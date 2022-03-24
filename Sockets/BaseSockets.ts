@@ -1,4 +1,4 @@
-import { Account, Bot, Key, Order } from "./Models";
+import { Account, Bot, Key, Order } from "../Models";
 
 const Binance = require('node-binance-api');
 
@@ -9,6 +9,7 @@ export abstract class BaseSockets {
     pairs = Array<string>()
     chartsSocket
     prices = {}
+    pricesQuarter = {}
     accounts = new Map<string, Account>();
 
     binance = Binance().options({})
@@ -20,6 +21,8 @@ export abstract class BaseSockets {
 
 
     averagePrice = (pair, steps) => this.prices[pair].slice(0, steps).reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / steps;
+
+    averagePriceQuarter = (pair) => this.pricesQuarter[pair].reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / this.prices[pair].length;
 
   
     updateDepthSockets() {
@@ -39,6 +42,9 @@ export abstract class BaseSockets {
 
         this.chartsSocket = this.binance.websockets.chart(this.pairs, "5m", (symbol, interval, chart) =>
             this.prices[symbol] = Object.values(chart).map(c => (c as any).close).reverse())
+
+        this.chartsSocket = this.binance.websockets.chart(this.pairs, "15m", (symbol, interval, chart) =>
+            this.pricesQuarter[symbol] = Object.values(chart).map(c => (c as any).close).reverse())
     }
 
     abstract addUserDataSockets(acc: Account);

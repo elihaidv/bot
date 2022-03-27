@@ -106,7 +106,7 @@ export abstract class BasePlacer {
                 sellOrders.push(order.clientOrderId);
             }
 
-            this.currentPnl += order.pnl
+            this.currentPnl += order.pnl - (order.avgPrice * order.executedQty * 0.0002)
             
             if (order.isFirst()) {
                 break

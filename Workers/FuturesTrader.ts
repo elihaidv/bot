@@ -38,7 +38,7 @@ export class FutureTrader extends BasePlacer {
 
         await this.placeBuy()
 
-        this.positionAmount != 0 && await this.placeSell()                          
+        this.positionAmount != 0 && await this.placeSell()
     }
     calculatePrice() {
 
@@ -59,7 +59,7 @@ export class FutureTrader extends BasePlacer {
 
     }
 
-    calculateDirection(){
+    calculateDirection() {
         if (this.bot.direction == 2) {
             this.bot.dynamicDirection = true
         }
@@ -83,14 +83,14 @@ export class FutureTrader extends BasePlacer {
 
     add(operand1, operand2) {
         return this.bot.direction ?
-        parseFloat(operand1) - parseFloat(operand2) :
+            parseFloat(operand1) - parseFloat(operand2) :
             parseFloat(operand1) + parseFloat(operand2)
     }
 
     sub(operand1, operand2) {
         return this.bot.direction ?
-        parseFloat(operand1) + parseFloat(operand2) :
-        parseFloat(operand1) - parseFloat(operand2)
+            parseFloat(operand1) + parseFloat(operand2) :
+            parseFloat(operand1) - parseFloat(operand2)
 
     }
 
@@ -99,7 +99,7 @@ export class FutureTrader extends BasePlacer {
             operand1 < operand2 :
             operand1 > operand2
 
-        }
+    }
 
     isFirst() {
         return !this.positionAmount
@@ -110,10 +110,10 @@ export class FutureTrader extends BasePlacer {
         let balanceLeveraged = this.balance[this.SECOND] * this.bot.leverage;
         let params: any = {};
 
-        if ( this.isFirst()) {
+        if (this.isFirst()) {
             params.newClientOrderId = "FIRST" + this.PAIR
             buyPrice = maxBuyPrice * this.sub(1, this.bot.buy_percent)
-        } else if(this.myLastOrder?.side == this.sellSide()){
+        } else if (this.myLastOrder?.side == this.sellSide()) {
             buyPrice = this.myLastOrder?.avgPrice * this.sub(1, this.bot.take_profit)
         } else {
             buyPrice = this.myLastOrder?.avgPrice * this.sub(1, this.bot.last_distance)
@@ -123,10 +123,10 @@ export class FutureTrader extends BasePlacer {
 
         balanceLeveraged -= this.positionAmount * this.positionEntry
 
-        if (this.isFirst()){
+        if (this.isFirst()) {
             buyQu = balanceLeveraged * this.bot.amount_percent * this.bot.increase_first / buyPrice
             this.error = true
-        } else if(this.myLastOrder?.side == this.sellSide()){
+        } else if (this.myLastOrder?.side == this.sellSide()) {
             buyQu = this.myLastOrder?.executedQty
         } else if (this.myLastOrder?.isFirst()) {
             buyQu = this.myLastOrder.executedQty / this.bot.increase_first
@@ -136,14 +136,14 @@ export class FutureTrader extends BasePlacer {
         }
 
         if (!this.bot.multiassets) {
-           if (balanceLeveraged > 0) {
+            if (balanceLeveraged > 0) {
                 buyQu = Math.min(balanceLeveraged / buyPrice, buyQu)
             } else {
                 buyQu = 0;
             }
         }
         await this.place_order(this.SECOND, Math.abs(buyQu), buyPrice, !this.bot.direction, params)
-    } 
+    }
 
     async placeSell() {
 
@@ -151,18 +151,18 @@ export class FutureTrader extends BasePlacer {
 
         let price, amount = this.positionAmount
 
-        if (this.standingBuy){
+        if (this.standingBuy) {
             price = this.positionEntry * this.add(1, this.bot.take_profit_position || this.bot.take_profit)
         } else {
             price = this.positionEntry * this.add(1, this.bot.take_profit)
         }
 
-        price = this.sub(price, this.currentPnl/ amount)
+        price = this.sub(price, this.currentPnl / amount)
 
         if (this.standingBuy && this.bot.sellAdded && this.standingBuy.executedQty < this.positionAmount) {
             amount = await this.placeSellFromBuy(this.standingBuy, price)
         }
-        
+
         if (this.bot.callbackRate) {
             await this.place_order(this.PAIR, amount, 0, this.bot.direction, {
                 type: "TRAILING_STOP_MARKET",

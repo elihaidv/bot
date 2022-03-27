@@ -50,6 +50,7 @@ export class FutureDataManager extends DataManager {
         console.log("Profit: " + (this.profit / 100).toFixed(0) + "% Date: " + new Date(parseInt(this.chart[this.time].time)))
 
 
+        order.pnl = gain
         order.status = 'FILLED'
         this.bot.binance!.orders[this.PAIR].push(order)
     }

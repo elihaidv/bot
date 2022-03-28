@@ -46,12 +46,13 @@ async function run() {
 
   const executeds = new Map<Number, Order>()
 
-  for (t of dataManager.chart.slice(dataManager.time)) {
-    if (!dataManager.hasMoney(t) && t.close) {
-      console.log("😰Liquid at: " + t.close)
-      break;
-    }
-    for (let o of dataManager.openOrders) {
+  for (let i = dataManager.time; i < dataManager.chart.length; i++) {
+    const t = dataManager.chart[i]
+
+    // const low = Math.min(t.low,  dataManager.chart[i - 1]?.low ?? Infinity)
+    
+
+    for (let o of dataManager.openOrders.reverse()) {
       if (await checkTrailing(bot,o,t)) break;
 
       if (t.high > o.price && o.price > t.low) {
@@ -75,6 +76,10 @@ async function run() {
 
       }
     }
+    if (!dataManager.hasMoney(t) && t.close) {
+      console.log("😰Liquid at: " + t.close)
+      break;
+    }
     dataManager.time++
   }
   dataManager.closePosition(dataManager.chart.at(-1)?.low);
@@ -85,9 +90,9 @@ async function run() {
 }
 
 async function checkTrailing(bot:Bot, o:Order, t:CandleStick){
-  const direction = bot.direction;
 
   if (trailing && o.type == "TRAILING_STOP_MARKET") {
+    const direction = bot.direction;
     trailing = direction ? Math.min(t.low, trailing) : Math.max(t.high, trailing)
     console.log(`Trailing Update: ${trailing}`)
 

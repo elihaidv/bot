@@ -48,6 +48,7 @@ export class DataManager {
         const file = await fs.readFile('cryptoHistory/' + this.PAIR)
         const data = file.toString().split('\n').map(l=>l.split(","))
         this.time = process.argv[3] ? data.length - parseInt(process.argv[3]) : 0
+        this.time = Math.max(this.time, this.bot.SMA * 5)
         this.chart = data.map(([time, high, low, close]) =>
             (Object.assign(new CandleStick(), { time, high, low, close })));
     }
@@ -114,11 +115,12 @@ export class DataManager {
     }
 
     averagePrice(pair, steps) {
-        return this.chart.map(x => x.close).slice(Math.max(this.time - steps,0), this.time + steps).reduce((a, b) => parseFloat(a) + parseFloat(b)) / steps
+        const start = Math.max(this.time - (steps * 5),0)
+        return this.chart.map(x => x.close).slice(start, this.time).reduce((a, b) => parseFloat(a) + parseFloat(b)) / (steps * 5)
     }
 
     averagePriceQuarter(pair) {
-        return this.chart.map(x => x.close).slice(Math.max(this.time - 1500,0), this.time + 1).reduce((a, b) => parseFloat(a) + parseFloat(b)) / 1500
+        return this.chart.map(x => x.close).slice(Math.max(this.time - 1500,0), this.time).reduce((a, b) => parseFloat(a) + parseFloat(b)) / 1500
     }
     simulateState() {
         this.openOrders = []

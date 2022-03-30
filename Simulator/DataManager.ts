@@ -47,8 +47,20 @@ export class DataManager {
     async fetchChart() {
         const file = await fs.readFile('cryptoHistory/' + this.PAIR)
         const data = file.toString().split('\n').map(l=>l.split(","))
-        this.time = process.argv[3] ? data.length - parseInt(process.argv[3]) : 0
+
+        if (!process.argv[3]) {
+            this.time = 0
+
+        } else if(isNaN(process.argv[3] as any)){
+            const minutes = Math.round((new Date().getTime() - new Date(process.argv[3]).getTime() ) / 1000 / 60)
+            this.time = data.length - minutes
+
+        } else {
+            this.time = data.length - parseInt(process.argv[3])
+        }
         this.time = Math.max(this.time, this.bot.SMA * 5)
+
+
         this.chart = data.map(([time, high, low, close]) =>
             (Object.assign(new CandleStick(), { time, high, low, close })));
     }

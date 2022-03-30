@@ -32,7 +32,7 @@ async function run() {
 
   const bot: Bot = Object.assign(new Bot(), bots[0]);
 
-  exchangeInfo = bot.isFuture ? 
+  exchangeInfo = bot.isFuture ?
     await Binance().futuresExchangeInfo() :
     await Binance().exchangeInfo()
 
@@ -50,25 +50,25 @@ async function run() {
     const t = dataManager.chart[i]
 
     // const low = Math.min(t.low,  dataManager.chart[i - 1]?.low ?? Infinity)
-    
+
 
     for (let o of dataManager.openOrders.reverse()) {
-      if (await checkTrailing(bot,o,t)) break;
+      // if (await checkTrailing(bot,o,t)) break;
 
-      if (t.high > o.price && o.price > t.low) {
-        if (o.type == "TRAILING_STOP_MARKET") {
-          if (!trailing) {
-            trailing = t.high
-            // console.log(`Trailing activate ${o.side}: ${o.price}`)
-          }
+      //     case "TRAILING_STOP_MARKET": 
+      //     if (!trailing) {
+      //       trailing = t.high
+      //       // console.log(`Trailing activate ${o.side}: ${o.price}`)
+      //     }
+      if (("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > t.low ||
+          ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < t.high) {
 
-        } else {
-          console.log(`Execute ${o.side}: ${t.high} ~ ${t.low}`)
-          executeds[dataManager.time] = o
-          dataManager.orderexecute(o)
-          await place(bot)
-          break;
-        }
+        console.log(`Execute ${o.side}: ${t.high} ~ ${t.low}`)
+        executeds[dataManager.time] = o
+        dataManager.orderexecute(o)
+        await place(bot)
+        break;
+
       } else if (dataManager.time - o.time >= bot.secound / 60 && bot.lastOrder != Bot.STABLE) {
         // console.log("expire")
         await place(bot)
@@ -89,7 +89,7 @@ async function run() {
   exit(0)
 }
 
-async function checkTrailing(bot:Bot, o:Order, t:CandleStick){
+async function checkTrailing(bot: Bot, o: Order, t: CandleStick) {
 
   if (trailing && o.type == "TRAILING_STOP_MARKET") {
     const direction = bot.direction;

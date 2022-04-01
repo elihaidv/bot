@@ -1,6 +1,8 @@
 import { BasePlacer } from "./BasePlacer"
 import { Bot, Order } from "./Models";
 
+const logger = require('log4js').getLogger("weightAvg");
+
 
 export class WeightAvg extends BasePlacer{
     myLastBuyAvg;
@@ -8,13 +10,27 @@ export class WeightAvg extends BasePlacer{
 
     async place() {
 
+        logger.info("1. ", !this.binance );
+        logger.info("2. ", !this.balance[this.SECOND] );
+        logger.info("3. ", !this.orders.length );
+        logger.info("4. ", !this.sockets.prices[this.PAIR] );
+        logger.info("5. ", !this.sockets.orderBooks[this.PAIR] );
+
         if (!this.binance || !this.balance[this.SECOND] || !this.orders.length || !this.sockets.prices[this.PAIR] || !this.sockets.orderBooks[this.PAIR]) return
+
+        logger.info("1.");
 
         this.parseAllValues()
     
+        logger.info("2.");
+
         await this.buyBNB()
 
+        logger.info("3.");
+
         this.calculateLastBuy()
+
+        logger.info("4.");
 
         await this.placeBuy()
 
@@ -75,6 +91,7 @@ export class WeightAvg extends BasePlacer{
                 await this.binance.marketBuy(bnbPair, this.bot.bnbamount)
             } catch (e) {
                 // console.log(e)
+                logger.error(e);
             }
         }
     }

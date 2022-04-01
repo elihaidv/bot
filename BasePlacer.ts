@@ -2,6 +2,9 @@ import { dbo } from './Main'
 import { Bot, Order } from './Models'
 import { Sockets } from './Sockets'
 
+const logger = require('log4js').getLogger("basePlacer");
+
+
 export abstract class BasePlacer {
     myLastBuy: Order | undefined
     myLastSell: any
@@ -41,7 +44,6 @@ export abstract class BasePlacer {
         this.orders = _bot.binance?.orders[this.PAIR]
 
 
-
         this.exchangeInfo = _exchangeInfo.symbols.find(s => s.symbol == this.PAIR)
         this.filters = this.exchangeInfo.filters.reduce((a, b) => { a[b.filterType] = b; return a }, {})
 
@@ -57,7 +59,8 @@ export abstract class BasePlacer {
 
                 await this.binance!.marketBuy(bnbPair, this.bot.bnbamount)
             } catch (e) {
-                console.log(e)
+                // console.log(e)
+                logger.error(e);
             }
         }
     }
@@ -75,6 +78,8 @@ export abstract class BasePlacer {
                 return parseFloat(orderPrice) - tick
             }
         }
+
+        logger.info("price = ", price);
         return price
     }
 
@@ -147,7 +152,9 @@ export abstract class BasePlacer {
 
             let res = await action(this.PAIR, qu, price, params)
             if (res.msg) {
-                console.log(res.msg, this.PAIR, price, qu, this.bot.id())
+                // console.log(res.msg, this.PAIR, price, qu, this.bot.id())
+                logger.info(res.msg, this.PAIR, price, qu, this.bot.id())
+
 
                 dbo.insertOne( {
                     bot_id: this.bot.id,
@@ -162,7 +169,8 @@ export abstract class BasePlacer {
                 return res
             } else {
 
-                console.log(res.symbol, res.side, res.price, res.origQty, res.status)
+                // console.log(res.symbol, res.side, res.price, res.origQty, res.status)
+                logger.info(res.symbol, res.side, res.price, res.origQty, res.status)
                 if (res.status == "EXPIRED") {
                     return res.status
                 }
@@ -175,7 +183,10 @@ export abstract class BasePlacer {
             //     order.this.bot_id = this.bot.id
             //     order.save()
         } catch (e: any) {
-            console.log(e.body || e, this.PAIR, price, qu, this.bot.id())
+            logger.error(e);
+
+            // console.log(e.body || e, this.PAIR, price, qu, this.bot.id())
+            logger.info(e.body || e, this.PAIR, price, qu, this.bot.id())
             this.error = true
                 
 

@@ -1,3 +1,5 @@
 node_modules
 DB.js
 cryptoHistory/*
+*.js
+*.log

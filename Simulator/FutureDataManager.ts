@@ -45,9 +45,9 @@ export class FutureDataManager extends DataManager {
             pos.positionAmount += qu;
         }
 
+        gain -= (order.avgPrice * order.executedQty * 0.0002)
         this.bot.binance!.balance[this.bot.coin2] += gain
         this.profit += gain
-        this.profit -=  (order.avgPrice * order.executedQty * 0.0002)
         console.log("Profit: " + (this.profit / 100).toFixed(0) + "% Date: " + new Date(parseInt(this.chart[this.time].time)))
 
 

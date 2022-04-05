@@ -28,7 +28,7 @@ export class FutureDataManager extends DataManager {
             gain = (order.price - pos.positionEntry) * pos.positionAmount
             pos.positionAmount = 0
             pos.positionEntry = 0
-            console.log("Closing position")
+            console.log("Closing position with profit of: " + (gain / this.bot.binance!.balance[this.bot.coin2] * 100).toFixed() + "%")
         } else if (qu == 0) {
             gain = (pos.positionEntry - order.price) * pos.positionAmount * (order.side == "BUY" ? 1 : -1)
             pos.positionEntry = 0
@@ -48,6 +48,8 @@ export class FutureDataManager extends DataManager {
         gain -= (order.avgPrice * order.executedQty * 0.0002)
         this.bot.binance!.balance[this.bot.coin2] += gain
         this.profit += gain
+
+        console.log("Psition size: " + pos.positionAmount)
         console.log("Profit: " + (this.profit / 100).toFixed(0) + "% Date: " + new Date(parseInt(this.chart[this.time].time)))
 
 

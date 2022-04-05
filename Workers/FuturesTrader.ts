@@ -156,7 +156,7 @@ export class FutureTrader extends BasePlacer {
         } else {
             price = this.positionEntry * this.add(1, this.bot.take_profit)
         }
-
+        console.log("PNL: " + this.currentPnl)
         price = this.sub(price, this.currentPnl / amount)
 
         if (this.standingBuy && this.bot.sellAdded && this.standingBuy.executedQty < this.positionAmount) {

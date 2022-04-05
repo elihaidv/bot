@@ -52,7 +52,7 @@ async function run() {
     // const low = Math.min(t.low,  dataManager.chart[i - 1]?.low ?? Infinity)
 
 
-    for (let o of dataManager.openOrders.reverse()) {
+    for (let o of dataManager.openOrders.slice().reverse()) {
       // if (await checkTrailing(bot,o,t)) break;
 
       //     case "TRAILING_STOP_MARKET": 

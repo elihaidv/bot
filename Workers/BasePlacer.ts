@@ -1,10 +1,11 @@
-import { dbo } from './Main'
-import { Bot, Order } from './Models'
-import { Sockets } from './Sockets'
+
+import { DAL } from '../DAL'
+import { Bot, Order } from '../Models'
+import { Sockets } from '../Sockets/Sockets'
 
 export abstract class BasePlacer {
-    myLastBuy: Order | undefined
-    myLastSell: any
+    abstract place()
+
     filters: any
     exchangeInfo: any
     FIRST: string
@@ -16,12 +17,15 @@ export abstract class BasePlacer {
     orders: Array<Order>
 
     distanceTimestamp: number = 0
+
+
+
+    myLastOrder: Order | undefined
     myLastBuyPrice: number = 0
-
-
-
     myLastBuyAvg;
-    myLastBuyCount = 0;
+    currentPnl = 0
+    standingBuy: Order | undefined
+
 
     sockets = Sockets.getInstance()
 
@@ -82,31 +86,36 @@ export abstract class BasePlacer {
 
     sellSide = () => this.bot.direction ? "BUY" : "SELL";
 
-    calculateLastBuy() {
+    buildHistory() {
         const buys = Array<Order>()
-        for (let trade of this.orders
+        const sellOrders: Array<string> = []
+
+        for (let order of this.orders
             .filter(x => x.status.includes('FILLED'))
             .filter(x => x.positionSide == this.bot.positionSide())
             .reverse()) {
 
-            if (trade.isBigPosition()) {
-                break
+            this.myLastOrder ||= order
+            if (order.side == this.buySide()) {
+
+                if (!sellOrders.includes("SELL" + order.orderId)){
+                    this.standingBuy ||= order
+                    buys.push(order)
+                }
+            } else {
+                sellOrders.push(order.clientOrderId);
             }
 
-            if (trade.side == this.buySide()) {
-                buys.push(trade)
-                this.myLastBuyCount++
-
-            } else {
-                this.myLastSell = trade
-                break;
+            this.currentPnl += order.pnl - (order.avgPrice * order.executedQty * 0.0002)
+            
+            if (order.isFirst()) {
+                break
             }
         }
 
-        this.myLastBuy = buys[0]
         this.myLastBuyAvg = this.weightAverage(buys)
-
     }
+    
 
     weightAverage(arr) {
         const overallQu = arr.reduce((a, b) => a + parseFloat(b.executedQty), 0.0)
@@ -147,9 +156,9 @@ export abstract class BasePlacer {
 
             let res = await action(this.PAIR, qu, price, params)
             if (res.msg) {
-                console.log(res.msg, this.PAIR, price, qu, this.bot.id())
+                console.log(res.msg, this.PAIR,  price || params.stopPrice || params.activationPrice, qu, this.bot.id())
 
-                dbo.insertOne( {
+                DAL.instance.logError( {
                     bot_id: this.bot.id,
                     type: type,
                     coin: this.PAIR,
@@ -162,7 +171,7 @@ export abstract class BasePlacer {
                 return res
             } else {
 
-                console.log(res.symbol, res.side, res.price, res.origQty, res.status)
+                console.log(res.symbol, res.side, res.price || params.stopPrice || params.activationPrice, res.origQty, res.status)
                 if (res.status == "EXPIRED") {
                     return res.status
                 }
@@ -180,13 +189,14 @@ export abstract class BasePlacer {
                 
 
             
-            dbo.insertOne( {
+            DAL.instance.logError( {
+                user_id: this.bot.user_id,
                 bot_id: this.bot.id,
                 type: type,
                 coin: this.PAIR,
                 amount: qu,
                 price: price,
-                message: e.getMessage()
+                message: e.body || e
             })
             return e
         } finally {

@@ -45,6 +45,10 @@ export class Bot {
     multiassets: any;
     bigPosition: number = 0.5;
     mode: boolean = false;
+    lastStopPrice = 0;
+    classname: any;
+    dynamicDirection: boolean = false;
+    user_id: any;
 
     id(): String { return this._id.toString() }
 
@@ -58,7 +62,7 @@ export class Bot {
 export class Order {
     side: string
     status: string;
-    price: number;
+    price: any;
     orderId: string
     origQty: number
     executedQty: number
@@ -68,6 +72,7 @@ export class Order {
     clientOrderId: string
     positionSide: any;
     avgPrice: any;
+    closePosition:any;
 
 
     constructor(
@@ -102,6 +107,7 @@ export class Order {
 
     isBigPosition = (): boolean => this.clientOrderId.includes("BigPosition")
 
+    orderPrice = ():number => parseFloat(this.price) || this.avgPrice
 
 }
 

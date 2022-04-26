@@ -1,5 +1,5 @@
 import { BaseSockets } from "./BaseSockets";
-import { Account, Bot, Key, Order } from "./Models";
+import { Account, Bot, Key, Order } from "../Models";
 
 const Binance = require('node-binance-api');
 
@@ -42,7 +42,8 @@ export class Sockets extends BaseSockets {
                 data.q,
                 data.z,
                 data.E,
-                data.o
+                data.o,
+                data.c
             );
 
             if (order) {
@@ -103,6 +104,9 @@ export class Sockets extends BaseSockets {
 
     addUserDataSockets(acc: Account) {
         acc.binance.balance((error, balances) => {
+            if (error) {
+                console.log('Balance error' + error.body)
+            } 
             for (let b in balances) {
                 balances[b].total = parseFloat(balances[b].available) + parseFloat(balances[b].onOrder)
             }
@@ -133,17 +137,18 @@ export class Sockets extends BaseSockets {
                     if (trades.map)
                         acc.orders[PAIR] = acc.orders[PAIR].concat(trades.map(t => Object.assign(new Order(), t)))
                 });
-                acc.binance.trades(PAIR, (error, trades, symbol) => {
+                acc.binance.allOrders(PAIR, (error, trades, symbol) => {
                     if (trades.map) {
                         const orders:Array<Order> = trades.map(t => new Order(
-                            t.isBuyer ? 'BUY' : 'SELL',
-                            "FILLED",
+                            t.side,
+                            t.status,
                             t.price,
                             t.orderId,
-                            parseFloat(t.qty),
-                            parseFloat(t.qty),
+                            parseFloat(t.origQty),
+                            parseFloat(t.executedQty),
                             t.time,
-                            'LIMIT'
+                            t.type,
+                            t.clientOrderId
                         ))
 
                         let firstOrder;
@@ -162,7 +167,7 @@ export class Sockets extends BaseSockets {
                         }
                         firstOrder && acc.orders[PAIR].push(firstOrder)
                     }
-                });
+                },{limit:1000});
             }
         }
 

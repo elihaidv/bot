@@ -1,14 +1,14 @@
 
 
 import { FutureTrader } from './FuturesTrader';
-import { Account, Bot, Key, Order } from './Models';
+import { Account, Bot, Key, Order } from '../Models';
 
 export class DualBot extends FutureTrader {
     bigPosition: Order | undefined
   
 
     async placeBuy() {
-        let buyPrice, buyQu, maxBuyPrice = this.futureSockets.ticker(this.PAIR)?.bestBid as unknown as number
+        let maxBuyPrice = this.futureSockets.ticker(this.PAIR)?.bestBid as unknown as number
         let balanceLeveraged = this.balance[this.SECOND] * this.bot.leverage;
         
         if (!this.positionAmount) {
@@ -22,7 +22,7 @@ export class DualBot extends FutureTrader {
     }
     
     isFirst(): boolean {
-        return (!this.myLastBuy && !this.myLastSell) || !this.positionAmount
+        return !this.myLastOrder || !this.positionAmount
     }
 
     seekBigPosition(){
@@ -60,7 +60,7 @@ export class DualBot extends FutureTrader {
         }
     }
 
-    buyLastSell() {
+    buyLastSell():boolean {
         return !!this.findStandbyBuy()
 
     }
@@ -75,9 +75,9 @@ export class DualBot extends FutureTrader {
 
         const lastStandbyBuy = this.findStandbyBuy()
 
-        if (this.myLastBuy) {
-            if (this.myLastBuy.executedQty < this.positionAmount) {
-                await this.placeSellFromBuy(this.myLastBuy, price)
+        if (this.myLastOrder) {
+            if (this.myLastOrder.executedQty < this.positionAmount) {
+                await this.placeSellFromBuy(this.myLastOrder, price)
             }
         } else {
             

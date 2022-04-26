@@ -1,5 +1,5 @@
 import { BaseSockets } from "./BaseSockets";
-import { Account, Bot, Key, Order } from "./Models";
+import { Account, Bot, Key, Order } from "../Models";
 
 export class SocketsFutures extends BaseSockets {
     futuresBookTickerStreams = new Array<Ticker>();
@@ -58,9 +58,9 @@ export class SocketsFutures extends BaseSockets {
                 orders[orderUpdate.symbol].push(newOrder)
             }
 
-            if (orderUpdate.orderStatus == 'FILLED' || 
-               (orderUpdate.orderStatus == 'EXPIRED' && orderUpdate.orderType == "LIMIT")) {
-                if (!orderUpdate.clientOrderId.includes("BigPosition")){   
+            if (orderUpdate.orderStatus == 'FILLED' ||
+                (orderUpdate.orderStatus == 'EXPIRED' && orderUpdate.orderType == "LIMIT" && orderUpdate.originalOrderType != "TAKE_PROFIT")) {
+                if (!orderUpdate.clientOrderId.includes("BigPosition")) {
                     orders.changed.push(orderUpdate.symbol + orderUpdate.positionSide);
                 }
             }
@@ -80,7 +80,7 @@ export class SocketsFutures extends BaseSockets {
             });
 
             data.positions && data.positions.filter(p => p.updateTime).forEach(p => {
-                acc.positions[p.symbol+p.positionSide] = p
+                acc.positions[p.symbol + p.positionSide] = p
             });
         });
 
@@ -109,7 +109,7 @@ export class SocketsFutures extends BaseSockets {
         }
     }
 
-    ticker(pair): Ticker | undefined {
+    ticker(pair) {
         return this.futuresBookTickerStreams.find(t => t.pair == pair)
     }
 
@@ -122,12 +122,15 @@ export class SocketsFutures extends BaseSockets {
                 if (acc.orders[PAIR] === undefined) {
                     acc.orders[PAIR] = []
 
-                    const openOrders = await acc.binance.futuresAllOrders(PAIR,{limit:1000})
+                    const openOrders = await acc.binance.futuresAllOrders(PAIR, { limit: 1000 })
 
                     if (openOrders.code) throw openOrders.msg
 
-                    acc.orders[PAIR] = acc.orders[PAIR].concat(openOrders.filter(o => o.status != "CANCELED").map(order =>
-                        Object.assign(new Order(), order)
+                    acc.orders[PAIR] = acc.orders[PAIR].concat(openOrders.filter(o => o.status != "CANCELED").map(order => {
+                        const o = Object.assign(new Order(), order)
+                        o.price ||= order.avgPrice
+                        return o
+                    }
                     ));
 
                     acc.orders[PAIR].push(new Order())

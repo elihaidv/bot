@@ -1,23 +1,18 @@
 const Binance = require('node-binance-api');
-const { MongoClient } = require("mongodb");
 require('dotenv').config({ path: '../.env' })
 const cancelOrders = require('./CancelOrders');
-const DB = require('./DB')
-
-import { DualBot } from './DualBot';
-import { FutureTrader } from './FuturesTrader';
+import { DirectionTrader } from './Workers/DirectionTrader';
+import { DualBot } from './Workers/DualBot';
+import { FutureTrader } from './Workers/FuturesTrader';
 import { Bot, Key } from './Models'
-import { OrderPlacer } from './PlaceOrders';
-import { Sockets } from './Sockets';
-import { SocketsFutures } from './SocketsFuture';
-import { WeightAvg } from './WeightAvg';
+// import { OrderPlacer } from './PlaceOrders';
+import { Sockets } from './Sockets/Sockets';
+import { SocketsFutures } from './Sockets/SocketsFuture';
+import { WeightAvg } from './Workers/WeightAvg';
+import { DAL } from './DAL';
 
-const uri = DB.USERNAME ?
-  `mongodb://${DB.USERNAME}:${DB.PASSWORD}@${DB.ADDRESS}?writeConcern=majority` :
-  `mongodb://127.0.0.1:27017/trading_bot?writeConcern=majority`;
 
-let exchangeInfo, futuresExchangeInfo;
-export let dbo
+let exchangeInfo, futuresExchangeInfo
 
 let bots = new Array<Bot>()
 
@@ -28,9 +23,7 @@ async function run() {
   Binance().exchangeInfo().then(data => exchangeInfo = data)
   Binance().futuresExchangeInfo().then(data => futuresExchangeInfo = data)
 
-  let db = await MongoClient.connect(uri)
-  dbo = db.db("trading_bot")
-
+  await DAL.instance.init()
   execute()
 
 }
@@ -38,8 +31,9 @@ run()
 
 async function execute() {
   try {
-    let botsResults = await dbo.collection('bot').find({ run: true, stream: '1', enviroment: DB.ENVIROMENT }).toArray()
-    let keys: Array<Key> = await dbo.collection('key').find({}).toArray()
+    let botsResults = await DAL.instance.getBots()
+    
+    let keys: Array<Key> = await DAL.instance.getKeys()
 
     initBots(botsResults)
 
@@ -53,14 +47,16 @@ async function execute() {
       await Promise.all(outdatedBots.map(cancelOrders));
       await Promise.all(outdatedBots.map((b) => {
         switch (b.bot_type_id) {
-          case "1":
-            return new OrderPlacer(b, exchangeInfo).place();
+          // case "1":
+          //   return new OrderPlacer(b, exchangeInfo).place();
           case "2":
             return new WeightAvg(b, exchangeInfo).place();
           case "3":
             return new FutureTrader(b, futuresExchangeInfo).place();
           case "4":
             return new DualBot(b, futuresExchangeInfo).place()
+          case "5":
+            return new DirectionTrader(b, futuresExchangeInfo).place()
 
         }
       }))
@@ -71,6 +67,7 @@ async function execute() {
   }
   setTimeout(execute, 3000)
 }
+
 
 function filterOutdated(bots: Array<Bot>): Array<Bot> {
   return bots.filter(b => {

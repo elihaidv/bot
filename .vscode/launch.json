@@ -1,0 +1,49 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Main",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "ts-node",
+            "args": [
+                "Main.ts"
+            ],
+            "cwd": "${workspaceRoot}",
+            "internalConsoleOptions": "openOnSessionStart",
+            "skipFiles": [
+                "<node_internals>/**",
+                "node_modules/**"
+            ]
+        },
+        {
+            "name": "Simulate",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "ts-node",
+            "args": [
+                "Simulator/Simulate.ts",
+                "623dbe7a998b8114d3706f13",
+                "200000"
+            ],
+            "cwd": "${workspaceRoot}",
+            "internalConsoleOptions": "openOnSessionStart",
+            "skipFiles": [
+                "<node_internals>/**",
+                "node_modules/**"
+            ]
+        },
+        {
+            "name": "Attach by Process ID",
+            "processId": "${command:PickProcess}",
+            "request": "attach",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "pwa-node"
+        }
+    ]
+}

@@ -60,7 +60,8 @@ async function run() {
       //       trailing = t.high
       //       // console.log(`Trailing activate ${o.side}: ${o.price}`)
       //     }
-      if (("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > t.low ||
+      if ( o.clientOrderId.includes("FIRST") ||
+        ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > t.low ||
           ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < t.high) {
 
         console.log(`Execute ${o.side}: ${t.high} ~ ${t.low}`)

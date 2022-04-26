@@ -52,7 +52,7 @@ export class DataManager {
             this.time = 0
 
         } else if(isNaN(process.argv[3] as any)){
-            const minutes = Math.round((new Date().getTime() - new Date(process.argv[3]).getTime() ) / 1000 / 60)
+            const minutes = Math.round((parseInt(data.at(-2)[0]) - new Date(process.argv[3]).getTime() ) / 1000 / 60)
             this.time = data.length - minutes
 
         } else {
@@ -147,7 +147,7 @@ export class DataManager {
     }
     ticker(p): Ticker {
         let t = new Ticker();
-        t.bestBid = this.chart[this.time].low
+        t.bestBid = this.chart[this.time].close
         return t
     }
 }

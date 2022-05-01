@@ -18,11 +18,14 @@ export class WeightAvg extends BasePlacer {
 
         await this.placeBuy()
 
-        !this.isFirst() && await this.placeSell()
+        !this.isFirst && await this.placeSell()
     }
 
-    isFirst() {
+    get isFirst() {
         let maxBuyPrice = parseFloat(Object.keys(this.sockets.orderBooks[this.PAIR].bids)[0])
+        console.log(maxBuyPrice)
+        console.log(this.balance[this.FIRST].total)
+        console.log((this.filters.MIN_NOTIONAL.minNotional / maxBuyPrice))
         return this.balance[this.FIRST].total < (this.filters.MIN_NOTIONAL.minNotional / maxBuyPrice)
     }
 
@@ -32,7 +35,7 @@ export class WeightAvg extends BasePlacer {
 
         buyPrice = maxBuyPrice * (1 - this.bot.buy_percent)
 
-        if (this.isFirst() || !this.myLastOrder) {
+        if (this.isFirst || !this.myLastOrder) {
             params.newClientOrderId = "FIRST" + this.PAIR
         } else if (this.myLastOrder!.side == this.sellSide()) {
             buyPrice = Math.min(this.myLastOrder!.price * (1 - this.bot.take_profit), buyPrice)
@@ -45,7 +48,7 @@ export class WeightAvg extends BasePlacer {
             buyPrice = Math.min(buyPrice, this.sockets.averagePrice(this.PAIR, this.bot.SMA))
         }
 
-        if (this.isFirst() || !this.myLastOrder) {
+        if (this.isFirst || !this.myLastOrder) {
             buyQu = this.balance[this.SECOND].available * this.bot.amount_percent / buyPrice
 
         } else if (this.myLastOrder?.side == this.sellSide()) {

@@ -52,9 +52,10 @@ export class WeightAvg extends BasePlacer {
             buyQu = this.myLastOrder.executedQty
 
         } else {
-            buyQu = Math.min(this.balance[this.SECOND].available / buyPrice,
-                this.myLastOrder!.origQty * (1 + this.bot.increase_factor))
+            buyQu = this.myLastOrder!.origQty * (1 + this.bot.increase_factor)
         }
+        
+        buyQu =  Math.min(this.balance[this.SECOND].available / buyPrice, buyQu)
 
         await this.place_order(this.SECOND, buyQu, buyPrice, true, params)
     }

@@ -23,9 +23,6 @@ export class WeightAvg extends BasePlacer {
 
     get isFirst() {
         let maxBuyPrice = parseFloat(Object.keys(this.sockets.orderBooks[this.PAIR].bids)[0])
-        console.log(maxBuyPrice)
-        console.log(this.balance[this.FIRST].total)
-        console.log((this.filters.MIN_NOTIONAL.minNotional / maxBuyPrice))
         return this.balance[this.FIRST].total < (this.filters.MIN_NOTIONAL.minNotional / maxBuyPrice)
     }
 

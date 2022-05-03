@@ -45,6 +45,9 @@ async function execute() {
     if (exchangeInfo && futuresExchangeInfo) {
 
       await Promise.all(outdatedBots.map(cancelOrders));
+      
+      await Sockets.getInstance().timeout(1000)
+
       await Promise.all(outdatedBots.map((b) => {
         switch (b.bot_type_id) {
           // case "1":

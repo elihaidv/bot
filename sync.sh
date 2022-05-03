@@ -3,4 +3,4 @@ ssh trading 'mongodump -u elihai --authenticationDatabase admin --password eldv1
 ssh trading 'mongodump -u elihai --authenticationDatabase admin --password eldv1993 -d trading_bot -c bot'
 scp -r trading:dump .
 mongorestore --drop
-mongo trading_bot --eval 'db.bot.updateMany({}, {"$set":{"run":"0", "enviroment":"LOCAL"}})'
+mongo trading_bot --eval 'db.bot.updateMany({}, {"$set":{"run":"0", "enviroment":"LOCAL"}})'6

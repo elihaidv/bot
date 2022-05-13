@@ -66,24 +66,40 @@ export class WeightAvg extends BasePlacer {
 
 
         if (this.standingBuy) {
-            sellPrice = this.standingBuy.price * (1 + this.bot.take_profit)
+            if (this.oldestStandingBuy && this.oldestStandingBuy.orderId != this.standingBuy.orderId){
+                sellPrice = this.weightAverage([this.standingBuy,this.oldestStandingBuy]) * (1 + this.bot.take_profit)
+                
+                await this.place_order(this.FIRST, this.oldestStandingBuy.executedQty, sellPrice, false, {
+                    newClientOrderId: "SELL" + this.oldestStandingBuy.orderId
+                })
 
-            sellQu = this.standingBuy.executedQty
-
-            if (sellQu < this.balance[this.FIRST].available) {
-
-                await this.place_order(this.FIRST, sellQu, sellPrice, false, {
+                await this.place_order(this.FIRST, this.standingBuy.executedQty, sellPrice, false, {
                     newClientOrderId: "SELL" + this.standingBuy.orderId
                 })
+
             } else {
-                sellQu = 0
+
+                sellPrice = this.standingBuy.price * (1 + this.bot.take_profit)
+
+                sellQu = this.standingBuy.executedQty
+
+                if (sellQu < this.balance[this.FIRST].available) {
+
+                    await this.place_order(this.FIRST, sellQu, sellPrice, false, {
+                        newClientOrderId: "SELL" + this.standingBuy.orderId
+                    })
+                } else {
+                    sellQu = 0
+                }
+
+                sellPrice = this.myLastBuyAvg * (1 + (this.bot.take_profit_position || this.bot.take_profit))
+
+                await this.place_order(this.FIRST, this.balance[this.FIRST].available - sellQu, sellPrice, false)
             }
 
         }
 
-        sellPrice = this.myLastBuyAvg * (1 + (this.bot.take_profit_position || this.bot.take_profit))
-
-        await this.place_order(this.FIRST, this.balance[this.FIRST].available - sellQu, sellPrice, false)
+      
 
         if (!this.error) {
             this.bot.lastOrder = Bot.STABLE

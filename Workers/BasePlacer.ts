@@ -25,6 +25,7 @@ export abstract class BasePlacer {
     myLastBuyAvg;
     currentPnl = 0
     standingBuy: Order | undefined
+    oldestStandingBuy: Order | undefined
 
 
     sockets = Sockets.getInstance()
@@ -100,6 +101,7 @@ export abstract class BasePlacer {
 
                 if (!sellOrders.includes("SELL" + order.orderId)){
                     this.standingBuy ||= order
+                    this.oldestStandingBuy = order
                     buys.push(order)
                 }
             } else {

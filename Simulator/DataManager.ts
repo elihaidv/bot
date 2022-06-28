@@ -1,4 +1,4 @@
-const fs  = require('fs').promises
+const fs = require('fs').promises
 import { Account, Bot, Order } from "../Models";
 import { BaseSockets } from "../Sockets/BaseSockets";
 import { Sockets } from "../Sockets/Sockets";
@@ -7,9 +7,9 @@ import { SocketsFutures } from "../Sockets/SocketsFuture";
 const Binance = require('node-binance-api');
 
 export class DataManager {
-    hasMoney(t:CandleStick) : boolean {
+    hasMoney(t: CandleStick): boolean {
         return true
-    //   throw new Error("Method not implemented.");
+        //   throw new Error("Method not implemented.");
     }
     chart: Array<CandleStick> = [];
     openOrders: Array<Order> = [];
@@ -36,23 +36,33 @@ export class DataManager {
         //     return {msg:"Order Expire"}
         // }
         const order = new Order(type ? 'BUY' : "SELL", "NEW", p,
-            this.time.toString(), qu, qu, this.time, params.type || "LIMIT", params.newClientOrderId,
+            this.makeid(10), qu, qu, this.time, params.type || "LIMIT", params.newClientOrderId,
             this.bot.positionSide(), p)
-            order.closePosition = params.closePosition
+        order.closePosition = params.closePosition
 
         this.openOrders.push(order)
         return order
     });
+    makeid(length): string {
+        var result = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() *
+                charactersLength));
+        }
+        return result;
+    }
 
     async fetchChart() {
         const file = await fs.readFile('cryptoHistory/' + this.PAIR)
-        const data = file.toString().split('\n').map(l=>l.split(","))
+        const data = file.toString().split('\n').map(l => l.split(","))
 
         if (!process.argv[3]) {
             this.time = 0
 
-        } else if(isNaN(process.argv[3] as any)){
-            const minutes = Math.round((parseInt(data.at(-2)[0]) - new Date(process.argv[3]).getTime() ) / 1000 / 60)
+        } else if (isNaN(process.argv[3] as any)) {
+            const minutes = Math.round((parseInt(data.at(-2)[0]) - new Date(process.argv[3]).getTime()) / 1000 / 60)
             this.time = data.length - minutes
 
         } else {
@@ -81,6 +91,9 @@ export class DataManager {
 
         order.status = 'FILLED'
         this.bot.binance!.orders[this.PAIR].push(order)
+        if (order.side == "SELL") {
+            console.log("balance: " + (this.bot.binance!.balance[this.bot.coin2].available))
+        }
     }
 
     closePosition(price) {
@@ -118,7 +131,7 @@ export class DataManager {
 
 
         this.bot.binance!.positions = {};
-        
+
         this.bot.binance!.positions[this.PAIR + this.bot.positionSide()] ||= {
             positionAmount: 0,
             positionEntry: 0
@@ -127,12 +140,12 @@ export class DataManager {
     }
 
     averagePrice(pair, steps) {
-        const start = Math.max(this.time - (steps * 5),0)
+        const start = Math.max(this.time - (steps * 5), 0)
         return this.chart.map(x => x.close).slice(start, this.time).reduce((a, b) => parseFloat(a) + parseFloat(b)) / (steps * 5)
     }
 
     averagePriceQuarter(pair) {
-        return this.chart.map(x => x.close).slice(Math.max(this.time - 1500,0), this.time).reduce((a, b) => parseFloat(a) + parseFloat(b)) / 1500
+        return this.chart.map(x => x.close).slice(Math.max(this.time - 1500, 0), this.time).reduce((a, b) => parseFloat(a) + parseFloat(b)) / 1500
     }
     simulateState() {
         this.openOrders = []

@@ -1,0 +1,2969 @@
+FIRST
+undefined BUY 133.03 0.18 NEW
+Execute BUY: 133.432 ~ 133.432
+undefined BUY 130.36 0.21 NEW
+undefined SELL 139.68 0.18 NEW
+Execute SELL: 140.398 ~ 138.22
+balance: 10001.197
+FIRST
+undefined BUY 137.8 0.18 NEW
+Execute BUY: 140.652 ~ 137.331
+undefined BUY 135.04 0.21 NEW
+undefined SELL 144.69 0.18 NEW
+Execute SELL: 144.909 ~ 144.602
+balance: 10002.4372
+FIRST
+undefined BUY 144.16 0.17 NEW
+Execute BUY: 144.795 ~ 144.232
+undefined BUY 141.27 0.2 NEW
+undefined SELL 151.36 0.17 NEW
+Execute BUY: 142.112 ~ 141.184
+undefined BUY 138.44 0.24 NEW
+undefined SELL 149.72 0.2 NEW
+undefined SELL 149.72 0.17 NEW
+Execute BUY: 139.697 ~ 138.365
+undefined BUY 135.67 0.28 NEW
+undefined SELL 147.85 0.24 NEW
+undefined SELL 147.85 0.17 NEW
+Execute SELL: 148.027 ~ 145.794
+balance: 9941.5849
+Execute SELL: 148.027 ~ 145.794
+balance: 9977.0689
+undefined BUY 140.45 0.24 NEW
+undefined SELL 148.33 0.19 NEW
+Execute SELL: 148.352 ~ 147.42
+balance: 10005.2516
+FIRST
+undefined BUY 146.97 0.17 NEW
+Execute BUY: 148.493 ~ 147.852
+undefined BUY 144.03 0.2 NEW
+undefined SELL 154.31 0.17 NEW
+Execute BUY: 144.284 ~ 143.726
+undefined BUY 141.14 0.24 NEW
+undefined SELL 152.64 0.2 NEW
+undefined SELL 152.64 0.17 NEW
+Execute BUY: 141.648 ~ 140.804
+undefined BUY 138.31 0.28 NEW
+undefined SELL 150.73 0.24 NEW
+undefined SELL 150.73 0.17 NEW
+Execute BUY: 139.253 ~ 138.247
+undefined BUY 135.54 0.33 NEW
+undefined SELL 148.66 0.28 NEW
+undefined SELL 148.66 0.17 NEW
+Execute BUY: 136.75 ~ 135.07
+undefined BUY 132.82 0.39 NEW
+undefined SELL 146.39 0.33 NEW
+undefined SELL 146.39 0.17 NEW
+Execute SELL: 146.832 ~ 146.104
+balance: 9859.018399999999
+Execute SELL: 146.832 ~ 146.104
+balance: 9907.327099999999
+undefined BUY 139.07 0.33 NEW
+undefined SELL 147.72 0.28 NEW
+undefined SELL 147.72 0.2 NEW
+Execute BUY: 140.001 ~ 137.141
+undefined BUY 136.28 0.39 NEW
+undefined SELL 147.98 0.33 NEW
+undefined SELL 147.98 0.2 NEW
+Execute SELL: 148.189 ~ 147.761
+balance: 9891.029999999999
+Execute SELL: 148.189 ~ 147.761
+balance: 9939.863399999998
+undefined BUY 140.58 0.33 NEW
+undefined SELL 146.59 0.28 NEW
+undefined SELL 146.59 0.24 NEW
+Execute SELL: 148.193 ~ 146.749
+balance: 9975.044999999998
+Execute SELL: 148.193 ~ 146.749
+balance: 10016.090199999999
+FIRST
+undefined BUY 146.3 0.17 NEW
+Execute BUY: 148.547 ~ 148.087
+undefined BUY 143.37 0.2 NEW
+undefined SELL 153.61 0.17 NEW
+Execute SELL: 154.734 ~ 152.894
+balance: 10017.3329
+FIRST
+undefined BUY 152.43 0.16 NEW
+Execute BUY: 155. ~ 153.954
+undefined BUY 149.38 0.19 NEW
+undefined SELL 160.05 0.16 NEW
+Execute SELL: 160.168 ~ 159.344
+balance: 10018.552099999999
+FIRST
+undefined BUY 158.86 0.15 NEW
+Execute BUY: 160.431 ~ 159.416
+undefined BUY 155.68 0.18 NEW
+undefined SELL 166.8 0.15 NEW
+Execute SELL: 167.362 ~ 165.633
+balance: 10019.7431
+FIRST
+undefined BUY 165.13 0.15 NEW
+Execute BUY: 167.763 ~ 166.883
+undefined BUY 161.82 0.18 NEW
+undefined SELL 173.38 0.15 NEW
+Execute SELL: 173.6 ~ 171.452
+balance: 10020.980599999999
+FIRST
+undefined BUY 170.93 0.14 NEW
+Execute BUY: 172.993 ~ 171.791
+undefined BUY 167.51 0.16 NEW
+undefined SELL 179.47 0.14 NEW
+Execute SELL: 179.727 ~ 178.707
+balance: 10022.176199999998
+FIRST
+undefined BUY 178.17 0.14 NEW
+Execute BUY: 179.983 ~ 179.002
+undefined BUY 174.6 0.16 NEW
+undefined SELL 187.07 0.14 NEW
+Execute SELL: 188.018 ~ 186.006
+balance: 10023.422199999999
+FIRST
+undefined BUY 185.44 0.13 NEW
+Execute BUY: 188. ~ 187.
+undefined BUY 181.73 0.15 NEW
+undefined SELL 194.71 0.13 NEW
+Execute SELL: 195.173 ~ 193.339
+balance: 10024.627299999998
+FIRST
+undefined BUY 192.75 0.13 NEW
+Execute BUY: 195.5 ~ 193.186
+undefined BUY 188.89 0.15 NEW
+undefined SELL 202.38 0.13 NEW
+Execute BUY: 190.381 ~ 188.317
+undefined BUY 185.11 0.18 NEW
+undefined SELL 200.21 0.15 NEW
+undefined SELL 200.21 0.13 NEW
+Execute BUY: 188.553 ~ 184.772
+undefined BUY 181.4 0.21 NEW
+undefined SELL 197.72 0.18 NEW
+undefined SELL 197.72 0.13 NEW
+Execute BUY: 183.117 ~ 181.279
+undefined BUY 177.77 0.25 NEW
+undefined SELL 195.02 0.21 NEW
+undefined SELL 195.02 0.13 NEW
+Execute BUY: 181.296 ~ 175.394
+undefined BUY 174.21 0.3 NEW
+undefined SELL 192.03 0.25 NEW
+undefined SELL 192.03 0.13 NEW
+Execute BUY: 177.003 ~ 173.592
+undefined BUY 170.72 0.36 NEW
+undefined SELL 188.8 0.3 NEW
+undefined SELL 188.8 0.13 NEW
+Execute BUY: 172.613 ~ 161.328
+undefined BUY 160.84 0.43 NEW
+undefined SELL 185.39 0.36 NEW
+undefined SELL 185.39 0.13 NEW
+Execute BUY: 165.16 ~ 156.
+undefined BUY 155.53 0.51 NEW
+undefined SELL 176.66 0.43 NEW
+undefined SELL 176.66 0.13 NEW
+Execute BUY: 156.96 ~ 151.
+undefined BUY 150.54 0.61 NEW
+undefined SELL 171.24 0.51 NEW
+undefined SELL 171.24 0.13 NEW
+Execute BUY: 156.251 ~ 143.402
+undefined BUY 142.97 0.73 NEW
+undefined SELL 165.85 0.61 NEW
+undefined SELL 165.85 0.13 NEW
+Execute BUY: 154.361 ~ 135.855
+undefined BUY 135.44 0.87 NEW
+undefined SELL 158.01 0.73 NEW
+undefined SELL 158.01 0.13 NEW
+Execute BUY: 148.424 ~ 135.
+undefined BUY 132.73 1.04 NEW
+undefined SELL 150.03 0.87 NEW
+undefined SELL 150.03 0.13 NEW
+Execute BUY: 144.932 ~ 132.55
+undefined BUY 130.07 1.24 NEW
+undefined SELL 146.36 1.04 NEW
+undefined SELL 146.36 0.13 NEW
+Execute SELL: 147.798 ~ 141.235
+balance: 9160.1336
+Execute SELL: 147.798 ~ 141.235
+balance: 9312.348
+undefined BUY 139.04 1.04 NEW
+undefined SELL 150.46 0.87 NEW
+undefined SELL 150.46 0.15 NEW
+Execute SELL: 157.918 ~ 146.14
+balance: 9334.917
+Execute SELL: 157.918 ~ 146.14
+balance: 9465.8172
+undefined BUY 142.93 0.87 NEW
+undefined SELL 158.87 0.73 NEW
+undefined SELL 158.87 0.18 NEW
+Execute BUY: 151.885 ~ 142.275
+undefined BUY 140.07 1.04 NEW
+undefined SELL 157.66 0.87 NEW
+undefined SELL 157.66 0.18 NEW
+Execute SELL: 159.734 ~ 145.231
+balance: 9369.8469
+Execute SELL: 159.734 ~ 145.231
+balance: 9507.0111
+undefined BUY 144.79 0.87 NEW
+undefined SELL 159.13 0.73 NEW
+undefined SELL 159.13 0.21 NEW
+Execute SELL: 159.997 ~ 153.054
+balance: 9540.428399999999
+Execute SELL: 159.997 ~ 153.054
+balance: 9656.593299999999
+undefined BUY 151.17 0.73 NEW
+undefined SELL 166.37 0.61 NEW
+undefined SELL 166.37 0.25 NEW
+Execute SELL: 167.194 ~ 156.461
+balance: 9698.1858
+Execute SELL: 167.194 ~ 156.461
+balance: 9799.671499999999
+undefined BUY 155.99 0.61 NEW
+undefined SELL 170.57 0.51 NEW
+undefined SELL 170.57 0.3 NEW
+Execute BUY: 165.77 ~ 153.061
+undefined BUY 152.6 0.73 NEW
+undefined SELL 170.09 0.61 NEW
+undefined SELL 170.09 0.3 NEW
+Execute SELL: 177.827 ~ 167.847
+balance: 9755.5446
+Execute SELL: 177.827 ~ 167.847
+balance: 9859.2995
+undefined BUY 161.58 0.61 NEW
+undefined SELL 169.9 0.51 NEW
+undefined SELL 169.9 0.36 NEW
+Execute SELL: 172.261 ~ 170.033
+balance: 9920.4635
+Execute SELL: 172.261 ~ 170.033
+balance: 10007.1125
+undefined BUY 161.4 0.51 NEW
+undefined SELL 168.88 0.43 NEW
+Execute SELL: 173.224 ~ 170.354
+balance: 10079.730899999999
+FIRST
+undefined BUY 169.84 0.14 NEW
+Execute BUY: 172.4 ~ 170.957
+undefined BUY 166.44 0.16 NEW
+undefined SELL 178.33 0.14 NEW
+Execute BUY: 172.32 ~ 162.
+undefined BUY 161.51 0.19 NEW
+undefined SELL 176.42 0.16 NEW
+undefined SELL 176.42 0.14 NEW
+Execute SELL: 178.744 ~ 174.641
+balance: 10054.0217
+Execute SELL: 178.744 ~ 174.641
+balance: 10082.248899999999
+FIRST
+undefined BUY 174.11 0.14 NEW
+Execute BUY: 178. ~ 174.504
+undefined BUY 170.62 0.16 NEW
+undefined SELL 182.81 0.14 NEW
+Execute SELL: 183. ~ 178.788
+balance: 10083.466899999998
+FIRST
+undefined BUY 178.25 0.14 NEW
+Execute BUY: 182.535 ~ 180.389
+undefined BUY 174.68 0.16 NEW
+undefined SELL 187.16 0.14 NEW
+Execute SELL: 187.243 ~ 184.122
+balance: 10084.714299999998
+FIRST
+undefined BUY 183.56 0.13 NEW
+Execute BUY: 186.533 ~ 180.625
+undefined BUY 179.88 0.15 NEW
+undefined SELL 192.73 0.13 NEW
+Execute BUY: 182.554 ~ 177.09
+undefined BUY 176.28 0.18 NEW
+undefined SELL 190.66 0.15 NEW
+undefined SELL 190.66 0.13 NEW
+Execute BUY: 178.22 ~ 173.315
+undefined BUY 172.75 0.21 NEW
+undefined SELL 188.29 0.18 NEW
+undefined SELL 188.29 0.13 NEW
+Execute BUY: 175.485 ~ 170.001
+undefined BUY 169.29 0.25 NEW
+undefined SELL 185.72 0.21 NEW
+undefined SELL 185.72 0.13 NEW
+Execute BUY: 171.68 ~ 165.249
+undefined BUY 164.75 0.3 NEW
+undefined SELL 182.88 0.25 NEW
+undefined SELL 182.88 0.13 NEW
+Execute BUY: 168.324 ~ 162.088
+undefined BUY 161.45 0.36 NEW
+undefined SELL 178.95 0.3 NEW
+undefined SELL 178.95 0.13 NEW
+Execute BUY: 167.128 ~ 160.197
+undefined BUY 158.22 0.43 NEW
+undefined SELL 175.68 0.36 NEW
+undefined SELL 175.68 0.13 NEW
+Execute SELL: 177.799 ~ 173.862
+balance: 9838.830499999998
+Execute SELL: 177.799 ~ 173.862
+balance: 9902.075299999999
+undefined BUY 166.89 0.36 NEW
+undefined SELL 178.28 0.3 NEW
+undefined SELL 178.28 0.15 NEW
+Execute SELL: 178.694 ~ 175.497
+balance: 9928.817299999999
+Execute SELL: 178.694 ~ 175.497
+balance: 9982.3013
+undefined BUY 169.36 0.3 NEW
+undefined SELL 180.82 0.25 NEW
+undefined SELL 180.82 0.18 NEW
+Execute BUY: 170.311 ~ 168.701
+undefined BUY 165.97 0.36 NEW
+undefined SELL 180.55 0.3 NEW
+undefined SELL 180.55 0.18 NEW
+Execute BUY: 166.966 ~ 164.755
+undefined BUY 162.65 0.43 NEW
+undefined SELL 177.87 0.36 NEW
+undefined SELL 177.87 0.18 NEW
+Execute BUY: 164.331 ~ 162.261
+undefined BUY 159.39 0.51 NEW
+undefined SELL 175 0.43 NEW
+undefined SELL 175 0.18 NEW
+Execute SELL: 175.304 ~ 173.834
+balance: 9833.304599999998
+Execute SELL: 175.304 ~ 173.834
+balance: 9908.554599999998
+undefined BUY 166.25 0.43 NEW
+undefined SELL 176.89 0.36 NEW
+undefined SELL 176.89 0.21 NEW
+Execute SELL: 178.454 ~ 175.95
+balance: 9945.701499999997
+Execute SELL: 178.454 ~ 175.95
+balance: 10009.381899999997
+undefined BUY 168.04 0.36 NEW
+undefined SELL 177.79 0.3 NEW
+undefined SELL 177.79 0.25 NEW
+Execute SELL: 178.576 ~ 176.998
+balance: 10053.829399999997
+Execute SELL: 178.576 ~ 176.998
+balance: 10107.166399999996
+FIRST
+undefined BUY 176.46 0.14 NEW
+Execute BUY: 178.281 ~ 176.793
+undefined BUY 172.93 0.16 NEW
+undefined SELL 185.28 0.14 NEW
+Execute BUY: 173.673 ~ 172.827
+undefined BUY 169.47 0.19 NEW
+undefined SELL 183.3 0.16 NEW
+undefined SELL 183.3 0.14 NEW
+Execute BUY: 170.83 ~ 169.46
+undefined BUY 166.08 0.22 NEW
+undefined SELL 181.05 0.19 NEW
+undefined SELL 181.05 0.14 NEW
+Execute BUY: 167.8 ~ 165.895
+undefined BUY 162.75 0.26 NEW
+undefined SELL 178.62 0.22 NEW
+undefined SELL 178.62 0.14 NEW
+Execute BUY: 163.783 ~ 162.2
+undefined BUY 159.49 0.31 NEW
+undefined SELL 175.92 0.26 NEW
+undefined SELL 175.92 0.14 NEW
+Execute BUY: 161.4 ~ 156.958
+undefined BUY 156.3 0.37 NEW
+undefined SELL 173 0.31 NEW
+undefined SELL 173 0.14 NEW
+Execute BUY: 159.251 ~ 155.967
+undefined BUY 153.17 0.44 NEW
+undefined SELL 169.92 0.37 NEW
+undefined SELL 169.92 0.14 NEW
+Execute BUY: 154.5 ~ 153.
+undefined BUY 150.1 0.52 NEW
+undefined SELL 166.73 0.44 NEW
+undefined SELL 166.73 0.14 NEW
+Execute BUY: 150.991 ~ 148.75
+undefined BUY 147.09 0.62 NEW
+undefined SELL 163.47 0.52 NEW
+undefined SELL 163.47 0.14 NEW
+Execute BUY: 149.285 ~ 146.859
+undefined BUY 144.14 0.74 NEW
+undefined SELL 160.12 0.62 NEW
+undefined SELL 160.12 0.14 NEW
+Execute SELL: 160.71 ~ 158.754
+balance: 9622.242599999998
+Execute SELL: 160.71 ~ 158.754
+balance: 9721.516999999998
+undefined BUY 152.11 0.62 NEW
+undefined SELL 163.24 0.52 NEW
+undefined SELL 163.24 0.16 NEW
+Execute SELL: 163.536 ~ 161.968
+balance: 9747.635399999997
+Execute SELL: 163.536 ~ 161.968
+balance: 9832.520199999997
+undefined BUY 155.07 0.52 NEW
+undefined SELL 165.99 0.44 NEW
+undefined SELL 165.99 0.19 NEW
+Execute SELL: 166.842 ~ 164.775
+balance: 9864.058299999997
+Execute SELL: 166.842 ~ 164.775
+balance: 9937.093899999996
+undefined BUY 157.69 0.44 NEW
+undefined SELL 167.94 0.37 NEW
+undefined SELL 167.94 0.22 NEW
+Execute BUY: 158.601 ~ 157.211
+undefined BUY 154.53 0.52 NEW
+undefined SELL 168.51 0.44 NEW
+undefined SELL 168.51 0.22 NEW
+Execute BUY: 155.984 ~ 154.5
+undefined BUY 151.43 0.62 NEW
+undefined SELL 165.86 0.52 NEW
+undefined SELL 165.86 0.22 NEW
+Execute SELL: 165.942 ~ 163.831
+balance: 9823.843899999996
+Execute SELL: 165.942 ~ 163.831
+balance: 9910.091099999996
+undefined BUY 157.56 0.52 NEW
+undefined SELL 167.54 0.44 NEW
+undefined SELL 167.54 0.26 NEW
+Execute SELL: 167.949 ~ 166.362
+balance: 9953.651499999996
+Execute SELL: 167.949 ~ 166.362
+balance: 10027.369099999996
+undefined BUY 159.16 0.44 NEW
+undefined SELL 165.64 0.37 NEW
+undefined SELL 165.64 0.31 NEW
+Execute SELL: 167.467 ~ 166.357
+balance: 10078.717499999997
+Execute SELL: 167.467 ~ 166.357
+balance: 10140.004299999997
+FIRST
+undefined BUY 165.85 0.15 NEW
+Execute BUY: 167.326 ~ 166.528
+undefined BUY 162.53 0.18 NEW
+undefined SELL 174.14 0.15 NEW
+Execute SELL: 174.554 ~ 171.432
+balance: 10141.247799999996
+FIRST
+undefined BUY 170.91 0.14 NEW
+Execute BUY: 174.274 ~ 171.973
+undefined BUY 167.49 0.16 NEW
+undefined SELL 179.45 0.14 NEW
+Execute SELL: 179.688 ~ 178.457
+balance: 10142.443399999995
+FIRST
+undefined BUY 177.92 0.14 NEW
+Execute BUY: 180.215 ~ 179.442
+undefined BUY 174.36 0.16 NEW
+undefined SELL 186.81 0.14 NEW
+Execute SELL: 187.817 ~ 186.111
+balance: 10143.687999999995
+FIRST
+undefined BUY 185.55 0.13 NEW
+Execute BUY: 187.672 ~ 186.345
+undefined BUY 181.83 0.15 NEW
+undefined SELL 194.82 0.13 NEW
+Execute SELL: 197.261 ~ 193.177
+balance: 10144.893099999996
+FIRST
+undefined BUY 192.59 0.13 NEW
+Execute BUY: 198.435 ~ 193.693
+undefined BUY 188.73 0.15 NEW
+undefined SELL 202.21 0.13 NEW
+Execute BUY: 193.386 ~ 181.319
+undefined BUY 180.77 0.18 NEW
+undefined SELL 200.04 0.15 NEW
+undefined SELL 200.04 0.13 NEW
+Execute SELL: 201.317 ~ 198.292
+balance: 10117.552099999995
+Execute SELL: 201.317 ~ 198.292
+balance: 10147.558099999995
+FIRST
+undefined BUY 197.69 0.12 NEW
+Execute BUY: 202.442 ~ 200.426
+undefined BUY 193.73 0.14 NEW
+undefined SELL 207.57 0.12 NEW
+Execute SELL: 208. ~ 205.942
+balance: 10148.743699999995
+FIRST
+undefined BUY 205.32 0.12 NEW
+Execute BUY: 207.035 ~ 204.663
+undefined BUY 201.21 0.14 NEW
+undefined SELL 215.58 0.12 NEW
+Execute SELL: 219.326 ~ 206.168
+balance: 10149.974899999996
+FIRST
+undefined BUY 205.54 0.12 NEW
+Execute BUY: 210.093 ~ 208.256
+undefined BUY 201.42 0.14 NEW
+undefined SELL 215.81 0.12 NEW
+Execute SELL: 216.447 ~ 214.537
+balance: 10151.207299999995
+FIRST
+undefined BUY 213.89 0.11 NEW
+Execute BUY: 215.352 ~ 213.563
+undefined BUY 209.61 0.13 NEW
+undefined SELL 224.58 0.11 NEW
+Execute BUY: 210.826 ~ 207.287
+undefined BUY 205.41 0.15 NEW
+undefined SELL 222.15 0.13 NEW
+undefined SELL 222.15 0.11 NEW
+Execute BUY: 207.453 ~ 203.756
+undefined BUY 201.3 0.18 NEW
+undefined SELL 219.44 0.15 NEW
+undefined SELL 219.44 0.11 NEW
+Execute BUY: 204.097 ~ 199.801
+undefined BUY 197.27 0.21 NEW
+undefined SELL 216.37 0.18 NEW
+undefined SELL 216.37 0.11 NEW
+Execute BUY: 201.054 ~ 197.212
+undefined BUY 193.32 0.25 NEW
+undefined SELL 213.13 0.21 NEW
+undefined SELL 213.13 0.11 NEW
+Execute BUY: 195.152 ~ 192.1
+undefined BUY 189.45 0.3 NEW
+undefined SELL 209.58 0.25 NEW
+undefined SELL 209.58 0.11 NEW
+Execute BUY: 191.237 ~ 188.03
+undefined BUY 185.66 0.36 NEW
+undefined SELL 205.8 0.3 NEW
+undefined SELL 205.8 0.11 NEW
+Execute BUY: 187.1 ~ 185.29
+undefined BUY 181.94 0.43 NEW
+undefined SELL 201.88 0.36 NEW
+undefined SELL 201.88 0.11 NEW
+Execute BUY: 184.954 ~ 181.321
+undefined BUY 178.3 0.51 NEW
+undefined SELL 197.87 0.43 NEW
+undefined SELL 197.87 0.11 NEW
+Execute SELL: 198.55 ~ 197.214
+balance: 9763.486799999995
+Execute SELL: 198.55 ~ 197.214
+balance: 9848.570899999995
+undefined BUY 187.97 0.43 NEW
+undefined SELL 201.61 0.36 NEW
+undefined SELL 201.61 0.13 NEW
+Execute BUY: 190.4 ~ 186.
+undefined BUY 184.21 0.51 NEW
+undefined SELL 202.64 0.43 NEW
+undefined SELL 202.64 0.13 NEW
+Execute BUY: 185.369 ~ 184.1
+undefined BUY 180.52 0.61 NEW
+undefined SELL 198.83 0.51 NEW
+undefined SELL 198.83 0.13 NEW
+Execute BUY: 182.129 ~ 176.468
+undefined BUY 175.93 0.73 NEW
+undefined SELL 194.91 0.61 NEW
+undefined SELL 194.91 0.13 NEW
+Execute BUY: 177.76 ~ 170.597
+undefined BUY 170.08 0.87 NEW
+undefined SELL 190.07 0.73 NEW
+undefined SELL 190.07 0.13 NEW
+Execute BUY: 171.96 ~ 170.
+undefined BUY 166.67 1.04 NEW
+undefined SELL 183.97 0.87 NEW
+undefined SELL 183.97 0.13 NEW
+Execute SELL: 184.133 ~ 183.354
+balance: 9311.197099999994
+Execute SELL: 184.133 ~ 183.354
+balance: 9471.250999999995
+undefined BUY 174.77 0.87 NEW
+undefined SELL 190 0.73 NEW
+undefined SELL 190 0.15 NEW
+Execute BUY: 175.638 ~ 173.94
+undefined BUY 171.27 1.04 NEW
+undefined SELL 188.23 0.87 NEW
+undefined SELL 188.23 0.15 NEW
+Execute BUY: 172.828 ~ 170.769
+undefined BUY 167.84 1.24 NEW
+undefined SELL 184.35 1.04 NEW
+undefined SELL 184.35 0.15 NEW
+Execute SELL: 184.362 ~ 183.564
+balance: 9168.732799999994
+Execute SELL: 184.362 ~ 183.564
+balance: 9360.456799999994
+undefined BUY 175.13 1.04 NEW
+undefined SELL 188.28 0.87 NEW
+undefined SELL 188.28 0.18 NEW
+Execute SELL: 188.344 ~ 187.579
+balance: 9394.347199999995
+Execute SELL: 188.344 ~ 187.579
+balance: 9558.150799999994
+undefined BUY 178.86 0.87 NEW
+undefined SELL 189.73 0.73 NEW
+undefined SELL 189.73 0.21 NEW
+Execute SELL: 189.912 ~ 189.2
+balance: 9597.994099999994
+Execute SELL: 189.912 ~ 189.2
+balance: 9736.496999999994
+undefined BUY 180.24 0.73 NEW
+undefined SELL 193.45 0.61 NEW
+undefined SELL 193.45 0.25 NEW
+Execute SELL: 195.579 ~ 191.835
+balance: 9784.859499999993
+Execute SELL: 195.579 ~ 191.835
+balance: 9902.863999999992
+undefined BUY 183.77 0.61 NEW
+undefined SELL 195.45 0.51 NEW
+undefined SELL 195.45 0.3 NEW
+Execute BUY: 184.681 ~ 183.106
+undefined BUY 180.09 0.73 NEW
+undefined SELL 194.92 0.61 NEW
+undefined SELL 194.92 0.3 NEW
+Execute BUY: 180.831 ~ 179.822
+undefined BUY 176.48 0.87 NEW
+undefined SELL 191.95 0.73 NEW
+undefined SELL 191.95 0.3 NEW
+Execute BUY: 177.141 ~ 176.232
+undefined BUY 172.95 1.04 NEW
+undefined SELL 188.79 0.87 NEW
+undefined SELL 188.79 0.3 NEW
+Execute SELL: 189. ~ 188.346
+balance: 9562.397999999992
+Execute SELL: 189. ~ 188.346
+balance: 9726.645299999993
+undefined BUY 179.35 0.87 NEW
+undefined SELL 191.02 0.73 NEW
+undefined SELL 191.02 0.36 NEW
+Execute SELL: 191.622 ~ 190.432
+balance: 9795.412499999993
+Execute SELL: 191.622 ~ 190.432
+balance: 9934.857099999994
+undefined BUY 181.46 0.73 NEW
+undefined SELL 194.78 0.61 NEW
+undefined SELL 194.78 0.43 NEW
+Execute BUY: 182.472 ~ 181.431
+undefined BUY 177.83 0.87 NEW
+undefined SELL 193.06 0.73 NEW
+undefined SELL 193.06 0.43 NEW
+Execute BUY: 178.642 ~ 177.501
+undefined BUY 174.27 1.04 NEW
+undefined SELL 190.24 0.87 NEW
+undefined SELL 190.24 0.43 NEW
+Execute BUY: 175.326 ~ 173.983
+undefined BUY 170.78 1.24 NEW
+undefined SELL 187.19 1.04 NEW
+undefined SELL 187.19 0.43 NEW
+Execute BUY: 172.659 ~ 170.369
+undefined BUY 167.36 1.48 NEW
+undefined SELL 183.96 1.24 NEW
+undefined SELL 183.96 0.43 NEW
+Execute BUY: 169.018 ~ 165.
+undefined BUY 164.01 1.77 NEW
+undefined SELL 180.59 1.48 NEW
+undefined SELL 180.59 0.43 NEW
+Execute BUY: 166.112 ~ 163.942
+undefined BUY 160.72 2.12 NEW
+undefined SELL 177.12 1.77 NEW
+undefined SELL 177.12 0.43 NEW
+Execute BUY: 161.791 ~ 160.33
+undefined BUY 157.5 2.54 NEW
+undefined SELL 173.58 2.12 NEW
+undefined SELL 173.58 0.43 NEW
+Execute BUY: 158.135 ~ 157.013
+undefined BUY 154.35 3.04 NEW
+undefined SELL 170 2.54 NEW
+undefined SELL 170 0.43 NEW
+Execute BUY: 155.504 ~ 154.162
+undefined BUY 151.26 3.64 NEW
+undefined SELL 166.44 3.04 NEW
+undefined SELL 166.44 0.43 NEW
+Execute BUY: 152.833 ~ 151.246
+undefined BUY 148.23 4.36 NEW
+undefined SELL 162.89 3.64 NEW
+undefined SELL 162.89 0.43 NEW
+Execute SELL: 163.013 ~ 162.235
+balance: 7026.136599999993
+Execute SELL: 163.013 ~ 162.235
+balance: 7619.056199999994
+undefined BUY 154.74 3.64 NEW
+undefined SELL 166.57 3.04 NEW
+undefined SELL 166.57 0.51 NEW
+Execute SELL: 166.583 ~ 165.569
+balance: 7704.006899999994
+Execute SELL: 166.583 ~ 165.569
+balance: 8210.379699999994
+undefined BUY 158.24 3.04 NEW
+undefined SELL 170.71 2.54 NEW
+undefined SELL 170.71 0.61 NEW
+Execute BUY: 161.01 ~ 154.682
+undefined BUY 154.21 3.64 NEW
+undefined SELL 170.63 3.04 NEW
+undefined SELL 170.63 0.61 NEW
+Execute BUY: 158.326 ~ 154.074
+undefined BUY 151.12 4.36 NEW
+undefined SELL 166.37 3.64 NEW
+undefined SELL 166.37 0.61 NEW
+Execute BUY: 155.569 ~ 150.226
+undefined BUY 148.09 5.23 NEW
+undefined SELL 162.88 4.36 NEW
+undefined SELL 162.88 0.61 NEW
+Execute SELL: 162.894 ~ 162.32
+balance: 6608.479299999993
+Execute SELL: 162.894 ~ 162.32
+balance: 7318.636099999992
+undefined BUY 154.73 4.36 NEW
+undefined SELL 166.7 3.64 NEW
+undefined SELL 166.7 0.73 NEW
+Execute SELL: 166.909 ~ 166.527
+balance: 7440.327099999992
+Execute SELL: 166.909 ~ 166.527
+balance: 8047.115099999992
+undefined BUY 158.36 3.64 NEW
+undefined SELL 170.72 3.04 NEW
+undefined SELL 170.72 0.87 NEW
+Execute SELL: 171.246 ~ 170.043
+balance: 8195.641499999992
+Execute SELL: 171.246 ~ 170.043
+balance: 8714.630299999992
+undefined BUY 162.18 3.04 NEW
+undefined SELL 170.49 2.54 NEW
+undefined SELL 170.49 1.04 NEW
+Execute SELL: 172.576 ~ 170.8
+balance: 8891.939899999992
+Execute SELL: 172.576 ~ 170.8
+balance: 9324.984499999991
+undefined BUY 161.96 2.54 NEW
+undefined SELL 172.65 2.12 NEW
+undefined SELL 172.65 1.24 NEW
+Execute SELL: 172.656 ~ 171.999
+balance: 9539.07049999999
+Execute SELL: 172.656 ~ 171.999
+balance: 9905.08849999999
+undefined BUY 164.01 2.12 NEW
+undefined SELL 173.81 1.77 NEW
+undefined SELL 173.81 1.48 NEW
+Execute SELL: 174. ~ 173.066
+balance: 10162.32729999999
+Execute SELL: 174. ~ 173.066
+balance: 10469.97099999999
+FIRST
+undefined BUY 172.54 0.15 NEW
+Execute BUY: 174.192 ~ 173.777
+undefined BUY 169.08 0.18 NEW
+undefined SELL 181.16 0.15 NEW
+Execute BUY: 169.541 ~ 168.628
+undefined BUY 165.69 0.21 NEW
+undefined SELL 179.18 0.18 NEW
+undefined SELL 179.18 0.15 NEW
+Execute BUY: 166.19 ~ 165.6
+undefined BUY 162.37 0.25 NEW
+undefined SELL 176.97 0.21 NEW
+undefined SELL 176.97 0.15 NEW
+Execute BUY: 164.045 ~ 162.232
+undefined BUY 159.12 0.3 NEW
+undefined SELL 174.49 0.25 NEW
+undefined SELL 174.49 0.15 NEW
+Execute BUY: 160.18 ~ 158.453
+undefined BUY 155.93 0.36 NEW
+undefined SELL 171.77 0.3 NEW
+undefined SELL 171.77 0.15 NEW
+Execute BUY: 156.573 ~ 155.501
+undefined BUY 152.81 0.43 NEW
+undefined SELL 168.85 0.36 NEW
+undefined SELL 168.85 0.15 NEW
+Execute BUY: 154.161 ~ 152.165
+undefined BUY 149.75 0.51 NEW
+undefined SELL 165.8 0.43 NEW
+undefined SELL 165.8 0.15 NEW
+Execute BUY: 151.472 ~ 147.553
+undefined BUY 146.75 0.61 NEW
+undefined SELL 162.67 0.51 NEW
+undefined SELL 162.67 0.15 NEW
+Execute BUY: 149.264 ~ 146.718
+undefined BUY 143.81 0.73 NEW
+undefined SELL 159.43 0.61 NEW
+undefined SELL 159.43 0.15 NEW
+Execute BUY: 146.172 ~ 143.106
+undefined BUY 140.93 0.87 NEW
+undefined SELL 156.14 0.73 NEW
+undefined SELL 156.14 0.15 NEW
+Execute SELL: 156.55 ~ 155.178
+balance: 9921.23879999999
+Execute SELL: 156.55 ~ 155.178
+balance: 10035.22099999999
+undefined BUY 148.33 0.73 NEW
+undefined SELL 159.42 0.61 NEW
+undefined SELL 159.42 0.18 NEW
+Execute SELL: 159.499 ~ 158.755
+balance: 10063.91659999999
+Execute SELL: 159.499 ~ 158.755
+balance: 10161.16279999999
+undefined BUY 151.44 0.61 NEW
+undefined SELL 162.11 0.51 NEW
+undefined SELL 162.11 0.21 NEW
+Execute SELL: 162.399 ~ 161.87
+balance: 10195.20589999999
+Execute SELL: 162.399 ~ 161.87
+balance: 10277.88199999999
+undefined BUY 154 0.51 NEW
+undefined SELL 164.14 0.43 NEW
+undefined SELL 164.14 0.25 NEW
+Execute BUY: 154.711 ~ 153.688
+undefined BUY 150.91 0.61 NEW
+undefined SELL 164.59 0.51 NEW
+undefined SELL 164.59 0.25 NEW
+Execute SELL: 164.601 ~ 161.86
+balance: 10240.489499999989
+Execute SELL: 164.601 ~ 161.86
+balance: 10324.430399999988
+undefined BUY 156.36 0.51 NEW
+undefined SELL 163.17 0.43 NEW
+undefined SELL 163.17 0.3 NEW
+Execute SELL: 165.998 ~ 164.221
+balance: 10373.381399999987
+Execute SELL: 165.998 ~ 164.221
+balance: 10443.544499999987
+undefined BUY 155.01 0.43 NEW
+undefined SELL 163.72 0.36 NEW
+Execute SELL: 166.666 ~ 165.487
+balance: 10502.483699999988
+FIRST
+undefined BUY 164.99 0.15 NEW
+Execute BUY: 166.304 ~ 164.767
+undefined BUY 161.69 0.18 NEW
+undefined SELL 173.23 0.15 NEW
+Execute BUY: 162.249 ~ 161.6
+undefined BUY 158.45 0.21 NEW
+undefined SELL 171.34 0.18 NEW
+undefined SELL 171.34 0.15 NEW
+Execute BUY: 159.312 ~ 158.279
+undefined BUY 155.28 0.25 NEW
+undefined SELL 169.23 0.21 NEW
+undefined SELL 169.23 0.15 NEW
+Execute BUY: 155.852 ~ 155.23
+undefined BUY 152.17 0.3 NEW
+undefined SELL 166.86 0.25 NEW
+undefined SELL 166.86 0.15 NEW
+Execute BUY: 152.982 ~ 151.385
+undefined BUY 149.12 0.36 NEW
+undefined SELL 164.26 0.3 NEW
+undefined SELL 164.26 0.15 NEW
+Execute BUY: 149.306 ~ 148.292
+undefined BUY 146.13 0.43 NEW
+undefined SELL 161.47 0.36 NEW
+undefined SELL 161.47 0.15 NEW
+Execute BUY: 146.513 ~ 146.096
+undefined BUY 143.2 0.51 NEW
+undefined SELL 158.55 0.43 NEW
+undefined SELL 158.55 0.15 NEW
+Execute BUY: 144.501 ~ 142.8
+undefined BUY 140.33 0.61 NEW
+undefined SELL 155.55 0.51 NEW
+undefined SELL 155.55 0.15 NEW
+Execute BUY: 140.899 ~ 140.174
+undefined BUY 137.52 0.73 NEW
+undefined SELL 152.45 0.61 NEW
+undefined SELL 152.45 0.15 NEW
+Execute BUY: 138.989 ~ 137.34
+undefined BUY 134.76 0.87 NEW
+undefined SELL 149.31 0.73 NEW
+undefined SELL 149.31 0.15 NEW
+Execute BUY: 135.559 ~ 134.105
+undefined BUY 132.06 1.04 NEW
+undefined SELL 146.16 0.87 NEW
+undefined SELL 146.16 0.15 NEW
+Execute SELL: 146.627 ~ 145.806
+balance: 9860.02629999999
+Execute SELL: 146.627 ~ 145.806
+balance: 9987.18549999999
+undefined BUY 138.85 0.87 NEW
+undefined SELL 149.41 0.73 NEW
+undefined SELL 149.41 0.18 NEW
+Execute SELL: 151.622 ~ 149.307
+balance: 10014.07929999999
+Execute SELL: 151.622 ~ 149.307
+balance: 10123.14859999999
+undefined BUY 141.93 0.73 NEW
+undefined SELL 152.21 0.61 NEW
+undefined SELL 152.21 0.21 NEW
+Execute SELL: 152.336 ~ 151.319
+balance: 10155.112699999989
+Execute SELL: 152.336 ~ 151.319
+balance: 10247.960799999988
+undefined BUY 144.59 0.61 NEW
+undefined SELL 154.53 0.51 NEW
+undefined SELL 154.53 0.25 NEW
+Execute SELL: 154.725 ~ 153.709
+balance: 10286.593299999988
+Execute SELL: 154.725 ~ 153.709
+balance: 10365.403599999987
+undefined BUY 146.8 0.51 NEW
+undefined SELL 156.04 0.43 NEW
+undefined SELL 156.04 0.3 NEW
+Execute SELL: 156.151 ~ 155.112
+balance: 10412.215599999987
+Execute SELL: 156.151 ~ 155.112
+balance: 10479.312799999987
+undefined BUY 148.23 0.43 NEW
+undefined SELL 156.57 0.36 NEW
+Execute SELL: 156.738 ~ 156.026
+balance: 10535.677999999987
+FIRST
+undefined BUY 155.55 0.16 NEW
+Execute BUY: 156.826 ~ 156.269
+undefined BUY 152.43 0.19 NEW
+undefined SELL 163.32 0.16 NEW
+Execute SELL: 163.501 ~ 162.803
+balance: 10536.921199999986
+FIRST
+undefined BUY 162.31 0.16 NEW
+Execute BUY: 163.825 ~ 163.166
+undefined BUY 159.06 0.19 NEW
+undefined SELL 170.42 0.16 NEW
+Execute BUY: 161.206 ~ 157.671
+undefined BUY 155.87 0.22 NEW
+undefined SELL 168.57 0.19 NEW
+undefined SELL 168.57 0.16 NEW
+Execute SELL: 168.681 ~ 168.153
+balance: 10507.701399999985
+Execute SELL: 168.681 ~ 168.153
+balance: 10539.729699999985
+FIRST
+undefined BUY 167.64 0.15 NEW
+Execute BUY: 168.651 ~ 168.071
+undefined BUY 164.28 0.18 NEW
+undefined SELL 176.02 0.15 NEW
+Execute BUY: 164.898 ~ 164.011
+undefined BUY 160.99 0.21 NEW
+undefined SELL 174.09 0.18 NEW
+undefined SELL 174.09 0.15 NEW
+Execute BUY: 161.154 ~ 160.801
+undefined BUY 157.77 0.25 NEW
+undefined SELL 171.94 0.21 NEW
+undefined SELL 171.94 0.15 NEW
+Execute BUY: 158.247 ~ 157.064
+undefined BUY 154.61 0.3 NEW
+undefined SELL 169.54 0.25 NEW
+undefined SELL 169.54 0.15 NEW
+Execute BUY: 155.522 ~ 153.041
+undefined BUY 151.51 0.36 NEW
+undefined SELL 166.9 0.3 NEW
+undefined SELL 166.9 0.15 NEW
+Execute BUY: 151.701 ~ 151.04
+undefined BUY 148.47 0.43 NEW
+undefined SELL 164.06 0.36 NEW
+undefined SELL 164.06 0.15 NEW
+Execute BUY: 148.944 ~ 148.255
+undefined BUY 145.5 0.51 NEW
+undefined SELL 161.09 0.43 NEW
+undefined SELL 161.09 0.15 NEW
+Execute BUY: 146.503 ~ 145.032
+undefined BUY 142.59 0.61 NEW
+undefined SELL 158.05 0.51 NEW
+undefined SELL 158.05 0.15 NEW
+Execute BUY: 143.489 ~ 141.753
+undefined BUY 139.73 0.73 NEW
+undefined SELL 154.91 0.61 NEW
+undefined SELL 154.91 0.15 NEW
+Execute BUY: 140.313 ~ 139.286
+undefined BUY 136.93 0.87 NEW
+undefined SELL 151.71 0.73 NEW
+undefined SELL 151.71 0.15 NEW
+Execute BUY: 138.513 ~ 136.8
+undefined BUY 134.19 1.04 NEW
+undefined SELL 148.51 0.87 NEW
+undefined SELL 148.51 0.15 NEW
+Execute BUY: 135.208 ~ 134.113
+undefined BUY 131.5 1.24 NEW
+undefined SELL 145.32 1.04 NEW
+undefined SELL 145.32 0.15 NEW
+Execute BUY: 132.603 ~ 131.267
+undefined BUY 128.87 1.48 NEW
+undefined SELL 142.17 1.24 NEW
+undefined SELL 142.17 0.15 NEW
+Execute SELL: 143.551 ~ 140.962
+balance: 9583.385199999986
+Execute SELL: 143.551 ~ 140.962
+balance: 9759.675999999987
+undefined BUY 135.06 1.24 NEW
+undefined SELL 145.56 1.04 NEW
+undefined SELL 145.56 0.18 NEW
+Execute SELL: 145.9 ~ 144.912
+balance: 9785.876799999987
+Execute SELL: 145.9 ~ 144.912
+balance: 9937.259199999988
+undefined BUY 138.28 1.04 NEW
+undefined SELL 148.68 0.87 NEW
+undefined SELL 148.68 0.21 NEW
+Execute BUY: 139.159 ~ 137.692
+undefined BUY 135.51 1.24 NEW
+undefined SELL 149.2 1.04 NEW
+undefined SELL 149.2 0.21 NEW
+Execute BUY: 136.24 ~ 135.101
+undefined BUY 132.79 1.48 NEW
+undefined SELL 146.16 1.24 NEW
+undefined SELL 146.16 0.21 NEW
+Execute BUY: 134.173 ~ 132.356
+undefined BUY 130.13 1.77 NEW
+undefined SELL 143.1 1.48 NEW
+undefined SELL 143.1 0.21 NEW
+Execute BUY: 130.993 ~ 130.01
+undefined BUY 127.52 2.12 NEW
+undefined SELL 140.07 1.77 NEW
+undefined SELL 140.07 0.21 NEW
+Execute BUY: 128.862 ~ 126.99
+undefined BUY 124.96 2.54 NEW
+undefined SELL 137.06 2.12 NEW
+undefined SELL 137.06 0.21 NEW
+Execute SELL: 137.418 ~ 135.55
+balance: 8956.996499999988
+Execute SELL: 137.418 ~ 135.55
+balance: 9247.563699999988
+undefined BUY 130.2 2.12 NEW
+undefined SELL 140.22 1.77 NEW
+undefined SELL 140.22 0.25 NEW
+Execute SELL: 140.686 ~ 138.183
+balance: 9282.618699999988
+Execute SELL: 140.686 ~ 138.183
+balance: 9530.808099999987
+undefined BUY 133.2 1.77 NEW
+undefined SELL 143.29 1.48 NEW
+undefined SELL 143.29 0.3 NEW
+Execute SELL: 143.775 ~ 143.06
+balance: 9573.795099999987
+Execute SELL: 143.775 ~ 143.06
+balance: 9785.864299999987
+undefined BUY 136.12 1.48 NEW
+undefined SELL 146.06 1.24 NEW
+undefined SELL 146.06 0.36 NEW
+Execute BUY: 136.657 ~ 136.051
+undefined BUY 133.39 1.77 NEW
+undefined SELL 146.08 1.48 NEW
+undefined SELL 146.08 0.36 NEW
+Execute BUY: 133.741 ~ 133.277
+undefined BUY 130.72 2.12 NEW
+undefined SELL 143.27 1.77 NEW
+undefined SELL 143.27 0.36 NEW
+Execute BUY: 131.717 ~ 130.144
+undefined BUY 128.1 2.54 NEW
+undefined SELL 140.42 2.12 NEW
+undefined SELL 140.42 0.36 NEW
+Execute BUY: 128.643 ~ 127.764
+undefined BUY 125.53 3.04 NEW
+undefined SELL 137.55 2.54 NEW
+undefined SELL 137.55 0.36 NEW
+Execute BUY: 126.392 ~ 125.208
+undefined BUY 123.01 3.64 NEW
+undefined SELL 134.69 3.04 NEW
+undefined SELL 134.69 0.36 NEW
+Execute BUY: 123.693 ~ 122.897
+undefined BUY 120.54 4.36 NEW
+undefined SELL 131.85 3.64 NEW
+undefined SELL 131.85 0.36 NEW
+Execute BUY: 121.451 ~ 120.513
+undefined BUY 118.12 5.23 NEW
+undefined SELL 129.04 4.36 NEW
+undefined SELL 129.04 0.36 NEW
+Execute BUY: 119.662 ~ 116.019
+undefined BUY 115.67 6.27 NEW
+undefined SELL 126.28 5.23 NEW
+undefined SELL 126.28 0.36 NEW
+Execute SELL: 126.51 ~ 124.9
+balance: 6818.577199999988
+Execute SELL: 126.51 ~ 124.9
+balance: 7479.021599999988
+undefined BUY 119.96 5.23 NEW
+undefined SELL 129.19 4.36 NEW
+undefined SELL 129.19 0.43 NEW
+Execute SELL: 129.603 ~ 128.643
+balance: 7534.573299999988
+Execute SELL: 129.603 ~ 128.643
+balance: 8097.841699999988
+undefined BUY 122.73 4.36 NEW
+undefined SELL 132.06 3.64 NEW
+undefined SELL 132.06 0.51 NEW
+Execute SELL: 132.095 ~ 131.762
+balance: 8165.192299999988
+Execute SELL: 132.095 ~ 131.762
+balance: 8645.890699999987
+undefined BUY 125.45 3.64 NEW
+undefined SELL 134.8 3.04 NEW
+undefined SELL 134.8 0.61 NEW
+Execute SELL: 135.312 ~ 133.736
+balance: 8728.118699999986
+Execute SELL: 135.312 ~ 133.736
+balance: 9137.910699999986
+undefined BUY 128.06 3.04 NEW
+undefined SELL 137.23 2.54 NEW
+undefined SELL 137.23 0.73 NEW
+Execute SELL: 137.871 ~ 136.429
+balance: 9238.088599999986
+Execute SELL: 137.871 ~ 136.429
+balance: 9586.652799999987
+undefined BUY 130.36 2.54 NEW
+undefined SELL 139.15 2.12 NEW
+undefined SELL 139.15 0.87 NEW
+Execute SELL: 139.285 ~ 138.521
+balance: 9707.713299999987
+Execute SELL: 139.285 ~ 138.521
+balance: 10002.711299999986
+undefined BUY 132.19 2.12 NEW
+undefined SELL 141.95 1.77 NEW
+undefined SELL 141.95 1.04 NEW
+Execute SELL: 141.961 ~ 141.501
+balance: 10150.339299999987
+Execute SELL: 141.961 ~ 141.501
+balance: 10401.590799999987
+undefined BUY 134.85 1.77 NEW
+undefined SELL 142.63 1.48 NEW
+undefined SELL 142.63 1.24 NEW
+Execute SELL: 142.939 ~ 142.11
+balance: 10578.451999999987
+Execute SELL: 142.939 ~ 142.11
+balance: 10789.544399999986
+FIRST
+undefined BUY 141.68 0.19 NEW
+Execute BUY: 142.939 ~ 142.3
+undefined BUY 138.84 0.22 NEW
+undefined SELL 148.76 0.19 NEW
+Execute SELL: 149. ~ 147.765
+balance: 10790.889599999986
+FIRST
+undefined BUY 147.32 0.18 NEW
+Execute BUY: 149.845 ~ 148.713
+undefined BUY 144.37 0.21 NEW
+undefined SELL 154.68 0.18 NEW
+Execute BUY: 145.717 ~ 144.068
+undefined BUY 141.48 0.25 NEW
+undefined SELL 153.01 0.21 NEW
+undefined SELL 153.01 0.18 NEW
+Execute BUY: 142.021 ~ 141.378
+undefined BUY 138.65 0.3 NEW
+undefined SELL 151.12 0.25 NEW
+undefined SELL 151.12 0.18 NEW
+Execute BUY: 140.305 ~ 137.946
+undefined BUY 135.87 0.36 NEW
+undefined SELL 148.99 0.3 NEW
+undefined SELL 148.99 0.18 NEW
+Execute BUY: 136.91 ~ 135.301
+undefined BUY 133.15 0.43 NEW
+undefined SELL 146.67 0.36 NEW
+undefined SELL 146.67 0.18 NEW
+Execute BUY: 133.839 ~ 132.87
+undefined BUY 130.48 0.51 NEW
+undefined SELL 144.19 0.43 NEW
+undefined SELL 144.19 0.18 NEW
+Execute BUY: 131.024 ~ 130.337
+undefined BUY 127.87 0.61 NEW
+undefined SELL 141.61 0.51 NEW
+undefined SELL 141.61 0.18 NEW
+Execute SELL: 142. ~ 141.154
+balance: 10509.866599999987
+Execute SELL: 142. ~ 141.154
+balance: 10582.087699999987
+undefined BUY 134.52 0.51 NEW
+undefined SELL 143.67 0.43 NEW
+undefined SELL 143.67 0.21 NEW
+Execute SELL: 144.161 ~ 143.207
+balance: 10612.258399999988
+Execute SELL: 144.161 ~ 143.207
+balance: 10674.036499999987
+undefined BUY 136.48 0.43 NEW
+undefined SELL 145.07 0.36 NEW
+undefined SELL 145.07 0.25 NEW
+Execute BUY: 136.925 ~ 136.383
+undefined BUY 133.75 0.51 NEW
+undefined SELL 145.23 0.43 NEW
+undefined SELL 145.23 0.25 NEW
+Execute BUY: 135.678 ~ 133.58
+undefined BUY 131.07 0.61 NEW
+undefined SELL 143.1 0.51 NEW
+undefined SELL 143.1 0.25 NEW
+Execute BUY: 131.375 ~ 130.76
+undefined BUY 128.44 0.73 NEW
+undefined SELL 140.8 0.61 NEW
+undefined SELL 140.8 0.25 NEW
+Execute BUY: 129.106 ~ 128.414
+undefined BUY 125.87 0.87 NEW
+undefined SELL 138.35 0.73 NEW
+undefined SELL 138.35 0.25 NEW
+Execute BUY: 126.7 ~ 125.867
+undefined BUY 123.35 1.04 NEW
+undefined SELL 135.82 0.87 NEW
+undefined SELL 135.82 0.25 NEW
+Execute SELL: 136.53 ~ 135.131
+balance: 10297.871799999986
+Execute SELL: 136.53 ~ 135.131
+balance: 10416.035199999986
+undefined BUY 129.02 0.87 NEW
+undefined SELL 137.98 0.73 NEW
+undefined SELL 137.98 0.3 NEW
+Execute SELL: 138.367 ~ 137.832
+balance: 10457.429199999986
+Execute SELL: 138.367 ~ 137.832
+balance: 10558.154599999985
+undefined BUY 131.08 0.73 NEW
+undefined SELL 139.49 0.61 NEW
+undefined SELL 139.49 0.36 NEW
+Execute SELL: 139.911 ~ 139.417
+balance: 10608.370999999985
+Execute SELL: 139.911 ~ 139.417
+balance: 10693.459899999985
+undefined BUY 132.51 0.61 NEW
+undefined SELL 141.74 0.51 NEW
+undefined SELL 141.74 0.43 NEW
+Execute SELL: 142.092 ~ 140.821
+balance: 10754.408099999986
+Execute SELL: 142.092 ~ 140.821
+balance: 10826.695499999985
+FIRST
+undefined BUY 140.39 0.19 NEW
+Execute BUY: 142.696 ~ 141.7
+undefined BUY 137.58 0.22 NEW
+undefined SELL 147.4 0.19 NEW
+Execute SELL: 147.503 ~ 146.311
+balance: 10828.027399999984
+FIRST
+undefined BUY 145.87 0.18 NEW
+Execute BUY: 147.876 ~ 147.371
+undefined BUY 142.95 0.21 NEW
+undefined SELL 153.16 0.18 NEW
+Execute BUY: 143.457 ~ 142.648
+undefined BUY 140.09 0.25 NEW
+undefined SELL 151.51 0.21 NEW
+undefined SELL 151.51 0.18 NEW
+Execute BUY: 140.346 ~ 138.657
+undefined BUY 137.28 0.3 NEW
+undefined SELL 149.63 0.25 NEW
+undefined SELL 149.63 0.18 NEW
+Execute BUY: 138.766 ~ 136.749
+undefined BUY 134.53 0.36 NEW
+undefined SELL 147.52 0.3 NEW
+undefined SELL 147.52 0.18 NEW
+Execute BUY: 135.127 ~ 134.232
+undefined BUY 131.83 0.43 NEW
+undefined SELL 145.22 0.36 NEW
+undefined SELL 145.22 0.18 NEW
+Execute BUY: 132.539 ~ 131.731
+undefined BUY 129.19 0.51 NEW
+undefined SELL 142.77 0.43 NEW
+undefined SELL 142.77 0.18 NEW
+Execute BUY: 129.648 ~ 129.062
+undefined BUY 126.6 0.61 NEW
+undefined SELL 140.21 0.51 NEW
+undefined SELL 140.21 0.18 NEW
+Execute SELL: 140.687 ~ 139.977
+balance: 10549.777999999986
+Execute SELL: 140.687 ~ 139.977
+balance: 10621.285099999986
+undefined BUY 133.19 0.51 NEW
+undefined SELL 142.25 0.43 NEW
+undefined SELL 142.25 0.21 NEW
+Execute SELL: 142.259 ~ 141.842
+balance: 10651.157599999986
+Execute SELL: 142.259 ~ 141.842
+balance: 10712.325099999985
+undefined BUY 135.13 0.43 NEW
+undefined SELL 143.64 0.36 NEW
+undefined SELL 143.64 0.25 NEW
+Execute SELL: 143.704 ~ 143.23
+balance: 10748.235099999985
+Execute SELL: 143.704 ~ 143.23
+balance: 10799.945499999985
+undefined BUY 136.45 0.36 NEW
+undefined SELL 144.14 0.3 NEW
+Execute SELL: 144.163 ~ 143.662
+balance: 10843.187499999985
+FIRST
+undefined BUY 143.23 0.18 NEW
+Execute BUY: 144.158 ~ 143.587
+undefined BUY 140.36 0.21 NEW
+undefined SELL 150.39 0.18 NEW
+Execute BUY: 140.727 ~ 140.19
+undefined BUY 137.55 0.25 NEW
+undefined SELL 148.76 0.21 NEW
+undefined SELL 148.76 0.18 NEW
+Execute SELL: 148.874 ~ 147.609
+balance: 10814.707299999985
+Execute SELL: 148.874 ~ 147.609
+balance: 10845.946899999986
+FIRST
+undefined BUY 147.16 0.18 NEW
+Execute BUY: 148.555 ~ 148.023
+undefined BUY 144.21 0.21 NEW
+undefined SELL 154.51 0.18 NEW
+Execute SELL: 155.239 ~ 153.608
+balance: 10847.269899999987
+FIRST
+undefined BUY 153.14 0.17 NEW
+Execute BUY: 155.294 ~ 154.04
+undefined BUY 150.07 0.2 NEW
+undefined SELL 160.79 0.17 NEW
+Execute BUY: 150.588 ~ 149.769
+undefined BUY 147.06 0.24 NEW
+undefined SELL 159.05 0.2 NEW
+undefined SELL 159.05 0.17 NEW
+Execute SELL: 159.08 ~ 158.034
+balance: 10818.260599999989
+Execute SELL: 159.08 ~ 158.034
+balance: 10850.070599999988
+FIRST
+undefined BUY 157.55 0.17 NEW
+Execute BUY: 158.384 ~ 157.825
+undefined BUY 154.39 0.2 NEW
+undefined SELL 165.42 0.17 NEW
+Execute SELL: 165.834 ~ 165.2
+balance: 10851.408499999989
+FIRST
+undefined BUY 164.7 0.16 NEW
+Execute BUY: 165.96 ~ 165.35
+undefined BUY 161.4 0.19 NEW
+undefined SELL 172.93 0.16 NEW
+Execute SELL: 173.069 ~ 172.573
+balance: 10852.725299999987
+FIRST
+undefined BUY 172.05 0.15 NEW
+Execute BUY: 173.828 ~ 172.916
+undefined BUY 168.6 0.18 NEW
+undefined SELL 180.65 0.15 NEW
+Execute BUY: 170.163 ~ 168.215
+undefined BUY 165.22 0.21 NEW
+undefined SELL 178.67 0.18 NEW
+undefined SELL 178.67 0.15 NEW
+Execute BUY: 166.18 ~ 164.205
+undefined BUY 161.91 0.25 NEW
+undefined SELL 176.46 0.21 NEW
+undefined SELL 176.46 0.15 NEW
+Execute BUY: 162.791 ~ 161.542
+undefined BUY 158.67 0.3 NEW
+undefined SELL 173.99 0.25 NEW
+undefined SELL 173.99 0.15 NEW
+Execute BUY: 160.115 ~ 158.161
+undefined BUY 155.49 0.36 NEW
+undefined SELL 171.28 0.3 NEW
+undefined SELL 171.28 0.15 NEW
+Execute BUY: 155.84 ~ 155.266
+undefined BUY 152.38 0.43 NEW
+undefined SELL 168.37 0.36 NEW
+undefined SELL 168.37 0.15 NEW
+Execute BUY: 152.85 ~ 151.8
+undefined BUY 149.33 0.51 NEW
+undefined SELL 165.34 0.43 NEW
+undefined SELL 165.34 0.15 NEW
+Execute SELL: 165.756 ~ 164.619
+balance: 10577.096299999985
+Execute SELL: 165.756 ~ 164.619
+balance: 10648.192499999985
+undefined BUY 157.07 0.43 NEW
+undefined SELL 167.85 0.36 NEW
+undefined SELL 167.85 0.18 NEW
+Execute SELL: 167.852 ~ 167.301
+balance: 10678.405499999984
+Execute SELL: 167.852 ~ 167.301
+balance: 10738.831499999984
+undefined BUY 159.45 0.36 NEW
+undefined SELL 169.43 0.3 NEW
+undefined SELL 169.43 0.21 NEW
+Execute BUY: 160.875 ~ 159.336
+undefined BUY 156.26 0.43 NEW
+undefined SELL 169.65 0.36 NEW
+undefined SELL 169.65 0.21 NEW
+Execute BUY: 156.832 ~ 156.201
+undefined BUY 153.13 0.51 NEW
+undefined SELL 167.16 0.43 NEW
+undefined SELL 167.16 0.21 NEW
+Execute BUY: 153.318 ~ 153.101
+undefined BUY 150.06 0.61 NEW
+undefined SELL 164.48 0.51 NEW
+undefined SELL 164.48 0.21 NEW
+Execute BUY: 150.176 ~ 145.299
+undefined BUY 144.86 0.73 NEW
+undefined SELL 161.63 0.61 NEW
+undefined SELL 161.63 0.21 NEW
+Execute BUY: 145.374 ~ 144.382
+undefined BUY 141.96 0.87 NEW
+undefined SELL 156.87 0.73 NEW
+undefined SELL 156.87 0.21 NEW
+Execute BUY: 142.744 ~ 141.8
+undefined BUY 139.12 1.04 NEW
+undefined SELL 153.8 0.87 NEW
+undefined SELL 153.8 0.21 NEW
+Execute BUY: 140.4 ~ 139.091
+undefined BUY 136.33 1.24 NEW
+undefined SELL 150.68 1.04 NEW
+undefined SELL 150.68 0.21 NEW
+Execute SELL: 150.954 ~ 150.38
+balance: 10102.309799999986
+Execute SELL: 150.954 ~ 150.38
+balance: 10259.016999999987
+undefined BUY 143.14 1.04 NEW
+undefined SELL 153.73 0.87 NEW
+undefined SELL 153.73 0.25 NEW
+Execute SELL: 153.829 ~ 153.374
+balance: 10297.449499999988
+Execute SELL: 153.829 ~ 153.374
+balance: 10431.194599999988
+undefined BUY 146.04 0.87 NEW
+undefined SELL 156.32 0.73 NEW
+undefined SELL 156.32 0.3 NEW
+Execute BUY: 146.381 ~ 146.
+undefined BUY 143.11 1.04 NEW
+undefined SELL 156.74 0.87 NEW
+undefined SELL 156.74 0.3 NEW
+Execute SELL: 156.817 ~ 156.117
+balance: 10351.161799999989
+Execute SELL: 156.817 ~ 156.117
+balance: 10487.525599999988
+undefined BUY 148.9 0.87 NEW
+undefined SELL 157.16 0.73 NEW
+undefined SELL 157.16 0.36 NEW
+Execute SELL: 159.088 ~ 156.805
+balance: 10544.103199999989
+Execute SELL: 159.088 ~ 156.805
+balance: 10658.829999999989
+undefined BUY 149.3 0.73 NEW
+undefined SELL 160.25 0.61 NEW
+undefined SELL 160.25 0.43 NEW
+Execute SELL: 160.996 ~ 158.585
+balance: 10727.737499999988
+Execute SELL: 160.996 ~ 158.585
+balance: 10825.489999999989
+undefined BUY 152.23 0.61 NEW
+undefined SELL 160.78 0.51 NEW
+Execute SELL: 162.734 ~ 159.639
+balance: 10907.487799999988
+FIRST
+undefined BUY 159.16 0.17 NEW
+Execute BUY: 161.227 ~ 159.602
+undefined BUY 155.97 0.2 NEW
+undefined SELL 167.11 0.17 NEW
+Execute SELL: 167.223 ~ 166.865
+balance: 10908.839299999989
+FIRST
+undefined BUY 166.36 0.16 NEW
+Execute BUY: 167.191 ~ 166.592
+undefined BUY 163.03 0.19 NEW
+undefined SELL 174.67 0.16 NEW
+Execute BUY: 163.852 ~ 162.653
+undefined BUY 159.76 0.22 NEW
+undefined SELL 172.77 0.19 NEW
+undefined SELL 172.77 0.16 NEW
+Execute BUY: 160.379 ~ 159.399
+undefined BUY 156.56 0.26 NEW
+undefined SELL 170.66 0.22 NEW
+undefined SELL 170.66 0.16 NEW
+Execute BUY: 157.011 ~ 153.459
+undefined BUY 152.99 0.31 NEW
+undefined SELL 168.3 0.26 NEW
+undefined SELL 168.3 0.16 NEW
+Execute SELL: 168.521 ~ 167.768
+balance: 10802.32119999999
+Execute SELL: 168.521 ~ 167.768
+balance: 10846.07919999999
+undefined BUY 159.88 0.26 NEW
+undefined SELL 169.33 0.22 NEW
+undefined SELL 169.33 0.19 NEW
+Execute SELL: 169.478 ~ 168.936
+balance: 10878.251899999988
+Execute SELL: 169.478 ~ 168.936
+balance: 10915.504499999988
+FIRST
+undefined BUY 168.42 0.16 NEW
+Execute BUY: 169.583 ~ 169.16
+undefined BUY 165.05 0.19 NEW
+undefined SELL 176.84 0.16 NEW
+Execute SELL: 177.063 ~ 176.272
+balance: 10916.851699999988
+FIRST
+undefined BUY 175.74 0.15 NEW
+Execute BUY: 178.665 ~ 176.79
+undefined BUY 172.22 0.18 NEW
+undefined SELL 184.52 0.15 NEW
+Execute SELL: 184.703 ~ 183.79
+balance: 10918.168699999987
+FIRST
+undefined BUY 183.23 0.14 NEW
+Execute BUY: 185.253 ~ 184.644
+undefined BUY 179.56 0.16 NEW
+undefined SELL 192.39 0.14 NEW
+Execute SELL: 193.214 ~ 192.141
+balance: 10919.451099999987
+FIRST
+undefined BUY 191.56 0.14 NEW
+Execute BUY: 193.293 ~ 192.232
+undefined BUY 187.72 0.16 NEW
+undefined SELL 201.13 0.14 NEW
+Execute BUY: 189.315 ~ 187.254
+undefined BUY 183.96 0.19 NEW
+undefined SELL 198.98 0.16 NEW
+undefined SELL 198.98 0.14 NEW
+Execute BUY: 188.161 ~ 183.22
+undefined BUY 180.28 0.22 NEW
+undefined SELL 196.54 0.19 NEW
+undefined SELL 196.54 0.14 NEW
+Execute BUY: 180.968 ~ 178.571
+undefined BUY 176.67 0.26 NEW
+undefined SELL 193.9 0.22 NEW
+undefined SELL 193.9 0.14 NEW
+Execute SELL: 194.568 ~ 192.516
+balance: 10815.129499999988
+Execute SELL: 194.568 ~ 192.516
+balance: 10857.787499999988
+undefined BUY 184.2 0.22 NEW
+undefined SELL 194.96 0.19 NEW
+undefined SELL 194.96 0.16 NEW
+Execute SELL: 195.309 ~ 193.767
+balance: 10888.981099999988
+Execute SELL: 195.309 ~ 193.767
+balance: 10926.023499999988
+FIRST
+undefined BUY 193.18 0.14 NEW
+Execute BUY: 195.616 ~ 194.559
+undefined BUY 189.31 0.16 NEW
+undefined SELL 202.83 0.14 NEW
+Execute SELL: 203.454 ~ 200.585
+balance: 10927.374499999987
+FIRST
+undefined BUY 199.98 0.13 NEW
+Execute BUY: 203.665 ~ 202.07
+undefined BUY 195.98 0.15 NEW
+undefined SELL 209.97 0.13 NEW
+Execute SELL: 210.269 ~ 208.868
+balance: 10928.673199999987
+FIRST
+undefined BUY 208.24 0.13 NEW
+Execute BUY: 210.014 ~ 208.78
+undefined BUY 204.07 0.15 NEW
+undefined SELL 218.65 0.13 NEW
+Execute BUY: 205.399 ~ 203.966
+undefined BUY 199.98 0.18 NEW
+undefined SELL 216.3 0.15 NEW
+undefined SELL 216.3 0.13 NEW
+Execute BUY: 200.503 ~ 199.304
+undefined BUY 195.98 0.21 NEW
+undefined SELL 213.61 0.18 NEW
+undefined SELL 213.61 0.13 NEW
+Execute BUY: 196.803 ~ 195.78
+undefined BUY 192.06 0.25 NEW
+undefined SELL 210.7 0.21 NEW
+undefined SELL 210.7 0.13 NEW
+Execute BUY: 192.21 ~ 191.319
+undefined BUY 188.21 0.3 NEW
+undefined SELL 207.47 0.25 NEW
+undefined SELL 207.47 0.13 NEW
+Execute BUY: 188.825 ~ 187.984
+undefined BUY 184.44 0.36 NEW
+undefined SELL 203.97 0.3 NEW
+undefined SELL 203.97 0.13 NEW
+Execute SELL: 204.406 ~ 203.009
+balance: 10715.877399999987
+Execute SELL: 204.406 ~ 203.009
+balance: 10777.068399999987
+undefined BUY 193.77 0.3 NEW
+undefined SELL 206.39 0.25 NEW
+undefined SELL 206.39 0.15 NEW
+Execute SELL: 206.405 ~ 205.94
+balance: 10808.026899999988
+Execute SELL: 206.405 ~ 205.94
+balance: 10859.624399999988
+undefined BUY 196.07 0.25 NEW
+undefined SELL 207.71 0.21 NEW
+undefined SELL 207.71 0.18 NEW
+Execute SELL: 207.893 ~ 207.248
+balance: 10897.012199999988
+Execute SELL: 207.893 ~ 207.248
+balance: 10940.631299999988
+FIRST
+undefined BUY 206.62 0.13 NEW
+Execute BUY: 207.839 ~ 207.262
+undefined BUY 202.48 0.15 NEW
+undefined SELL 216.95 0.13 NEW
+Execute SELL: 217.187 ~ 216.027
+balance: 10941.974199999988
+FIRST
+undefined BUY 215.37 0.12 NEW
+Execute BUY: 218. ~ 216.601
+undefined BUY 211.06 0.14 NEW
+undefined SELL 226.13 0.12 NEW
+Execute BUY: 211.699 ~ 211.004
+undefined BUY 206.83 0.16 NEW
+undefined SELL 223.7 0.14 NEW
+undefined SELL 223.7 0.12 NEW
+Execute BUY: 207.945 ~ 206.76
+undefined BUY 202.69 0.19 NEW
+undefined SELL 221.01 0.16 NEW
+undefined SELL 221.01 0.12 NEW
+Execute BUY: 203.614 ~ 202.363
+undefined BUY 198.63 0.22 NEW
+undefined SELL 217.97 0.19 NEW
+undefined SELL 217.97 0.12 NEW
+Execute BUY: 199.646 ~ 198.5
+undefined BUY 194.65 0.26 NEW
+undefined SELL 214.76 0.22 NEW
+undefined SELL 214.76 0.12 NEW
+Execute BUY: 195.516 ~ 194.215
+undefined BUY 190.75 0.31 NEW
+undefined SELL 211.25 0.26 NEW
+undefined SELL 211.25 0.12 NEW
+Execute BUY: 192.1 ~ 188.5
+undefined BUY 186.93 0.37 NEW
+undefined SELL 207.5 0.31 NEW
+undefined SELL 207.5 0.12 NEW
+Execute BUY: 189.525 ~ 183.567
+undefined BUY 183.01 0.44 NEW
+undefined SELL 203.58 0.37 NEW
+undefined SELL 203.58 0.12 NEW
+Execute BUY: 186.701 ~ 180.
+undefined BUY 179.34 0.52 NEW
+undefined SELL 199.44 0.44 NEW
+undefined SELL 199.44 0.12 NEW
+Execute BUY: 182.933 ~ 178.446
+undefined BUY 175.75 0.62 NEW
+undefined SELL 195.4 0.52 NEW
+undefined SELL 195.4 0.12 NEW
+Execute BUY: 181.254 ~ 175.56
+undefined BUY 172.23 0.74 NEW
+undefined SELL 191.28 0.62 NEW
+undefined SELL 191.28 0.12 NEW
+Execute SELL: 191.434 ~ 190.
+balance: 10332.58069999999
+Execute SELL: 191.434 ~ 190.
+balance: 10451.17429999999
+undefined BUY 181.71 0.62 NEW
+undefined SELL 195.37 0.52 NEW
+undefined SELL 195.37 0.14 NEW
+Execute SELL: 195.868 ~ 194.247
+balance: 10478.52609999999
+Execute SELL: 195.868 ~ 194.247
+balance: 10580.11849999999
+undefined BUY 185.6 0.52 NEW
+undefined SELL 198.83 0.44 NEW
+undefined SELL 198.83 0.16 NEW
+Execute BUY: 187.731 ~ 185.597
+undefined BUY 181.88 0.62 NEW
+undefined SELL 200.12 0.52 NEW
+undefined SELL 200.12 0.16 NEW
+Execute BUY: 183.438 ~ 181.149
+undefined BUY 178.24 0.74 NEW
+undefined SELL 196.34 0.62 NEW
+undefined SELL 196.34 0.16 NEW
+Execute SELL: 196.777 ~ 194.71
+balance: 10402.255299999988
+Execute SELL: 196.777 ~ 194.71
+balance: 10523.986099999987
+undefined BUY 186.52 0.62 NEW
+undefined SELL 199.68 0.52 NEW
+undefined SELL 199.68 0.19 NEW
+Execute SELL: 199.912 ~ 199.031
+balance: 10561.925299999988
+Execute SELL: 199.912 ~ 199.031
+balance: 10665.758899999988
+undefined BUY 189.69 0.52 NEW
+undefined SELL 197.62 0.44 NEW
+undefined SELL 197.62 0.22 NEW
+Execute SELL: 200.112 ~ 199.182
+balance: 10709.235299999988
+Execute SELL: 200.112 ~ 199.182
+balance: 10796.188099999987
+undefined BUY 187.73 0.44 NEW
+undefined SELL 199.62 0.37 NEW
+undefined SELL 199.62 0.26 NEW
+Execute SELL: 199.916 ~ 199.51
+balance: 10848.089299999987
+Execute SELL: 199.916 ~ 199.51
+balance: 10921.948699999986
+undefined BUY 189.63 0.37 NEW
+undefined SELL 200.28 0.31 NEW
+Execute SELL: 201.438 ~ 199.993
+balance: 10984.035499999985
+FIRST
+undefined BUY 199.39 0.13 NEW
+Execute BUY: 201.508 ~ 200.722
+undefined BUY 195.4 0.15 NEW
+undefined SELL 209.35 0.13 NEW
+Execute BUY: 196.191 ~ 195.242
+undefined BUY 191.49 0.18 NEW
+undefined SELL 207.11 0.15 NEW
+undefined SELL 207.11 0.13 NEW
+Execute BUY: 191.949 ~ 191.489
+undefined BUY 187.66 0.21 NEW
+undefined SELL 204.54 0.18 NEW
+undefined SELL 204.54 0.13 NEW
+Execute BUY: 188.307 ~ 187.638
+undefined BUY 183.9 0.25 NEW
+undefined SELL 201.75 0.21 NEW
+undefined SELL 201.75 0.13 NEW
+Execute SELL: 202.084 ~ 199.823
+balance: 10881.155499999986
+Execute SELL: 202.084 ~ 199.823
+balance: 10923.522999999986
+undefined BUY 191.66 0.21 NEW
+undefined SELL 202.93 0.18 NEW
+undefined SELL 202.93 0.15 NEW
+Execute SELL: 203.108 ~ 202.478
+balance: 10953.962499999987
+Execute SELL: 203.108 ~ 202.478
+balance: 10990.489899999988
+FIRST
+undefined BUY 201.87 0.13 NEW
+Execute BUY: 202.842 ~ 202.544
+undefined BUY 197.83 0.15 NEW
+undefined SELL 211.96 0.13 NEW
+Execute BUY: 199.494 ~ 197.716
+undefined BUY 193.87 0.18 NEW
+undefined SELL 209.69 0.15 NEW
+undefined SELL 209.69 0.13 NEW
+Execute SELL: 209.988 ~ 209.009
+balance: 10961.83199999999
+Execute SELL: 209.988 ~ 209.009
+balance: 10993.285499999989
+FIRST
+undefined BUY 208.38 0.13 NEW
+Execute BUY: 209.926 ~ 209.34
+undefined BUY 204.21 0.15 NEW
+undefined SELL 218.79 0.13 NEW
+Execute BUY: 204.769 ~ 204.174
+undefined BUY 200.12 0.18 NEW
+undefined SELL 216.45 0.15 NEW
+undefined SELL 216.45 0.13 NEW
+Execute BUY: 200.597 ~ 200.107
+undefined BUY 196.11 0.21 NEW
+undefined SELL 213.76 0.18 NEW
+undefined SELL 213.76 0.13 NEW
+Execute SELL: 213.92 ~ 213.411
+balance: 10927.331799999989
+Execute SELL: 213.92 ~ 213.411
+balance: 10965.80859999999
+undefined BUY 203.07 0.18 NEW
+undefined SELL 214.42 0.15 NEW
+Execute SELL: 214.691 ~ 214.069
+balance: 10997.97159999999
+FIRST
+undefined BUY 213.42 0.12 NEW
+Execute BUY: 214.561 ~ 213.963
+undefined BUY 209.15 0.14 NEW
+undefined SELL 224.09 0.12 NEW
+Execute SELL: 224.81 ~ 223.59
+balance: 10999.25199999999
+FIRST
+undefined BUY 222.91 0.12 NEW
+Execute BUY: 224.6 ~ 223.3
+undefined BUY 218.45 0.14 NEW
+undefined SELL 234.05 0.12 NEW
+Execute SELL: 234.066 ~ 233.322
+balance: 11000.588799999989
+FIRST
+undefined BUY 232.62 0.11 NEW
+Execute BUY: 234.326 ~ 233.791
+undefined BUY 227.96 0.13 NEW
+undefined SELL 244.25 0.11 NEW
+Execute BUY: 228.138 ~ 227.537
+undefined BUY 223.4 0.15 NEW
+undefined SELL 241.6 0.13 NEW
+undefined SELL 241.6 0.11 NEW
+Execute BUY: 225.07 ~ 223.35
+undefined BUY 218.93 0.18 NEW
+undefined SELL 238.66 0.15 NEW
+undefined SELL 238.66 0.11 NEW
+Execute SELL: 239.326 ~ 238.143
+balance: 10938.108399999988
+Execute SELL: 239.326 ~ 238.143
+balance: 10973.90739999999
+undefined BUY 226.72 0.15 NEW
+undefined SELL 239.35 0.13 NEW
+Execute SELL: 239.8 ~ 238.825
+balance: 11005.022899999989
+FIRST
+undefined BUY 238.1 0.11 NEW
+Execute BUY: 239.838 ~ 239.28
+undefined BUY 233.33 0.13 NEW
+undefined SELL 250 0.11 NEW
+Execute SELL: 250.012 ~ 249.131
+balance: 11006.331899999988
+FIRST
+undefined BUY 248.38 0.11 NEW
+Execute BUY: 250.098 ~ 249.665
+undefined BUY 243.41 0.13 NEW
+undefined SELL 260.79 0.11 NEW
+Execute BUY: 243.736 ~ 243.282
+undefined BUY 238.54 0.15 NEW
+undefined SELL 257.97 0.13 NEW
+undefined SELL 257.97 0.11 NEW
+Execute BUY: 239.225 ~ 238.388
+undefined BUY 233.76 0.18 NEW
+undefined SELL 254.83 0.15 NEW
+undefined SELL 254.83 0.11 NEW
+Execute BUY: 234.324 ~ 233.629
+undefined BUY 229.08 0.21 NEW
+undefined SELL 251.27 0.18 NEW
+undefined SELL 251.27 0.11 NEW
+Execute SELL: 251.951 ~ 250.031
+balance: 10897.148699999987
+Execute SELL: 251.951 ~ 250.031
+balance: 10942.377299999987
+undefined BUY 238.7 0.18 NEW
+undefined SELL 252.84 0.15 NEW
+undefined SELL 252.84 0.13 NEW
+Execute SELL: 253.65 ~ 251.708
+balance: 10975.246499999987
+Execute SELL: 253.65 ~ 251.708
+balance: 11013.172499999986
+FIRST
+undefined BUY 250.95 0.1 NEW
+Execute BUY: 254.294 ~ 251.621
+undefined BUY 245.93 0.12 NEW
+undefined SELL 263.49 0.1 NEW
+Execute BUY: 246.405 ~ 245.542
+undefined BUY 241.01 0.14 NEW
+undefined SELL 260.62 0.12 NEW
+undefined SELL 260.62 0.1 NEW
+Execute BUY: 241.878 ~ 237.46
+undefined BUY 236.18 0.16 NEW
+undefined SELL 257.4 0.14 NEW
+undefined SELL 257.4 0.1 NEW
+Execute BUY: 236.545 ~ 235.829
+undefined BUY 231.45 0.19 NEW
+undefined SELL 253.95 0.16 NEW
+undefined SELL 253.95 0.1 NEW
+Execute BUY: 231.896 ~ 228.434
+undefined BUY 226.82 0.22 NEW
+undefined SELL 250.08 0.19 NEW
+undefined SELL 250.08 0.1 NEW
+Execute BUY: 230.182 ~ 225.651
+undefined BUY 222.28 0.26 NEW
+undefined SELL 246.07 0.22 NEW
+undefined SELL 246.07 0.1 NEW
+Execute BUY: 227.152 ~ 221.5
+undefined BUY 217.83 0.31 NEW
+undefined SELL 241.75 0.26 NEW
+undefined SELL 241.75 0.1 NEW
+Execute BUY: 221.636 ~ 215.537
+undefined BUY 213.47 0.37 NEW
+undefined SELL 237.2 0.31 NEW
+undefined SELL 237.2 0.1 NEW
+Execute SELL: 237.257 ~ 236.354
+balance: 10691.559699999985
+Execute SELL: 237.257 ~ 236.354
+balance: 10765.091699999984
+undefined BUY 225.33 0.31 NEW
+undefined SELL 241.23 0.26 NEW
+undefined SELL 241.23 0.12 NEW
+Execute SELL: 241.261 ~ 240.353
+balance: 10794.039299999984
+Execute SELL: 241.261 ~ 240.353
+balance: 10856.759099999985
+undefined BUY 229.16 0.26 NEW
+undefined SELL 243.95 0.22 NEW
+undefined SELL 243.95 0.14 NEW
+Execute SELL: 243.957 ~ 243.646
+balance: 10890.912099999985
+Execute SELL: 243.957 ~ 243.646
+balance: 10944.581099999985
+undefined BUY 231.75 0.22 NEW
+undefined SELL 245.29 0.19 NEW
+undefined SELL 245.29 0.16 NEW
+Execute SELL: 245.5 ~ 244.971
+balance: 10983.827499999985
+Execute SELL: 245.5 ~ 244.971
+balance: 11030.432599999986
+FIRST
+undefined BUY 244.23 0.11 NEW
+Execute BUY: 245.796 ~ 245.371
+undefined BUY 239.34 0.13 NEW
+undefined SELL 256.44 0.11 NEW
+Execute BUY: 239.927 ~ 239.251
+undefined BUY 234.55 0.15 NEW
+undefined SELL 253.66 0.13 NEW
+undefined SELL 253.66 0.11 NEW
+Execute BUY: 235.065 ~ 234.539
+undefined BUY 229.85 0.18 NEW
+undefined SELL 250.57 0.15 NEW
+undefined SELL 250.57 0.11 NEW
+Execute BUY: 230.413 ~ 229.293
+undefined BUY 225.25 0.21 NEW
+undefined SELL 247.06 0.18 NEW
+undefined SELL 247.06 0.11 NEW
+Execute BUY: 225.651 ~ 225.124
+undefined BUY 220.74 0.25 NEW
+undefined SELL 243.36 0.21 NEW
+undefined SELL 243.36 0.11 NEW
+Execute SELL: 243.46 ~ 242.201
+balance: 10875.364699999986
+Execute SELL: 243.46 ~ 242.201
+balance: 10926.470299999986
+undefined BUY 231.19 0.21 NEW
+undefined SELL 245.52 0.18 NEW
+undefined SELL 245.52 0.13 NEW
+Execute SELL: 245.522 ~ 244.601
+balance: 10958.387899999987
+Execute SELL: 245.522 ~ 244.601
+balance: 11002.581499999987
+undefined BUY 233.24 0.18 NEW
+undefined SELL 246.27 0.15 NEW
+Execute SELL: 246.312 ~ 245.028
+balance: 11039.521999999988
+FIRST
+undefined BUY 244.29 0.11 NEW
+Execute BUY: 246.171 ~ 245.393
+undefined BUY 239.4 0.13 NEW
+undefined SELL 256.5 0.11 NEW
+Execute BUY: 240.018 ~ 238.694
+undefined BUY 234.61 0.15 NEW
+undefined SELL 253.72 0.13 NEW
+undefined SELL 253.72 0.11 NEW
+Execute BUY: 235.012 ~ 233.67
+undefined BUY 229.91 0.18 NEW
+undefined SELL 250.64 0.15 NEW
+undefined SELL 250.64 0.11 NEW
+Execute BUY: 230.688 ~ 229.623
+undefined BUY 225.31 0.21 NEW
+undefined SELL 247.13 0.18 NEW
+undefined SELL 247.13 0.11 NEW
+Execute BUY: 228.908 ~ 224.891
+undefined BUY 220.8 0.25 NEW
+undefined SELL 243.42 0.21 NEW
+undefined SELL 243.42 0.11 NEW
+Execute BUY: 222.257 ~ 220.55
+undefined BUY 216.38 0.3 NEW
+undefined SELL 239.37 0.25 NEW
+undefined SELL 239.37 0.11 NEW
+Execute BUY: 218.09 ~ 215.
+undefined BUY 212.05 0.36 NEW
+undefined SELL 235.06 0.3 NEW
+undefined SELL 235.06 0.11 NEW
+Execute BUY: 213.014 ~ 211.966
+undefined BUY 207.8 0.43 NEW
+undefined SELL 230.57 0.36 NEW
+undefined SELL 230.57 0.11 NEW
+Execute BUY: 208.746 ~ 207.645
+undefined BUY 203.64 0.51 NEW
+undefined SELL 225.99 0.43 NEW
+undefined SELL 225.99 0.11 NEW
+Execute BUY: 204.122 ~ 203.618
+undefined BUY 199.56 0.61 NEW
+undefined SELL 221.39 0.51 NEW
+undefined SELL 221.39 0.11 NEW
+Execute BUY: 200.674 ~ 199.506
+undefined BUY 195.56 0.73 NEW
+undefined SELL 216.71 0.61 NEW
+undefined SELL 216.71 0.11 NEW
+Execute BUY: 196.039 ~ 195.187
+undefined BUY 191.64 0.87 NEW
+undefined SELL 212.03 0.73 NEW
+undefined SELL 212.03 0.11 NEW
+Execute BUY: 192.72 ~ 191.111
+undefined BUY 187.8 1.04 NEW
+undefined SELL 207.42 0.87 NEW
+undefined SELL 207.42 0.11 NEW
+Execute BUY: 188.721 ~ 187.
+undefined BUY 184.04 1.24 NEW
+undefined SELL 202.86 1.04 NEW
+undefined SELL 202.86 0.11 NEW
+Execute SELL: 202.91 ~ 202.291
+balance: 9863.760699999988
+Execute SELL: 202.91 ~ 202.291
+balance: 10074.735099999987
+undefined BUY 192.71 1.04 NEW
+undefined SELL 207.74 0.87 NEW
+undefined SELL 207.74 0.13 NEW
+Execute BUY: 193.172 ~ 192.622
+undefined BUY 188.85 1.24 NEW
+undefined SELL 207.79 1.04 NEW
+undefined SELL 207.79 0.13 NEW
+Execute SELL: 207.967 ~ 206.895
+balance: 9901.329399999986
+Execute SELL: 207.967 ~ 206.895
+balance: 10117.430999999986
+undefined BUY 197.4 1.04 NEW
+undefined SELL 207.85 0.87 NEW
+undefined SELL 207.85 0.15 NEW
+Execute SELL: 208.039 ~ 207.644
+balance: 10148.608499999986
+Execute SELL: 208.039 ~ 207.644
+balance: 10329.437999999986
+undefined BUY 197.45 0.87 NEW
+undefined SELL 212.47 0.73 NEW
+undefined SELL 212.47 0.18 NEW
+Execute SELL: 212.988 ~ 211.356
+balance: 10367.682599999986
+Execute SELL: 212.988 ~ 211.356
+balance: 10522.785699999986
+undefined BUY 201.84 0.73 NEW
+undefined SELL 216.46 0.61 NEW
+undefined SELL 216.46 0.21 NEW
+Execute SELL: 216.839 ~ 216.007
+balance: 10568.242299999985
+Execute SELL: 216.839 ~ 216.007
+balance: 10700.282899999986
+undefined BUY 205.63 0.61 NEW
+undefined SELL 219.74 0.51 NEW
+undefined SELL 219.74 0.25 NEW
+Execute SELL: 219.76 ~ 219.292
+balance: 10755.217899999985
+Execute SELL: 219.76 ~ 219.292
+balance: 10867.285299999985
+undefined BUY 208.75 0.51 NEW
+undefined SELL 221.89 0.43 NEW
+undefined SELL 221.89 0.3 NEW
+Execute BUY: 209.568 ~ 208.705
+undefined BUY 204.57 0.61 NEW
+undefined SELL 222.15 0.51 NEW
+undefined SELL 222.15 0.3 NEW
+Execute SELL: 222.371 ~ 220.772
+balance: 10827.467799999986
+Execute SELL: 222.371 ~ 220.772
+balance: 10940.764299999986
+undefined BUY 211.04 0.51 NEW
+undefined SELL 220.22 0.43 NEW
+undefined SELL 220.22 0.36 NEW
+Execute SELL: 222.656 ~ 221.982
+balance: 11020.043499999987
+Execute SELL: 222.656 ~ 221.982
+balance: 11114.738099999988
+FIRST
+undefined BUY 221.31 0.12 NEW
+Execute BUY: 222.179 ~ 221.77
+undefined BUY 216.88 0.14 NEW
+undefined SELL 232.37 0.12 NEW
+Execute SELL: 233.174 ~ 232.
+balance: 11116.06529999999
+FIRST
+undefined BUY 231.3 0.12 NEW
+Execute BUY: 233.412 ~ 232.811
+undefined BUY 226.67 0.14 NEW
+undefined SELL 242.86 0.12 NEW
+Execute BUY: 228.058 ~ 226.335
+undefined BUY 222.13 0.16 NEW
+undefined SELL 240.24 0.14 NEW
+undefined SELL 240.24 0.12 NEW
+Execute BUY: 222.695 ~ 222.
+undefined BUY 217.68 0.19 NEW
+undefined SELL 237.36 0.16 NEW
+undefined SELL 237.36 0.12 NEW
+Execute BUY: 218.491 ~ 217.396
+undefined BUY 213.32 0.22 NEW
+undefined SELL 234.09 0.19 NEW
+undefined SELL 234.09 0.12 NEW
+Execute BUY: 213.797 ~ 213.13
+undefined BUY 209.05 0.26 NEW
+undefined SELL 230.64 0.22 NEW
+undefined SELL 230.64 0.12 NEW
+Execute BUY: 209.763 ~ 208.657
+undefined BUY 204.86 0.31 NEW
+undefined SELL 226.88 0.26 NEW
+undefined SELL 226.88 0.12 NEW
+Execute BUY: 205.131 ~ 204.252
+undefined BUY 200.76 0.37 NEW
+undefined SELL 222.85 0.31 NEW
+undefined SELL 222.85 0.12 NEW
+Execute BUY: 201.095 ~ 200.666
+undefined BUY 196.74 0.44 NEW
+undefined SELL 218.65 0.37 NEW
+undefined SELL 218.65 0.12 NEW
+Execute BUY: 199.638 ~ 195.789
+undefined BUY 192.8 0.52 NEW
+undefined SELL 214.35 0.44 NEW
+undefined SELL 214.35 0.12 NEW
+Execute BUY: 194.062 ~ 192.667
+undefined BUY 188.94 0.62 NEW
+undefined SELL 210.01 0.52 NEW
+undefined SELL 210.01 0.12 NEW
+Execute BUY: 190.82 ~ 188.711
+undefined BUY 185.16 0.74 NEW
+undefined SELL 205.59 0.62 NEW
+undefined SELL 205.59 0.12 NEW
+Execute BUY: 186.035 ~ 185.123
+undefined BUY 181.45 0.88 NEW
+undefined SELL 201.17 0.74 NEW
+undefined SELL 201.17 0.12 NEW
+Execute BUY: 183.793 ~ 180.899
+undefined BUY 177.82 1.05 NEW
+undefined SELL 196.8 0.88 NEW
+undefined SELL 196.8 0.12 NEW
+Execute SELL: 197.7 ~ 195.895
+balance: 10163.56149999999
+Execute SELL: 197.7 ~ 195.895
+balance: 10336.74549999999
+undefined BUY 186.96 0.88 NEW
+undefined SELL 201.35 0.74 NEW
+undefined SELL 201.35 0.14 NEW
+Execute SELL: 202.172 ~ 199.532
+balance: 10364.93449999999
+Execute SELL: 202.172 ~ 199.532
+balance: 10513.93349999999
+undefined BUY 191.28 0.74 NEW
+undefined SELL 205.53 0.62 NEW
+undefined SELL 205.53 0.16 NEW
+Execute SELL: 206.117 ~ 205.194
+balance: 10546.81829999999
+Execute SELL: 206.117 ~ 205.194
+balance: 10674.24689999999
+undefined BUY 195.25 0.62 NEW
+undefined SELL 209.43 0.52 NEW
+undefined SELL 209.43 0.19 NEW
+Execute SELL: 209.732 ~ 209.077
+balance: 10714.038599999989
+Execute SELL: 209.732 ~ 209.077
+balance: 10822.942199999989
+undefined BUY 198.95 0.52 NEW
+undefined SELL 212.38 0.44 NEW
+undefined SELL 212.38 0.22 NEW
+Execute SELL: 212.54 ~ 211.645
+balance: 10869.665799999988
+Execute SELL: 212.54 ~ 211.645
+balance: 10963.112999999988
+undefined BUY 201.76 0.44 NEW
+undefined SELL 214.39 0.37 NEW
+undefined SELL 214.39 0.26 NEW
+Execute BUY: 201.874 ~ 201.406
+undefined BUY 197.72 0.52 NEW
+undefined SELL 214.69 0.44 NEW
+undefined SELL 214.69 0.26 NEW
+Execute SELL: 214.9 ~ 213.791
+balance: 10930.157999999989
+Execute SELL: 214.9 ~ 213.791
+balance: 11024.621599999988
+undefined BUY 203.95 0.44 NEW
+undefined SELL 212.76 0.37 NEW
+undefined SELL 212.76 0.31 NEW
+Execute SELL: 214.91 ~ 214.05
+balance: 11090.577199999987
+Execute SELL: 214.91 ~ 214.05
+balance: 11169.298399999987
+FIRST
+undefined BUY 213.4 0.13 NEW
+Execute BUY: 215.784 ~ 214.921
+undefined BUY 209.13 0.15 NEW
+undefined SELL 224.07 0.13 NEW
+Execute BUY: 209.324 ~ 208.525
+undefined BUY 204.94 0.18 NEW
+undefined SELL 221.66 0.15 NEW
+undefined SELL 221.66 0.13 NEW
+Execute SELL: 221.918 ~ 221.163
+balance: 11139.002699999986
+Execute SELL: 221.918 ~ 221.163
+balance: 11172.251699999986
+FIRST
+undefined BUY 220.49 0.12 NEW
+Execute BUY: 222.169 ~ 221.596
+undefined BUY 216.08 0.14 NEW
+undefined SELL 231.51 0.12 NEW
+Execute SELL: 231.527 ~ 230.791
+balance: 11173.574099999985
+FIRST
+undefined BUY 230.09 0.12 NEW
+Execute BUY: 231.774 ~ 231.033
+undefined BUY 225.48 0.14 NEW
+undefined SELL 241.59 0.12 NEW
+Execute BUY: 225.792 ~ 225.414
+undefined BUY 220.97 0.16 NEW
+undefined SELL 238.98 0.14 NEW
+undefined SELL 238.98 0.12 NEW
+Execute BUY: 221.823 ~ 220.904
+undefined BUY 216.55 0.19 NEW
+undefined SELL 236.12 0.16 NEW
+undefined SELL 236.12 0.12 NEW
+Execute SELL: 236.525 ~ 235.788
+balance: 11107.375299999985
+Execute SELL: 236.525 ~ 235.788
+balance: 11145.154499999986
+undefined BUY 224.31 0.16 NEW
+undefined SELL 236.75 0.14 NEW
+Execute BUY: 224.861 ~ 223.437
+undefined BUY 219.82 0.19 NEW
+undefined SELL 236.09 0.16 NEW
+undefined SELL 236.09 0.14 NEW
+Execute SELL: 236.999 ~ 235.528
+balance: 11142.317499999986
+Execute SELL: 236.999 ~ 235.528
+balance: 11180.091899999987
+FIRST
+undefined BUY 234.82 0.11 NEW
+Execute BUY: 237. ~ 236.128
+undefined BUY 230.12 0.13 NEW
+undefined SELL 246.56 0.11 NEW
+Execute BUY: 230.252 ~ 229.877
+undefined BUY 225.51 0.15 NEW
+undefined SELL 243.88 0.13 NEW
+undefined SELL 243.88 0.11 NEW
+Execute BUY: 226.659 ~ 225.317
+undefined BUY 220.99 0.18 NEW
+undefined SELL 240.92 0.15 NEW
+undefined SELL 240.92 0.11 NEW
+Execute BUY: 222.04 ~ 220.691
+undefined BUY 216.57 0.21 NEW
+undefined SELL 237.54 0.18 NEW
+undefined SELL 237.54 0.11 NEW
+Execute BUY: 217.153 ~ 216.432
+undefined BUY 212.23 0.25 NEW
+undefined SELL 233.98 0.21 NEW
+undefined SELL 233.98 0.11 NEW
+Execute BUY: 212.871 ~ 212.216
+undefined BUY 207.98 0.3 NEW
+undefined SELL 230.08 0.25 NEW
+undefined SELL 230.08 0.11 NEW
+Execute BUY: 208.55 ~ 203.769
+undefined BUY 203.15 0.36 NEW
+undefined SELL 225.94 0.3 NEW
+undefined SELL 225.94 0.11 NEW
+Execute BUY: 205.242 ~ 203.049
+undefined BUY 199.08 0.43 NEW
+undefined SELL 221.09 0.36 NEW
+undefined SELL 221.09 0.11 NEW
+Execute BUY: 200.438 ~ 198.092
+undefined BUY 195.09 0.51 NEW
+undefined SELL 216.67 0.43 NEW
+undefined SELL 216.67 0.11 NEW
+Execute BUY: 195.352 ~ 192.848
+undefined BUY 191.18 0.61 NEW
+undefined SELL 212.24 0.51 NEW
+undefined SELL 212.24 0.11 NEW
+Execute BUY: 192.895 ~ 190.045
+undefined BUY 187.35 0.73 NEW
+undefined SELL 207.73 0.61 NEW
+undefined SELL 207.73 0.11 NEW
+Execute BUY: 190.026 ~ 184.839
+undefined BUY 183.6 0.87 NEW
+undefined SELL 203.24 0.73 NEW
+undefined SELL 203.24 0.11 NEW
+Execute BUY: 188.673 ~ 181.
+undefined BUY 179.92 1.04 NEW
+undefined SELL 198.81 0.87 NEW
+undefined SELL 198.81 0.11 NEW
+Execute BUY: 182.085 ~ 179.146
+undefined BUY 176.32 1.24 NEW
+undefined SELL 194.42 1.04 NEW
+undefined SELL 194.42 0.11 NEW
+Execute BUY: 180.181 ~ 176.
+undefined BUY 172.79 1.48 NEW
+undefined SELL 190.14 1.24 NEW
+undefined SELL 190.14 0.11 NEW
+Execute BUY: 177.478 ~ 172.05
+undefined BUY 169.33 1.77 NEW
+undefined SELL 185.93 1.48 NEW
+undefined SELL 185.93 0.11 NEW
+Execute BUY: 173.204 ~ 166.862
+undefined BUY 165.94 2.12 NEW
+undefined SELL 181.81 1.77 NEW
+undefined SELL 181.81 0.11 NEW
+Execute SELL: 183.938 ~ 179.955
+balance: 9277.260799999987
+Execute SELL: 183.938 ~ 179.955
+balance: 9599.064499999988
+undefined BUY 172.71 1.77 NEW
+undefined SELL 186.29 1.48 NEW
+undefined SELL 186.29 0.13 NEW
+Execute SELL: 186.494 ~ 183.525
+balance: 9623.282199999987
+Execute SELL: 186.494 ~ 183.525
+balance: 9898.991399999986
+undefined BUY 176.97 1.48 NEW
+undefined SELL 190.7 1.24 NEW
+undefined SELL 190.7 0.15 NEW
+Execute SELL: 191.465 ~ 188.138
+balance: 9927.596399999986
+Execute SELL: 191.465 ~ 188.138
+balance: 10164.064399999987
+undefined BUY 181.16 1.24 NEW
+undefined SELL 195.27 1.04 NEW
+undefined SELL 195.27 0.18 NEW
+Execute SELL: 195.488 ~ 193.157
+balance: 10199.212999999987
+Execute SELL: 195.488 ~ 193.157
+balance: 10402.293799999987
+undefined BUY 185.5 1.04 NEW
+undefined SELL 199.51 0.87 NEW
+undefined SELL 199.51 0.21 NEW
+Execute BUY: 188.007 ~ 185.423
+undefined BUY 181.79 1.24 NEW
+undefined SELL 200.25 1.04 NEW
+undefined SELL 200.25 0.21 NEW
+Execute SELL: 200.436 ~ 198.838
+balance: 10251.426299999986
+Execute SELL: 200.436 ~ 198.838
+balance: 10459.686299999987
+undefined BUY 190.23 1.04 NEW
+undefined SELL 199.49 0.87 NEW
+undefined SELL 199.49 0.25 NEW
+Execute SELL: 201.295 ~ 200.016
+balance: 10509.558799999986
+Execute SELL: 201.295 ~ 200.016
+balance: 10683.115099999986
+undefined BUY 189.51 0.87 NEW
+undefined SELL 203.02 0.73 NEW
+undefined SELL 203.02 0.3 NEW
+Execute SELL: 203.141 ~ 200.73
+balance: 10744.021099999987
+Execute SELL: 203.141 ~ 200.73
+balance: 10892.225699999986
+undefined BUY 192.86 0.73 NEW
+undefined SELL 205.4 0.61 NEW
+undefined SELL 205.4 0.36 NEW
+Execute SELL: 205.446 ~ 203.823
+balance: 10966.169699999986
+Execute SELL: 205.446 ~ 203.823
+balance: 11091.463699999986
+undefined BUY 195.13 0.61 NEW
+undefined SELL 206.76 0.51 NEW
+undefined SELL 206.76 0.43 NEW
+Execute SELL: 207. ~ 205.631
+balance: 11180.370499999986
+Execute SELL: 207. ~ 205.631
+balance: 11285.818099999986
+FIRST
+undefined BUY 205.01 0.13 NEW
+Execute BUY: 207.353 ~ 206.557
+undefined BUY 200.9 0.15 NEW
+undefined SELL 215.26 0.13 NEW
+Execute BUY: 202.422 ~ 200.832
+undefined BUY 196.88 0.18 NEW
+undefined SELL 212.94 0.15 NEW
+undefined SELL 212.94 0.13 NEW
+Execute BUY: 198.11 ~ 196.25
+undefined BUY 192.94 0.21 NEW
+undefined SELL 210.3 0.18 NEW
+undefined SELL 210.3 0.13 NEW
+Execute BUY: 193.1 ~ 192.65
+undefined BUY 189.08 0.25 NEW
+undefined SELL 207.43 0.21 NEW
+undefined SELL 207.43 0.13 NEW
+Execute BUY: 189.888 ~ 186.497
+undefined BUY 185.29 0.3 NEW
+undefined SELL 204.25 0.25 NEW
+undefined SELL 204.25 0.13 NEW
+Execute BUY: 185.994 ~ 184.907
+undefined BUY 181.58 0.36 NEW
+undefined SELL 200.81 0.3 NEW
+undefined SELL 200.81 0.13 NEW
+Execute BUY: 182.881 ~ 181.555
+undefined BUY 177.94 0.43 NEW
+undefined SELL 197.18 0.36 NEW
+undefined SELL 197.18 0.13 NEW
+Execute SELL: 197.999 ~ 195.84
+balance: 11010.483599999987
+Execute SELL: 197.999 ~ 195.84
+balance: 11081.468399999987
+undefined BUY 187.32 0.36 NEW
+undefined SELL 200.01 0.3 NEW
+undefined SELL 200.01 0.15 NEW
+Execute BUY: 187.781 ~ 187.081
+undefined BUY 183.57 0.43 NEW
+undefined SELL 200.87 0.36 NEW
+undefined SELL 200.87 0.15 NEW
+Execute BUY: 184.253 ~ 183.264
+undefined BUY 179.89 0.51 NEW
+undefined SELL 197.45 0.43 NEW
+undefined SELL 197.45 0.15 NEW
+Execute BUY: 180.804 ~ 179.7
+undefined BUY 176.29 0.61 NEW
+undefined SELL 193.89 0.51 NEW
+undefined SELL 193.89 0.15 NEW
+Execute SELL: 195. ~ 193.105
+balance: 10872.437699999988
+Execute SELL: 195. ~ 193.105
+balance: 10971.321599999988
+undefined BUY 184.19 0.51 NEW
+undefined SELL 196.87 0.43 NEW
+undefined SELL 196.87 0.18 NEW
+Execute SELL: 196.974 ~ 196.217
+balance: 11006.75819999999
+Execute SELL: 196.974 ~ 196.217
+balance: 11091.412299999989
+undefined BUY 187.02 0.43 NEW
+undefined SELL 198.86 0.36 NEW
+undefined SELL 198.86 0.21 NEW
+Execute SELL: 199.026 ~ 198.628
+balance: 11133.172899999989
+Execute SELL: 199.026 ~ 198.628
+balance: 11204.762499999988
+undefined BUY 188.91 0.36 NEW
+undefined SELL 196.36 0.3 NEW
+undefined SELL 196.36 0.25 NEW
+Execute SELL: 199.207 ~ 198.634
+balance: 11253.852499999988
+Execute SELL: 199.207 ~ 198.634
+balance: 11312.760499999988
+FIRST
+undefined BUY 198.03 0.14 NEW
+Execute BUY: 199.413 ~ 199.122
+undefined BUY 194.06 0.16 NEW
+undefined SELL 207.93 0.14 NEW
+Execute BUY: 194.486 ~ 193.819
+undefined BUY 190.17 0.19 NEW
+undefined SELL 205.7 0.16 NEW
+undefined SELL 205.7 0.14 NEW
+Execute BUY: 190.306 ~ 189.954
+undefined BUY 186.36 0.22 NEW
+undefined SELL 203.17 0.19 NEW
+undefined SELL 203.17 0.14 NEW
+Execute BUY: 187.187 ~ 186.254
+undefined BUY 182.63 0.26 NEW
+undefined SELL 200.44 0.22 NEW
+undefined SELL 200.44 0.14 NEW
+Execute BUY: 183.548 ~ 182.415
+undefined BUY 178.97 0.31 NEW
+undefined SELL 197.42 0.26 NEW
+undefined SELL 197.42 0.14 NEW
+Execute BUY: 179.572 ~ 178.862
+undefined BUY 175.39 0.37 NEW
+undefined SELL 194.14 0.31 NEW
+undefined SELL 194.14 0.14 NEW
+Execute BUY: 175.567 ~ 175.307
+undefined BUY 171.88 0.44 NEW
+undefined SELL 190.68 0.37 NEW
+undefined SELL 190.68 0.14 NEW
+Execute BUY: 172.279 ~ 171.606
+undefined BUY 168.44 0.52 NEW
+undefined SELL 187.1 0.44 NEW
+undefined SELL 187.1 0.14 NEW
+Execute BUY: 170.033 ~ 168.338
+undefined BUY 165.07 0.62 NEW
+undefined SELL 183.45 0.52 NEW
+undefined SELL 183.45 0.14 NEW
+Execute BUY: 166.303 ~ 164.839
+undefined BUY 161.76 0.74 NEW
+undefined SELL 179.69 0.62 NEW
+undefined SELL 179.69 0.14 NEW
+Execute BUY: 162.922 ~ 161.664
+undefined BUY 158.52 0.88 NEW
+undefined SELL 175.9 0.74 NEW
+undefined SELL 175.9 0.14 NEW
+Execute SELL: 176.056 ~ 175.494
+balance: 10648.360599999987
+Execute SELL: 176.056 ~ 175.494
+balance: 10778.526599999987
+undefined BUY 167.1 0.74 NEW
+undefined SELL 179.56 0.62 NEW
+undefined SELL 179.56 0.16 NEW
+Execute BUY: 167.25 ~ 166.44
+undefined BUY 163.75 0.88 NEW
+undefined SELL 180.48 0.74 NEW
+undefined SELL 180.48 0.16 NEW
+Execute BUY: 164.66 ~ 163.54
+undefined BUY 160.47 1.05 NEW
+undefined SELL 176.83 0.88 NEW
+undefined SELL 176.83 0.16 NEW
+Execute BUY: 160.91 ~ 160.29
+undefined BUY 157.26 1.26 NEW
+undefined SELL 173.15 1.05 NEW
+undefined SELL 173.15 0.16 NEW
+Execute BUY: 158.21 ~ 157.24
+undefined BUY 154.11 1.51 NEW
+undefined SELL 169.47 1.26 NEW
+undefined SELL 169.47 0.16 NEW
+Execute BUY: 155.06 ~ 153.67
+undefined BUY 151.02 1.81 NEW
+undefined SELL 165.83 1.51 NEW
+undefined SELL 165.83 0.16 NEW
+Execute BUY: 152.6 ~ 150.92
+undefined BUY 147.99 2.17 NEW
+undefined SELL 162.24 1.81 NEW
+undefined SELL 162.24 0.16 NEW
+Execute SELL: 162.59 ~ 160.45
+balance: 9664.037599999985
+Execute SELL: 162.59 ~ 160.45
+balance: 9957.691999999985
+undefined BUY 154.12 1.81 NEW
+undefined SELL 166.04 1.51 NEW
+undefined SELL 166.04 0.19 NEW
+Execute SELL: 166.28 ~ 165.65
+balance: 9989.239599999984
+Execute SELL: 166.28 ~ 165.65
+balance: 10239.959999999985
+undefined BUY 157.73 1.51 NEW
+undefined SELL 169.66 1.26 NEW
+undefined SELL 169.66 0.22 NEW
+Execute BUY: 158.03 ~ 157.23
+undefined BUY 154.57 1.81 NEW
+undefined SELL 169.43 1.51 NEW
+undefined SELL 169.43 0.22 NEW
+Execute SELL: 169.49 ~ 168.17
+balance: 10039.062299999985
+Execute SELL: 169.49 ~ 168.17
+balance: 10294.901599999985
+undefined BUY 160.95 1.51 NEW
+undefined SELL 169.67 1.26 NEW
+undefined SELL 169.67 0.26 NEW
+Execute SELL: 169.86 ~ 169.04
+balance: 10339.015799999985
+Execute SELL: 169.86 ~ 169.04
+balance: 10552.799999999985
+undefined BUY 161.18 1.26 NEW
+undefined SELL 172.92 1.05 NEW
+undefined SELL 172.92 0.31 NEW
+Execute SELL: 174.26 ~ 170.64
+balance: 10606.405199999985
+Execute SELL: 174.26 ~ 170.64
+balance: 10787.971199999985
+undefined BUY 164.27 1.05 NEW
+undefined SELL 175.55 0.88 NEW
+undefined SELL 175.55 0.37 NEW
+Execute SELL: 175.65 ~ 174.27
+balance: 10852.924699999985
+Execute SELL: 175.65 ~ 174.27
+balance: 11007.408699999985
+undefined BUY 166.77 0.88 NEW
+undefined SELL 177.32 0.74 NEW
+undefined SELL 177.32 0.44 NEW
+Execute SELL: 177.38 ~ 175.98
+balance: 11085.429499999986
+Execute SELL: 177.38 ~ 175.98
+balance: 11216.646299999986
+undefined BUY 168.45 0.74 NEW
+undefined SELL 174.93 0.62 NEW
+undefined SELL 174.93 0.52 NEW
+Execute SELL: 177.94 ~ 176.47
+balance: 11307.609899999985
+Execute SELL: 177.94 ~ 176.47
+balance: 11416.066499999984
+FIRST
+undefined BUY 175.94 0.16 NEW
+Execute BUY: 177.66 ~ 176.
+undefined BUY 172.42 0.19 NEW
+undefined SELL 184.73 0.16 NEW
+Execute BUY: 173.34 ~ 172.19
+undefined BUY 168.97 0.22 NEW
+undefined SELL 182.73 0.19 NEW
+undefined SELL 182.73 0.16 NEW
+Execute BUY: 170.26 ~ 168.513
+undefined BUY 165.59 0.26 NEW
+undefined SELL 180.49 0.22 NEW
+undefined SELL 180.49 0.16 NEW
+Execute SELL: 181.4 ~ 179.19
+balance: 11346.861299999984
+Execute SELL: 181.4 ~ 179.19
+balance: 11386.569099999984
+undefined BUY 171.46 0.22 NEW
+undefined SELL 181.04 0.19 NEW
+Execute SELL: 181.94 ~ 180.41
+balance: 11420.966699999984
+FIRST
+undefined BUY 179.86 0.15 NEW
+Execute BUY: 182.66 ~ 181.79
+undefined BUY 176.26 0.18 NEW
+undefined SELL 188.85 0.15 NEW
+Execute BUY: 176.62 ~ 176.15
+undefined BUY 172.73 0.21 NEW
+undefined SELL 186.79 0.18 NEW
+undefined SELL 186.79 0.15 NEW
+Execute SELL: 186.94 ~ 186.65
+balance: 11390.279399999985
+Execute SELL: 186.94 ~ 186.65
+balance: 11423.901599999985
+FIRST
+undefined BUY 186.09 0.15 NEW
+Execute BUY: 186.76 ~ 186.6
+undefined BUY 182.36 0.18 NEW
+undefined SELL 195.39 0.15 NEW
+Execute BUY: 182.98 ~ 182.32
+undefined BUY 178.71 0.21 NEW
+undefined SELL 193.25 0.18 NEW
+undefined SELL 193.25 0.15 NEW
+Execute BUY: 179.68 ~ 178.66
+undefined BUY 175.13 0.25 NEW
+undefined SELL 190.87 0.21 NEW
+undefined SELL 190.87 0.15 NEW
+Execute BUY: 175.69 ~ 175.026
+undefined BUY 171.62 0.3 NEW
+undefined SELL 188.2 0.25 NEW
+undefined SELL 188.2 0.15 NEW
+Execute BUY: 171.96 ~ 171.6
+undefined BUY 168.18 0.36 NEW
+undefined SELL 185.26 0.3 NEW
+undefined SELL 185.26 0.15 NEW
+Execute BUY: 168.87 ~ 168.
+undefined BUY 164.81 0.43 NEW
+undefined SELL 182.12 0.36 NEW
+undefined SELL 182.12 0.15 NEW
+Execute SELL: 182.6 ~ 181.67
+balance: 11197.138899999984
+Execute SELL: 182.6 ~ 181.67
+balance: 11262.702099999984
+undefined BUY 173.01 0.36 NEW
+undefined SELL 184.42 0.3 NEW
+undefined SELL 184.42 0.18 NEW
+Execute SELL: 184.57 ~ 184.31
+balance: 11295.897699999983
+Execute SELL: 184.57 ~ 184.31
+balance: 11351.223699999982
+undefined BUY 175.19 0.3 NEW
+undefined SELL 185.6 0.25 NEW
+undefined SELL 185.6 0.21 NEW
+Execute SELL: 185.73 ~ 184.92
+balance: 11390.199699999983
+Execute SELL: 185.73 ~ 184.92
+balance: 11436.599699999982
+FIRST
+undefined BUY 184.36 0.15 NEW
+Execute BUY: 185.66 ~ 185.48
+undefined BUY 180.67 0.18 NEW
+undefined SELL 193.57 0.15 NEW
+Execute BUY: 180.95 ~ 180.34
+undefined BUY 177.05 0.21 NEW
+undefined SELL 191.46 0.18 NEW
+undefined SELL 191.46 0.15 NEW
+Execute BUY: 177.46 ~ 176.76
+undefined BUY 173.5 0.25 NEW
+undefined SELL 189.1 0.21 NEW
+undefined SELL 189.1 0.15 NEW
+Execute BUY: 173.89 ~ 173.26
+undefined BUY 170.03 0.3 NEW
+undefined SELL 186.45 0.25 NEW
+undefined SELL 186.45 0.15 NEW
+Execute BUY: 170.18 ~ 169.92
+undefined BUY 166.62 0.36 NEW
+undefined SELL 183.54 0.3 NEW
+undefined SELL 183.54 0.15 NEW
+Execute SELL: 183.91 ~ 183.44
+balance: 11272.391599999983
+Execute SELL: 183.91 ~ 183.44
+balance: 11327.453599999983
+undefined BUY 174.36 0.3 NEW
+undefined SELL 185.32 0.25 NEW
+undefined SELL 185.32 0.18 NEW
+Execute SELL: 185.4 ~ 185.24
+balance: 11360.811199999982
+Execute SELL: 185.4 ~ 185.24
+balance: 11407.141199999982
+undefined BUY 176.05 0.25 NEW
+undefined SELL 185.9 0.21 NEW
+Execute SELL: 185.95 ~ 185.71
+balance: 11446.180199999983
+FIRST
+undefined BUY 185.15 0.15 NEW
+Execute BUY: 186.14 ~ 185.82
+undefined BUY 181.44 0.18 NEW
+undefined SELL 194.4 0.15 NEW
+Execute BUY: 181.72 ~ 181.37
+undefined BUY 177.81 0.21 NEW
+undefined SELL 192.28 0.18 NEW
+undefined SELL 192.28 0.15 NEW
+Execute BUY: 178.66 ~ 177.65
+undefined BUY 174.25 0.25 NEW
+undefined SELL 189.91 0.21 NEW
+undefined SELL 189.91 0.15 NEW
+Execute SELL: 189.92 ~ 189.54
+balance: 11376.894899999985
+Execute SELL: 189.92 ~ 189.54
+balance: 11416.775999999985
+undefined BUY 180.41 0.21 NEW
+undefined SELL 190.51 0.18 NEW
+Execute SELL: 190.52 ~ 190.03
+balance: 11451.067799999986
+FIRST
+undefined BUY 189.45 0.15 NEW
+Execute BUY: 192. ~ 190.34
+undefined BUY 185.66 0.18 NEW
+undefined SELL 198.92 0.15 NEW
+Execute BUY: 187.59 ~ 184.02
+undefined BUY 181.94 0.21 NEW
+undefined SELL 196.75 0.18 NEW
+undefined SELL 196.75 0.15 NEW
+Execute SELL: 196.79 ~ 196.02
+balance: 11418.743999999988
+Execute SELL: 196.79 ~ 196.02
+balance: 11454.158999999989
+FIRST
+undefined BUY 195.43 0.14 NEW
+Execute BUY: 197.19 ~ 196.59
+undefined BUY 191.52 0.16 NEW
+undefined SELL 205.2 0.14 NEW
+Execute BUY: 191.99 ~ 191.25
+undefined BUY 187.68 0.19 NEW
+undefined SELL 203.01 0.16 NEW
+undefined SELL 203.01 0.14 NEW
+Execute SELL: 203.12 ~ 202.87
+balance: 11424.576999999988
+Execute SELL: 203.12 ~ 202.87
+balance: 11457.058599999988
+FIRST
+undefined BUY 202.26 0.14 NEW
+Execute BUY: 203.2 ~ 202.95
+undefined BUY 198.21 0.16 NEW
+undefined SELL 212.37 0.14 NEW
+Execute BUY: 198.43 ~ 198.2
+undefined BUY 194.24 0.19 NEW
+undefined SELL 210.1 0.16 NEW
+undefined SELL 210.1 0.14 NEW
+Execute BUY: 194.64 ~ 193.69
+undefined BUY 190.35 0.22 NEW
+undefined SELL 207.52 0.19 NEW
+undefined SELL 207.52 0.14 NEW
+Execute BUY: 190.59 ~ 190.29
+undefined BUY 186.54 0.26 NEW
+undefined SELL 204.73 0.22 NEW
+undefined SELL 204.73 0.14 NEW
+Execute BUY: 187.25 ~ 186.33
+undefined BUY 182.8 0.31 NEW
+undefined SELL 201.64 0.26 NEW
+undefined SELL 201.64 0.14 NEW
+Execute BUY: 183.47 ~ 182.62
+undefined BUY 179.14 0.37 NEW
+undefined SELL 198.29 0.31 NEW
+undefined SELL 198.29 0.14 NEW
+Execute BUY: 180.05 ~ 178.67
+undefined BUY 175.55 0.44 NEW
+undefined SELL 194.76 0.37 NEW
+undefined SELL 194.76 0.14 NEW
+Execute BUY: 176.46 ~ 175.34
+undefined BUY 172.03 0.52 NEW
+undefined SELL 191.09 0.44 NEW
+undefined SELL 191.09 0.14 NEW
+Execute BUY: 172.4 ~ 171.97
+undefined BUY 168.58 0.62 NEW
+undefined SELL 187.36 0.52 NEW
+undefined SELL 187.36 0.14 NEW
+Execute BUY: 169.12 ~ 168.39
+undefined BUY 165.2 0.74 NEW
+undefined SELL 183.52 0.62 NEW
+undefined SELL 183.52 0.14 NEW
+Execute BUY: 166.09 ~ 165.
+undefined BUY 161.89 0.88 NEW
+undefined SELL 179.65 0.74 NEW
+undefined SELL 179.65 0.14 NEW
+Execute BUY: 162.27 ~ 161.84
+undefined BUY 158.65 1.05 NEW
+undefined SELL 175.8 0.88 NEW
+undefined SELL 175.8 0.14 NEW
+Execute BUY: 160.08 ~ 158.18
+undefined BUY 155.47 1.26 NEW
+undefined SELL 171.96 1.05 NEW
+undefined SELL 171.96 0.14 NEW
+Execute BUY: 155.77 ~ 155.09
+undefined BUY 152.36 1.51 NEW
+undefined SELL 168.15 1.26 NEW
+undefined SELL 168.15 0.14 NEW
+Execute BUY: 152.72 ~ 151.88
+undefined BUY 149.31 1.81 NEW
+undefined SELL 164.42 1.51 NEW
+undefined SELL 164.42 0.14 NEW
+Execute BUY: 149.84 ~ 147.54
+undefined BUY 146.32 2.17 NEW
+undefined SELL 160.76 1.81 NEW
+undefined SELL 160.76 0.14 NEW
+Execute BUY: 147.68 ~ 145.71
+undefined BUY 143.39 2.6 NEW
+undefined SELL 157.19 2.17 NEW
+undefined SELL 157.19 0.14 NEW
+Execute BUY: 143.98 ~ 143.3
+undefined BUY 140.52 3.12 NEW
+undefined SELL 153.71 2.6 NEW
+undefined SELL 153.71 0.14 NEW
+Execute BUY: 141.29 ~ 140.2
+undefined BUY 137.7 3.74 NEW
+undefined SELL 150.32 3.12 NEW
+undefined SELL 150.32 0.14 NEW
+Execute BUY: 139.92 ~ 137.56
+undefined BUY 134.94 4.48 NEW
+undefined SELL 147.03 3.74 NEW
+undefined SELL 147.03 0.14 NEW
+Execute BUY: 135.26 ~ 134.55
+undefined BUY 132.24 5.37 NEW
+undefined SELL 143.82 4.48 NEW
+undefined SELL 143.82 0.14 NEW
+Execute SELL: 143.86 ~ 143.37
+balance: 7519.932799999989
+Execute SELL: 143.86 ~ 143.37
+balance: 8164.246399999989
+undefined BUY 136.62 4.48 NEW
+undefined SELL 147.19 3.74 NEW
+undefined SELL 147.19 0.16 NEW
+Execute SELL: 147.53 ~ 146.91
+balance: 8187.796799999989
+Execute SELL: 147.53 ~ 146.91
+balance: 8738.287399999988
+undefined BUY 139.83 3.74 NEW
+undefined SELL 150.78 3.12 NEW
+undefined SELL 150.78 0.19 NEW
+Execute BUY: 141.02 ~ 139.7
+undefined BUY 137.03 4.48 NEW
+undefined SELL 149.58 3.74 NEW
+undefined SELL 149.58 0.19 NEW
+Execute BUY: 137.87 ~ 136.51
+undefined BUY 134.28 5.37 NEW
+undefined SELL 146.32 4.48 NEW
+undefined SELL 146.32 0.19 NEW
+Execute BUY: 134.8 ~ 134.13
+undefined BUY 131.59 6.44 NEW
+undefined SELL 143.14 5.37 NEW
+undefined SELL 143.14 0.19 NEW
+Execute SELL: 143.25 ~ 142.78
+balance: 6907.541799999988
+Execute SELL: 143.25 ~ 142.78
+balance: 7676.203599999988
+undefined BUY 135.98 5.37 NEW
+undefined SELL 146.5 4.48 NEW
+undefined SELL 146.5 0.22 NEW
+Execute SELL: 146.64 ~ 146.03
+balance: 7708.433599999988
+Execute SELL: 146.64 ~ 146.03
+balance: 8364.753599999987
+undefined BUY 139.17 4.48 NEW
+undefined SELL 150 3.74 NEW
+undefined SELL 150 0.26 NEW
+Execute BUY: 139.8 ~ 139.14
+undefined BUY 136.38 5.37 NEW
+undefined SELL 148.85 4.48 NEW
+undefined SELL 148.85 0.26 NEW
+Execute BUY: 136.72 ~ 136.37
+undefined BUY 133.65 6.44 NEW
+undefined SELL 145.63 5.37 NEW
+undefined SELL 145.63 0.26 NEW
+Execute BUY: 134.14 ~ 133.62
+undefined BUY 130.97 7.72 NEW
+undefined SELL 142.48 6.44 NEW
+undefined SELL 142.48 0.26 NEW
+Execute BUY: 133.29 ~ 130.56
+undefined BUY 128.35 9.26 NEW
+undefined SELL 139.41 7.72 NEW
+undefined SELL 139.41 0.26 NEW
+Execute SELL: 139.43 ~ 139.04
+balance: 5173.363599999988
+Execute SELL: 139.43 ~ 139.04
+balance: 6249.608799999987
+undefined BUY 132.43 7.72 NEW
+undefined SELL 142.7 6.44 NEW
+undefined SELL 142.7 0.31 NEW
+Execute SELL: 142.88 ~ 142.23
+balance: 6293.845799999987
+Execute SELL: 142.88 ~ 142.23
+balance: 7212.833799999988
+undefined BUY 135.56 6.44 NEW
+undefined SELL 146.09 5.37 NEW
+undefined SELL 146.09 0.37 NEW
+Execute SELL: 146.19 ~ 145.58
+balance: 7266.887099999987
+Execute SELL: 146.19 ~ 145.58
+balance: 8051.3903999999875
+undefined BUY 138.78 5.37 NEW
+undefined SELL 149.54 4.48 NEW
+undefined SELL 149.54 0.44 NEW
+Execute SELL: 149.69 ~ 149.23
+balance: 8117.187999999987
+Execute SELL: 149.69 ~ 149.23
+balance: 8787.127199999988
+undefined BUY 142.06 4.48 NEW
+undefined SELL 150.94 3.74 NEW
+undefined SELL 150.94 0.52 NEW
+Execute SELL: 151.24 ~ 150.2
+balance: 8865.615999999987
+Execute SELL: 151.24 ~ 150.2
+balance: 9430.131599999988
+undefined BUY 143.39 3.74 NEW
+undefined SELL 152.43 3.12 NEW
+undefined SELL 152.43 0.62 NEW
+Execute SELL: 152.69 ~ 151.81
+balance: 9524.638199999989
+Execute SELL: 152.69 ~ 151.81
+balance: 10000.219799999988
+undefined BUY 144.8 3.12 NEW
+undefined SELL 155.63 2.6 NEW
+undefined SELL 155.63 0.74 NEW
+Execute SELL: 155.67 ~ 155.3
+balance: 10115.385999999988
+Execute SELL: 155.67 ~ 155.3
+balance: 10520.023999999989
+undefined BUY 147.84 2.6 NEW
+undefined SELL 158.35 2.17 NEW
+undefined SELL 158.35 0.88 NEW
+Execute BUY: 148.85 ~ 147.63
+undefined BUY 144.88 3.12 NEW
+undefined SELL 158.96 2.6 NEW
+undefined SELL 158.96 0.88 NEW
+Execute BUY: 145.36 ~ 144.39
+undefined BUY 141.98 3.74 NEW
+undefined SELL 156.05 3.12 NEW
+undefined SELL 156.05 0.88 NEW
+Execute BUY: 142.33 ~ 141.95
+undefined BUY 139.14 4.48 NEW
+undefined SELL 153.06 3.74 NEW
+undefined SELL 153.06 0.88 NEW
+Execute BUY: 139.58 ~ 139.12
+undefined BUY 136.35 5.37 NEW
+undefined SELL 150.01 4.48 NEW
+undefined SELL 150.01 0.88 NEW
+Execute BUY: 136.61 ~ 136.34
+undefined BUY 133.62 6.44 NEW
+undefined SELL 146.94 5.37 NEW
+undefined SELL 146.94 0.88 NEW
+Execute BUY: 133.95 ~ 133.56
+undefined BUY 130.94 7.72 NEW
+undefined SELL 143.86 6.44 NEW
+undefined SELL 143.86 0.88 NEW
+Execute BUY: 132.17 ~ 130.77
+undefined BUY 128.32 9.26 NEW
+undefined SELL 140.81 7.72 NEW
+undefined SELL 140.81 0.88 NEW
+Execute BUY: 128.8 ~ 127.88
+undefined BUY 125.75 11.11 NEW
+undefined SELL 137.79 9.26 NEW
+undefined SELL 137.79 0.88 NEW
+Execute BUY: 126.1 ~ 125.09
+undefined BUY 123.23 13.33 NEW
+undefined SELL 134.82 11.11 NEW
+undefined SELL 134.82 0.88 NEW
+Execute BUY: 124.04 ~ 122.9
+undefined BUY 120.76 14.05 NEW
+undefined SELL 131.9 13.33 NEW
+undefined SELL 131.9 0.88 NEW
+Execute BUY: 121.2 ~ 120.68
+undefined SELL 129.34 14.05 NEW
+undefined SELL 129.34 0.88 NEW
+Execute SELL: 129.4 ~ 128.21
+balance: 114.85249999998824
+Execute SELL: 129.4 ~ 128.21
+balance: 1932.0794999999882
+undefined BUY 122.87 14.05 NEW
+undefined SELL 132.1 13.33 NEW
+undefined SELL 132.1 1.05 NEW
+Execute BUY: 123.29 ~ 122.81
+undefined BUY 120.41 1.7 NEW
+undefined SELL 131.62 14.05 NEW
+undefined SELL 131.62 1.05 NEW
+Execute BUY: 121.32 ~ 120.4
+undefined SELL 141.76 1.7 NEW
+undefined SELL 141.76 1.05 NEW
+Execute SELL: 141.98 ~ 141.54
+balance: 149.90699999998802
+Execute SELL: 141.98 ~ 141.54
+balance: 390.898999999988
+undefined BUY 134.67 1.7 NEW
+undefined SELL 131.83 14.05 NEW
+undefined SELL 131.83 1.26 NEW
+Execute SELL: 142.2 ~ 141.6
+balance: 557.004799999988
+Execute SELL: 142.2 ~ 141.6
+balance: 2409.216299999988
+undefined BUY 125.23 14.05 NEW
+undefined SELL 132.5 13.33 NEW
+undefined SELL 132.5 1.51 NEW
+Execute SELL: 142.47 ~ 141.98
+balance: 2609.291299999988
+Execute SELL: 142.47 ~ 141.98
+balance: 4375.516299999988
+undefined BUY 125.87 13.33 NEW
+undefined SELL 135.5 11.11 NEW
+undefined SELL 135.5 1.81 NEW
+Execute SELL: 142.75 ~ 142.05
+balance: 4620.7712999999885
+Execute SELL: 142.75 ~ 142.05
+balance: 6126.176299999988
+undefined BUY 128.72 11.11 NEW
+undefined SELL 138.32 9.26 NEW
+undefined SELL 138.32 2.17 NEW
+Execute SELL: 142.81 ~ 142.35
+balance: 6426.330699999989
+Execute SELL: 142.81 ~ 142.35
+balance: 7707.173899999989
+undefined BUY 131.4 9.26 NEW
+undefined SELL 141.95 7.72 NEW
+undefined SELL 141.95 2.6 NEW
+Execute SELL: 143.54 ~ 142.8
+balance: 8076.243899999989
+Execute SELL: 143.54 ~ 142.8
+balance: 9172.097899999988
+undefined BUY 134.85 7.72 NEW
+undefined SELL 144.15 6.44 NEW
+undefined SELL 144.15 3.12 NEW
+Execute BUY: 135.62 ~ 134.62
+undefined BUY 132.15 9.26 NEW
+undefined SELL 144.62 7.72 NEW
+undefined SELL 144.62 3.12 NEW
+Execute BUY: 133.7 ~ 127.01
+undefined BUY 126.62 11.11 NEW
+undefined SELL 142.12 9.26 NEW
+undefined SELL 142.12 3.12 NEW
+Execute BUY: 127.35 ~ 126.38
+undefined BUY 124.08 13.33 NEW
+undefined SELL 137.15 11.11 NEW
+undefined SELL 137.15 3.12 NEW
+Execute BUY: 124.48 ~ 122.81
+undefined BUY 121.59 15.99 NEW
+undefined SELL 134.42 13.33 NEW
+undefined SELL 134.42 3.12 NEW
+Execute BUY: 122.08 ~ 120.25
+undefined BUY 119.15 15.96 NEW
+undefined SELL 131.66 15.99 NEW
+undefined SELL 131.66 3.12 NEW
+Execute BUY: 119.38 ~ 118.63
+undefined SELL 129.52 15.96 NEW
+undefined SELL 129.52 3.12 NEW
+Profit: -6292.493800000011

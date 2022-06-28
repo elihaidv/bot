@@ -50,9 +50,10 @@ async function run() {
     const t = dataManager.chart[i]
 
     // const low = Math.min(t.low,  dataManager.chart[i - 1]?.low ?? Infinity)
-
+    let ToPlace = false;
 
     for (let o of dataManager.openOrders.slice().reverse()) {
+      
       // if (await checkTrailing(bot,o,t)) break;
 
       //     case "TRAILING_STOP_MARKET": 
@@ -64,26 +65,30 @@ async function run() {
         ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > t.low ||
           ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < t.high) {
 
+          if (o.type == "STOP_MARKET") {
+            console.log("stop loose")
+          }
         console.log(`Execute ${o.side}: ${t.high} ~ ${t.low}`)
         executeds[dataManager.time] = o
         dataManager.orderexecute(o)
-        await place(bot)
-        break;
+       ToPlace = true
+        // break;
 
       } else if (dataManager.time - o.time >= bot.secound / 60 && bot.lastOrder != Bot.STABLE) {
         // console.log("expire")
-        await place(bot)
+        ToPlace = true
         break;
 
       }
     }
+    ToPlace &&  await place(bot)
     if (!dataManager.hasMoney(t) && t.close) {
       console.log("😰Liquid at: " + t.close)
       break;
     }
     dataManager.time++
   }
-  dataManager.closePosition(dataManager.chart.at(-1)?.low);
+  dataManager.closePosition(dataManager.chart.at(-2)?.low);
   console.log("Profit: " + dataManager.profit)
   // console.log(JSON.stringify(executeds))
   // console.log(JSON.stringify(dataManager.chart.map(c=>(["", parseFloat(c.high),parseFloat(c.close),parseFloat(c.close),parseFloat(c.low)]))))

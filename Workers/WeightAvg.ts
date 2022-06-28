@@ -16,6 +16,7 @@ export class WeightAvg extends BasePlacer {
 
         this.buildHistory()
 
+        this.isFirst && console.log("FIRST")
         await this.placeBuy()
 
         !this.isFirst && await this.placeSell()
@@ -66,16 +67,18 @@ export class WeightAvg extends BasePlacer {
 
 
         if (this.standingBuy) {
-            if (this.oldestStandingBuy && this.oldestStandingBuy.orderId != this.standingBuy.orderId){
+            if (this.oldestStandingBuy && this.oldestStandingBuy.orderId != this.standingBuy.orderId && this.bot.take_profit_position == -1){
                 sellPrice = this.weightAverage([this.standingBuy,this.oldestStandingBuy]) * (1 + this.bot.take_profit)
                 
+                await this.place_order(this.FIRST, this.standingBuy.executedQty, sellPrice, false, {
+                    newClientOrderId: "SELL" + this.standingBuy.orderId
+                })
+
                 await this.place_order(this.FIRST, this.oldestStandingBuy.executedQty, sellPrice, false, {
                     newClientOrderId: "SELL" + this.oldestStandingBuy.orderId
                 })
 
-                await this.place_order(this.FIRST, this.standingBuy.executedQty, sellPrice, false, {
-                    newClientOrderId: "SELL" + this.standingBuy.orderId
-                })
+                
 
             } else {
 
@@ -95,6 +98,15 @@ export class WeightAvg extends BasePlacer {
                 sellPrice = this.myLastBuyAvg * (1 + (this.bot.take_profit_position || this.bot.take_profit))
 
                 await this.place_order(this.FIRST, this.balance[this.FIRST].available - sellQu, sellPrice, false)
+            }
+
+
+            if (this.bot.stop_loose) {
+                sellPrice = this.myLastBuyAvg * (1 - this.bot.stop_loose )
+                await this.place_order(this.FIRST, this.balance[this.FIRST].available, sellPrice, false,  {
+                    type: "STOP_MARKET",
+                    stopPrice: sellPrice
+                })
             }
 
         }

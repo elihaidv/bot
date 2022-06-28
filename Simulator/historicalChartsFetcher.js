@@ -25,7 +25,7 @@ if (fs.existsSync(filename)) {
     exec(`tail -n 1 ${filename}`, (error, stdout, stderr) => {
         const line = stdout.split(",")
         startTime = line[0]
-        runMain(parseInt(startTime) + 60000)
+        runMain(parseInt(startTime))
     })
 } else {
     startTime = new Date(new Date().setFullYear(new Date().getFullYear() - 1)).getTime()

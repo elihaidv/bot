@@ -7,6 +7,7 @@ import { BasePlacer } from "../Workers/BasePlacer";
 import { CandleStick, DataManager } from "./DataManager";
 import { FutureDataManager } from "./FutureDataManager";
 import { exit } from "process";
+import { DAL } from "../DAL";
 
 const Binance = require('node-binance-api');
 
@@ -42,10 +43,14 @@ async function run() {
 
   dataManager.initData()
 
+  await DAL.instance.init()
+  await DAL.instance.createTest(bot)
   await place(bot)
 
   const executeds = new Map<Number, Order>()
 
+
+  
   for (let i = dataManager.time; i < dataManager.chart.length; i++) {
     const t = dataManager.chart[i]
 
@@ -68,6 +73,7 @@ async function run() {
           if (o.type == "STOP_MARKET") {
             console.log("stop loose")
           }
+        await DAL.instance.logStep(`Execute ${o.side}: ${t.high} ~ ${t.low}`)
         console.log(`Execute ${o.side}: ${t.high} ~ ${t.low}`)
         executeds[dataManager.time] = o
         dataManager.orderexecute(o)

@@ -2,3 +2,4 @@ node_modules
 DB.js
 cryptoHistory/*
 .vscode
+res

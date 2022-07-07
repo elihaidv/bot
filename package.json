@@ -17,6 +17,6 @@
     "on-change": "^3.0.2"
   },
   "devDependencies": {
-    "@types/node": "^16.11.7"
+    "@types/node": "^16.11.43"
   }
 }

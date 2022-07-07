@@ -1,7 +1,7 @@
 
 
 
-const { MongoClient } = require("mongodb");
+import { MongoClient } from "mongodb";
 const DB = require('./DB')
 
 const uri = DB.USERNAME ?
@@ -11,6 +11,7 @@ const uri = DB.USERNAME ?
 export class DAL {
     static instance = new DAL()
     dbo
+    currentTest
 
     async init() {
         let db = await MongoClient.connect(uri)
@@ -26,5 +27,18 @@ export class DAL {
 
     logError(error) {
         this.dbo.collection('error').insertOne(error)
+    }
+
+    async createTest(test) {
+        const clone = (({ binance,_id, ...o }) => o)(test)
+        this.currentTest = await this.dbo.collection('tests').insertOne(clone)
+        
+    }
+
+    async logStep(step) {
+        await this.dbo.collection('tests').update(
+            { "_id": this.currentTest._id },
+            { "$push": { "logs": {"x":step} }}
+        )
     }
 }

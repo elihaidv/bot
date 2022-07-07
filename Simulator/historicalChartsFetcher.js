@@ -3,6 +3,7 @@ const fs = require('fs')
 const SYMBOL = process.argv[2]
 const filename = `cryptoHistory/${SYMBOL}`
 const { exec } = require("child_process");
+const { collationNotSupported } = require('mongodb/lib/core/utils');
 
 
 function runMain(t) {

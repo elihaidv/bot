@@ -1,14 +1,9 @@
-<<<<<<< HEAD
 const Binance = require('node-binance-api');
 require('dotenv').config({ path: '../.env' })
 const cancelOrders = require('./CancelOrders');
 import { DirectionTrader } from './Workers/DirectionTrader';
 import { DualBot } from './Workers/DualBot';
 import { FutureTrader } from './Workers/FuturesTrader';
-=======
-import { DualBot } from './DualBot';
-import { FutureTrader } from './FuturesTrader';
->>>>>>> 1fe5e468bad57248cad8060d8e3ad3ab030c1031
 import { Bot, Key } from './Models'
 // import { OrderPlacer } from './PlaceOrders';
 import { Sockets } from './Sockets/Sockets';
@@ -16,25 +11,10 @@ import { SocketsFutures } from './Sockets/SocketsFuture';
 import { WeightAvg } from './Workers/WeightAvg';
 import { DAL } from './DAL';
 
-<<<<<<< HEAD
-=======
-const Binance = require('node-binance-api');
-const { MongoClient } = require("mongodb");
-require('dotenv').config({ path: '../.env' })
-const cancelOrders = require('./CancelOrders');
-// const DB = require('./DB')
-const log4js = require("log4js");
-
-
-// const uri = DB.USERNAME ?
-//   `mongodb://${DB.USERNAME}:${DB.PASSWORD}@${DB.ADDRESS}?writeConcern=majority` :
-//   `mongodb://127.0.0.1:27017/trading_bot?writeConcern=majority`;
->>>>>>> 1fe5e468bad57248cad8060d8e3ad3ab030c1031
 
 let exchangeInfo, futuresExchangeInfo
 
 let bots = new Array<Bot>();
-let logger = log4js.getLogger("main");
 
 
 // TO DELETE: for local (like DB)
@@ -93,23 +73,7 @@ async function run() {
 
   await configLogger()
 
-<<<<<<< HEAD
   await DAL.instance.init()
-=======
-  logger.info("run!!!");
-
-  Binance().exchangeInfo().then(data => exchangeInfo = data)
-  Binance().futuresExchangeInfo().then(data => futuresExchangeInfo = data)
-  
-  // let db = await MongoClient.connect(uri)
-  // dbo = db.db("trading_bot")
-
-  // TO DELETE: for local (like DB)
-  bots.push(Object.assign(new Bot(), my_bot));
-  dev_keys.push(Object.assign(new Key(), my_key));
-  
-  logger.info("execute!");
->>>>>>> 1fe5e468bad57248cad8060d8e3ad3ab030c1031
   execute()
 
 }
@@ -121,18 +85,9 @@ async function execute() {
   logger.info("execute!");
 
   try {
-<<<<<<< HEAD
     let botsResults = await DAL.instance.getBots()
     
     let keys: Array<Key> = await DAL.instance.getKeys()
-=======
-    // let botsResults = await dbo.collection('bot').find({ run: true, stream: '1', enviroment: DB.ENVIROMENT }).toArray()
-    // let keys: Array<Key> = await dbo.collection('key').find({}).toArray()
-    
-    // TO DELETE: for local (like above)
-    let botsResults = bots;
-    let keys = dev_keys;
->>>>>>> 1fe5e468bad57248cad8060d8e3ad3ab030c1031
 
     initBots(botsResults)
     

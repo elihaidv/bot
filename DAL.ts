@@ -37,8 +37,8 @@ export class DAL {
 
     async logStep(step) {
         await this.dbo.collection('tests').update(
-            { "_id": this.currentTest._id },
-            { "$push": { "logs": {"x":step} }}
+            { "_id": this.currentTest.insertedId },
+            { "$push": { "logs": step }}
         )
     }
 }

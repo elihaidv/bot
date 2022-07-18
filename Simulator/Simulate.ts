@@ -23,7 +23,7 @@ const id = process.argv[2] || "61da8b2036520f0737301999";
 
 
 let trailing;
-let exchangeInfo, dataManager: DataManager
+let  dataManager: DataManager
 async function run() {
   const db = await MongoClient.connect(uri)
   const dbo = db.db("trading_bot")
@@ -33,11 +33,13 @@ async function run() {
 
   const bot: Bot = Object.assign(new Bot(), bots[0]);
 
-  exchangeInfo = bot.isFuture ?
-    await Binance().futuresExchangeInfo() :
-    await Binance().exchangeInfo()
 
-  dataManager = bot.isFuture ? new FutureDataManager(bot) : new DataManager(bot);
+
+    dataManager = bot.isFuture ? new FutureDataManager(bot) : new DataManager(bot);
+
+    dataManager.setExchangeInfo(bot.isFuture ?
+        await Binance().futuresExchangeInfo() :
+        await Binance().exchangeInfo())
 
   await dataManager.fetchChart()
 
@@ -71,9 +73,13 @@ async function run() {
           ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < t.high) {
 
           if (o.type == "STOP_MARKET") {
+            await DAL.instance.logStep({ type: "StopLoose", side: o.side, high: t.high, low: t.low})
             console.log("stop loose")
+          } else {
+            await DAL.instance.logStep({type:'Execute', side: o.side, high: t.high, low: t.low})
           }
-        await DAL.instance.logStep(`Execute ${o.side}: ${t.high} ~ ${t.low}`)
+
+        
         console.log(`Execute ${o.side}: ${t.high} ~ ${t.low}`)
         executeds[dataManager.time] = o
         dataManager.orderexecute(o)
@@ -128,16 +134,16 @@ async function place(bot: Bot) {
     // case "1":
     //   return new OrderPlacer(b, exchangeInfo).place();
     case "2":
-      worker = new WeightAvg(bot, exchangeInfo)
+      worker = new WeightAvg(bot, dataManager.exchangeInfo)
       break
     case "3":
-      worker = new FutureTrader(bot, exchangeInfo)
+      worker = new FutureTrader(bot, dataManager.exchangeInfo)
       break
     case "4":
-      worker = new DualBot(bot, exchangeInfo)
+      worker = new DualBot(bot, dataManager.exchangeInfo)
       break
     default:
-      worker = new DirectionTrader(bot, exchangeInfo)
+      worker = new DirectionTrader(bot, dataManager.exchangeInfo)
       break
 
   }

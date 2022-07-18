@@ -1,4 +1,5 @@
 const fs = require('fs').promises
+import { DAL } from "../DAL";
 import { Account, Bot, Order } from "../Models";
 import { BaseSockets } from "../Sockets/BaseSockets";
 import { Sockets } from "../Sockets/Sockets";
@@ -17,6 +18,8 @@ export class DataManager {
     bot: Bot
     PAIR
     profit = 0;
+    exchangeInfo: any
+    filters: any
 
     sockets: BaseSockets
 
@@ -28,6 +31,12 @@ export class DataManager {
 
         this.sockets.averagePrice = this.averagePrice.bind(this)
         this.sockets.averagePriceQuarter = this.averagePriceQuarter.bind(this)
+
+    }
+
+    setExchangeInfo(_exchangeInfo) {
+        this.exchangeInfo = _exchangeInfo
+        this.filters = _exchangeInfo.symbols.find(s => s.symbol == this.PAIR).filters.reduce((a, b) => { a[b.filterType] = b; return a }, {})
     }
 
     openOrder = (type) => ((coin, qu, price, params?) => {
@@ -41,6 +50,8 @@ export class DataManager {
         order.closePosition = params.closePosition
 
         this.openOrders.push(order)
+
+        DAL.instance.logStep({ type: 'OpenOrder', side: order.side, price: order.price, quantity: order.origQty })
         return order
     });
     makeid(length): string {
@@ -93,6 +104,14 @@ export class DataManager {
         this.bot.binance!.orders[this.PAIR].push(order)
         if (order.side == "SELL") {
             console.log("balance: " + (this.bot.binance!.balance[this.bot.coin2].available))
+            DAL.instance.logStep({ type: 'Balance', 
+                balanceSecond: (this.bot.binance!.balance[this.bot.coin2].available), 
+                balanceFirst: (this.bot.binance!.balance[this.bot.coin1].available) })
+
+            //Check if 
+            if (this.bot.binance!.balance[this.bot.coin1].available < this.filters.MIN_NOTIONAL.minNotional / order.avgPrice) {
+                DAL.instance.logStep({ type: 'Close Position'}) 
+            }
         }
     }
 

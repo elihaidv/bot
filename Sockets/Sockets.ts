@@ -1,6 +1,7 @@
 import { BaseSockets } from "./BaseSockets";
 import { Account, Bot, Key, Order } from "../Models";
 
+const logger = require('log4js').getLogger("sockets");
 const Binance = require('node-binance-api');
 
 
@@ -54,13 +55,15 @@ export class Sockets extends BaseSockets {
 
             if (data.x == 'TRADE') {
                 orders.changed.push(data.s);
-                console.log(data.S, data.s)
+                // console.log(data.S, data.s)
+                logger.info(data.S, data.s);
             }
         }
     }
 
     execution_update = (orders) => (data) => {
-        console.log(data)
+        // console.log(data)
+        logger.info(data);
         if (!orders[data.s]) orders[data.s] = []
         let order = orders[data.s].find(o => o.orderId == data.i) as Order
 
@@ -83,7 +86,8 @@ export class Sockets extends BaseSockets {
 
         if (newOrder.status == 'FILLED') {
             orders.changed.push(data.s);
-            console.log(data.S, data.s)
+            // console.log(data.S, data.s)
+            logger.info(data.S, data.s);
         }
 
     }
@@ -120,7 +124,8 @@ export class Sockets extends BaseSockets {
                 this.balance_update(acc.balance, acc.orders),
                 this.execution_update(acc.orders))
         } catch (e: any) {
-            console.log("UserSokcet", e.message)
+            // console.log("UserSokcet", e.message)
+            logger.error(e.message);
         }
     }
 

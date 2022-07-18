@@ -1,9 +1,14 @@
+<<<<<<< HEAD
 const Binance = require('node-binance-api');
 require('dotenv').config({ path: '../.env' })
 const cancelOrders = require('./CancelOrders');
 import { DirectionTrader } from './Workers/DirectionTrader';
 import { DualBot } from './Workers/DualBot';
 import { FutureTrader } from './Workers/FuturesTrader';
+=======
+import { DualBot } from './DualBot';
+import { FutureTrader } from './FuturesTrader';
+>>>>>>> 1fe5e468bad57248cad8060d8e3ad3ab030c1031
 import { Bot, Key } from './Models'
 // import { OrderPlacer } from './PlaceOrders';
 import { Sockets } from './Sockets/Sockets';
@@ -11,34 +16,128 @@ import { SocketsFutures } from './Sockets/SocketsFuture';
 import { WeightAvg } from './Workers/WeightAvg';
 import { DAL } from './DAL';
 
+<<<<<<< HEAD
+=======
+const Binance = require('node-binance-api');
+const { MongoClient } = require("mongodb");
+require('dotenv').config({ path: '../.env' })
+const cancelOrders = require('./CancelOrders');
+// const DB = require('./DB')
+const log4js = require("log4js");
+
+
+// const uri = DB.USERNAME ?
+//   `mongodb://${DB.USERNAME}:${DB.PASSWORD}@${DB.ADDRESS}?writeConcern=majority` :
+//   `mongodb://127.0.0.1:27017/trading_bot?writeConcern=majority`;
+>>>>>>> 1fe5e468bad57248cad8060d8e3ad3ab030c1031
 
 let exchangeInfo, futuresExchangeInfo
 
-let bots = new Array<Bot>()
+let bots = new Array<Bot>();
+let logger = log4js.getLogger("main");
+
+
+// TO DELETE: for local (like DB)
+let dev_keys = new Array<Key>();
+
+// TO DELETE: for local (like DB)
+let my_bot = {
+    "_id": "62278c6132b9cc5e183dcf47",
+    "bot_type_id": "2",
+    "name": "פיתוח",
+    "key_id": "p3x1d63d9ay5wf0f72e11eg2",
+    "coin1": "BUSD",
+    "coin2": "USDT",
+    "last_distance": "0.02",
+    "buy_percent": "0.003",
+    "secound": "60",
+    "minbnb": null,
+    "bnbamount": null,
+    "amount_percent": "0.02",
+    "take_profit": "0.02",
+    "SMA": "3",
+    "increase_factor": null,
+    "stream": "1",
+    "user_id": "ufb29y3d9ab2bf0f72e1fv8s",
+    "run": "1",
+    "profit": 0.0,
+    "stop_loose": "0.15",
+    "startBalance": 15.0,
+    "closer": null,
+    "enviroment": "LOCAL",
+    "deleted_at": "0",
+    "take_profit_position": "0.02",
+    "updated_at": "2022-03-08T21:21:21.391Z",
+    "created_at": "2022-03-08T17:03:29.299Z"
+};
+
+// TO DELETE: for local (like DB)
+let my_key = {
+    "_id" : "p3x1d63d9ay5wf0f72e11eg2", 
+    "id" : "1", 
+    "name" : "avraham", 
+    "public" : "vTMdUBOlWBdRDCbZ5a5SCRSv7zvZaFRUE0XpBKdpmho2npiCnjbpdmQfZrBrJxW8",
+    "secret" : "CCO5bnNlTuJ5UpJTBT5mkJbCCB1CnlRmniHSwLNn9N7919V2otxX1Vt5j248i4Jk",
+    "user_id" : "5be1d63d9ab2bf0f72e180cf", 
+    "created_at" : "2018-01-01 21:08:34", 
+    "updated_at" : "2018-01-01 21:08:34", 
+    "deleted_at" : null, 
+    "key_id" : "5be1d63d9ab2bf0f72e180c0", 
+    "burse" : "binance" 
+};
+
 
 
 
 async function run() {
 
+  await configLogger()
+
+<<<<<<< HEAD
+  await DAL.instance.init()
+=======
+  logger.info("run!!!");
+
   Binance().exchangeInfo().then(data => exchangeInfo = data)
   Binance().futuresExchangeInfo().then(data => futuresExchangeInfo = data)
+  
+  // let db = await MongoClient.connect(uri)
+  // dbo = db.db("trading_bot")
 
-  await DAL.instance.init()
+  // TO DELETE: for local (like DB)
+  bots.push(Object.assign(new Bot(), my_bot));
+  dev_keys.push(Object.assign(new Key(), my_key));
+  
+  logger.info("execute!");
+>>>>>>> 1fe5e468bad57248cad8060d8e3ad3ab030c1031
   execute()
 
 }
 run()
 
+
+
 async function execute() {
+  logger.info("execute!");
+
   try {
+<<<<<<< HEAD
     let botsResults = await DAL.instance.getBots()
     
     let keys: Array<Key> = await DAL.instance.getKeys()
+=======
+    // let botsResults = await dbo.collection('bot').find({ run: true, stream: '1', enviroment: DB.ENVIROMENT }).toArray()
+    // let keys: Array<Key> = await dbo.collection('key').find({}).toArray()
+    
+    // TO DELETE: for local (like above)
+    let botsResults = bots;
+    let keys = dev_keys;
+>>>>>>> 1fe5e468bad57248cad8060d8e3ad3ab030c1031
 
     initBots(botsResults)
-
+    
     Sockets.getInstance().updateSockets(Array.from(bots.filter(b => !b.isFuture)), keys)
-    SocketsFutures.getFInstance().updateSockets(Array.from(bots.filter(b => b.isFuture)), keys)
+    // SocketsFutures.getFInstance().updateSockets(Array.from(bots.filter(b => b.isFuture)), keys)
 
     let outdatedBots: Array<Bot> = filterOutdated(bots)
 
@@ -46,6 +145,7 @@ async function execute() {
 
       await Promise.all(outdatedBots.map(cancelOrders));
       await Promise.all(outdatedBots.map((b) => {
+
         switch (b.bot_type_id) {
           // case "1":
           //   return new OrderPlacer(b, exchangeInfo).place();
@@ -63,7 +163,8 @@ async function execute() {
     }
 
   } catch (e) {
-    console.log(e)
+    // console.log(e)
+    logger.error(e);
   }
   setTimeout(execute, 3000)
 }
@@ -83,6 +184,7 @@ function filterOutdated(bots: Array<Bot>): Array<Bot> {
 }
 
 async function initBots(botsResults) {
+
   let newBots = new Array<Bot>()
 
   for (let bot of botsResults) {
@@ -98,3 +200,18 @@ async function initBots(botsResults) {
   bots = newBots
 }
 
+
+
+async function configLogger() {
+
+    try {
+        require('fs').mkdirSync('./log');
+    } catch (e: any) {
+        if (e.code != 'EEXIST') {
+            console.error("Could not set up log directory, error was: ", e);
+            process.exit(1);
+        }
+    }
+    
+    log4js.configure('./log4js.json');
+}

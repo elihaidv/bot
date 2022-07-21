@@ -99,7 +99,7 @@ export abstract class BasePlacer {
             this.myLastOrder ||= order
             if (order.side == this.buySide()) {
                 this.myLastBuy ||= order
-                
+
                 if (!sellOrders.includes("SELL" + order.orderId)){
                     this.standingBuy ||= order
                     this.oldestStandingBuy = order
@@ -147,7 +147,10 @@ export abstract class BasePlacer {
         qu = this.roundQu(qu)
         price = this.roundPrice(price)
 
-        if ((qu * price) < minNotional) return
+        if ((qu * price) < minNotional) {
+            console.log("quantity is to small" , qu , price , this.bot._id)
+            return
+        }
 
         this.bot.lastOrder = new Date().getTime()
 

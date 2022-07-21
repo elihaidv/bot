@@ -16,7 +16,7 @@ export class WeightAvg extends BasePlacer {
 
         this.buildHistory()
 
-        this.isFirst && console.log("FIRST")
+        // this.isFirst && console.log("FIRST")
         await this.placeBuy()
 
         !this.isFirst && await this.placeSell()

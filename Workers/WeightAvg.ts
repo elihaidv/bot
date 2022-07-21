@@ -27,6 +27,10 @@ export class WeightAvg extends BasePlacer {
         return this.balance[this.FIRST].total < (this.filters.MIN_NOTIONAL.minNotional / maxBuyPrice)
     }
 
+    get isNewAlgo(): boolean {
+        return this.bot.take_profit_position == -1
+    }
+
     async placeBuy() {
         let buyPrice, buyQu, maxBuyPrice = Object.keys(this.sockets.orderBooks[this.PAIR].bids)[0] as unknown as number
         let params: any = {};
@@ -35,7 +39,11 @@ export class WeightAvg extends BasePlacer {
 
         if (this.isFirst || !this.myLastOrder) {
             params.newClientOrderId = "FIRST" + this.PAIR
-        } else if (this.myLastOrder!.side == this.sellSide()) {
+
+        } else if (this.isNewAlgo && this.myLastBuy && this.myLastBuy?.orderId != this.myLastOrder.orderId) {
+            buyPrice = this.myLastBuy?.price
+
+        }else if (this.myLastOrder!.side == this.sellSide()) {
             buyPrice = Math.min(this.myLastOrder!.price * (1 - this.bot.take_profit), buyPrice)
 
         } else {
@@ -48,6 +56,9 @@ export class WeightAvg extends BasePlacer {
 
         if (this.isFirst || !this.myLastOrder) {
             buyQu = this.balance[this.SECOND].available * this.bot.amount_percent / buyPrice
+
+        } else if (this.isNewAlgo && this.myLastBuy && this.myLastBuy?.orderId != this.myLastOrder.orderId) {
+            buyQu = this.myLastBuy?.origQty
 
         } else if (this.myLastOrder?.side == this.sellSide()) {
             buyQu = this.myLastOrder.executedQty
@@ -67,7 +78,7 @@ export class WeightAvg extends BasePlacer {
 
 
         if (this.standingBuy) {
-            if (this.oldestStandingBuy && this.oldestStandingBuy.orderId != this.standingBuy.orderId && this.bot.take_profit_position == -1){
+            if (this.oldestStandingBuy && this.oldestStandingBuy.orderId != this.standingBuy.orderId && this.isNewAlgo){
                 sellPrice = this.weightAverage([this.standingBuy,this.oldestStandingBuy]) * (1 + this.bot.take_profit)
                 
                 await this.place_order(this.FIRST, this.standingBuy.executedQty, sellPrice, false, {

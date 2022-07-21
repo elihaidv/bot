@@ -21,7 +21,7 @@ export abstract class BasePlacer {
 
 
     myLastOrder: Order | undefined
-    myLastBuyPrice: number = 0
+    myLastBuy: Order | undefined
     myLastBuyAvg;
     currentPnl = 0
     standingBuy: Order | undefined
@@ -98,7 +98,8 @@ export abstract class BasePlacer {
 
             this.myLastOrder ||= order
             if (order.side == this.buySide()) {
-
+                this.myLastBuy ||= order
+                
                 if (!sellOrders.includes("SELL" + order.orderId)){
                     this.standingBuy ||= order
                     this.oldestStandingBuy = order

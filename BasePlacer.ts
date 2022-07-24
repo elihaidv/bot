@@ -1,4 +1,4 @@
-import { dbo } from './Main'
+// import { dbo } from './Main'
 import { Bot, Order } from './Models'
 import { Sockets } from './Sockets'
 
@@ -149,14 +149,14 @@ export abstract class BasePlacer {
             if (res.msg) {
                 console.log(res.msg, this.PAIR, price, qu, this.bot.id())
 
-                dbo.insertOne( {
-                    bot_id: this.bot.id,
-                    type: type,
-                    coin: this.PAIR,
-                    amount: qu,
-                    price: price,
-                    message: res.msg
-                })
+                // dbo.insertOne( {
+                //     bot_id: this.bot.id,
+                //     type: type,
+                //     coin: this.PAIR,
+                //     amount: qu,
+                //     price: price,
+                //     message: res.msg
+                // })
 
                 this.error = true
                 return res
@@ -180,14 +180,14 @@ export abstract class BasePlacer {
                 
 
             
-            dbo.insertOne( {
-                bot_id: this.bot.id,
-                type: type,
-                coin: this.PAIR,
-                amount: qu,
-                price: price,
-                message: e.getMessage()
-            })
+            // dbo.insertOne( {
+            //     bot_id: this.bot.id,
+            //     type: type,
+            //     coin: this.PAIR,
+            //     amount: qu,
+            //     price: price,
+            //     message: e.getMessage()
+            // })
             return e
         } finally {
 

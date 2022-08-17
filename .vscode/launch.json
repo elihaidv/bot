@@ -26,7 +26,8 @@
             "runtimeExecutable": "ts-node",
             "args": [
                 "Simulator/Simulate.ts",
-                "62fcb1247d12100ef5064d8a"
+                "62fcdb8713a9cbfe5b080933",
+                "3000"
             ],
             "cwd": "${workspaceRoot}",
             "internalConsoleOptions": "openOnSessionStart",

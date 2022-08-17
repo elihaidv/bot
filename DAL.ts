@@ -48,7 +48,7 @@ export class DAL {
         this.currentTestId = test._id
         this.started = new Date()
 
-        await this.dbo.collection('tests').update(
+        await this.dbo.collection('tests').updateOne(
             { "_id": this.currentTestId },
             { "$set": { 
                 status: 'running',
@@ -60,21 +60,21 @@ export class DAL {
     async logStep(step) {
         step.time = this.dataManager.chart[this.dataManager.time].time
         
-        await this.dbo.collection('tests').update(
+        await this.dbo.collection('tests').updateOne(
             { "_id": this.currentTestId },
             { "$push": { "logs": step }}
         )
     }
 
     async setFields(fields) {
-        await this.dbo.collection('tests').update(
+        await this.dbo.collection('tests').updateOne(
             { "_id": this.currentTestId },
             { "$set": fields }
         )
     }
 
     async endTest(profit) {
-        await this.dbo.collection('tests').update(
+        await this.dbo.collection('tests').updateOne(
             { "_id": this.currentTestId },
             { "$set": {
                 profit:  (profit / 100).toPrecision(2) + "%",

@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Key = exports.Account = exports.Order = exports.Bot = void 0;
 var Bot = /** @class */ (function () {
     function Bot() {
@@ -15,6 +15,7 @@ var Bot = /** @class */ (function () {
         this.bigPosition = 0.5;
         this.mode = false;
         this.lastStopPrice = 0;
+        this.dynamicDirection = false;
     }
     Bot.prototype.id = function () { return this._id.toString(); };
     Bot.prototype.positionSide = function () {

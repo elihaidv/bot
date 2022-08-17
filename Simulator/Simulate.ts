@@ -65,7 +65,7 @@ async function run() {
 
 
   
-  for (let i = dataManager.time; i < dataManager.chart.length; i++) {
+  for (let i = dataManager.time; i < dataManager.chart.length - 1; i++) {
     const t = dataManager.chart[i]
 
     // const low = Math.min(t.low,  dataManager.chart[i - 1]?.low ?? Infinity)
@@ -112,7 +112,7 @@ async function run() {
     }
     dataManager.time++
   }
-  dataManager.closePosition(dataManager.chart.at(-2)?.low);
+  dataManager.closePosition(dataManager.chart[dataManager.time].low);
   console.log("Profit: " + dataManager.profit)
   await DAL.instance.endTest(dataManager.profit)
   // console.log(JSON.stringify(executeds))

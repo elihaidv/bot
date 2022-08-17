@@ -3,3 +3,4 @@ DB.js
 cryptoHistory/*
 .vscode
 res
+*.js

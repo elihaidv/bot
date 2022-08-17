@@ -27,7 +27,15 @@ let  dataManager: DataManager
 async function run() {
   const db = await MongoClient.connect(uri)
   const dbo = db.db("trading_bot")
-  const bots = await dbo.collection('bot').find({ _id: ObjectID(id) }).toArray()
+  const tests = await dbo.collection('tests').find({ _id: ObjectID(id) }).toArray()
+  let bots = []
+
+  if (tests.length == 0) {
+    bots = await dbo.collection('bot').find({ _id: ObjectID(id) }).toArray()
+  } else {
+    bots = await dbo.collection('bot').find({ _id: ObjectID(tests[0].bot_id) }).toArray()
+  }
+  
   let keys: Array<Key> = await dbo.collection('key').find({}).toArray()
   let t
 
@@ -45,8 +53,12 @@ async function run() {
 
   dataManager.initData()
 
-  await DAL.instance.init()
-  await DAL.instance.createTest(bot)
+  await DAL.instance.init(dataManager)
+  if (tests.length == 0) {
+    await DAL.instance.createTest(bot)
+  } else {
+    await DAL.instance.startTest(tests[0])
+  }
   await place(bot)
 
   const executeds = new Map<Number, Order>()
@@ -102,6 +114,7 @@ async function run() {
   }
   dataManager.closePosition(dataManager.chart.at(-2)?.low);
   console.log("Profit: " + dataManager.profit)
+  await DAL.instance.endTest(dataManager.profit)
   // console.log(JSON.stringify(executeds))
   // console.log(JSON.stringify(dataManager.chart.map(c=>(["", parseFloat(c.high),parseFloat(c.close),parseFloat(c.close),parseFloat(c.low)]))))
   exit(0)

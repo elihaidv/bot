@@ -105,8 +105,8 @@ export class DataManager {
         if (order.side == "SELL") {
             console.log("balance: " + (this.bot.binance!.balance[this.bot.coin2].available))
             DAL.instance.logStep({ type: 'Balance', 
-                balanceSecond: (this.bot.binance!.balance[this.bot.coin2].available), 
-                balanceFirst: (this.bot.binance!.balance[this.bot.coin1].available) })
+                balanceSecond: (this.bot.binance!.balance[this.bot.coin2].available).toFixed(2), 
+                balanceFirst: (this.bot.binance!.balance[this.bot.coin1].available).toFixed(2) })
 
             //Check if 
             if (this.bot.binance!.balance[this.bot.coin1].available < this.filters.MIN_NOTIONAL.minNotional / order.avgPrice) {

@@ -112,7 +112,7 @@ async function run() {
     }
     dataManager.time++
   }
-  dataManager.closePosition(dataManager.chart[dataManager.time].low);
+  dataManager.closePosition(dataManager.chart[dataManager.time - 1 ].low);
   console.log("Profit: " + dataManager.profit)
   await DAL.instance.endTest(dataManager.profit)
   // console.log(JSON.stringify(executeds))

@@ -166,6 +166,7 @@ export abstract class BasePlacer {
 
                 DAL.instance.logError( {
                     bot_id: this.bot._id,
+                    user_id: this.bot.user_id,
                     type: type,
                     coin: this.PAIR,
                     amount: qu,

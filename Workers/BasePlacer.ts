@@ -170,7 +170,8 @@ export abstract class BasePlacer {
                     coin: this.PAIR,
                     amount: qu,
                     price: price,
-                    message: res.msg
+                    message: res.msg,
+                    created_at: new Date()
                 })
 
                 this.error = true
@@ -202,7 +203,8 @@ export abstract class BasePlacer {
                 coin: this.PAIR,
                 amount: qu,
                 price: price,
-                message: e.body || e
+                message: e.body || e,
+                created_at: new Date()
             })
             return e
         } finally {

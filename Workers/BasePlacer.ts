@@ -165,7 +165,7 @@ export abstract class BasePlacer {
                 console.log(res.msg, this.PAIR,  price || params.stopPrice || params.activationPrice, qu, this.bot.id())
 
                 DAL.instance.logError( {
-                    bot_id: this.bot.id,
+                    bot_id: this.bot._id,
                     type: type,
                     coin: this.PAIR,
                     amount: qu,
@@ -197,7 +197,7 @@ export abstract class BasePlacer {
             
             DAL.instance.logError( {
                 user_id: this.bot.user_id,
-                bot_id: this.bot.id,
+                bot_id: this.bot._id,
                 type: type,
                 coin: this.PAIR,
                 amount: qu,

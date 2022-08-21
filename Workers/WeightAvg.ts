@@ -115,8 +115,8 @@ export class WeightAvg extends BasePlacer {
             if (this.bot.stop_loose) {
                 sellPrice = this.myLastBuyAvg * (1 - this.bot.stop_loose )
                 await this.place_order(this.FIRST, this.balance[this.FIRST].available, sellPrice, false,  {
-                    type: "STOP_MARKET",
-                    stopPrice: sellPrice
+                    type: "STOP_LOSS_LIMIT",
+                    stopPrice: this.roundPrice(sellPrice)
                 })
             }
 

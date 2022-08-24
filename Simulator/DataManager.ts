@@ -88,7 +88,7 @@ export class DataManager {
 
     candlesticks = () => new Promise(resolve => Binance().candlesticks(this.PAIR, "1m", (e, t, s) => resolve(t)));
 
-    orderexecute(order: Order) {
+    orderexecute(order: Order, t: CandleStick) {
         const amount = order.avgPrice * order.executedQty;
         const direction = order.side == "BUY" ? 1 : -1;
 
@@ -104,15 +104,23 @@ export class DataManager {
         this.bot.binance!.orders[this.PAIR].push(order)
         if (order.side == "SELL") {
             console.log("balance: " + (this.bot.binance!.balance[this.bot.coin2].available))
-            DAL.instance.logStep({ type: 'Balance', 
-                balanceSecond: (this.bot.binance!.balance[this.bot.coin2].available).toFixed(2), 
-                balanceFirst: (this.bot.binance!.balance[this.bot.coin1].available).toFixed(2) })
+          
 
             //Check if 
             if (this.bot.binance!.balance[this.bot.coin1].available < this.filters.MIN_NOTIONAL.minNotional / order.avgPrice) {
-                DAL.instance.logStep({ type: 'Close Position'}) 
+                DAL.instance.logStep({ type: 'Close Position' })
             }
         }
+
+        DAL.instance.logStep({
+            type: order.type == "STOP_MARKET" ? "StopLoose" : 'Execute',
+            side: order.side,
+            high: t.high,
+            low: t.low,
+            balanceSecond: (this.bot.binance!.balance[this.bot.coin2].available).toFixed(2),
+            balanceFirst: (this.bot.binance!.balance[this.bot.coin1].available).toFixed(2)
+        })
+
     }
 
     closePosition(price) {

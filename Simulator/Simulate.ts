@@ -80,21 +80,15 @@ async function run() {
       //       trailing = t.high
       //       // console.log(`Trailing activate ${o.side}: ${o.price}`)
       //     }
-      if ( o.clientOrderId.includes("FIRST") ||
-        ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > t.low ||
+      if (("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > t.low ||
           ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < t.high) {
 
-          if (o.type == "STOP_MARKET") {
-            await DAL.instance.logStep({ type: "StopLoose", side: o.side, high: t.high, low: t.low})
-            console.log("stop loose")
-          } else {
-            await DAL.instance.logStep({type:'Execute', side: o.side, high: t.high, low: t.low})
-          }
+         
 
         
         console.log(`Execute ${o.side}: ${t.high} ~ ${t.low}`)
         executeds[dataManager.time] = o
-        dataManager.orderexecute(o)
+        dataManager.orderexecute(o, t)
        ToPlace = true
         // break;
 
@@ -120,23 +114,23 @@ async function run() {
   exit(0)
 }
 
-async function checkTrailing(bot: Bot, o: Order, t: CandleStick) {
+// async function checkTrailing(bot: Bot, o: Order, t: CandleStick) {
 
-  if (trailing && o.type == "TRAILING_STOP_MARKET") {
-    const direction = bot.direction;
-    trailing = direction ? Math.min(t.low, trailing) : Math.max(t.high, trailing)
-    console.log(`Trailing Update: ${trailing}`)
+//   if (trailing && o.type == "TRAILING_STOP_MARKET") {
+//     const direction = bot.direction;
+//     trailing = direction ? Math.min(t.low, trailing) : Math.max(t.high, trailing)
+//     console.log(`Trailing Update: ${trailing}`)
 
-    if ((direction ? -1 : 1) * (trailing - t.close) / trailing > bot.callbackRate / 100) {
-      console.log(`Execute Trailing ${o.side}: ${t.high} ~ ${t.low}`)
-      o.price = t.close
-      dataManager.orderexecute(o)
-      await place(bot)
-      return true
-    }
-  }
-  return false
-}
+//     if ((direction ? -1 : 1) * (trailing - t.close) / trailing > bot.callbackRate / 100) {
+//       console.log(`Execute Trailing ${o.side}: ${t.high} ~ ${t.low}`)
+//       o.price = t.close
+//       dataManager.orderexecute(o)
+//       await place(bot)
+//       return true
+//     }
+//   }
+//   return false
+// }
 
 async function place(bot: Bot) {
   dataManager.simulateState()

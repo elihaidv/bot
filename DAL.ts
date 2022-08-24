@@ -77,7 +77,7 @@ export class DAL {
         await this.dbo.collection('tests').updateOne(
             { "_id": this.currentTestId },
             { "$set": {
-                profit:  (profit / 100).toPrecision(2) + "%",
+                profit:  Number((profit / 100).toPrecision(2)) + "%",
                 status: 'finished',
                 time: ((new Date().getTime() - this.started.getTime()) / 1000).toFixed()
             } }

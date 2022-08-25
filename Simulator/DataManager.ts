@@ -67,14 +67,18 @@ export class DataManager {
 
     async fetchChart() {
         const file = await fs.readFile('cryptoHistory/' + this.PAIR)
-        const data = file.toString().split('\n').map(l => l.split(","))
+        let data = file.toString().split('\n').map(l => l.split(","))
 
         if (!process.argv[3]) {
             this.time = 0
 
         } else if (isNaN(process.argv[3] as any)) {
-            const minutes = Math.round((parseInt(data.at(-2)[0]) - new Date(process.argv[3]).getTime()) / 1000 / 60)
-            this.time = data.length - minutes
+            const start = new Date(process.argv[3]).getTime() - (this.bot.SMA * 5 * 60 * 1000)
+            const end = new Date(process.argv[4]).getTime()
+
+            const startIndex = this.findIndexBetween(start, data)
+            const endIndex = this.findIndexBetween(end, data)
+            data = data.slice(startIndex, endIndex)
 
         } else {
             this.time = data.length - parseInt(process.argv[3])
@@ -84,6 +88,21 @@ export class DataManager {
 
         this.chart = data.map(([time, high, low, close]) =>
             (Object.assign(new CandleStick(), { time, high, low, close })));
+    }
+
+    findIndexBetween(time, chart) {
+        if (time < chart[0][0]) {
+            return 0
+        }
+        for (let i = 0; i < chart.length - 1; i++) {
+            if (chart[i][0] < time && chart[i + 1][0] >= time) {
+                return i
+            }
+        }
+        if (time > chart[chart.length - 1][0]) {
+            return chart.length - 1
+        }
+        return -1
     }
 
     candlesticks = () => new Promise(resolve => Binance().candlesticks(this.PAIR, "1m", (e, t, s) => resolve(t)));
@@ -104,7 +123,7 @@ export class DataManager {
         this.bot.binance!.orders[this.PAIR].push(order)
         if (order.side == "SELL") {
             console.log("balance: " + (this.bot.binance!.balance[this.bot.coin2].available))
-          
+
 
             //Check if 
             if (this.bot.binance!.balance[this.bot.coin1].available < this.filters.MIN_NOTIONAL.minNotional / order.avgPrice) {

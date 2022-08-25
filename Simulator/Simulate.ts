@@ -49,7 +49,7 @@ async function run() {
         await Binance().futuresExchangeInfo() :
         await Binance().exchangeInfo())
 
-  await dataManager.fetchChart()
+  await a.fetchChart()
 
   dataManager.initData()
 

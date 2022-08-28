@@ -17,7 +17,7 @@ function runMain(t) {
                 `${d[0]},${d[2].replace(/0+$/,'')},${d[3].replace(/0+$/,'')},${d[4].replace(/0+$/,'')}`)
             .join("\n") + "\n")
         console.log(new Date(data[0][0]));
-        setTimeout(() => runMain(data.at(-1)[6]), 1000)
+        setTimeout(() => runMain(data[data.length - 1][6]), 1000)
     });
 }
 
@@ -27,7 +27,7 @@ if (process.argv.length == 4) {
     startTime = new Date(process.argv[3]).getTime()
     runMain(startTime)
 } else if (fs.existsSync(filename)) {
-    exec(`tail -n 1 ${filename}`, (error, stdout, stderr) => {
+    exec(`tail -n 1 ${filename}`, (error, stdout, stderr) => {d
         const line = stdout.split(",")
         startTime = line[0]
         runMain(parseInt(startTime))

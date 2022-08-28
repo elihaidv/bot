@@ -7,7 +7,7 @@ const { collationNotSupported } = require('mongodb/lib/core/utils');
 
 
 function runMain(t) {
-    fetch.fetchUrl(`https://fapi.binance.com/fapi/v1/klines?symbol=${SYMBOL}&interval=1m&startTime=${t}&limit=1000`, (e, m, b) => {
+    fetch.fetchUrl(`https://api.binance.com/api/v3/klines?symbol=${SYMBOL}&interval=1m&startTime=${t}&limit=1000`, (e, m, b) => {
         const data = JSON.parse(b)
         if (!data.length) {
             console.log(data)

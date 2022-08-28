@@ -28,7 +28,8 @@
                 "Simulator/Simulate.ts",
                 "62fcdb8713a9cbfe5b080933",
                 "2022-05-25 17:16:00",
-                "2022-06-25 17:16:00"
+                "2022-06-25 17:16:00",
+                "quiet"
             ],
             "cwd": "${workspaceRoot}",
             "internalConsoleOptions": "openOnSessionStart",
@@ -36,6 +37,18 @@
                 "<node_internals>/**",
                 "node_modules/**"
             ]
+        },
+        {
+            "name": "fetch history",
+            "program": "${workspaceFolder}/Simulator/historicalChartsFetcher.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "args": [
+                "MATICBUSD", "2021-08-28 15:32:19"
+            ],
+            "type": "node"
         },
         {
             "name": "Attach by Process ID",

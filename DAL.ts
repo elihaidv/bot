@@ -58,6 +58,9 @@ export class DAL {
         )      
     }
     async logStep(step) {
+        if (process.argv[5] == 'quiet') {
+            return
+        }
         step.time = this.dataManager.chart[this.dataManager.time].time
         
         await this.dbo.collection('tests').updateOne(

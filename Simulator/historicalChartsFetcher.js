@@ -22,7 +22,11 @@ function runMain(t) {
 }
 
 let startTime
-if (fs.existsSync(filename)) {
+if (process.argv.length == 4) {
+    fs.rmSync(filename)
+    startTime = new Date(process.argv[3]).getTime()
+    runMain(startTime)
+} else if (fs.existsSync(filename)) {
     exec(`tail -n 1 ${filename}`, (error, stdout, stderr) => {
         const line = stdout.split(",")
         startTime = line[0]

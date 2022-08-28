@@ -27,6 +27,11 @@ export class WeightAvg extends BasePlacer {
         return this.balance[this.FIRST].total < (this.filters.MIN_NOTIONAL.minNotional / maxBuyPrice)
     }
 
+    get isLast() {
+        let maxBuyPrice = parseFloat(Object.keys(this.sockets.orderBooks[this.PAIR].bids)[0])
+        return this.balance[this.SECOND].total < (this.filters.MIN_NOTIONAL.minNotional)
+    }
+
     get isNewAlgo(): boolean {
         return this.bot.take_profit_position == -1
     }
@@ -40,10 +45,10 @@ export class WeightAvg extends BasePlacer {
         if (this.isFirst || !this.myLastOrder) {
             params.newClientOrderId = "FIRST" + this.PAIR
 
-        } else if (this.isNewAlgo && this.myLastBuy && this.myLastBuy?.orderId != this.myLastOrder.orderId) {
+        } else if (this.isNewAlgo && this.myLastBuy && this.myLastOrder!.side == this.sellSide()) {
             buyPrice = this.myLastBuy?.price
 
-        }else if (this.myLastOrder!.side == this.sellSide()) {
+        } else if (this.myLastOrder!.side == this.sellSide()) {
             buyPrice = Math.min(this.myLastOrder!.price * (1 - this.bot.take_profit), buyPrice)
 
         } else {
@@ -66,8 +71,8 @@ export class WeightAvg extends BasePlacer {
         } else {
             buyQu = this.myLastOrder!.origQty * (1 + this.bot.increase_factor)
         }
-        
-        buyQu =  Math.min(this.balance[this.SECOND].available / buyPrice, buyQu)
+
+        buyQu = Math.min(this.balance[this.SECOND].available / buyPrice, buyQu)
 
         await this.place_order(this.SECOND, buyQu, buyPrice, true, params)
     }
@@ -78,19 +83,21 @@ export class WeightAvg extends BasePlacer {
 
 
         if (this.standingBuy) {
-            if (this.oldestStandingBuy && this.oldestStandingBuy.orderId != this.standingBuy.orderId && this.isNewAlgo){
-                sellPrice = this.weightAverage([this.standingBuy,this.oldestStandingBuy]) * (1 + this.bot.take_profit)
-                
+            if (this.oldestStandingBuy && this.oldestStandingBuy.orderId != this.standingBuy.orderId && this.isNewAlgo) {
+                if (this.isLast) {
+                    sellPrice = this.standingBuy.price * (1 + this.bot.take_profit)
+
+                } else {
+                    sellPrice = this.weightAverage([this.standingBuy, this.oldestStandingBuy]) * (1 + this.bot.take_profit)
+
+                    await this.place_order(this.FIRST, this.oldestStandingBuy.executedQty, sellPrice, false, {
+                        newClientOrderId: "SELL" + this.oldestStandingBuy.orderId
+                    })
+
+                }
                 await this.place_order(this.FIRST, this.standingBuy.executedQty, sellPrice, false, {
                     newClientOrderId: "SELL" + this.standingBuy.orderId
                 })
-
-                await this.place_order(this.FIRST, this.oldestStandingBuy.executedQty, sellPrice, false, {
-                    newClientOrderId: "SELL" + this.oldestStandingBuy.orderId
-                })
-
-                
-
             } else {
 
                 sellPrice = this.standingBuy.price * (1 + this.bot.take_profit)
@@ -113,8 +120,8 @@ export class WeightAvg extends BasePlacer {
 
 
             if (this.bot.stop_loose) {
-                sellPrice = this.myLastBuyAvg * (1 - this.bot.stop_loose )
-                await this.place_order(this.FIRST, this.balance[this.FIRST].available, sellPrice, false,  {
+                sellPrice = this.myLastBuyAvg * (1 - this.bot.stop_loose)
+                await this.place_order(this.FIRST, this.balance[this.FIRST].available, sellPrice, false, {
                     type: "STOP_LOSS_LIMIT",
                     stopPrice: this.roundPrice(sellPrice)
                 })
@@ -122,7 +129,7 @@ export class WeightAvg extends BasePlacer {
 
         }
 
-      
+
 
         if (!this.error) {
             this.bot.lastOrder = Bot.STABLE

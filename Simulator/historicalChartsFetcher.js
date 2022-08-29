@@ -28,7 +28,7 @@ if (process.argv.length == 4) {
         runMain(startTime)
     })
 } else if (fs.existsSync(filename)) {
-    exec(`tail -n 1 ${filename}`, (error, stdout, stderr) => {d
+    exec(`tail -n 1 ${filename}`, (error, stdout, stderr) => {
         const line = stdout.split(",")
         startTime = line[0]
         runMain(parseInt(startTime))

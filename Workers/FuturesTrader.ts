@@ -16,8 +16,6 @@ export class FutureTrader extends BasePlacer {
 
     futureSockets = SocketsFutures.getFInstance()
 
-    minFunc;
-    maxFunc;
 
     async place() {
 
@@ -25,8 +23,6 @@ export class FutureTrader extends BasePlacer {
         // await this.binance.futuresLeverage( this.PAIR, this.bot.leverage )
         // await this.binance.futuresMarginType( this.PAIR, 'ISOLATED' )
 
-        this.minFunc = this.bot.direction ? Math.max : Math.min
-        this.maxFunc = this.bot.direction ? Math.min : Math.max
 
         this.parseAllValues()
 
@@ -39,6 +35,18 @@ export class FutureTrader extends BasePlacer {
         await this.placeBuy()
 
         this.positionAmount != 0 && await this.placeSell()
+    }
+    minFunc(...values: number[]) {
+        if (this.isSemulation){
+            values.pop()
+        }
+        return this.bot.direction ? Math.max(...values) : Math.min(...values)
+    }
+    maxFunc(...values: number[]) {
+        if (this.isSemulation){
+            values.pop()
+        }
+        return this.bot.direction ? Math.min(...values) : Math.max(...values)
     }
     calculatePrice() {
 

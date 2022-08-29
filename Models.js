@@ -7,6 +7,7 @@ var Bot = /** @class */ (function () {
         this.coin1 = "";
         this.coin2 = "";
         this.stop_loose = 0;
+        this.SMA = 0;
         this.take_profit = 0;
         this.secound = 0;
         this.isFuture = false;

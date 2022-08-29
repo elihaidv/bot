@@ -28,7 +28,6 @@ export class WeightAvg extends BasePlacer {
     }
 
     get isLast() {
-        let maxBuyPrice = parseFloat(Object.keys(this.sockets.orderBooks[this.PAIR].bids)[0])
         return this.balance[this.SECOND].total < (this.filters.MIN_NOTIONAL.minNotional)
     }
 

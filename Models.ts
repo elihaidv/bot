@@ -16,7 +16,7 @@ export class Bot {
     last_buy_dist;
     stop_loose: number = 0;
     last_distance;
-    SMA;
+    SMA = 0;
     amount_percent;
     amount_percent_sell;
     minbnb;

@@ -237,4 +237,9 @@ export abstract class BasePlacer {
         if (!number.toString().includes(".")) return 0;
         return number.toString().split(".")[1].length || 0;
     }
+
+    get isSemulation() {
+        return process.argv[1].includes("Simulate")
+    }
+        
 }

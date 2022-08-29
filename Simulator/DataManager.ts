@@ -51,7 +51,7 @@ export class DataManager {
 
         this.openOrders.push(order)
 
-        DAL.instance.logStep({ type: 'OpenOrder', side: order.side, price: order.price, quantity: order.origQty })
+        DAL.instance.logStep({ type: 'OpenOrder', side: order.side, price: order.price, quantity: order.origQty,  priority: 1 })
         return order
     });
     makeid(length): string {
@@ -127,7 +127,7 @@ export class DataManager {
 
             //Check if 
             if (this.bot.binance!.balance[this.bot.coin1].available < this.filters.MIN_NOTIONAL.minNotional / order.avgPrice) {
-                DAL.instance.logStep({ type: 'Close Position' })
+                DAL.instance.logStep({ type: 'Close Position',  priority: 8 })
             }
         }
 
@@ -137,7 +137,8 @@ export class DataManager {
             high: t.high,
             low: t.low,
             balanceSecond: (this.bot.binance!.balance[this.bot.coin2].available).toFixed(2),
-            balanceFirst: (this.bot.binance!.balance[this.bot.coin1].available).toFixed(2)
+            balanceFirst: (this.bot.binance!.balance[this.bot.coin1].available).toFixed(2),
+            priority: 5
         })
 
     }

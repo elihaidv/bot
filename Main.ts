@@ -10,6 +10,7 @@ import { Sockets } from './Sockets/Sockets';
 import { SocketsFutures } from './Sockets/SocketsFuture';
 import { WeightAvg } from './Workers/WeightAvg';
 import { DAL } from './DAL';
+import { Periodically } from './Workers/Periodically';
 
 
 let exchangeInfo, futuresExchangeInfo
@@ -60,6 +61,8 @@ async function execute() {
             return new DualBot(b, futuresExchangeInfo).place()
           case "5":
             return new DirectionTrader(b, futuresExchangeInfo).place()
+          case "6":
+            return new Periodically(b, exchangeInfo).place()
 
         }
       }))

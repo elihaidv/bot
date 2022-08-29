@@ -8,6 +8,7 @@ import { CandleStick, DataManager } from "./DataManager";
 import { FutureDataManager } from "./FutureDataManager";
 import { exit } from "process";
 import { DAL } from "../DAL";
+import { Periodically } from "../Workers/Periodically";
 
 const Binance = require('node-binance-api');
 
@@ -23,7 +24,7 @@ const id = process.argv[2] || "61da8b2036520f0737301999";
 
 
 let trailing;
-let  dataManager: DataManager
+let dataManager: DataManager
 async function run() {
   const db = await MongoClient.connect(uri)
   const dbo = db.db("trading_bot")
@@ -35,7 +36,7 @@ async function run() {
   } else {
     bots = await dbo.collection('bot').find({ _id: ObjectID(tests[0].bot_id) }).toArray()
   }
-  
+
   let keys: Array<Key> = await dbo.collection('key').find({}).toArray()
   let t
 
@@ -43,11 +44,11 @@ async function run() {
 
 
 
-    dataManager = bot.isFuture ? new FutureDataManager(bot) : new DataManager(bot);
+  dataManager = bot.isFuture ? new FutureDataManager(bot) : new DataManager(bot);
 
-    dataManager.setExchangeInfo(bot.isFuture ?
-        await Binance().futuresExchangeInfo() :
-        await Binance().exchangeInfo())
+  dataManager.setExchangeInfo(bot.isFuture ?
+    await Binance().futuresExchangeInfo() :
+    await Binance().exchangeInfo())
 
   await dataManager.fetchChart()
 
@@ -64,7 +65,7 @@ async function run() {
   const executeds = new Map<Number, Order>()
 
 
-  
+
   for (let i = dataManager.time; i < dataManager.chart.length - 1; i++) {
     const t = dataManager.chart[i]
 
@@ -72,7 +73,7 @@ async function run() {
     let ToPlace = false;
 
     for (let o of dataManager.openOrders.slice().reverse()) {
-      
+
       // if (await checkTrailing(bot,o,t)) break;
 
       //     case "TRAILING_STOP_MARKET": 
@@ -81,17 +82,15 @@ async function run() {
       //       // console.log(`Trailing activate ${o.side}: ${o.price}`)
       //     }
       if (("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > t.low ||
-          ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < t.high) {
+        ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < t.high) {
 
-         
-
-        
-        console.log(`Execute ${o.side}: ${t.high} ~ ${t.low}`)
+        console.log(`Execute ${o.side}: ${t.high} ~ ${t.low}`, new Date(parseFloat(t.time)))
         executeds[dataManager.time] = o
         dataManager.orderexecute(o, t)
-       ToPlace = true
-        // break;
-
+        ToPlace = true
+        // // break;
+        // dataManager.time += 60
+        // i += 60
       } else if (dataManager.time - o.time >= bot.secound / 60 && bot.lastOrder != Bot.STABLE) {
         // console.log("expire")
         ToPlace = true
@@ -99,18 +98,18 @@ async function run() {
 
       }
     }
-    ToPlace &&  await place(bot)
+    ToPlace && await place(bot)
     if (!dataManager.hasMoney(t) && t.close) {
       console.log("😰Liquid at: " + t.close)
+      DAL.instance.logStep({ "type": "😰Liquid", low: t.close, priority: 10 })
       break;
     }
     dataManager.time++
   }
-  dataManager.closePosition(dataManager.chart[dataManager.time - 1 ].low);
+  dataManager.closePosition(dataManager.chart[dataManager.time - 1].low);
   console.log("Profit: " + dataManager.profit)
   await DAL.instance.endTest(dataManager.profit)
-  // console.log(JSON.stringify(executeds))
-  // console.log(JSON.stringify(dataManager.chart.map(c=>(["", parseFloat(c.high),parseFloat(c.close),parseFloat(c.close),parseFloat(c.low)]))))
+ 
   exit(0)
 }
 
@@ -149,8 +148,12 @@ async function place(bot: Bot) {
     case "4":
       worker = new DualBot(bot, dataManager.exchangeInfo)
       break
-    default:
+    case "5":
       worker = new DirectionTrader(bot, dataManager.exchangeInfo)
+      break
+    case "6":
+    default:
+      worker = new Periodically(bot, dataManager.exchangeInfo)
       break
 
   }

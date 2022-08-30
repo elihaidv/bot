@@ -31,7 +31,7 @@ export class FutureDataManager extends DataManager {
             pos.positionEntry = 0
             console.log("Closing position with profit of: " + (gain / this.bot.binance!.balance[this.bot.coin2] * 100).toFixed() + "%")
 
-            DAL.instance.logStep({ type: 'Close Position',  priority: 8 })
+            DAL.instance.logStep({ type: 'Close Position',  priority: 5 })
         } else if (qu == 0) {
             gain = (pos.positionEntry - order.price) * pos.positionAmount * (order.side == "BUY" ? 1 : -1)
             pos.positionEntry = 0
@@ -60,6 +60,8 @@ export class FutureDataManager extends DataManager {
         DAL.instance.logStep({
             type: order.type == "STOP_MARKET" ? "StopLoose" : 'Execute',
             side: order.side,
+            price: order.price,
+            quantity: order.executedQty,
             high: t.high,
             low: t.low,
             positionSize: pos.positionAmount,
@@ -68,7 +70,7 @@ export class FutureDataManager extends DataManager {
 
             balanceSecond: (this.bot.binance!.balance[this.bot.coin2]).toFixed(2),
             balanceFirst: (this.bot.binance!.balance[this.bot.coin1]).toFixed(2),
-            priority: 5
+            priority: 1
         })
 
 
@@ -81,7 +83,7 @@ export class FutureDataManager extends DataManager {
         this.bot.binance!.balance[this.bot.coin2] += this.bot.binance!.balance[this.bot.coin1] * price;
         this.bot.binance!.balance[this.bot.coin1] = 0
 
-        DAL.instance.logStep({ type: 'Close Position', priority: 8 })
+        DAL.instance.logStep({ type: 'Close Position', priority: 5 })
     }
 
     hasMoney(t: CandleStick): boolean {

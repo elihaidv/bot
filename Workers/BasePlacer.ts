@@ -130,7 +130,7 @@ export abstract class BasePlacer {
 
     abstract getAction(type: boolean): Function
 
-    async place_order(coin, qu, price, type: boolean, params?) {
+    async place_order(coin, qu, price, type: boolean, params?, increaseToMinimum = false) {
         let minNotional = this.filters.MIN_NOTIONAL.minNotional || this.bot.minNotional
 
 
@@ -148,8 +148,12 @@ export abstract class BasePlacer {
         price = this.roundPrice(price)
 
         if ((qu * price) < minNotional) {
-            console.log("quantity is to small" , qu , price , this.bot._id)
-            return
+            if (increaseToMinimum) {
+                qu = this.roundQu((parseFloat(minNotional) + 1) / price)
+            } else {
+                console.log("quantity is to small" , qu , price , this.bot._id)
+                return
+            }
         }
 
         this.bot.lastOrder = new Date().getTime()

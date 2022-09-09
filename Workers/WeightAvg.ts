@@ -91,7 +91,7 @@ export class WeightAvg extends BasePlacer {
 
                     await this.place_order(this.FIRST, this.oldestStandingBuy.executedQty, sellPrice, false, {
                         newClientOrderId: "SELL" + this.oldestStandingBuy.orderId
-                    })
+                    }, true)
 
                 }
                 await this.place_order(this.FIRST, this.standingBuy.executedQty, sellPrice, false, {
@@ -126,6 +126,9 @@ export class WeightAvg extends BasePlacer {
                 })
             }
 
+        } else {
+            let minSellPrice = parseFloat(Object.keys(this.sockets.orderBooks[this.PAIR].asks)[0])
+            await this.place_order(this.FIRST, this.balance[this.FIRST].available, minSellPrice, false)
         }
 
 

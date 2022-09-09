@@ -7,40 +7,29 @@ import { BasePlacer } from "../Workers/BasePlacer";
 import { CandleStick, DataManager } from "./DataManager";
 import { FutureDataManager } from "./FutureDataManager";
 import { exit } from "process";
-import { DAL } from "../DAL";
+import { DAL } from "../DALSimulation";
 import { Periodically } from "../Workers/Periodically";
+import fetch from 'node-fetch';
+
 
 const Binance = require('node-binance-api');
 
 const { MongoClient, ObjectID } = require("mongodb");
 
-const DB = require('../DB')
 
 
-const uri = DB.USERNAME ?
-  `mongodb://${DB.USERNAME}:${DB.PASSWORD}@${DB.ADDRESS}?writeConcern=majority` :
-  `mongodb://127.0.0.1:27017/trading_bot?writeConcern=majority`;
 const id = process.argv[2] || "61da8b2036520f0737301999";
 
-
-let trailing;
 let dataManager: DataManager
 async function run() {
-  const db = await MongoClient.connect(uri)
-  const dbo = db.db("trading_bot")
-  const tests = await dbo.collection('tests').find({ _id: ObjectID(id) }).toArray()
-  let bots = []
 
-  if (tests.length == 0) {
-    bots = await dbo.collection('bot').find({ _id: ObjectID(id) }).toArray()
-  } else {
-    bots = await dbo.collection('bot').find({ _id: ObjectID(tests[0].bot_id) }).toArray()
-  }
+  const simulation = await fetch("https://itamars.live/api/simulations/" + id, {
+    headers: {
+      "API-KEY": "WkqrHeuts2mIOJHMcxoK"
+    }
+  }).then(r => r.json())
 
-  let keys: Array<Key> = await dbo.collection('key').find({}).toArray()
-  let t
-
-  const bot: Bot = Object.assign(new Bot(), bots[0]);
+  const bot: Bot = Object.assign(new Bot(), simulation);
 
 
 
@@ -54,12 +43,7 @@ async function run() {
 
   dataManager.initData()
 
-  await DAL.instance.init(dataManager)
-  if (tests.length == 0) {
-    await DAL.instance.createTest(bot)
-  } else {
-    await DAL.instance.startTest(tests[0])
-  }
+  DAL.instance.init(dataManager,id)
   await place(bot)
 
   const executeds = new Map<Number, Order>()
@@ -98,6 +82,13 @@ async function run() {
 
       }
     }
+
+    if (DAL.instance.awaiter){
+      console.log("awaiter")
+      DAL.instance.awaiter = false
+      await timeout(100)
+    }
+
     ToPlace && await place(bot)
     if (!dataManager.hasMoney(t) && t.close) {
       console.log("😰Liquid at: " + t.close)
@@ -108,7 +99,7 @@ async function run() {
   }
   dataManager.closePosition(dataManager.chart[dataManager.time - 1].low);
   console.log("Profit: " + dataManager.profit)
-  await DAL.instance.endTest(dataManager.profit)
+  await DAL.instance.endTest()
  
   exit(0)
 }
@@ -133,7 +124,7 @@ async function run() {
 
 async function place(bot: Bot) {
   dataManager.simulateState()
-  trailing = null;
+  // trailing = null;
 
   let worker: BasePlacer
   switch (bot.bot_type_id.toString()) {
@@ -160,5 +151,8 @@ async function place(bot: Bot) {
 
   worker.getAction = dataManager.openOrder
   await worker.place();
+}
+function timeout(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 run()

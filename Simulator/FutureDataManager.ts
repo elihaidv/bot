@@ -1,4 +1,4 @@
-import { DAL } from "../DAL";
+import { DAL } from "../DALSimulation";
 import { Bot, Order } from "../Models";
 import { SocketsFutures } from "../Sockets/SocketsFuture";
 import { CandleStick, DataManager } from "./DataManager";

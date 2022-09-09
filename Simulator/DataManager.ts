@@ -1,8 +1,10 @@
 const fs = require('fs').promises
-import { DAL } from "../DAL";
+import { DAL } from "../DALSimulation";
 import { Account, Bot, Order } from "../Models";
 import { BaseSockets } from "../Sockets/BaseSockets";
 import { Sockets } from "../Sockets/Sockets";
+import fetch from 'node-fetch';
+
 import { SocketsFutures } from "../Sockets/SocketsFuture";
 
 const Binance = require('node-binance-api');
@@ -39,7 +41,7 @@ export class DataManager {
         this.filters = _exchangeInfo.symbols.find(s => s.symbol == this.PAIR).filters.reduce((a, b) => { a[b.filterType] = b; return a }, {})
     }
 
-    openOrder = (type) => ((coin, qu, price, params?) => {
+     openOrder = (type) => ((coin, qu, price, params?) => {
         const p = price || params.stopPrice || params.activationPrice
         // if (type ? p > this.chart[this.time].high :  p < this.chart[this.time].low) {
         //     return {msg:"Order Expire"}
@@ -66,8 +68,9 @@ export class DataManager {
     }
 
     async fetchChart() {
-        const file = await fs.readFile('cryptoHistory/' + this.PAIR)
-        let data = file.toString().split('\n').map(l => l.split(","))
+        const file = await fetch("https://itamars.live/storage/cryptoHistory/" +  this.PAIR).then(r => r.text())
+
+        let data = file.split('\n').map(l => l.split(","))
 
         if (!process.argv[3]) {
             this.time = 0

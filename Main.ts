@@ -24,7 +24,7 @@ async function run() {
   Binance().exchangeInfo().then(data => exchangeInfo = data)
   Binance().futuresExchangeInfo().then(data => futuresExchangeInfo = data)
 
-  await DAL.instance.init(null)
+  await DAL.instance.init()
   execute()
 
 }

@@ -98,14 +98,16 @@ export abstract class BasePlacer {
 
             this.myLastOrder ||= order
             if (order.side == this.buySide()) {
-                this.myLastBuy ||= order
 
-                if (!sellOrders.includes("SELL" + order.orderId)){
+                if (!sellOrders.join("").includes(order.orderId)){
                     this.standingBuy ||= order
                     this.oldestStandingBuy = order
                     buys.push(order)
                 }
             } else {
+                if (order.clientOrderId.includes("SELLbig") && !this.myLastBuy) {  
+                    this.myLastBuy = this.orders.find(x => x.orderId == order.clientOrderId.split("SELLbig")[1])
+                }
                 sellOrders.push(order.clientOrderId);
             }
 

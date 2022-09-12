@@ -175,13 +175,13 @@ var WeightAvg = /** @class */ (function (_super) {
                     case 1:
                         sellPrice = this.weightAverage([this.standingBuy, this.oldestStandingBuy]) * (1 + this.bot.take_profit);
                         return [4 /*yield*/, this.place_order(this.FIRST, this.oldestStandingBuy.executedQty, sellPrice, false, {
-                                newClientOrderId: "SELL" + this.oldestStandingBuy.orderId
+                                newClientOrderId: "SELLsmall" + this.oldestStandingBuy.orderId
                             }, true)];
                     case 2:
                         _a.sent();
                         _a.label = 3;
                     case 3: return [4 /*yield*/, this.place_order(this.FIRST, this.standingBuy.executedQty, sellPrice, false, {
-                            newClientOrderId: "SELL" + this.standingBuy.orderId
+                            newClientOrderId: "SELLbig" + this.standingBuy.orderId
                         })];
                     case 4:
                         _a.sent();

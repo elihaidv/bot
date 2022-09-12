@@ -90,12 +90,12 @@ export class WeightAvg extends BasePlacer {
                     sellPrice = this.weightAverage([this.standingBuy, this.oldestStandingBuy]) * (1 + this.bot.take_profit)
 
                     await this.place_order(this.FIRST, this.oldestStandingBuy.executedQty, sellPrice, false, {
-                        newClientOrderId: "SELL" + this.oldestStandingBuy.orderId
+                        newClientOrderId: "SELLsmall" + this.oldestStandingBuy.orderId
                     }, true)
 
                 }
                 await this.place_order(this.FIRST, this.standingBuy.executedQty, sellPrice, false, {
-                    newClientOrderId: "SELL" + this.standingBuy.orderId
+                    newClientOrderId: "SELLbig" + this.standingBuy.orderId
                 })
             } else {
 

@@ -74,7 +74,7 @@ var DAL = /** @class */ (function () {
                                 return [2 /*return*/];
                         }
                     });
-                }); }, 600 * 1000);
+                }); }, 3400 * 1000);
                 return [2 /*return*/];
             });
         });

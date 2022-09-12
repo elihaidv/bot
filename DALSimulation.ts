@@ -20,7 +20,7 @@ export class DAL {
         setTimeout(async ()=> {
             await this.updateProgress("timeout")
             exit(8)
-        }, 600 * 1000)
+        }, 3400 * 1000)
     }
 
     async logStep(step) {

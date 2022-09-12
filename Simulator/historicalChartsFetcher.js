@@ -24,7 +24,9 @@ function runMain(t) {
 let startTime
 if (process.argv.length == 4) {
 
-    fs.rmSync(filename)
+    if (fs.existsSync(filename)) {
+        fs.rmSync(filename)
+    }
     startTime = new Date(process.argv[3]).getTime()
     runMain(startTime)
     

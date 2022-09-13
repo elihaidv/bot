@@ -86,6 +86,6 @@ export class DAL {
                 .steps
                 .slice(this.page * PAGE_SIZE - PAGE_SIZE, (this.page * PAGE_SIZE))
                 .map(s => s.join(','))
-                .join('\n'));
+                .join('\n'),{resumable: false});
     
 }

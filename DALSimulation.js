@@ -55,7 +55,7 @@ var DAL = /** @class */ (function () {
                 .steps
                 .slice(_this.page * PAGE_SIZE - PAGE_SIZE, (_this.page * PAGE_SIZE))
                 .map(function (s) { return s.join(','); })
-                .join('\n'));
+                .join('\n'), { resumable: false });
         };
     }
     DAL.prototype.init = function (dataManager, simulationId) {

@@ -61,7 +61,7 @@ export class WeightAvg extends BasePlacer {
         if (this.isFirst || !this.myLastOrder) {
             buyQu = this.balance[this.SECOND].available * this.bot.amount_percent / buyPrice
 
-        } else if (this.isNewAlgo && this.myLastBuy && this.myLastBuy?.orderId != this.myLastOrder.orderId) {
+        } else if (this.isNewAlgo && this.myLastBuy && this.myLastOrder!.side == this.sellSide()) {
             buyQu = this.myLastBuy?.origQty
 
         } else if (this.myLastOrder?.side == this.sellSide()) {

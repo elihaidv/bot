@@ -67,7 +67,11 @@ var WeightAvg = /** @class */ (function (_super) {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        if (!this.binance || !this.balance[this.SECOND] || !this.orders.length || !this.sockets.prices[this.PAIR] || !this.sockets.orderBooks[this.PAIR])
+                        if (!this.binance ||
+                            !this.balance[this.SECOND] ||
+                            !this.orders.length ||
+                            !this.sockets.prices[this.PAIR] ||
+                            !this.sockets.orderBooks[this.PAIR])
                             return [2 /*return*/];
                         this.parseAllValues();
                         return [4 /*yield*/, this.buyBNB()];
@@ -162,7 +166,7 @@ var WeightAvg = /** @class */ (function (_super) {
     };
     WeightAvg.prototype.placeSell = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var sellPrice, sellQu, minSellPrice;
+            var sellPrice, sellQu;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -215,14 +219,8 @@ var WeightAvg = /** @class */ (function (_super) {
                     case 11:
                         _a.sent();
                         _a.label = 12;
-                    case 12: return [3 /*break*/, 15];
+                    case 12: return [3 /*break*/, 13];
                     case 13:
-                        minSellPrice = parseFloat(Object.keys(this.sockets.orderBooks[this.PAIR].asks)[0]);
-                        return [4 /*yield*/, this.place_order(this.FIRST, this.balance[this.FIRST].available, minSellPrice, false)];
-                    case 14:
-                        _a.sent();
-                        _a.label = 15;
-                    case 15:
                         if (!this.error) {
                             this.bot.lastOrder = Models_1.Bot.STABLE;
                         }

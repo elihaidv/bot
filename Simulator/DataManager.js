@@ -58,7 +58,11 @@ var DataManager = /** @class */ (function () {
             var order = new Models_1.Order(type ? 'BUY' : "SELL", "NEW", p, _this.makeid(10), qu, qu, _this.time, params.type || "LIMIT", params.newClientOrderId, _this.bot.positionSide(), p);
             order.closePosition = params.closePosition;
             _this.openOrders.push(order);
-            DALSimulation_1.DAL.instance.logStep({ type: 'OpenOrder', side: order.side, price: order.price, quantity: order.origQty, priority: 8 });
+            DALSimulation_1.DAL.instance.logStep({
+                type: 'OpenOrder', side: order.side, price: order.price, quantity: order.origQty, priority: 8,
+                high: _this.chart[_this.time].high,
+                low: _this.chart[_this.time].low,
+            });
             return order;
         }); };
         this.candlesticks = function () { return new Promise(function (resolve) { return Binance().candlesticks(_this.PAIR, "1m", function (e, t, s) { return resolve(t); }); }); };
@@ -89,10 +93,12 @@ var DataManager = /** @class */ (function () {
     };
     DataManager.prototype.fetchChart = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var file, data, start, end, startIndex, endIndex;
+            var market, file, data, start, end, startIndex, endIndex;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, (0, node_fetch_1.default)("https://itamars.live/storage/cryptoHistory/" + this.PAIR).then(function (r) { return r.text(); })];
+                    case 0:
+                        market = this.bot.isFuture ? "FUTURES" : "SPOT";
+                        return [4 /*yield*/, (0, node_fetch_1.default)("https://itamars.live/storage/cryptoHistory/" + this.PAIR + "_" + market).then(function (r) { return r.text(); })];
                     case 1:
                         file = _a.sent();
                         data = file.split('\n').map(function (l) { return l.split(","); });

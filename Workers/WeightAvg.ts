@@ -8,7 +8,11 @@ export class WeightAvg extends BasePlacer {
 
     async place() {
 
-        if (!this.binance || !this.balance[this.SECOND] || !this.orders.length || !this.sockets.prices[this.PAIR] || !this.sockets.orderBooks[this.PAIR]) return
+        if (!this.binance ||
+            !this.balance[this.SECOND] ||
+            !this.orders.length ||
+            !this.sockets.prices[this.PAIR] ||
+            !this.sockets.orderBooks[this.PAIR]) return
 
         this.parseAllValues()
 
@@ -127,8 +131,8 @@ export class WeightAvg extends BasePlacer {
             }
 
         } else {
-            let minSellPrice = parseFloat(Object.keys(this.sockets.orderBooks[this.PAIR].asks)[0])
-            await this.place_order(this.FIRST, this.balance[this.FIRST].available, minSellPrice, false)
+            // let minSellPrice = parseFloat(Object.keys(this.sockets.orderBooks[this.PAIR].asks)[0])
+            // await this.place_order(this.FIRST, this.balance[this.FIRST].available, minSellPrice, false)
         }
 
 

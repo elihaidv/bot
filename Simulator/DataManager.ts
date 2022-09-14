@@ -41,7 +41,7 @@ export class DataManager {
         this.filters = _exchangeInfo.symbols.find(s => s.symbol == this.PAIR).filters.reduce((a, b) => { a[b.filterType] = b; return a }, {})
     }
 
-     openOrder = (type) => ((coin, qu, price, params?) => {
+    openOrder = (type) => ((coin, qu, price, params?) => {
         const p = price || params.stopPrice || params.activationPrice
         // if (type ? p > this.chart[this.time].high :  p < this.chart[this.time].low) {
         //     return {msg:"Order Expire"}
@@ -53,7 +53,11 @@ export class DataManager {
 
         this.openOrders.push(order)
 
-        DAL.instance.logStep({ type: 'OpenOrder', side: order.side, price: order.price, quantity: order.origQty,  priority: 8 })
+        DAL.instance.logStep({
+            type: 'OpenOrder', side: order.side, price: order.price, quantity: order.origQty, priority: 8,
+            high: this.chart[this.time].high,
+            low: this.chart[this.time].low,
+        })
         return order
     });
     makeid(length): string {
@@ -68,7 +72,8 @@ export class DataManager {
     }
 
     async fetchChart() {
-        const file = await fetch("https://itamars.live/storage/cryptoHistory/" +  this.PAIR).then(r => r.text())
+        const market = this.bot.isFuture ? "FUTURES" : "SPOT"
+        const file = await fetch("https://itamars.live/storage/cryptoHistory/" + this.PAIR + "_" + market).then(r => r.text())
 
         let data = file.split('\n').map(l => l.split(","))
 
@@ -130,7 +135,7 @@ export class DataManager {
 
             //Check if 
             if (this.bot.binance!.balance[this.bot.coin1].available < this.filters.MIN_NOTIONAL.minNotional / order.avgPrice) {
-                DAL.instance.logStep({ type: 'Close Position',  priority: 5 })
+                DAL.instance.logStep({ type: 'Close Position', priority: 5 })
             }
         }
 

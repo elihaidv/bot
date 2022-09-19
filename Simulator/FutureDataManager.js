@@ -17,6 +17,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FutureDataManager = void 0;
 var DALSimulation_1 = require("../DALSimulation");
+var Models_1 = require("../Models");
 var SocketsFuture_1 = require("../Sockets/SocketsFuture");
 var DataManager_1 = require("./DataManager");
 var FutureDataManager = /** @class */ (function (_super) {
@@ -42,17 +43,9 @@ var FutureDataManager = /** @class */ (function (_super) {
             console.log("Closing position with profit of: " + (gain / this.bot.binance.balance[this.bot.coin2] * 100).toFixed() + "%");
             DALSimulation_1.DAL.instance.logStep({ type: 'Close Position', priority: 5 });
         }
-        else if (qu == 0) {
-            gain = (pos.positionEntry - order.price) * pos.positionAmount * (order.side == "BUY" ? 1 : -1);
-            pos.positionEntry = 0;
-            pos.positionAmount = 0;
-        }
         else if (qu * pos.positionAmount < 0) {
-            gain = (pos.positionEntry - order.price) * Math.min(order.executedQty, pos.positionAmount) * (order.side == "BUY" ? 1 : -1);
+            gain = (pos.positionEntry - order.price) * order.executedQty * (order.side == "BUY" ? 1 : -1);
             pos.positionAmount += qu;
-            if (order.executedQty > pos.positionAmount) {
-                pos.positionEntry = order.price;
-            }
         }
         else {
             pos.positionEntry = ((pos.positionEntry * Math.abs(pos.positionAmount)) + (order.executedQty * order.price)) / (Math.abs(pos.positionAmount) + order.executedQty);
@@ -71,7 +64,7 @@ var FutureDataManager = /** @class */ (function (_super) {
             high: t.high,
             low: t.low,
             positionSize: pos.positionAmount,
-            positionPnl: gain.toFixed(2),
+            positionPnl: (order.price - pos.positionEntry) * pos.positionAmount,
             profit: (this.profit / 100).toFixed(0) + "%",
             balanceSecond: (this.bot.binance.balance[this.bot.coin2]).toFixed(2),
             balanceFirst: (this.bot.binance.balance[this.bot.coin1]).toFixed(2),
@@ -82,9 +75,11 @@ var FutureDataManager = /** @class */ (function (_super) {
         this.bot.binance.orders[this.PAIR].push(order);
     };
     FutureDataManager.prototype.closePosition = function (price) {
-        this.bot.binance.balance[this.bot.coin2] += this.bot.binance.balance[this.bot.coin1] * price;
-        this.bot.binance.balance[this.bot.coin1] = 0;
-        DALSimulation_1.DAL.instance.logStep({ type: 'Close Position', priority: 5 });
+        this.orderexecute(Object.assign(new Models_1.Order(), {
+            closePosition: true,
+            price: price,
+            type: "STOP_MARKET",
+        }), this.chart[this.time]);
     };
     FutureDataManager.prototype.hasMoney = function (t) {
         var pos = this.bot.binance.positions[this.PAIR + this.bot.positionSide()];

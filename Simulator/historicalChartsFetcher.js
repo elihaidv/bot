@@ -35,7 +35,7 @@ if (process.argv.length == 5) {
     exec(`tail -n 1 ${filename}`, (error, stdout, stderr) => {
         const line = stdout.split(",")
         startTime = line[0]
-        runMain(parseInt(startTime))
+        runMain(parseInt(parseInt(startTime) + (1000 * 60)))
     })
 } else {
     

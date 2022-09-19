@@ -1,4 +1,4 @@
-const fs = require('fs').promises
+import * as fs from 'node:fs/promises'
 import { DAL } from "../DALSimulation";
 import { Account, Bot, Order } from "../Models";
 import { BaseSockets } from "../Sockets/BaseSockets";
@@ -72,9 +72,14 @@ export class DataManager {
     }
 
     async fetchChart() {
-        const market = this.bot.isFuture ? "FUTURES" : "SPOT"
-        const file = await fetch("https://itamars.live/storage/cryptoHistory/" + this.PAIR + "_" + market).then(r => r.text())
 
+        const market = this.bot.isFuture ? "FUTURES" : "SPOT"
+        let file
+        if (await fs.stat(`cryptoHistory/${this.PAIR}_${market}`)) {
+             file = await fs.readFile(`cryptoHistory/${this.PAIR}_${market}`, 'utf8')
+        } else {
+             file = await fetch("https://itamars.live/storage/cryptoHistory/" + this.PAIR + "_" + market).then(r => r.text())
+        }
         let data = file.split('\n').map(l => l.split(","))
 
         if (!process.argv[3]) {

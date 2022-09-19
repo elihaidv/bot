@@ -11,6 +11,12 @@ import { SocketsFutures } from './Sockets/SocketsFuture';
 import { WeightAvg } from './Workers/WeightAvg';
 import { DAL } from './DAL';
 import { Periodically } from './Workers/Periodically';
+import { SignaligProcessor } from './Workers/SignaligProcessor';
+const express = require('express')
+var bodyParser = require('body-parser')
+var https = require('https');
+var http = require('http');
+var fs = require('fs');
 
 
 let exchangeInfo, futuresExchangeInfo
@@ -27,6 +33,7 @@ async function run() {
   await DAL.instance.init()
   execute()
 
+  createServer()
 }
 run()
 
@@ -40,6 +47,8 @@ async function execute() {
 
     Sockets.getInstance().updateSockets(Array.from(bots.filter(b => !b.isFuture)), keys)
     SocketsFutures.getFInstance().updateSockets(Array.from(bots.filter(b => b.isFuture)), keys)
+
+    SignaligProcessor.instance.setBots(Array.from(bots.filter(b => b.bot_type_id == "7")))
 
     let outdatedBots: Array<Bot> = filterOutdated(bots)
 
@@ -104,3 +113,28 @@ async function initBots(botsResults) {
   bots = newBots
 }
 
+function createServer(){
+  const app = express()
+  app.use(bodyParser.urlencoded({ extended: false }))
+
+  app.use(bodyParser.json())
+
+  app.post('/', (req, res) => {
+      SignaligProcessor.instance.proccessTextSignal(req.body.message.text)
+          
+      console.log(req.body)
+      res.send('Hello World!')
+  })
+
+  http.createServer(app).listen(8081);
+
+  if (process.argv[2] == "https") {
+      var options = {
+
+          cert: fs.readFileSync('/etc/letsencrypt/live/elihai.live/fullchain.pem'),
+          key: fs.readFileSync('/etc/letsencrypt/live/elihai.live/privkey.pem')
+      };
+      https.createServer(options, app).listen(8443);
+  }
+  console.log("Server started")
+}

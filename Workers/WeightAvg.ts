@@ -125,14 +125,16 @@ export class WeightAvg extends BasePlacer {
             if (this.bot.stop_loose) {
                 sellPrice = this.myLastBuyAvg * (1 - this.bot.stop_loose)
                 await this.place_order(this.FIRST, this.balance[this.FIRST].available, sellPrice, false, {
-                    type: "STOP_LOSS_LIMIT",
+                    type: "STOP_MARKET",
                     stopPrice: this.roundPrice(sellPrice)
                 })
             }
 
         } else {
-            // let minSellPrice = parseFloat(Object.keys(this.sockets.orderBooks[this.PAIR].asks)[0])
-            // await this.place_order(this.FIRST, this.balance[this.FIRST].available, minSellPrice, false)
+            let minSellPrice = parseFloat(Object.keys(this.sockets.orderBooks[this.PAIR].asks)[0])
+            if (this.balance[this.FIRST].available < (this.filters.MIN_NOTIONAL.minNotional / minSellPrice) * 2){
+                await this.place_order(this.FIRST, this.balance[this.FIRST].available, minSellPrice, false)
+            }
         }
 
 

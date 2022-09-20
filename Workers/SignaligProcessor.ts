@@ -37,7 +37,13 @@ export class SignaligProcessor {
 
     async placeOrders(signaling: Signaling) {
         for(let bot of this.bots) {
-            
+            bot.binance?.binance.futuresBuy(
+                signaling.coin1 + signaling.coin2,
+                signaling.enter[0],
+                10 * signaling.enter[0],
+            );
+
+
         }
     }
 

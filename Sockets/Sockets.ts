@@ -92,7 +92,7 @@ export class Sockets extends BaseSockets {
 
         if (this.depthCacheSocket) this.binance.websockets.terminate(this.depthCacheSocket);
 
-        this.depthCacheSocket = this.binance.websockets.depthCache(this.pairs, (symbol, depth) => {
+        this.depthCacheSocket = this.binance.websockets.depthCache(this.pairs.filter(x=>x), (symbol, depth) => {
             if (!this.orderBooks[symbol]) this.orderBooks[symbol] = {}
 
             this.orderBooks[symbol].bids = this.binance.sortBids(depth.bids);

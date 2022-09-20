@@ -120,7 +120,7 @@ var Sockets = /** @class */ (function (_super) {
         var _this = this;
         if (this.depthCacheSocket)
             this.binance.websockets.terminate(this.depthCacheSocket);
-        this.depthCacheSocket = this.binance.websockets.depthCache(this.pairs, function (symbol, depth) {
+        this.depthCacheSocket = this.binance.websockets.depthCache(this.pairs.filter(function (x) { return x; }), function (symbol, depth) {
             if (!_this.orderBooks[symbol])
                 _this.orderBooks[symbol] = {};
             _this.orderBooks[symbol].bids = _this.binance.sortBids(depth.bids);

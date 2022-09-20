@@ -133,11 +133,11 @@ function createServer(){
 
   http.createServer(app).listen(8081);
 
-  if (process.argv[2] == "https") {
+  if (fs.existsSync('/etc/letsencrypt/live/itamars.live/fullchain.pem')) {
       var options = {
 
-          cert: fs.readFileSync('/etc/letsencrypt/live/elihai.live/fullchain.pem'),
-          key: fs.readFileSync('/etc/letsencrypt/live/elihai.live/privkey.pem')
+          cert: fs.readFileSync('/etc/letsencrypt/live/itamars.live/fullchain.pem'),
+          key: fs.readFileSync('/etc/letsencrypt/live/itamars.live/privkey.pem')
       };
       https.createServer(options, app).listen(8443);
   }

@@ -91,6 +91,29 @@ var DataManager = /** @class */ (function () {
         }
         return result;
     };
+    DataManager.prototype.checkFileExists = function (filepath) {
+        return __awaiter(this, void 0, void 0, function () {
+            var flag, e_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        flag = true;
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, fs.access(filepath)];
+                    case 2:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_1 = _a.sent();
+                        flag = false;
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/, flag];
+                }
+            });
+        });
+    };
     DataManager.prototype.fetchChart = function () {
         return __awaiter(this, void 0, void 0, function () {
             var market, file, data, start, end, startIndex, endIndex;
@@ -98,7 +121,7 @@ var DataManager = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         market = this.bot.isFuture ? "FUTURES" : "SPOT";
-                        return [4 /*yield*/, fs.stat("cryptoHistory/" + this.PAIR + "_" + market)];
+                        return [4 /*yield*/, this.checkFileExists("cryptoHistory/" + this.PAIR + "_" + market)];
                     case 1:
                         if (!_a.sent()) return [3 /*break*/, 3];
                         return [4 /*yield*/, fs.readFile("cryptoHistory/" + this.PAIR + "_" + market, 'utf8')];

@@ -70,12 +70,20 @@ export class DataManager {
         }
         return result;
     }
-
+    async checkFileExists(filepath){
+        let flag = true;
+        try{
+          await fs.access(filepath);
+        }catch(e){
+          flag = false;
+        }
+        return flag;
+      }
     async fetchChart() {
 
         const market = this.bot.isFuture ? "FUTURES" : "SPOT"
         let file
-        if (await fs.stat(`cryptoHistory/${this.PAIR}_${market}`)) {
+        if (await this.checkFileExists(`cryptoHistory/${this.PAIR}_${market}`)) {
              file = await fs.readFile(`cryptoHistory/${this.PAIR}_${market}`, 'utf8')
         } else {
              file = await fetch("https://itamars.live/storage/cryptoHistory/" + this.PAIR + "_" + market).then(r => r.text())

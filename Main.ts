@@ -28,7 +28,11 @@ let bots = new Array<Bot>()
 async function run() {
 
   Binance().exchangeInfo().then(data => exchangeInfo = data)
-  Binance().futuresExchangeInfo().then(data => futuresExchangeInfo = data)
+  Binance().futuresExchangeInfo().then(data => {
+     futuresExchangeInfo = data
+     SignaligProcessor.instance.futuresExchangeInfo = data
+     console.log("futuresExchangeInfo loaded")
+    })
 
   await DAL.instance.init()
   execute()
@@ -53,6 +57,7 @@ async function execute() {
     let outdatedBots: Array<Bot> = filterOutdated(bots)
 
     if (exchangeInfo && futuresExchangeInfo) {
+
 
       await Promise.all(outdatedBots.map(cancelOrders));
       

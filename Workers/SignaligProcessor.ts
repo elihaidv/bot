@@ -61,7 +61,7 @@ class SignalingPlacer extends FutureTrader {
   }
 
   async place() {
-    const price = average(this.signaling.enter)
+    const price = this.roundPrice(average(this.signaling.enter))
     const qu = 10 / price
 
     this.place_order(

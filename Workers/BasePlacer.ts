@@ -153,7 +153,7 @@ export abstract class BasePlacer {
             if (increaseToMinimum) {
                 qu = this.roundQu((parseFloat(minNotional) + 1) / price)
             } else {
-                console.log("quantity is to small" , qu , price , this.bot._id)
+                //console.log("quantity is to small" , qu , price , this.bot._id)
                 return
             }
         }

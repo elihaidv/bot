@@ -61,7 +61,8 @@ class SignalingPlacer extends FutureTrader {
   }
 
   async place() {
-    const qu = 10 / this.signaling.enter[0]
+    const price = average(this.signaling.enter)
+    const qu = 10 / price
 
     this.place_order(
       this.PAIR,
@@ -69,7 +70,7 @@ class SignalingPlacer extends FutureTrader {
       0,
       this.signaling.direction == "LONG" ? true : false, {
       type: "TAKE_PROFIT_MARKET",
-      stopPrice: this.signaling.enter[0]
+      stopPrice: price
     })
 
 
@@ -79,7 +80,7 @@ class SignalingPlacer extends FutureTrader {
       this.signaling.takeProfits[1],
       this.signaling.direction == "LONG" ? false : true, {
       type: "STOP",
-      stopPrice: this.signaling.enter[0]
+      stopPrice: price
     })
     
     this.place_order(
@@ -88,7 +89,7 @@ class SignalingPlacer extends FutureTrader {
       this.signaling.takeProfits[3],
       this.signaling.direction == "LONG" ? false : true, {
       type: "STOP",
-      stopPrice: this.signaling.enter[0]
+      stopPrice: price
     })
 
     this.place_order(

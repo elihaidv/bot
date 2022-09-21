@@ -67,11 +67,8 @@ class SignalingPlacer extends FutureTrader {
     this.place_order(
       this.PAIR,
       qu,
-      0,
-      this.signaling.direction == "LONG" ? true : false, {
-      type: "TAKE_PROFIT_MARKET",
-      stopPrice: price
-    })
+      price,
+      this.signaling.direction == "LONG" ? true : false)
 
 
     this.place_order(

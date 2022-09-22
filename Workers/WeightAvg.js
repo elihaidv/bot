@@ -171,7 +171,7 @@ var WeightAvg = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         sellQu = 0;
-                        if (!this.standingBuy) return [3 /*break*/, 13];
+                        if (!this.standingBuy) return [3 /*break*/, 11];
                         if (!(this.oldestStandingBuy && this.oldestStandingBuy.orderId != this.standingBuy.orderId && this.isNewAlgo)) return [3 /*break*/, 5];
                         if (!this.isLast) return [3 /*break*/, 1];
                         sellPrice = this.standingBuy.price * (1 + this.bot.take_profit);
@@ -210,24 +210,22 @@ var WeightAvg = /** @class */ (function (_super) {
                         _a.sent();
                         _a.label = 10;
                     case 10:
-                        if (!this.bot.stop_loose) return [3 /*break*/, 12];
-                        sellPrice = this.myLastBuyAvg * (1 - this.bot.stop_loose);
-                        return [4 /*yield*/, this.place_order(this.FIRST, this.balance[this.FIRST].available, sellPrice, false, {
-                                type: "STOP_MARKET",
-                                stopPrice: this.roundPrice(sellPrice)
-                            })];
+                        if (this.bot.stop_loose) {
+                            // sellPrice = this.myLastBuyAvg * (1 - this.bot.stop_loose)
+                            // await this.place_order(this.FIRST, this.balance[this.FIRST].available, sellPrice, false, {
+                            //     type: "STOP_MARKET",
+                            //     stopPrice: this.roundPrice(sellPrice)
+                            // })
+                        }
+                        return [3 /*break*/, 13];
                     case 11:
-                        _a.sent();
-                        _a.label = 12;
-                    case 12: return [3 /*break*/, 15];
-                    case 13:
                         minSellPrice = parseFloat(Object.keys(this.sockets.orderBooks[this.PAIR].asks)[0]);
-                        if (!(this.balance[this.FIRST].available < (this.filters.MIN_NOTIONAL.minNotional / minSellPrice) * 2)) return [3 /*break*/, 15];
+                        if (!(this.balance[this.FIRST].available < (this.filters.MIN_NOTIONAL.minNotional / minSellPrice) * 2)) return [3 /*break*/, 13];
                         return [4 /*yield*/, this.place_order(this.FIRST, this.balance[this.FIRST].available, minSellPrice, false)];
-                    case 14:
+                    case 12:
                         _a.sent();
-                        _a.label = 15;
-                    case 15:
+                        _a.label = 13;
+                    case 13:
                         if (!this.error) {
                             this.bot.lastOrder = Models_1.Bot.STABLE;
                         }

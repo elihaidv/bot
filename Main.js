@@ -49,6 +49,12 @@ var SocketsFuture_1 = require("./Sockets/SocketsFuture");
 var WeightAvg_1 = require("./Workers/WeightAvg");
 var DAL_1 = require("./DAL");
 var Periodically_1 = require("./Workers/Periodically");
+var SignaligProcessor_1 = require("./Workers/SignaligProcessor");
+var express = require('express');
+var bodyParser = require('body-parser');
+var https = require('https');
+var http = require('http');
+var fs = require('fs');
 var exchangeInfo, futuresExchangeInfo;
 var bots = new Array();
 function run() {
@@ -57,11 +63,16 @@ function run() {
             switch (_a.label) {
                 case 0:
                     Binance().exchangeInfo().then(function (data) { return exchangeInfo = data; });
-                    Binance().futuresExchangeInfo().then(function (data) { return futuresExchangeInfo = data; });
+                    Binance().futuresExchangeInfo().then(function (data) {
+                        futuresExchangeInfo = data;
+                        SignaligProcessor_1.SignaligProcessor.instance.futuresExchangeInfo = data;
+                        console.log("futuresExchangeInfo loaded");
+                    });
                     return [4 /*yield*/, DAL_1.DAL.instance.init()];
                 case 1:
                     _a.sent();
                     execute();
+                    createServer();
                     return [2 /*return*/];
             }
         });
@@ -84,6 +95,7 @@ function execute() {
                     initBots(botsResults);
                     Sockets_1.Sockets.getInstance().updateSockets(Array.from(bots.filter(function (b) { return !b.isFuture; })), keys);
                     SocketsFuture_1.SocketsFutures.getFInstance().updateSockets(Array.from(bots.filter(function (b) { return b.isFuture; })), keys);
+                    SignaligProcessor_1.SignaligProcessor.instance.setBots(Array.from(bots.filter(function (b) { return b.bot_type_id == "7"; })));
                     outdatedBots = filterOutdated(bots);
                     if (!(exchangeInfo && futuresExchangeInfo)) return [3 /*break*/, 6];
                     return [4 /*yield*/, Promise.all(outdatedBots.map(cancelOrders))];
@@ -157,4 +169,23 @@ function initBots(botsResults) {
             return [2 /*return*/];
         });
     });
+}
+function createServer() {
+    var app = express();
+    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(bodyParser.json());
+    app.post('/', function (req, res) {
+        SignaligProcessor_1.SignaligProcessor.instance.proccessTextSignal(req.body.message.text);
+        console.log(req.body);
+        res.send('Hello World!');
+    });
+    http.createServer(app).listen(8081);
+    if (fs.existsSync('/etc/letsencrypt/live/itamars.live/fullchain.pem')) {
+        var options = {
+            cert: fs.readFileSync('/etc/letsencrypt/live/itamars.live/fullchain.pem'),
+            key: fs.readFileSync('/etc/letsencrypt/live/itamars.live/privkey.pem')
+        };
+        https.createServer(options, app).listen(8443);
+    }
+    console.log("Server started");
 }

@@ -3,7 +3,11 @@ import { DAL } from "../DALSimulation";
 import { Account, Bot, Order } from "../Models";
 import { BaseSockets } from "../Sockets/BaseSockets";
 import { Sockets } from "../Sockets/Sockets";
-import fetch from 'node-fetch';
+const cf = require('node-fetch-cache')
+const fetch = cf.fetchBuilder.withCache(new cf.FileSystemCache({
+    cacheDirectory: '/tmp/simcache',
+}));
+
 
 import { SocketsFutures } from "../Sockets/SocketsFuture";
 
@@ -14,7 +18,7 @@ export class DataManager {
         return true
         //   throw new Error("Method not implemented.");
     }
-    chart: Array<CandleStick> = [];
+    fullChart: Array<CandleStick> = [];
     openOrders: Array<Order> = [];
     time = 0
     bot: Bot
@@ -22,6 +26,8 @@ export class DataManager {
     profit = 0;
     exchangeInfo: any
     filters: any
+    startIndex
+    endIndex
 
     sockets: BaseSockets
 
@@ -82,12 +88,8 @@ export class DataManager {
     async fetchChart() {
 
         const market = this.bot.isFuture ? "FUTURES" : "SPOT"
-        let file
-        if (await this.checkFileExists(`cryptoHistory/${this.PAIR}_${market}`)) {
-             file = await fs.readFile(`cryptoHistory/${this.PAIR}_${market}`, 'utf8')
-        } else {
-             file = await fetch("https://itamars.live/storage/cryptoHistory/" + this.PAIR + "_" + market).then(r => r.text())
-        }
+        const  file = await fetch("https://itamars.live/storage/cryptoHistory/" + this.PAIR + "_" + market).then(r => r.text())
+        
         let data = file.split('\n').map(l => l.split(","))
 
         if (!process.argv[3]) {
@@ -97,9 +99,8 @@ export class DataManager {
             const start = new Date(process.argv[3]).getTime() - (this.bot.SMA * 5 * 60 * 1000)
             const end = new Date(process.argv[4]).getTime()
 
-            const startIndex = this.findIndexBetween(start, data)
-            const endIndex = this.findIndexBetween(end, data)
-            data = data.slice(startIndex, endIndex)
+            this.startIndex = this.findIndexBetween(start, data)
+            this.endIndex = this.findIndexBetween(end, data)
 
         } else {
             this.time = data.length - parseInt(process.argv[3])
@@ -107,9 +108,14 @@ export class DataManager {
         this.time = Math.max(this.time, this.bot.SMA * 5)
 
 
-        this.chart = data.map(([time, high, low, close]) =>
+        this.fullChart = data.map(([time, high, low, close]) =>
             (Object.assign(new CandleStick(), { time, high, low, close })));
     }
+
+    get chart() {
+        return this.fullChart.slice(this.startIndex, this.endIndex)
+    }
+
 
     findIndexBetween(time, chart) {
         if (time < chart[0][0]) {
@@ -215,7 +221,8 @@ export class DataManager {
     }
 
     averagePriceQuarter(pair) {
-        return this.chart.map(x => x.close).slice(Math.max(this.time - 1500, 0), this.time).reduce((a, b) => parseFloat(a) + parseFloat(b)) / 1500
+        const startTime = this.time  + this.startIndex
+        return this.fullChart.map(x => x.close).slice(Math.max(startTime - 7500, 0), startTime).reduce((a, b) => parseFloat(a) + parseFloat(b)) / Math.min(startTime, 7500)
     }
     simulateState() {
         this.openOrders = []

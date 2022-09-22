@@ -41,12 +41,15 @@ var fs = require("node:fs/promises");
 var DALSimulation_1 = require("../DALSimulation");
 var Models_1 = require("../Models");
 var Sockets_1 = require("../Sockets/Sockets");
-var node_fetch_1 = require("node-fetch");
+var cf = require('node-fetch-cache');
+var fetch = cf.fetchBuilder.withCache(new cf.FileSystemCache({
+    cacheDirectory: '/tmp/simcache',
+}));
 var Binance = require('node-binance-api');
 var DataManager = /** @class */ (function () {
     function DataManager(bot) {
         var _this = this;
-        this.chart = [];
+        this.fullChart = [];
         this.openOrders = [];
         this.time = 0;
         this.profit = 0;
@@ -116,23 +119,14 @@ var DataManager = /** @class */ (function () {
     };
     DataManager.prototype.fetchChart = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var market, file, data, start, end, startIndex, endIndex;
+            var market, file, data, start, end;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         market = this.bot.isFuture ? "FUTURES" : "SPOT";
-                        return [4 /*yield*/, this.checkFileExists("cryptoHistory/" + this.PAIR + "_" + market)];
+                        return [4 /*yield*/, fetch("https://itamars.live/storage/cryptoHistory/" + this.PAIR + "_" + market).then(function (r) { return r.text(); })];
                     case 1:
-                        if (!_a.sent()) return [3 /*break*/, 3];
-                        return [4 /*yield*/, fs.readFile("cryptoHistory/" + this.PAIR + "_" + market, 'utf8')];
-                    case 2:
                         file = _a.sent();
-                        return [3 /*break*/, 5];
-                    case 3: return [4 /*yield*/, (0, node_fetch_1.default)("https://itamars.live/storage/cryptoHistory/" + this.PAIR + "_" + market).then(function (r) { return r.text(); })];
-                    case 4:
-                        file = _a.sent();
-                        _a.label = 5;
-                    case 5:
                         data = file.split('\n').map(function (l) { return l.split(","); });
                         if (!process.argv[3]) {
                             this.time = 0;
@@ -140,15 +134,14 @@ var DataManager = /** @class */ (function () {
                         else if (isNaN(process.argv[3])) {
                             start = new Date(process.argv[3]).getTime() - (this.bot.SMA * 5 * 60 * 1000);
                             end = new Date(process.argv[4]).getTime();
-                            startIndex = this.findIndexBetween(start, data);
-                            endIndex = this.findIndexBetween(end, data);
-                            data = data.slice(startIndex, endIndex);
+                            this.startIndex = this.findIndexBetween(start, data);
+                            this.endIndex = this.findIndexBetween(end, data);
                         }
                         else {
                             this.time = data.length - parseInt(process.argv[3]);
                         }
                         this.time = Math.max(this.time, this.bot.SMA * 5);
-                        this.chart = data.map(function (_a) {
+                        this.fullChart = data.map(function (_a) {
                             var time = _a[0], high = _a[1], low = _a[2], close = _a[3];
                             return (Object.assign(new CandleStick(), { time: time, high: high, low: low, close: close }));
                         });
@@ -157,6 +150,13 @@ var DataManager = /** @class */ (function () {
             });
         });
     };
+    Object.defineProperty(DataManager.prototype, "chart", {
+        get: function () {
+            return this.fullChart.slice(this.startIndex, this.endIndex);
+        },
+        enumerable: false,
+        configurable: true
+    });
     DataManager.prototype.findIndexBetween = function (time, chart) {
         if (time < chart[0][0]) {
             return 0;
@@ -237,7 +237,8 @@ var DataManager = /** @class */ (function () {
         return this.chart.map(function (x) { return x.close; }).slice(start, this.time).reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }) / (steps * 5);
     };
     DataManager.prototype.averagePriceQuarter = function (pair) {
-        return this.chart.map(function (x) { return x.close; }).slice(Math.max(this.time - 1500, 0), this.time).reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }) / 1500;
+        var startTime = this.time + this.startIndex;
+        return this.fullChart.map(function (x) { return x.close; }).slice(Math.max(startTime - 7500, 0), startTime).reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }) / Math.min(startTime, 7500);
     };
     DataManager.prototype.simulateState = function () {
         this.openOrders = [];

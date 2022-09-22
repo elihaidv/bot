@@ -20,15 +20,24 @@
             ]
         },
         {
+            "name": "Channel",
+            "program": "${workspaceFolder}/Simulator/SimulateChannel.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
             "name": "Simulate",
             "type": "node",
             "request": "launch",
             "runtimeExecutable": "ts-node",
             "args": [
                 "Simulator/Simulate.ts",
-                "632890be9207207d9459182e",
-                "2021-09-14 06:50:26",
-                "2022-09-19 13:15:26",
+                "632c03d831a5854f42449052",
+                "2022-09-21 22:48:00",
+                "2022-09-22 09:42:28",
                 "quiet"
             ],
             "cwd": "${workspaceRoot}",

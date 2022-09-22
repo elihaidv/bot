@@ -13,7 +13,7 @@ async function cancelOrders(bot: Bot) {
                     bot.binance!.binance.futuresCancel(PAIR, { orderId: o.orderId.toString() }) :
                     bot.binance!.binance.cancel(PAIR, o.orderId)));
         } catch (e: any) {
-            console.log(e.body)
+            console.log("Cancel Error" + e.body)
         }
     }
 }

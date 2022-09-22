@@ -21,6 +21,7 @@
     "mongodb": "^3.6.9",
     "node-binance-api": "^0.13.1",
     "node-fetch": "2",
+    "node-fetch-cache": "^3.0.5",
     "on-change": "^3.0.2"
   },
   "devDependencies": {

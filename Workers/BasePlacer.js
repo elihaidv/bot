@@ -242,7 +242,7 @@ var BasePlacer = /** @class */ (function () {
     };
     Object.defineProperty(BasePlacer.prototype, "isSemulation", {
         get: function () {
-            return process.argv[1].includes("Simulate");
+            return process.argv[2].includes("Simulate");
         },
         enumerable: false,
         configurable: true

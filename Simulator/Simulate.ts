@@ -18,7 +18,7 @@ const { MongoClient, ObjectID } = require("mongodb");
 
 
 
-const id = process.argv[2] || "61da8b2036520f0737301999";
+const id = process.argv[3] || "61da8b2036520f0737301999";
 
 let dataManager: DataManager
 async function run() {

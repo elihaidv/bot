@@ -49,7 +49,7 @@ var Periodically_1 = require("../Workers/Periodically");
 var node_fetch_1 = require("node-fetch");
 var Binance = require('node-binance-api');
 var _a = require("mongodb"), MongoClient = _a.MongoClient, ObjectID = _a.ObjectID;
-var id = process.argv[2] || "61da8b2036520f0737301999";
+var id = process.argv[3] || "61da8b2036520f0737301999";
 var dataManager;
 function run() {
     return __awaiter(this, void 0, void 0, function () {

@@ -172,7 +172,7 @@ var BasePlacer = /** @class */ (function () {
                         }
                         qu = this.roundQu(qu);
                         price = this.roundPrice(price);
-                        if ((qu * price) < minNotional) {
+                        if ((qu * price) < minNotional && !params.closePosition) {
                             if (increaseToMinimum) {
                                 qu = this.roundQu((parseFloat(minNotional) + 1) / price);
                             }
@@ -242,7 +242,7 @@ var BasePlacer = /** @class */ (function () {
     };
     Object.defineProperty(BasePlacer.prototype, "isSemulation", {
         get: function () {
-            return process.argv[1].includes("Simulate");
+            return process.argv[2].includes("Simulate");
         },
         enumerable: false,
         configurable: true

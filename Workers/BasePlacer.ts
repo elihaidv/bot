@@ -149,7 +149,7 @@ export abstract class BasePlacer {
         qu = this.roundQu(qu)
         price = this.roundPrice(price)
 
-        if ((qu * price) < minNotional) {
+        if ((qu * price) < minNotional && !params.closePosition) {
             if (increaseToMinimum) {
                 qu = this.roundQu((parseFloat(minNotional) + 1) / price)
             } else {
@@ -245,7 +245,7 @@ export abstract class BasePlacer {
     }
 
     get isSemulation() {
-        return process.argv[1].includes("Simulate")
+        return process.argv[2].includes("Simulate")
     }
         
 }

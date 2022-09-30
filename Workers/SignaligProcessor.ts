@@ -1,7 +1,9 @@
 import { ObjectId } from "mongodb";
-import { Bot } from "../Models";
+import { DAL } from "../DAL";
+import { average, Bot, Signaling } from "../Models";
 import { BasePlacer } from "./BasePlacer";
 import { FutureTrader } from "./FuturesTrader";
+const cancelOrders = require('../CancelOrders');
 
 const SIGNALING_REGEXES = [
   '⚡️⚡️ #(.*)\/(.*) ⚡️⚡️\nExchanges: Binance (.*)\nSignal Type: Regular \\((.*)\\)\nLeverage: Cross \\((.*)X\\)\n+Deposit only (.*)\%\n\nEntry Targets:\n((?:\\d\\).*\n)+)\nTake-Profit Targets:\n((?:\\d\\).*\n)+)\nStop Targets:\n((?:\\d\\).*\n)+)',
@@ -42,7 +44,8 @@ export class SignaligProcessor {
   async placeOrders(signaling: Signaling) {
 
     for (let bot of this.bots) {
-      new SignalingPlacer(bot, this.futuresExchangeInfo, signaling).place()
+      await DAL.instance.addSignaling(bot, signaling)
+      bot.binance?.orders.changed.push(signaling.coin1 + signaling.coin2 + bot.positionSide()) 
     }
   }
 
@@ -51,107 +54,107 @@ export class SignaligProcessor {
   }
 }
 
-class SignalingPlacer extends FutureTrader {
-  signaling: Signaling
-  constructor(bot: Bot, e, signaling: Signaling) {
-    bot.coin1 = signaling.coin1
-    bot.coin2 = signaling.coin2
+export class SignalingPlacer extends FutureTrader {
+  allExchangeInfo: any
+  constructor(bot: Bot, e) {
+    bot.coin1 = "BTC"
+    bot.coin2 = "USDT"
     super(bot, e)
-    this.signaling = signaling
+    this.allExchangeInfo = e
   }
 
   async place() {
-    const price = this.roundPrice(average(this.signaling.enter))
-    const qu = 10 / price
+    for (let signaling of this.bot.signalings ?? []) {
+      this.PAIR = signaling.coin1 + signaling.coin2
+      if (!this.futureSockets.prices[this.PAIR])continue
+      if (!this.bot.binance!.orders.changed.includes(this.PAIR + this.bot.positionSide())) continue
 
-    this.place_order(
-      this.PAIR,
-      qu,
-      price,
-      this.signaling.direction == "LONG" ? true : false)
+      this.bot.binance!.orders.changed = this.bot.binance!.orders.changed.filter(x => x != this.PAIR)
+      
+      this.bot.direction = signaling.direction != "LONG"
+      this.orders = this.bot.binance?.orders[this.PAIR] ?? []
 
+      this.exchangeInfo = this.allExchangeInfo.symbols.find(s => s.symbol == this.PAIR)
+      this.filters = this.exchangeInfo.filters.reduce((a, b) => { a[b.filterType] = b; return a }, {})
+      cancelOrders(this.bot, this.PAIR)
+      this.buildHistory()
+      this.calculatePrice()
+      
+      if (new Date().getTime() - signaling.date.getTime() > 1000 * 60 * 60 * 24 * 3) {
+        await this.closePosition(signaling)
+      } else {
+        await this.placeOrder(signaling)
+      }
+    }
 
-    this.place_order(
-      this.PAIR,
-      qu / 2,
-      this.signaling.takeProfits[1],
-      this.signaling.direction == "LONG" ? false : true, {
-      type: "STOP",
-      stopPrice: price
-    })
-    
-    this.place_order(
-      this.PAIR,
-      qu / 2,
-      this.signaling.takeProfits[3],
-      this.signaling.direction == "LONG" ? false : true, {
-      type: "STOP",
-      stopPrice: price
-    })
+  
+  }
+  
+  async closePosition(signaling: Signaling) {
+    DAL.instance.removeSignaling(this.bot, signaling)
 
-    this.place_order(
-      this.PAIR,
-      qu,
-      this.signaling.stop,
-      this.signaling.direction == "LONG" ? false : true, {
-      type: "STOP",
-      stopPrice: this.signaling.stop
-    })
+    if (this.positionAmount != 0){
+      await this.place_order(
+        this.PAIR,0,0,
+        this.bot.direction,
+        {
+          stopPrice: this.roundPrice(this.futureSockets.prices[this.PAIR][0] * (this.bot.direction ? 1.001 : 0.999)),
+          type: "STOP_MARKET",
+          closePosition : true
+        })
+    }
+  }
+
+  async placeOrder(signaling: Signaling) {
+    if (!this.myLastOrder?.clientOrderId.includes(signaling._id) ){
+      await this.closePosition(signaling)
+    } else if(this.myLastOrder?.clientOrderId.includes("LAST")){
+      DAL.instance.removeSignaling(this.bot, signaling)
+      this.bot.lastOrder = Bot.STABLE
+      return
+    }
+
+    if(this.isFirst()){
+
+      const price = this.roundPrice(this.minFunc(signaling.enter[0], this.futureSockets.prices[this.PAIR][0]))
+      const qu = 11 / price
+
+      this.place_order(
+        this.PAIR, qu,price,!this.bot.direction, {
+          newClientOrderId: "FIRST" + signaling._id
+        })
+    } else {
+
+      if (this.myLastOrder?.side == this.buySide()){
+
+        const price = this.roundPrice(signaling.enter[1])
+        const qu = 11 / price
+
+        this.place_order(
+          this.PAIR, qu,price,!this.bot.direction, {
+          })
+
+        this.place_order(
+          this.PAIR,0,0,
+          this.bot.direction, {
+            type: "TAKE_PROFIT_MARKET",
+            closePosition: true,
+            stopPrice: signaling.takeProfits[0],
+            newClientOrderId: "LASTTP" + signaling._id
+          })
+
+        this.place_order(
+          this.PAIR,0,0,
+          this.bot.direction, {
+            type: "STOP_MARKET",
+            closePosition: true,
+            stopPrice: signaling.stop,
+            newClientOrderId: "LASTSL" + signaling._id
+          })
+      }
+      
+    }
+    this.bot.lastOrder = Bot.STABLE
   }
 }
 
-
-export class Signaling {
-  public _id!: ObjectId;
-
-  public coin1!: string;
-
-  public coin2!: string;
-
-  public market!: string;
-
-
-  public direction!: string;
-
-
-  public lervrage: number = 1;
-
-
-  public deposit!: string;
-
-
-  public enter: Array<number> = [];
-
-
-  public stop!: number;
-
-
-  public takeProfits: Array<number> = [];
-
-  get pair(): string {
-    return this.coin1 + this.coin2
-  }
-
-  get eep(): number {
-    return average([average(this.enter), this.enter[0]])
-  }
-
-  get stopPercent(): number {
-    return Math.abs(diffInPrecents(this.eep, this.stop)) * this.lervrage
-  }
-  get profitercent(): number {
-    return Math.abs(diffInPrecents(this.takeProfits[0], this.eep)) * this.lervrage
-  }
-
-  get lowEnter(): number {
-    return this.enter.at(-1)!
-  }
-}
-export function diffInPrecents(a: number, b: number) {
-  return ((a - b) / a) * 100
-}
-
-export function average(arr: Array<number>) {
-  const sum = arr.reduce((a, b) => a + b, 0);
-  return (sum / arr.length) || 0;
-}

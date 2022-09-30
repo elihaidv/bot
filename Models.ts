@@ -1,4 +1,5 @@
 
+import { ObjectId } from "mongodb";
 
 export class Bot {
     static STABLE = -1;
@@ -49,6 +50,7 @@ export class Bot {
     classname: any;
     dynamicDirection: boolean = false;
     user_id: any;
+    signalings: Array<Signaling> = [];
 
     id(): String { return this._id.toString() }
 
@@ -134,3 +136,63 @@ export class Key {
     public
     secret
 }
+
+
+export class Signaling {
+
+    public _id!: ObjectId;
+    public coin1!: string;
+  
+    public coin2!: string;
+  
+    public market!: string;
+  
+  
+    public direction!: string;
+  
+  
+    public lervrage: number = 1;
+  
+  
+    public deposit!: string;
+  
+  
+    public enter: Array<number> = [];
+  
+  
+    public stop!: number;
+  
+  
+    public takeProfits: Array<number> = [];
+
+    public date : Date = new Date();
+  
+    get pair(): string {
+      return this.coin1 + this.coin2
+    }
+  
+    get eep(): number {
+      return average([average(this.enter), this.enter[0]])
+    }
+  
+    get stopPercent(): number {
+      return Math.abs(diffInPrecents(this.eep, this.stop)) * this.lervrage
+    }
+    get profitercent(): number {
+      return Math.abs(diffInPrecents(this.takeProfits[0], this.eep)) * this.lervrage
+    }
+  
+    get lowEnter(): number {
+      return this.enter.at(-1)!
+    }
+
+  }
+  export function diffInPrecents(a: number, b: number) {
+    return ((a - b) / a) * 100
+  }
+  
+  export function average(arr: Array<number>) {
+    const sum = arr.reduce((a, b) => a + b, 0);
+    return (sum / arr.length) || 0;
+  }
+  

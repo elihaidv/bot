@@ -118,6 +118,8 @@ function execute() {
                                     return new DirectionTrader_1.DirectionTrader(b, futuresExchangeInfo).place();
                                 case "6":
                                     return new Periodically_1.Periodically(b, exchangeInfo).place();
+                                case "7":
+                                    return new SignaligProcessor_1.SignalingPlacer(b, exchangeInfo).place();
                             }
                         }))];
                 case 5:
@@ -141,6 +143,14 @@ function filterOutdated(bots) {
         if (b.binance && b.binance.orders && b.binance.orders.changed.includes(PAIR)) {
             b.binance.orders.changed = b.binance.orders.changed.filter(function (p) { return p != PAIR; });
             return true;
+        }
+        if (b.signalings && b.binance && b.binance.orders) {
+            for (var _i = 0, _a = b.signalings; _i < _a.length; _i++) {
+                var s = _a[_i];
+                if (b.binance.orders.changed.includes(s.coin1 + s.coin2 + b.positionSide())) {
+                    return true;
+                }
+            }
         }
         if (b.lastOrder == Models_1.Bot.STABLE)
             return false;
@@ -175,8 +185,8 @@ function createServer() {
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
     app.post('/', function (req, res) {
-        SignaligProcessor_1.SignaligProcessor.instance.proccessTextSignal(req.body.message.text);
-        console.log(req.body);
+        SignaligProcessor_1.SignaligProcessor.instance.proccessTextSignal(req.body.message);
+        console.log(JSON.stringify(req.body));
         res.send('Hello World!');
     });
     http.createServer(app).listen(8081);

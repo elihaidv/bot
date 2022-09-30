@@ -92,18 +92,18 @@ export class DataManager {
         
         let data = file.split('\n').map(l => l.split(","))
 
-        if (!process.argv[3]) {
+        if (!process.argv[4]) {
             this.time = 0
 
-        } else if (isNaN(process.argv[3] as any)) {
-            const start = new Date(process.argv[3]).getTime() - (this.bot.SMA * 5 * 60 * 1000)
-            const end = new Date(process.argv[4]).getTime()
+        } else if (isNaN(process.argv[4] as any)) {
+            const start = new Date(process.argv[4]).getTime() - (this.bot.SMA * 5 * 60 * 1000)
+            const end = new Date(process.argv[5]).getTime()
 
             this.startIndex = this.findIndexBetween(start, data)
             this.endIndex = this.findIndexBetween(end, data)
 
         } else {
-            this.time = data.length - parseInt(process.argv[3])
+            this.time = data.length - parseInt(process.argv[4])
         }
         this.time = Math.max(this.time, this.bot.SMA * 5)
 

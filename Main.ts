@@ -11,7 +11,7 @@ import { SocketsFutures } from './Sockets/SocketsFuture';
 import { WeightAvg } from './Workers/WeightAvg';
 import { DAL } from './DAL';
 import { Periodically } from './Workers/Periodically';
-import { SignaligProcessor } from './Workers/SignaligProcessor';
+import { SignaligProcessor, SignalingPlacer } from './Workers/SignaligProcessor';
 const express = require('express')
 var bodyParser = require('body-parser')
 var https = require('https');
@@ -29,10 +29,10 @@ async function run() {
 
   Binance().exchangeInfo().then(data => exchangeInfo = data)
   Binance().futuresExchangeInfo().then(data => {
-     futuresExchangeInfo = data
-     SignaligProcessor.instance.futuresExchangeInfo = data
-     console.log("futuresExchangeInfo loaded")
-    })
+    futuresExchangeInfo = data
+    SignaligProcessor.instance.futuresExchangeInfo = data
+    console.log("futuresExchangeInfo loaded")
+  })
 
   await DAL.instance.init()
   execute()
@@ -44,7 +44,7 @@ run()
 async function execute() {
   try {
     let botsResults = await DAL.instance.getBots()
-    
+
     let keys: Array<Key> = await DAL.instance.getKeys()
 
     initBots(botsResults)
@@ -60,7 +60,7 @@ async function execute() {
 
 
       await Promise.all(outdatedBots.map(cancelOrders));
-      
+
       await Sockets.getInstance().timeout(1000)
 
       await Promise.all(outdatedBots.map((b) => {
@@ -77,6 +77,9 @@ async function execute() {
             return new DirectionTrader(b, futuresExchangeInfo).place()
           case "6":
             return new Periodically(b, exchangeInfo).place()
+          case "7":
+            return new SignalingPlacer(b, exchangeInfo).place()
+
 
         }
       }))
@@ -96,6 +99,13 @@ function filterOutdated(bots: Array<Bot>): Array<Bot> {
     if (b.binance && b.binance!.orders && b.binance!.orders.changed.includes(PAIR)) {
       b.binance!.orders.changed = b.binance!.orders.changed.filter(p => p != PAIR)
       return true
+    }
+    if (b.signalings && b.binance && b.binance!.orders) {
+      for (let s of b.signalings) {
+        if (b.binance!.orders.changed.includes(s.coin1 + s.coin2 + b.positionSide())) {
+          return true
+        }
+      }
     }
     if (b.lastOrder == Bot.STABLE) return false
     return !b.lastOrder || new Date().getTime() - b.lastOrder >= b.secound * 1000
@@ -118,16 +128,18 @@ async function initBots(botsResults) {
   bots = newBots
 }
 
-function createServer(){
+function createServer() {
+
+
   const app = express()
   app.use(bodyParser.urlencoded({ extended: false }))
 
   app.use(bodyParser.json())
 
   app.post('/', (req, res) => {
-      SignaligProcessor.instance.proccessTextSignal(req.body.message.text)
-          
-      console.log(req.body)
+      SignaligProcessor.instance.proccessTextSignal(req.body.message)
+
+      console.log(JSON.stringify(req.body))
       res.send('Hello World!')
   })
 

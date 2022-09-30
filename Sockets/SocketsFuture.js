@@ -96,6 +96,64 @@ var SocketsFutures = /** @class */ (function (_super) {
                 }
             }
         }; };
+        _this.fetchOrdersBySymbol = function (acc, PAIR) { return __awaiter(_this, void 0, void 0, function () {
+            var openOrders, trades;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(acc.orders[PAIR] === undefined)) return [3 /*break*/, 4];
+                        acc.orders[PAIR] = [];
+                        return [4 /*yield*/, acc.binance.futuresAllOrders(PAIR, { limit: 1000 })];
+                    case 1:
+                        openOrders = _a.sent();
+                        if (openOrders.code)
+                            throw openOrders.msg;
+                        acc.orders[PAIR] = acc.orders[PAIR].concat(openOrders.filter(function (o) { return o.status != "CANCELED"; }).map(function (order) {
+                            var o = Object.assign(new Models_1.Order(), order);
+                            o.price || (o.price = order.avgPrice);
+                            return o;
+                        }));
+                        acc.orders[PAIR].push(new Models_1.Order());
+                        return [4 /*yield*/, acc.binance.futuresUserTrades(PAIR)];
+                    case 2:
+                        trades = _a.sent();
+                        if (trades.code)
+                            throw trades.msg;
+                        trades.forEach(function (t) {
+                            var o = acc.orders[PAIR].find(function (o) { return o.orderId.toString() == t.orderId.toString(); });
+                            if (o)
+                                o.pnl += parseFloat(t.realizedPnl);
+                        });
+                        // acc.orders[PAIR] = acc.orders[PAIR].concat(trades.map(t => new Order(
+                        //     t.side,
+                        //     "FILLED",
+                        //     t.price,
+                        //     t.orderId,
+                        //     t.qty,
+                        //     t.qty,
+                        //     t.time,
+                        //     'LIMIT',
+                        //     t.clientOrderId.includes("FIRST")
+                        // )))
+                        return [4 /*yield*/, this.timeout(500)];
+                    case 3:
+                        // acc.orders[PAIR] = acc.orders[PAIR].concat(trades.map(t => new Order(
+                        //     t.side,
+                        //     "FILLED",
+                        //     t.price,
+                        //     t.orderId,
+                        //     t.qty,
+                        //     t.qty,
+                        //     t.time,
+                        //     'LIMIT',
+                        //     t.clientOrderId.includes("FIRST")
+                        // )))
+                        _a.sent();
+                        _a.label = 4;
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); };
         return _this;
     }
     SocketsFutures.getFInstance = function () {
@@ -167,93 +225,46 @@ var SocketsFutures = /** @class */ (function (_super) {
     };
     SocketsFutures.prototype.fetchInitOrders = function (bots) {
         return __awaiter(this, void 0, void 0, function () {
-            var _loop_2, this_2, _i, bots_1, bot;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var _i, bots_1, bot, PAIR, acc, _a, _b, s, e_1;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
-                        _loop_2 = function (bot) {
-                            var PAIR, acc, openOrders, trades, e_1;
-                            return __generator(this, function (_b) {
-                                switch (_b.label) {
-                                    case 0:
-                                        PAIR = bot.coin1 + bot.coin2;
-                                        acc = this_2.accounts[bot.key_id];
-                                        _b.label = 1;
-                                    case 1:
-                                        _b.trys.push([1, 6, , 7]);
-                                        if (!(acc.orders[PAIR] === undefined)) return [3 /*break*/, 5];
-                                        acc.orders[PAIR] = [];
-                                        return [4 /*yield*/, acc.binance.futuresAllOrders(PAIR, { limit: 1000 })];
-                                    case 2:
-                                        openOrders = _b.sent();
-                                        if (openOrders.code)
-                                            throw openOrders.msg;
-                                        acc.orders[PAIR] = acc.orders[PAIR].concat(openOrders.filter(function (o) { return o.status != "CANCELED"; }).map(function (order) {
-                                            var o = Object.assign(new Models_1.Order(), order);
-                                            o.price || (o.price = order.avgPrice);
-                                            return o;
-                                        }));
-                                        acc.orders[PAIR].push(new Models_1.Order());
-                                        return [4 /*yield*/, acc.binance.futuresUserTrades(PAIR)];
-                                    case 3:
-                                        trades = _b.sent();
-                                        if (trades.code)
-                                            throw trades.msg;
-                                        trades.forEach(function (t) {
-                                            var o = acc.orders[PAIR].find(function (o) { return o.orderId.toString() == t.orderId.toString(); });
-                                            if (o)
-                                                o.pnl += parseFloat(t.realizedPnl);
-                                        });
-                                        // acc.orders[PAIR] = acc.orders[PAIR].concat(trades.map(t => new Order(
-                                        //     t.side,
-                                        //     "FILLED",
-                                        //     t.price,
-                                        //     t.orderId,
-                                        //     t.qty,
-                                        //     t.qty,
-                                        //     t.time,
-                                        //     'LIMIT',
-                                        //     t.clientOrderId.includes("FIRST")
-                                        // )))
-                                        return [4 /*yield*/, this_2.timeout(500)];
-                                    case 4:
-                                        // acc.orders[PAIR] = acc.orders[PAIR].concat(trades.map(t => new Order(
-                                        //     t.side,
-                                        //     "FILLED",
-                                        //     t.price,
-                                        //     t.orderId,
-                                        //     t.qty,
-                                        //     t.qty,
-                                        //     t.time,
-                                        //     'LIMIT',
-                                        //     t.clientOrderId.includes("FIRST")
-                                        // )))
-                                        _b.sent();
-                                        _b.label = 5;
-                                    case 5: return [3 /*break*/, 7];
-                                    case 6:
-                                        e_1 = _b.sent();
-                                        acc.orders[PAIR] = undefined;
-                                        console.log("FetchInit Error: ", e_1, " Bot Id: ", bot.id());
-                                        return [3 /*break*/, 7];
-                                    case 7: return [2 /*return*/];
-                                }
-                            });
-                        };
-                        this_2 = this;
                         _i = 0, bots_1 = bots;
-                        _a.label = 1;
+                        _c.label = 1;
                     case 1:
-                        if (!(_i < bots_1.length)) return [3 /*break*/, 4];
+                        if (!(_i < bots_1.length)) return [3 /*break*/, 10];
                         bot = bots_1[_i];
-                        return [5 /*yield**/, _loop_2(bot)];
+                        PAIR = bot.coin1 + bot.coin2;
+                        acc = this.accounts[bot.key_id];
+                        _c.label = 2;
                     case 2:
-                        _a.sent();
-                        _a.label = 3;
+                        _c.trys.push([2, 8, , 9]);
+                        return [4 /*yield*/, this.fetchOrdersBySymbol(acc, PAIR)];
                     case 3:
+                        _c.sent();
+                        if (!bot.signalings) return [3 /*break*/, 7];
+                        _a = 0, _b = bot.signalings;
+                        _c.label = 4;
+                    case 4:
+                        if (!(_a < _b.length)) return [3 /*break*/, 7];
+                        s = _b[_a];
+                        return [4 /*yield*/, this.fetchOrdersBySymbol(acc, s.coin1 + s.coin2)];
+                    case 5:
+                        _c.sent();
+                        _c.label = 6;
+                    case 6:
+                        _a++;
+                        return [3 /*break*/, 4];
+                    case 7: return [3 /*break*/, 9];
+                    case 8:
+                        e_1 = _c.sent();
+                        acc.orders[PAIR] = undefined;
+                        console.log("FetchInit Error: ", e_1, " Bot Id: ", bot.id());
+                        return [3 /*break*/, 9];
+                    case 9:
                         _i++;
                         return [3 /*break*/, 1];
-                    case 4: return [2 /*return*/];
+                    case 10: return [2 /*return*/];
                 }
             });
         });

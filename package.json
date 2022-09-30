@@ -5,7 +5,7 @@
   "main": "Simulator/Simulate.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node Simulator/Simulate.js"
+    "start": "node Simulator/Simulate.js --unhandled-rejections=none"
   },
   "author": "",
   "license": "ISC",
@@ -22,9 +22,11 @@
     "node-binance-api": "^0.13.1",
     "node-fetch": "2",
     "node-fetch-cache": "^3.0.5",
-    "on-change": "^3.0.2"
+    "on-change": "^3.0.2",
+    "telegram-mtproto": "^2.2.2"
   },
   "devDependencies": {
-    "@types/node": "^16.11.43"
+    "@types/node": "^16.11.43",
+    "cli-interact": "^0.1.9"
   }
 }

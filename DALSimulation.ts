@@ -9,6 +9,7 @@ export class DAL {
     started
     dataManager
     steps = Array<Array<any>>()
+    stepsCounts = 0
     page = 0
     simulationId
     awaiter = false
@@ -16,11 +17,6 @@ export class DAL {
     async init(dataManager: DataManager | null, simulationId) {
         this.dataManager = dataManager
         this.simulationId = simulationId
-
-        setTimeout(async ()=> {
-            await this.updateProgress("timeout")
-            exit(8)
-        }, 3400 * 1000)
     }
 
     async logStep(step) {
@@ -30,8 +26,9 @@ export class DAL {
         const stepArr = [step.time, step.type, step.side, step.price, step.quantity, step.low, step.high, step.balanceSecond, step.positionSize, step.positionPnl, step.profit, step.balanceFirst, step.priority]
 
         this.steps.push(stepArr)
+        this.stepsCounts++
 
-        if (Math.floor(this.steps.length / PAGE_SIZE) > this.page) {
+        if (Math.floor(this.stepsCounts / PAGE_SIZE) > this.page) {
             this.page++
             this.saveInBucket()
             this.awaiter = true
@@ -59,11 +56,13 @@ export class DAL {
                 'Content-Type': 'application/json',
             }
 
-        }).then(r => r.text()).then(r => console.log(r))
+        }).then(r => r.text())
+        .then(console.log)
+        .catch(console.log)
      }
 
     get isQuiet() {
-        return process.argv[5] == 'quiet'
+        return process.argv[6] == 'quiet'
     }
 
     async endTest() {
@@ -78,14 +77,16 @@ export class DAL {
 
     }
 
-    saveInBucket = () => 
-         new Storage()
+    saveInBucket =  () => {
+        const cloneSteps = this.steps.slice()
+        this.steps = []
+        new Storage()
             .bucket('simulations-tradingbot')
-            .file(`simulation${process.argv[2]}/${this.page}.csv`)
-            .save(this
-                .steps
-                .slice(this.page * PAGE_SIZE - PAGE_SIZE, (this.page * PAGE_SIZE))
+            .file(`simulation${process.argv[3]}/${this.page}.csv`)
+            .save(cloneSteps
                 .map(s => s.join(','))
-                .join('\n'),{resumable: false});
+                .join('\n'),{resumable: false})
+                .catch(console.log);
+        }
     
 }

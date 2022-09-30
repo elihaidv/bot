@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Key = exports.Account = exports.Order = exports.Bot = void 0;
+exports.average = exports.diffInPrecents = exports.Signaling = exports.Key = exports.Account = exports.Order = exports.Bot = void 0;
 var Bot = /** @class */ (function () {
     function Bot() {
         this.bot_type_id = "1";
@@ -17,6 +17,7 @@ var Bot = /** @class */ (function () {
         this.mode = false;
         this.lastStopPrice = 0;
         this.dynamicDirection = false;
+        this.signalings = [];
     }
     Bot.prototype.id = function () { return this._id.toString(); };
     Bot.prototype.positionSide = function () {
@@ -78,3 +79,57 @@ var Key = /** @class */ (function () {
     return Key;
 }());
 exports.Key = Key;
+var Signaling = /** @class */ (function () {
+    function Signaling() {
+        this.lervrage = 1;
+        this.enter = [];
+        this.takeProfits = [];
+        this.date = new Date();
+    }
+    Object.defineProperty(Signaling.prototype, "pair", {
+        get: function () {
+            return this.coin1 + this.coin2;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Signaling.prototype, "eep", {
+        get: function () {
+            return average([average(this.enter), this.enter[0]]);
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Signaling.prototype, "stopPercent", {
+        get: function () {
+            return Math.abs(diffInPrecents(this.eep, this.stop)) * this.lervrage;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Signaling.prototype, "profitercent", {
+        get: function () {
+            return Math.abs(diffInPrecents(this.takeProfits[0], this.eep)) * this.lervrage;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Signaling.prototype, "lowEnter", {
+        get: function () {
+            return this.enter.at(-1);
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return Signaling;
+}());
+exports.Signaling = Signaling;
+function diffInPrecents(a, b) {
+    return ((a - b) / a) * 100;
+}
+exports.diffInPrecents = diffInPrecents;
+function average(arr) {
+    var sum = arr.reduce(function (a, b) { return a + b; }, 0);
+    return (sum / arr.length) || 0;
+}
+exports.average = average;

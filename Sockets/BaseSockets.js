@@ -131,6 +131,16 @@ var BaseSockets = /** @class */ (function () {
     };
     BaseSockets.prototype.isPairsChanged = function (bots) {
         var botsPairs = bots.map(function (b) { return b.coin1 + b.coin2; });
+        botsPairs = botsPairs.concat(bots
+            .map(function (_a) {
+            var signalings = _a.signalings;
+            return signalings || [];
+        })
+            .map(function (s) { return s.map(function (_a) {
+            var coin1 = _a.coin1, coin2 = _a.coin2;
+            return coin1 + coin2;
+        }); })
+            .reduce(function (a, c) { return a.concat(c); }, []));
         botsPairs = Array.from(new Set(botsPairs));
         if (!this.compare(botsPairs, this.pairs)) {
             this.pairs = botsPairs;

@@ -39,42 +39,31 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DAL = void 0;
 var node_fetch_1 = require("node-fetch");
 var storage_1 = require("@google-cloud/storage");
-var process_1 = require("process");
 var PAGE_SIZE = 2000;
 var DAL = /** @class */ (function () {
     function DAL() {
         var _this = this;
         this.steps = Array();
+        this.stepsCounts = 0;
         this.page = 0;
         this.awaiter = false;
         this.saveInBucket = function () {
-            return new storage_1.Storage()
+            var cloneSteps = _this.steps.slice();
+            _this.steps = [];
+            new storage_1.Storage()
                 .bucket('simulations-tradingbot')
-                .file("simulation" + process.argv[2] + "/" + _this.page + ".csv")
-                .save(_this
-                .steps
-                .slice(_this.page * PAGE_SIZE - PAGE_SIZE, (_this.page * PAGE_SIZE))
+                .file("simulation" + process.argv[3] + "/" + _this.page + ".csv")
+                .save(cloneSteps
                 .map(function (s) { return s.join(','); })
-                .join('\n'), { resumable: false });
+                .join('\n'), { resumable: false })
+                .catch(console.log);
         };
     }
     DAL.prototype.init = function (dataManager, simulationId) {
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
             return __generator(this, function (_a) {
                 this.dataManager = dataManager;
                 this.simulationId = simulationId;
-                setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, this.updateProgress("timeout")];
-                            case 1:
-                                _a.sent();
-                                (0, process_1.exit)(8);
-                                return [2 /*return*/];
-                        }
-                    });
-                }); }, 3400 * 1000);
                 return [2 /*return*/];
             });
         });
@@ -90,7 +79,8 @@ var DAL = /** @class */ (function () {
                         step.time = this.dataManager.chart[this.dataManager.time].time;
                         stepArr = [step.time, step.type, step.side, step.price, step.quantity, step.low, step.high, step.balanceSecond, step.positionSize, step.positionPnl, step.profit, step.balanceFirst, step.priority];
                         this.steps.push(stepArr);
-                        if (!(Math.floor(this.steps.length / PAGE_SIZE) > this.page)) return [3 /*break*/, 2];
+                        this.stepsCounts++;
+                        if (!(Math.floor(this.stepsCounts / PAGE_SIZE) > this.page)) return [3 /*break*/, 2];
                         this.page++;
                         this.saveInBucket();
                         this.awaiter = true;
@@ -119,11 +109,13 @@ var DAL = /** @class */ (function () {
                 "Accept": "application/json",
                 'Content-Type': 'application/json',
             }
-        }).then(function (r) { return r.text(); }).then(function (r) { return console.log(r); });
+        }).then(function (r) { return r.text(); })
+            .then(console.log)
+            .catch(console.log);
     };
     Object.defineProperty(DAL.prototype, "isQuiet", {
         get: function () {
-            return process.argv[5] == 'quiet';
+            return process.argv[6] == 'quiet';
         },
         enumerable: false,
         configurable: true

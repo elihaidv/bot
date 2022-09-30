@@ -68,6 +68,23 @@ var DAL = /** @class */ (function () {
     DAL.prototype.logError = function (error) {
         this.dbo.collection('error').insertOne(error);
     };
+    DAL.prototype.addSignaling = function (bot, signaling) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.dbo.collection('bot').updateOne({ _id: bot._id }, { $push: { signalings: signaling } })];
+                    case 1:
+                        _a.sent();
+                        bot.signalings.push(signaling);
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    DAL.prototype.removeSignaling = function (bot, signaling) {
+        this.dbo.collection('bot').updateOne({ _id: bot._id }, { $pull: { signalings: { _id: signaling._id } } });
+        bot.signalings = bot.signalings.filter(function (s) { return s._id != signaling._id; });
+    };
     DAL.instance = new DAL();
     return DAL;
 }());

@@ -81,6 +81,12 @@ export abstract class BaseSockets {
 
     isPairsChanged(bots:Array<Bot>) {
         let botsPairs = bots.map((b) => b.coin1 + b.coin2)
+
+        botsPairs = botsPairs.concat(bots
+            .map(({signalings}) => signalings || [])
+            .map(s => s.map(({coin1, coin2}) => coin1 + coin2))
+            .reduce((a, c) => a.concat(c), []))
+
         botsPairs = Array.from(new Set(botsPairs));
 
         if (!this.compare(botsPairs, this.pairs)) {

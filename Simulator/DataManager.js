@@ -128,17 +128,17 @@ var DataManager = /** @class */ (function () {
                     case 1:
                         file = _a.sent();
                         data = file.split('\n').map(function (l) { return l.split(","); });
-                        if (!process.argv[3]) {
+                        if (!process.argv[4]) {
                             this.time = 0;
                         }
-                        else if (isNaN(process.argv[3])) {
-                            start = new Date(process.argv[3]).getTime() - (this.bot.SMA * 5 * 60 * 1000);
-                            end = new Date(process.argv[4]).getTime();
+                        else if (isNaN(process.argv[4])) {
+                            start = new Date(process.argv[4]).getTime() - (this.bot.SMA * 5 * 60 * 1000);
+                            end = new Date(process.argv[5]).getTime();
                             this.startIndex = this.findIndexBetween(start, data);
                             this.endIndex = this.findIndexBetween(end, data);
                         }
                         else {
-                            this.time = data.length - parseInt(process.argv[3]);
+                            this.time = data.length - parseInt(process.argv[4]);
                         }
                         this.time = Math.max(this.time, this.bot.SMA * 5);
                         this.fullChart = data.map(function (_a) {

@@ -23,7 +23,7 @@ export class SignaligProcessor {
 
   proccessTextSignal(message: String) {
     for (let regex of SIGNALING_REGEXES) {
-      const match = message.replace(/\s/g, '').match(regex)
+      const match = message?.replace(/\s/g, '').match(regex)
       if (match) {
         const s = new Signaling()
         s._id = new ObjectId();

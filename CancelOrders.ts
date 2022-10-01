@@ -16,6 +16,6 @@ async function cancelOrders(bot: Bot, pair?) {
             console.log("Cancel Error" + e.body)
         }
     }
-}
+} 
 
 module.exports = cancelOrders

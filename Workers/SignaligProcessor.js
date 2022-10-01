@@ -77,7 +77,7 @@ var SignaligProcessor = /** @class */ (function () {
     SignaligProcessor.prototype.proccessTextSignal = function (message) {
         for (var _i = 0, SIGNALING_REGEXES_1 = SIGNALING_REGEXES; _i < SIGNALING_REGEXES_1.length; _i++) {
             var regex = SIGNALING_REGEXES_1[_i];
-            var match = message.replace(/\s/g, '').match(regex);
+            var match = message === null || message === void 0 ? void 0 : message.replace(/\s/g, '').match(regex);
             if (match) {
                 var s = new Models_1.Signaling();
                 s._id = new mongodb_1.ObjectId();

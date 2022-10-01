@@ -59,7 +59,7 @@ async function execute() {
     if (exchangeInfo && futuresExchangeInfo) {
 
 
-      await Promise.all(outdatedBots.map(cancelOrders));
+      await Promise.all(outdatedBots.map((b) => cancelOrders(b)));
 
       await Sockets.getInstance().timeout(1000)
 

@@ -1,7 +1,7 @@
 import { Bot } from "./Models";
 
 async function cancelOrders(bot: Bot, pair?) {
-    const PAIR = pair == 0 ? (bot.coin1 + bot.coin2) : pair
+    const PAIR = pair ? pair : (bot.coin1 + bot.coin2) 
     if (bot.binance && bot.binance!.orders[PAIR]) {
         const openOrders = bot.binance!.orders[PAIR]
             .filter(o => o.status == "NEW" || o.status == "PARTIALLY_FILLED")

@@ -1,13 +1,15 @@
 import { ObjectId } from "mongodb";
 import { DAL } from "../DAL";
-import { average, Bot, Signaling } from "../Models";
+import { average, Bot, Signaling, SignalingType } from "../Models";
 import { BasePlacer } from "./BasePlacer";
 import { FutureTrader } from "./FuturesTrader";
 const cancelOrders = require('../CancelOrders');
 
-const SIGNALING_REGEXES = [
-  '⚡️⚡️ #(.*)\/(.*) ⚡️⚡️\nExchanges: Binance (.*)\nSignal Type: Regular \\((.*)\\)\nLeverage: Cross \\((.*)X\\)\n+Deposit only (.*)\%\n\nEntry Targets:\n((?:\\d\\).*\n)+)\nTake-Profit Targets:\n((?:\\d\\).*\n)+)\nStop Targets:\n((?:\\d\\).*\n)+)',
-  '📦#(.*)\/(.*)-(.*)🔦(.*)IDEA(.*)🪤Maxleveragerecommended:(.*)✓ENTRY:-(.*)-(.*)💵Target1:(.*)💵Target2:(.*)💵Target3:(.*)💵Target4:(.*)💵Target5:(.*)💵Target6:(.*)🪄Stop\\|Loss:(.*)'
+const SIGNALING_TYPES = [
+  // new SignalingType('⚡️⚡️ #(.*)\/(.*) ⚡️⚡️\nExchanges: Binance (.*)\nSignal Type: Regular \\((.*)\\)\nLeverage: Cross \\((.*)X\\)\n+Deposit only (.*)\%\n\nEntry Targets:\n((?:\\d\\).*\n)+)\nTake-Profit Targets:\n((?:\\d\\).*\n)+)\nStop Targets:\n((?:\\d\\).*\n)+)', new Map([]),
+  new SignalingType('📦#(.*)\/(.*)-(.*)🔦(.*)IDEA(.*)🪤Maxleveragerecommended:(.*)✓ENTRY:-(.*)-(.*)💵Target1:(.*)💵Target2:(.*)💵Target3:(.*)💵Target4:(.*)💵Target5:(.*)💵Target6:(.*)🪄Stop\\|Loss:(.*)',1,2,4,6,7,8,9,14,15,"Bullish"),
+  new SignalingType(`📈(.*)Signal#(.*)30m\\|(.*)Entryprice:(.*)-(.*)-⏳-Signaldetails:Target:(.*)Target:(.*)Target:(.*)Target:(.*)❌Stop-Loss:(.*)🧲Leverage:(.*)\\[(.*)\\]@USABitcoinArmy`,2,2,1,11,4,5,6,9,10,"Long"),
+
 ]
 
 export class GroupCode {
@@ -22,19 +24,19 @@ export class SignaligProcessor {
   futuresExchangeInfo: any
 
   proccessTextSignal(message: String) {
-    for (let regex of SIGNALING_REGEXES) {
-      const match = message?.replace(/\s/g, '').match(regex)
+    for (let type of SIGNALING_TYPES) {
+      const match = message?.replace(/\s/g, '').match(type.regex)
       if (match) {
         const s = new Signaling()
         s._id = new ObjectId();
-        let lev, enter1, enter2;
-
-        [, s.coin1, s.coin2, , s.direction, , lev, enter1, enter2] = match
-        s.enter = [parseFloat(enter1), parseFloat(enter2)]
-        s.takeProfits = match.slice(9, 15).map(x => parseFloat(x))
-        s.stop = parseFloat(match[15])
-        s.lervrage = parseInt(lev)
-        s.direction = s.direction == "Bullish" ? "LONG" : "SHORT"
+        s.coin1 = match[type.coin1]
+        s.coin2 = type.coin1 == type.coin2 ? "" : match[type.coin2]
+        s.lervrage = match[type.leverage]
+        s.enter =  match.slice(type.enterPriceStart, type.enterPriceEnd + 1).map(e => Number(e))
+        s.takeProfits = match.slice(type.takeProfitStart, type.takeProfitEnd + 1).map(e => Number(e))
+        s.stop = Number(match[type.stopPrice])
+        s.direction = match[type.direction] == type.longTerm ? "LONG" : "SHORT"
+        
         console.log(s)
         this.placeOrders(s)
       }

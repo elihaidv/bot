@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.average = exports.diffInPrecents = exports.Signaling = exports.Key = exports.Account = exports.Order = exports.Bot = void 0;
+exports.average = exports.diffInPrecents = exports.Signaling = exports.SignalingType = exports.Key = exports.Account = exports.Order = exports.Bot = void 0;
 var Bot = /** @class */ (function () {
     function Bot() {
         this.bot_type_id = "1";
@@ -79,9 +79,26 @@ var Key = /** @class */ (function () {
     return Key;
 }());
 exports.Key = Key;
+var SignalingType = /** @class */ (function () {
+    function SignalingType(regex, coin1, coin2, direction, leverage, enterPriceStart, enterPriceEnd, takeProfitStart, takeProfitEnd, stop, longTerm) {
+        this.regex = regex;
+        this.coin1 = coin1;
+        this.coin2 = coin2;
+        this.direction = direction;
+        this.leverage = leverage;
+        this.enterPriceStart = enterPriceStart;
+        this.enterPriceEnd = enterPriceEnd;
+        this.takeProfitStart = takeProfitStart;
+        this.takeProfitEnd = takeProfitEnd;
+        this.stopPrice = stop;
+        this.longTerm = longTerm;
+    }
+    return SignalingType;
+}());
+exports.SignalingType = SignalingType;
 var Signaling = /** @class */ (function () {
     function Signaling() {
-        this.lervrage = 1;
+        this.lervrage = "1";
         this.enter = [];
         this.takeProfits = [];
         this.date = new Date();
@@ -102,14 +119,14 @@ var Signaling = /** @class */ (function () {
     });
     Object.defineProperty(Signaling.prototype, "stopPercent", {
         get: function () {
-            return Math.abs(diffInPrecents(this.eep, this.stop)) * this.lervrage;
+            return Math.abs(diffInPrecents(this.eep, this.stop));
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Signaling.prototype, "profitercent", {
         get: function () {
-            return Math.abs(diffInPrecents(this.takeProfits[0], this.eep)) * this.lervrage;
+            return Math.abs(diffInPrecents(this.takeProfits[0], this.eep));
         },
         enumerable: false,
         configurable: true

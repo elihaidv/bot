@@ -48,15 +48,20 @@ var DAL = /** @class */ (function () {
         this.page = 0;
         this.awaiter = false;
         this.saveInBucket = function () {
-            var cloneSteps = _this.steps.slice();
-            _this.steps = [];
-            new storage_1.Storage()
-                .bucket('simulations-tradingbot')
-                .file("simulation" + process.argv[3] + "/" + _this.page + ".csv")
-                .save(cloneSteps
-                .map(function (s) { return s.join(','); })
-                .join('\n'), { resumable: false })
-                .catch(console.log);
+            try {
+                var cloneSteps = _this.steps.slice();
+                _this.steps = [];
+                new storage_1.Storage()
+                    .bucket('simulations-tradingbot')
+                    .file("simulation" + process.argv[3] + "/" + _this.page + ".csv")
+                    .save(cloneSteps
+                    .map(function (s) { return s.join(','); })
+                    .join('\n'), { resumable: false })
+                    .catch(console.log);
+            }
+            catch (e) {
+                console.log(e);
+            }
         };
     }
     DAL.prototype.init = function (dataManager, simulationId) {

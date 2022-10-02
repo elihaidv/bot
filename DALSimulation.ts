@@ -21,7 +21,7 @@ export class DAL {
 
     async logStep(step) {
         if (this.isQuiet) return
-        
+
         step.time = this.dataManager.chart[this.dataManager.time].time
         const stepArr = [step.time, step.type, step.side, step.price, step.quantity, step.low, step.high, step.balanceSecond, step.positionSize, step.positionPnl, step.profit, step.balanceFirst, step.priority]
 
@@ -33,18 +33,18 @@ export class DAL {
             this.saveInBucket()
             this.awaiter = true
             await this.updateProgress("running")
-          
+
         }
 
     }
 
-     updateProgress(status) {
+    updateProgress(status) {
         const data = JSON.stringify({
-                profit: Number((this.dataManager.profit / 100).toPrecision(2)) + "%",
-                maxPage: this.page - 1,
-                progress: status == "finished" ? 100 : ((this.dataManager.time / this.dataManager.chart.length) * 100),
-                status: status
-            })
+            profit: Number((this.dataManager.profit / 100).toPrecision(2)) + "%",
+            maxPage: this.page - 1,
+            progress: status == "finished" ? 100 : ((this.dataManager.time / this.dataManager.chart.length) * 100),
+            status: status
+        })
         console.log(data)
 
         return fetch("https://itamars.live/api/simulations/" + this.simulationId, {
@@ -57,9 +57,9 @@ export class DAL {
             }
 
         }).then(r => r.text())
-        .then(console.log)
-        .catch(console.log)
-     }
+            .then(console.log)
+            .catch(console.log)
+    }
 
     get isQuiet() {
         return process.argv[6] == 'quiet'
@@ -68,7 +68,7 @@ export class DAL {
     async endTest() {
 
         if (this.isQuiet) return
-        
+
 
         this.page++
         await this.updateProgress("finished")
@@ -77,16 +77,20 @@ export class DAL {
 
     }
 
-    saveInBucket =  () => {
-        const cloneSteps = this.steps.slice()
-        this.steps = []
-        new Storage()
-            .bucket('simulations-tradingbot')
-            .file(`simulation${process.argv[3]}/${this.page}.csv`)
-            .save(cloneSteps
-                .map(s => s.join(','))
-                .join('\n'),{resumable: false})
+    saveInBucket = () => {
+        try {
+            const cloneSteps = this.steps.slice()
+            this.steps = []
+            new Storage()
+                .bucket('simulations-tradingbot')
+                .file(`simulation${process.argv[3]}/${this.page}.csv`)
+                .save(cloneSteps
+                    .map(s => s.join(','))
+                    .join('\n'), { resumable: false })
                 .catch(console.log);
+        } catch (e) {
+            console.log(e)
         }
-    
+    }
+
 }

@@ -238,7 +238,6 @@ var FutureTrader = /** @class */ (function (_super) {
                             price = this.positionEntry * this.add(1, this.bot.take_profit);
                         }
                         console.log("PNL: " + this.currentPnl);
-                        price = this.sub(price, this.currentPnl / amount);
                         if (!(this.standingBuy && this.bot.sellAdded && this.standingBuy.executedQty < this.positionAmount)) return [3 /*break*/, 2];
                         return [4 /*yield*/, this.placeSellFromBuy(this.standingBuy, price)];
                     case 1:

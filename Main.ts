@@ -17,6 +17,9 @@ var bodyParser = require('body-parser')
 var https = require('https');
 var http = require('http');
 var fs = require('fs');
+import { TelegramClient } from "telegram";
+import { StringSession } from "telegram/sessions";
+import { NewMessage } from "telegram/events";
 
 
 let exchangeInfo, futuresExchangeInfo
@@ -128,30 +131,50 @@ async function initBots(botsResults) {
   bots = newBots
 }
 
-function createServer() {
+async function createServer() {
 
 
-  const app = express()
-  app.use(bodyParser.urlencoded({ extended: false }))
+  const apiId = 708720;
+  const apiHash = "1e6f98056d5a7f5c6508b1a38478eb54";
+  const stringSession = new StringSession("1BAAOMTQ5LjE1NC4xNjcuOTEAUHIwmGyneJ1D1vODLBkJrLEI5uUPZ1W44dIsC/BY4d3vevWJXuaxQSgPZ6qpIqRUNx24dZEqEoS0oXDqDul7lVs2D89H7FYjUQgG/w9gLNP/BZmi5e3w4m3AGRI98o5SmDe8iO0LTIph8DwRfLowvChTksrhLeMUyBTgoriOFTnECbeptxDWhWuspFdHX6wEjKcRw7ce08atTH427f1a53MjZqZnvTPcSX5BZcecoWcHu5HqjVG40xsVzMSJC+I7uYL+CIhOvquH+o956Vb78qhTWQeBz0k8pwj0qLXLMtGPkoocEDLcr/DYEK06syUlb3x+IPsPW5d2q9PTsORJVsA="); // fill this later with the value from session.save()
+  const client = new TelegramClient(stringSession, apiId, apiHash, {
+    connectionRetries: 5,
+  });
 
-  app.use(bodyParser.json())
+  await client.start({
+    
+    phoneNumber: async () => "",
+    password: async () => "",
+    phoneCode: async () => "",
+    onError: (err) => console.log(err),
+  });
+  await client.addEventHandler( (m) => {
+    SignaligProcessor.instance.proccessTextSignal(m.message.text)
 
-  app.post('/', (req, res) => {
-      SignaligProcessor.instance.proccessTextSignal(req.body.message)
+    console.log(JSON.stringify(m.message.text))
+   
+}, new NewMessage({}));
+  // const app = express()
+  // app.use(bodyParser.urlencoded({ extended: false }))
 
-      console.log(JSON.stringify(req.body))
-      res.send('Hello World!')
-  })
+  // app.use(bodyParser.json())
 
-  http.createServer(app).listen(8081);
+  // app.post('/', (req, res) => {
+  //     SignaligProcessor.instance.proccessTextSignal(req.body.message)
 
-  if (fs.existsSync('/etc/letsencrypt/live/itamars.live/fullchain.pem')) {
-      var options = {
+  //     console.log(JSON.stringify(req.body))
+  //     res.send('Hello World!')
+  // })
 
-          cert: fs.readFileSync('/etc/letsencrypt/live/itamars.live/fullchain.pem'),
-          key: fs.readFileSync('/etc/letsencrypt/live/itamars.live/privkey.pem')
-      };
-      https.createServer(options, app).listen(8443);
-  }
-  console.log("Server started")
+  // http.createServer(app).listen(8081);
+
+  // if (fs.existsSync('/etc/letsencrypt/live/itamars.live/fullchain.pem')) {
+  //     var options = {
+
+  //         cert: fs.readFileSync('/etc/letsencrypt/live/itamars.live/fullchain.pem'),
+  //         key: fs.readFileSync('/etc/letsencrypt/live/itamars.live/privkey.pem')
+  //     };
+  //     https.createServer(options, app).listen(8443);
+  // }
+  // console.log("Server started")
 }

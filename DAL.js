@@ -81,9 +81,9 @@ var DAL = /** @class */ (function () {
             });
         });
     };
-    DAL.prototype.removeSignaling = function (bot, signaling) {
-        this.dbo.collection('bot').updateOne({ _id: bot._id }, { $pull: { signalings: { _id: signaling._id } } });
-        bot.signalings = bot.signalings.filter(function (s) { return s._id != signaling._id; });
+    DAL.prototype.removeSignaling = function (bot, signalingID) {
+        this.dbo.collection('bot').updateOne({ _id: bot._id }, { $pull: { signalings: { _id: signalingID } } });
+        bot.signalings = bot.signalings.filter(function (s) { return s._id != signalingID; });
     };
     DAL.instance = new DAL();
     return DAL;

@@ -51,6 +51,7 @@ var FutureDataManager = /** @class */ (function (_super) {
             pos.positionEntry = ((pos.positionEntry * Math.abs(pos.positionAmount)) + (order.executedQty * order.price)) / (Math.abs(pos.positionAmount) + order.executedQty);
             pos.positionAmount += qu;
         }
+        order.pnl = gain;
         gain -= (order.avgPrice * order.executedQty * 0.0002);
         this.bot.binance.balance[this.bot.coin2] += gain;
         this.profit += gain;
@@ -70,7 +71,6 @@ var FutureDataManager = /** @class */ (function (_super) {
             balanceFirst: (this.bot.binance.balance[this.bot.coin1]).toFixed(2),
             priority: 1
         });
-        order.pnl = gain;
         order.status = 'FILLED';
         this.bot.binance.orders[this.PAIR].push(order);
     };

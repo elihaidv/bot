@@ -41,6 +41,8 @@ export class FutureDataManager extends DataManager {
             pos.positionAmount += qu;
         }
 
+        order.pnl = gain
+        
         gain -= (order.avgPrice * order.executedQty * 0.0002)
         this.bot.binance!.balance[this.bot.coin2] += gain
         this.profit += gain
@@ -67,7 +69,6 @@ export class FutureDataManager extends DataManager {
         })
 
 
-        order.pnl = gain
         order.status = 'FILLED'
         this.bot.binance!.orders[this.PAIR].push(order)
     }

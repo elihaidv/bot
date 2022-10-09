@@ -34,8 +34,8 @@ export class DAL {
         bot.signalings.push(signaling)
       }
 
-    removeSignaling(bot: Bot, signaling: Signaling) {
-        this.dbo.collection('bot').updateOne({ _id: bot._id }, { $pull: { signalings: { _id: signaling._id } } })
-        bot.signalings = bot.signalings.filter(s => s._id != signaling._id)    
+    removeSignaling(bot: Bot, signalingID:String) {
+        this.dbo.collection('bot').updateOne({ _id: bot._id }, { $pull: { signalings: { _id: signalingID} } })
+        bot.signalings = bot.signalings.filter(s => s._id != signalingID)    
     }
 }

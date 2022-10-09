@@ -77,11 +77,11 @@ export class DAL {
 
     }
 
-    saveInBucket = () => {
+    saveInBucket = async () => {
         try {
             const cloneSteps = this.steps.slice()
             this.steps = []
-            new Storage()
+            await new Storage()
                 .bucket('simulations-tradingbot')
                 .file(`simulation${process.argv[3]}/${this.page}.csv`)
                 .save(cloneSteps

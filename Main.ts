@@ -22,7 +22,7 @@ import { StringSession } from "telegram/sessions";
 import { NewMessage } from "telegram/events";
 
 
-let exchangeInfo, futuresExchangeInfo
+let exchangeInfo, futuresExchangeInfo, first = true
 
 let bots = new Array<Bot>()
 
@@ -61,6 +61,15 @@ async function execute() {
 
     if (exchangeInfo && futuresExchangeInfo) {
 
+      if (first) {
+        bots.filter(b => b.bot_type_id == "7").forEach(b =>
+          b.signalings.forEach(s =>
+            b.binance?.orders.changed.push(s.coin1 + s.coin2 + b.positionSide())
+          )
+        );
+        first = false
+      }
+
 
       await Promise.all(outdatedBots.map((b) => cancelOrders(b)));
 
@@ -81,12 +90,15 @@ async function execute() {
           case "6":
             return new Periodically(b, exchangeInfo).place()
           case "7":
-            return new SignalingPlacer(b, exchangeInfo).place()
+            return new SignalingPlacer(b, futuresExchangeInfo).place()
 
 
         }
       }))
     }
+
+    
+
 
   } catch (e) {
     console.log(e)
@@ -142,39 +154,16 @@ async function createServer() {
   });
 
   await client.start({
-    
+
     phoneNumber: async () => "",
     password: async () => "",
     phoneCode: async () => "",
     onError: (err) => console.log(err),
   });
-  await client.addEventHandler( (m) => {
+  await client.addEventHandler((m) => {
     SignaligProcessor.instance.proccessTextSignal(m.message.text)
 
-    console.log(JSON.stringify(m.message.text))
-   
-}, new NewMessage({}));
-  // const app = express()
-  // app.use(bodyParser.urlencoded({ extended: false }))
+    // console.log(JSON.stringify(m.message.text))
 
-  // app.use(bodyParser.json())
-
-  // app.post('/', (req, res) => {
-  //     SignaligProcessor.instance.proccessTextSignal(req.body.message)
-
-  //     console.log(JSON.stringify(req.body))
-  //     res.send('Hello World!')
-  // })
-
-  // http.createServer(app).listen(8081);
-
-  // if (fs.existsSync('/etc/letsencrypt/live/itamars.live/fullchain.pem')) {
-  //     var options = {
-
-  //         cert: fs.readFileSync('/etc/letsencrypt/live/itamars.live/fullchain.pem'),
-  //         key: fs.readFileSync('/etc/letsencrypt/live/itamars.live/privkey.pem')
-  //     };
-  //     https.createServer(options, app).listen(8443);
-  // }
-  // console.log("Server started")
+  }, new NewMessage({}));
 }

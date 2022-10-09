@@ -7,8 +7,8 @@ const cancelOrders = require('../CancelOrders');
 
 const SIGNALING_TYPES = [
   // new SignalingType('⚡️⚡️ #(.*)\/(.*) ⚡️⚡️\nExchanges: Binance (.*)\nSignal Type: Regular \\((.*)\\)\nLeverage: Cross \\((.*)X\\)\n+Deposit only (.*)\%\n\nEntry Targets:\n((?:\\d\\).*\n)+)\nTake-Profit Targets:\n((?:\\d\\).*\n)+)\nStop Targets:\n((?:\\d\\).*\n)+)', new Map([]),
-  new SignalingType('📦#(.*)\/(.*)-(.*)🔦(.*)IDEA(.*)🪤Maxleveragerecommended:(.*)✓ENTRY:-(.*)-(.*)💵Target1:(.*)💵Target2:(.*)💵Target3:(.*)💵Target4:(.*)💵Target5:(.*)💵Target6:(.*)🪄Stop\\|Loss:(.*)',1,2,4,6,7,8,9,14,15,"Bullish"),
-  new SignalingType(`📈(.*)Signal#(.*)30m\\|(.*)Entryprice:(.*)-(.*)-⏳-Signaldetails:Target:(.*)Target:(.*)Target:(.*)Target:(.*)❌Stop-Loss:(.*)🧲Leverage:(.*)\\[(.*)\\]@USABitcoinArmy`,2,2,1,11,4,5,6,9,10,"Long"),
+  new SignalingType('📦#(.*)\/(.*)-(.*)🔦(.*)IDEA(.*)🪤Maxleveragerecommended:(.*)✓ENTRY:-?(.*)-(.*)💵Target1:(.*)💵Target2:(.*)💵Target3:(.*)💵Target4:(.*)💵Target5:(.*)💵Target6:(.*)🪄Stop\\|Loss:(.*)', 1, 2, 4, 6, 7, 8, 9, 14, 15, "Bullish"),
+  new SignalingType(`📈(.*)Signal#(.*)30m\\|(.*)Entryprice:(.*)-(.*)-⏳-Signaldetails:Target:(.*)Target:(.*)Target:(.*)Target:(.*)❌Stop-Loss:(.*)🧲Leverage:(.*)\\[(.*)\\]@USABitcoinArmy`, 2, 2, 1, 11, 4, 5, 6, 9, 10, "Long"),
 
 ]
 
@@ -32,11 +32,11 @@ export class SignaligProcessor {
         s.coin1 = match[type.coin1]
         s.coin2 = type.coin1 == type.coin2 ? "" : match[type.coin2]
         s.lervrage = match[type.leverage]
-        s.enter =  match.slice(type.enterPriceStart, type.enterPriceEnd + 1).map(e => Number(e))
+        s.enter = match.slice(type.enterPriceStart, type.enterPriceEnd + 1).map(e => Number(e))
         s.takeProfits = match.slice(type.takeProfitStart, type.takeProfitEnd + 1).map(e => Number(e))
         s.stop = Number(match[type.stopPrice])
         s.direction = match[type.direction] == type.longTerm ? "LONG" : "SHORT"
-        
+
         console.log(s)
         this.placeOrders(s)
       }
@@ -47,7 +47,7 @@ export class SignaligProcessor {
 
     for (let bot of this.bots) {
       await DAL.instance.addSignaling(bot, signaling)
-      bot.binance?.orders.changed.push(signaling.coin1 + signaling.coin2 + bot.positionSide()) 
+      bot.binance?.orders.changed.push(signaling.coin1 + signaling.coin2 + bot.positionSide())
     }
   }
 
@@ -68,93 +68,93 @@ export class SignalingPlacer extends FutureTrader {
   async place() {
     for (let signaling of this.bot.signalings ?? []) {
       this.PAIR = signaling.coin1 + signaling.coin2
-      if (!this.futureSockets.prices[this.PAIR])continue
+      if (!this.futureSockets.prices[this.PAIR]) continue
       if (!this.bot.binance!.orders.changed.includes(this.PAIR + this.bot.positionSide())) continue
 
-      this.bot.binance!.orders.changed = this.bot.binance!.orders.changed.filter(x => x != this.PAIR)
-      
+      this.bot.binance!.orders.changed = this.bot.binance!.orders.changed.filter(x => x != this.PAIR + this.bot.positionSide())
+
       this.bot.direction = signaling.direction != "LONG"
       this.orders = this.bot.binance?.orders[this.PAIR] ?? []
 
       this.exchangeInfo = this.allExchangeInfo.symbols.find(s => s.symbol == this.PAIR)
       this.filters = this.exchangeInfo.filters.reduce((a, b) => { a[b.filterType] = b; return a }, {})
-      cancelOrders(this.bot, this.PAIR)
+      await cancelOrders(this.bot, this.PAIR)
       this.buildHistory()
       this.calculatePrice()
-      
+
       if (new Date().getTime() - signaling.date.getTime() > 1000 * 60 * 60 * 24 * 3) {
-        await this.closePosition(signaling)
+        await this.closePosition(signaling._id)
       } else {
         await this.placeOrder(signaling)
       }
     }
 
-  
-  }
-  
-  async closePosition(signaling: Signaling) {
-    DAL.instance.removeSignaling(this.bot, signaling)
 
-    if (this.positionAmount != 0){
+  }
+
+  async closePosition(signalingId: String) {
+    DAL.instance.removeSignaling(this.bot, signalingId)
+
+    if (this.positionAmount != 0) {
       await this.place_order(
-        this.PAIR,0,0,
+        this.PAIR, 0, 0,
         this.bot.direction,
         {
           stopPrice: this.roundPrice(this.futureSockets.prices[this.PAIR][0] * (this.bot.direction ? 1.001 : 0.999)),
           type: "STOP_MARKET",
-          closePosition : true
+          closePosition: true
         })
     }
   }
 
   async placeOrder(signaling: Signaling) {
-    if (!this.myLastOrder?.clientOrderId.includes(signaling._id) ){
-      await this.closePosition(signaling)
-    } else if(this.myLastOrder?.clientOrderId.includes("LAST")){
-      DAL.instance.removeSignaling(this.bot, signaling)
+    if (this.myLastOrder && !this.myLastOrder?.clientOrderId.includes(signaling._id)) {
+      await this.closePosition(this.myLastOrder.clientOrderId.split("_")[1])
+    } else if (this.myLastOrder?.clientOrderId.includes("LAST")) {
+      DAL.instance.removeSignaling(this.bot, signaling._id)
       this.bot.lastOrder = Bot.STABLE
       return
     }
 
-    if(this.isFirst()){
+    if (this.isFirst()) {
 
       const price = this.roundPrice(this.minFunc(signaling.enter[0], this.futureSockets.prices[this.PAIR][0]))
       const qu = 11 / price
 
-      this.place_order(
-        this.PAIR, qu,price,!this.bot.direction, {
-          newClientOrderId: "FIRST" + signaling._id
-        })
+      await this.place_order(
+        this.PAIR, qu, price, !this.bot.direction, {
+        newClientOrderId: "FIRST_" + signaling._id
+      })
     } else {
 
-      if (this.myLastOrder?.side == this.buySide()){
+      if (this.myLastOrder?.side == this.buySide()) {
 
         const price = this.roundPrice(signaling.enter[1])
         const qu = 11 / price
 
-        this.place_order(
-          this.PAIR, qu,price,!this.bot.direction, {
-          })
+        await this.place_order(
+          this.PAIR, qu, price, !this.bot.direction, {
+        })
 
-        this.place_order(
-          this.PAIR,0,0,
+        await this.place_order(
+          this.PAIR, 0, 0,
           this.bot.direction, {
-            type: "TAKE_PROFIT_MARKET",
-            closePosition: true,
-            stopPrice: signaling.takeProfits[0],
-            newClientOrderId: "LASTTP" + signaling._id
-          })
+          type: "TAKE_PROFIT_MARKET",
+          closePosition: true,
+          stopPrice: signaling.takeProfits[0],
+          newClientOrderId: "LASTTP_" + signaling._id
+        })
 
-        this.place_order(
-          this.PAIR,0,0,
+        await this.place_order(
+          this.PAIR, 0, 0,
           this.bot.direction, {
-            type: "STOP_MARKET",
-            closePosition: true,
-            stopPrice: signaling.stop,
-            newClientOrderId: "LASTSL" + signaling._id
-          })
+          type: "STOP_MARKET",
+          closePosition: true,
+          stopPrice: signaling.stop,
+          newClientOrderId: "LASTSL_" + signaling._id
+        })
       }
-      
+
     }
     this.bot.lastOrder = Bot.STABLE
   }

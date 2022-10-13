@@ -128,13 +128,21 @@ export class SignalingPlacer extends FutureTrader {
     } else {
 
       if (this.myLastOrder?.side == this.buySide()) {
+        const match = this.myLastOrder!.clientOrderId.match(/ENTER(\d)/)
+        const enterNum = parseInt(match?.length ? match[1] : "1")
 
-        const price = this.roundPrice(signaling.enter[1])
-        const qu = 11 / price
 
-        await this.place_order(
-          this.PAIR, qu, price, !this.bot.direction, {
-        })
+        if (enterNum < 4) {
+
+          const step = (signaling.enter[0] - signaling.enter[1]) / 4
+          const price = this.roundPrice(signaling.enter[0] - step * enterNum)
+          const qu = 11 / price
+
+          await this.place_order(
+            this.PAIR, qu, price, !this.bot.direction, {
+            newClientOrderId: `ENTER${enterNum + 1}_${signaling._id}`
+          })
+        }
 
         await this.place_order(
           this.PAIR, 0, 0,

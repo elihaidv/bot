@@ -51,6 +51,7 @@ export class Bot {
   dynamicDirection: boolean = false;
   user_id: any;
   signalings: Array<Signaling> = [];
+  avoidCancel: boolean = false;
 
   id(): String { return this._id.toString() }
 

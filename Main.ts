@@ -20,6 +20,7 @@ var fs = require('fs');
 import { TelegramClient } from "telegram";
 import { StringSession } from "telegram/sessions";
 import { NewMessage } from "telegram/events";
+import { OneStep } from './Workers/OneStep';
 
 
 let exchangeInfo, futuresExchangeInfo, first = true
@@ -71,7 +72,7 @@ async function execute() {
       }
 
 
-      await Promise.all(outdatedBots.map((b) => cancelOrders(b)));
+      await Promise.all(outdatedBots.filter((b) => !b.avoidCancel).map((b) => cancelOrders(b)));
 
       await Sockets.getInstance().timeout(1000)
 
@@ -91,6 +92,8 @@ async function execute() {
             return new Periodically(b, exchangeInfo).place()
           case "7":
             return new SignalingPlacer(b, futuresExchangeInfo).place()
+          case "8":
+            return new OneStep(b, futuresExchangeInfo).place()
 
 
         }

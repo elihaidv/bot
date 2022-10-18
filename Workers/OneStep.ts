@@ -32,12 +32,11 @@ export class OneStep extends FutureTrader {
                 reduceOnly: true
             })
 
-            await this.place_order(this.PAIR, buyQu,
-                buyPrice * this.sub(1, this.bot.stop_loose),
+            await this.place_order(this.PAIR, 0,0,
                 this.bot.direction, {
-                type: "STOP",
-                stopPrice: this.roundPrice(buyPrice),
-                reduceOnly: true
+                type: "STOP_MARKET",
+                stopPrice: this.roundPrice(buyPrice * this.sub(1, this.bot.stop_loose)),
+                closePosition: true
             })
         }
 

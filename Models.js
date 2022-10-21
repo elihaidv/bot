@@ -18,6 +18,7 @@ var Bot = /** @class */ (function () {
         this.lastStopPrice = 0;
         this.dynamicDirection = false;
         this.signalings = [];
+        this.avoidCancel = false;
     }
     Bot.prototype.id = function () { return this._id.toString(); };
     Bot.prototype.positionSide = function () {

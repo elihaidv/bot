@@ -73,6 +73,7 @@ var FutureDataManager = /** @class */ (function (_super) {
         });
         order.status = 'FILLED';
         this.bot.binance.orders[this.PAIR].push(order);
+        this.openOrders = this.openOrders.filter(function (o) { return o.orderId != order.orderId; });
     };
     FutureDataManager.prototype.closePosition = function (price) {
         this.orderexecute(Object.assign(new Models_1.Order(), {

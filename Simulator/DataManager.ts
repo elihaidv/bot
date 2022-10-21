@@ -170,6 +170,7 @@ export class DataManager {
             priority: 1
         })
 
+
     }
 
     closePosition(price) {
@@ -225,7 +226,9 @@ export class DataManager {
         return this.fullChart.map(x => x.close).slice(Math.max(startTime - 7500, 0), startTime).reduce((a, b) => parseFloat(a) + parseFloat(b)) / Math.min(startTime, 7500)
     }
     simulateState() {
-        this.openOrders = []
+        // if (!this.bot.avoidCancel){
+            this.openOrders = []
+        // }
 
 
         this.sockets.orderBooks[this.PAIR] = {

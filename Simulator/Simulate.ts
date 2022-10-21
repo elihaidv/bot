@@ -10,6 +10,7 @@ import { exit } from "process";
 import { DAL } from "../DALSimulation";
 import { Periodically } from "../Workers/Periodically";
 import fetch from 'node-fetch';
+import { OneStep } from "../Workers/OneStep";
 
 
 const Binance = require('node-binance-api');
@@ -143,12 +144,18 @@ async function place(bot: Bot) {
       worker = new DirectionTrader(bot, dataManager.exchangeInfo)
       break
     case "6":
-    default:
       worker = new Periodically(bot, dataManager.exchangeInfo)
       break
+    case "7":
+    default: {
 
+      worker = new OneStep(bot, dataManager.exchangeInfo);
+     
+      // (worker as OneStep).cancelOrders = async () => {dataManager.openOrders = []}
+      break
+
+    }
   }
-
   worker.getAction = dataManager.openOrder
   await worker.place();
 }

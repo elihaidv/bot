@@ -8,9 +8,22 @@ export class OneStep extends FutureTrader {
 
     async placeBuy() {
         if (this.positionAmount != 0) {
+             await this.place_order(this.PAIR, 0,0,
+                this.bot.direction, {
+                type: "TAKE_PROFIT_MARKET",
+                stopPrice: this.roundPrice(this.positionEntry * this.add(1, this.bot.take_profit)),
+                closePosition: true
+            })
+
+            await this.place_order(this.PAIR, 0,0,
+                this.bot.direction, {
+                type: "STOP_MARKET",
+                stopPrice: this.roundPrice(this.positionEntry * this.sub(1, this.bot.stop_loose)),
+                closePosition: true
+            })
             this.bot.lastOrder = Bot.STABLE
         } else {
-            cancelOrders(this.bot)
+            // await this.cancelOrders()
 
             let buyQu, buyPrice, maxBuyPrice = this.futureSockets.ticker(this.PAIR)?.bestBid as unknown as number
             let balanceLeveraged = this.balance[this.SECOND] * this.bot.leverage;
@@ -24,25 +37,16 @@ export class OneStep extends FutureTrader {
 
             await this.place_order(this.SECOND, buyQu, buyPrice, !this.bot.direction, {})
 
-            await this.place_order(this.PAIR, buyQu,
-                buyPrice * this.add(1, this.bot.take_profit),
-                this.bot.direction, {
-                type: "STOP",
-                stopPrice: this.roundPrice(buyPrice),
-                reduceOnly: true
-            })
-
-            await this.place_order(this.PAIR, 0,0,
-                this.bot.direction, {
-                type: "STOP_MARKET",
-                stopPrice: this.roundPrice(buyPrice * this.sub(1, this.bot.stop_loose)),
-                closePosition: true
-            })
+           
         }
 
 
     }
 
     async placeSell() {
+    }
+
+    async cancelOrders() {
+        await cancelOrders(this.bot)
     }
 }

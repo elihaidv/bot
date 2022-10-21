@@ -241,7 +241,9 @@ var DataManager = /** @class */ (function () {
         return this.fullChart.map(function (x) { return x.close; }).slice(Math.max(startTime - 7500, 0), startTime).reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }) / Math.min(startTime, 7500);
     };
     DataManager.prototype.simulateState = function () {
+        // if (!this.bot.avoidCancel){
         this.openOrders = [];
+        // }
         this.sockets.orderBooks[this.PAIR] = {
             "asks": {},
             "bids": {},

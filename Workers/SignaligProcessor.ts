@@ -126,6 +126,7 @@ export class SignalingPlacer extends FutureTrader {
         newClientOrderId: "FIRST_" + signaling._id
       })
     } else {
+      let exitNum = 0
 
       if (this.myLastOrder?.side == this.buySide()) {
         const match = this.myLastOrder!.clientOrderId.match(/ENTER(\d)/)
@@ -144,25 +145,52 @@ export class SignalingPlacer extends FutureTrader {
           })
         }
 
-        await this.place_order(
-          this.PAIR, 0, 0,
-          this.bot.direction, {
-          type: "TAKE_PROFIT_MARKET",
-          closePosition: true,
-          stopPrice: signaling.takeProfits[0],
-          newClientOrderId: "LASTTP_" + signaling._id
-        })
+        const sellPrice = signaling.takeProfits[0]
+        const sellQu = this.positionAmount / 5 
 
         await this.place_order(
-          this.PAIR, 0, 0,
-          this.bot.direction, {
-          type: "STOP_MARKET",
-          closePosition: true,
-          stopPrice: signaling.stop,
-          newClientOrderId: "LASTSL_" + signaling._id
+          this.PAIR, sellQu, sellPrice, this.bot.direction, {
+          newClientOrderId: `EXIT1_${signaling._id}`,
+          reduceOnly: true
         })
+
+      } else if (this.myLastOrder?.side == this.sellSide()) {
+
+        const match = this.myLastOrder!.clientOrderId.match(/EXIT(\d)/)
+        exitNum = parseInt(match?.length ? match[1] : "1")
+
+
+        if (exitNum < 6) {
+
+          const price = signaling.takeProfits[exitNum]
+          const qu = this.positionAmount / 5
+
+          await this.place_order(
+            this.PAIR, qu, price, !this.bot.direction, {
+            newClientOrderId: `EXIT${exitNum + 1}_${signaling._id}`,
+            reduceOnly: true
+          })
+        }
       }
 
+
+      await this.place_order(
+        this.PAIR, 0, 0,
+        this.bot.direction, {
+        type: "TAKE_PROFIT_MARKET",
+        closePosition: true,
+        stopPrice: signaling.takeProfits[exitNum + 1],
+        newClientOrderId: "LASTTP_" + signaling._id
+      })
+
+      await this.place_order(
+        this.PAIR, 0, 0,
+        this.bot.direction, {
+        type: "STOP_MARKET",
+        closePosition: true,
+        stopPrice: signaling.stop,
+        newClientOrderId: "LASTSL_" + signaling._id
+      })
     }
     this.bot.lastOrder = Bot.STABLE
   }

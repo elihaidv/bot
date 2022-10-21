@@ -71,6 +71,8 @@ export class FutureDataManager extends DataManager {
 
         order.status = 'FILLED'
         this.bot.binance!.orders[this.PAIR].push(order)
+
+        this.openOrders = this.openOrders.filter(o => o.orderId != order.orderId)
     }
 
     closePosition(price) {

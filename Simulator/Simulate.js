@@ -47,6 +47,7 @@ var process_1 = require("process");
 var DALSimulation_1 = require("../DALSimulation");
 var Periodically_1 = require("../Workers/Periodically");
 var node_fetch_1 = require("node-fetch");
+var OneStep_1 = require("../Workers/OneStep");
 var Binance = require('node-binance-api');
 var _a = require("mongodb"), MongoClient = _a.MongoClient, ObjectID = _a.ObjectID;
 var id = process.argv[3] || "61da8b2036520f0737301999";
@@ -192,9 +193,14 @@ function place(bot) {
                             worker = new DirectionTrader_1.DirectionTrader(bot, dataManager.exchangeInfo);
                             break;
                         case "6":
-                        default:
                             worker = new Periodically_1.Periodically(bot, dataManager.exchangeInfo);
                             break;
+                        case "7":
+                        default: {
+                            worker = new OneStep_1.OneStep(bot, dataManager.exchangeInfo);
+                            // (worker as OneStep).cancelOrders = async () => {dataManager.openOrders = []}
+                            break;
+                        }
                     }
                     worker.getAction = dataManager.openOrder;
                     return [4 /*yield*/, worker.place()];

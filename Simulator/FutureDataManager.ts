@@ -26,6 +26,7 @@ export class FutureDataManager extends DataManager {
 
 
         if (order.closePosition) {
+            order.executedQty = pos.positionAmount
             gain = (order.price - pos.positionEntry) * pos.positionAmount
             pos.positionAmount = 0
             pos.positionEntry = 0
@@ -48,7 +49,7 @@ export class FutureDataManager extends DataManager {
         this.profit += gain
 
         console.log("Psition size: " + pos.positionAmount)
-        console.log("Profit: " + (this.profit / 100).toFixed(0) + "% Date: " + new Date(parseInt(this.chart[this.time].time)))
+        console.log("Profit: " + (this.profit / 100).toFixed(2) + "% Date: " + new Date(parseInt(this.chart[this.time].time)))
 
 
 

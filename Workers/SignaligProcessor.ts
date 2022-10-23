@@ -146,7 +146,7 @@ export class SignalingPlacer extends FutureTrader {
         }
 
         const sellPrice = signaling.takeProfits[0]
-        const sellQu = this.positionAmount / 5 
+        const sellQu = this.positionAmount / 3 
 
         await this.place_order(
           this.PAIR, sellQu, sellPrice, this.bot.direction, {
@@ -163,10 +163,10 @@ export class SignalingPlacer extends FutureTrader {
         if (exitNum < 6) {
 
           const price = signaling.takeProfits[exitNum]
-          const qu = this.positionAmount / 5
+          const qu = this.positionAmount / 3
 
           await this.place_order(
-            this.PAIR, qu, price, !this.bot.direction, {
+            this.PAIR, qu, price, this.bot.direction, {
             newClientOrderId: `EXIT${exitNum + 1}_${signaling._id}`,
             reduceOnly: true
           })

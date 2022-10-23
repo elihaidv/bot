@@ -68,14 +68,14 @@ export class FutureTrader extends BasePlacer {
     }
 
     calculateDirection() {
-        if (this.bot.direction == 2) {
+        if (this.bot.direction > 1) {
             this.bot.dynamicDirection = true
         }
         if (this.bot.dynamicDirection) {
             if (!this.positionAmount) {
                 const maxBuyPrice = this.futureSockets.ticker(this.PAIR)?.bestBid as unknown as number
                 const avgWeekPrice = this.futureSockets.averagePriceQuarter(this.PAIR)
-                this.setDirection(maxBuyPrice > avgWeekPrice)
+                this.setDirection(this.bot.direction == 2 ? maxBuyPrice > avgWeekPrice : maxBuyPrice < avgWeekPrice)
 
             } else {
                 this.setDirection(this.positionDirection)

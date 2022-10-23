@@ -39,10 +39,10 @@
 //         this.distanceTimestamp = new Date().getTime() - (this.bot.last_distance_minutes * 60 * 1000);
 
 //         if (this.myLastBuy) {
-//             this.myLastBuyPrice = this.myLastBuy.price
+//             let myLastBuyPrice = this.myLastBuy.price
 
 //             if (this.myLastBuy.time > this.distanceTimestamp && (!this.myLastSell || this.myLastSell.time < this.myLastBuy.time)) {
-//                 buyPrice = Math.min(buyPrice, this.myLastBuyPrice * (1 - this.bot.last_distance))
+//                 buyPrice = Math.min(buyPrice, myLastBuyPrice * (1 - this.bot.last_distance))
 //             }
 
 //             if (this.bot.last_buy_dist && this.myLastBuyPrice > 0) {

@@ -133,14 +133,14 @@ var FutureTrader = /** @class */ (function (_super) {
     };
     FutureTrader.prototype.calculateDirection = function () {
         var _a;
-        if (this.bot.direction == 2) {
+        if (this.bot.direction > 1) {
             this.bot.dynamicDirection = true;
         }
         if (this.bot.dynamicDirection) {
             if (!this.positionAmount) {
                 var maxBuyPrice = (_a = this.futureSockets.ticker(this.PAIR)) === null || _a === void 0 ? void 0 : _a.bestBid;
                 var avgWeekPrice = this.futureSockets.averagePriceQuarter(this.PAIR);
-                this.setDirection(maxBuyPrice > avgWeekPrice);
+                this.setDirection(this.bot.direction == 2 ? maxBuyPrice > avgWeekPrice : maxBuyPrice < avgWeekPrice);
             }
             else {
                 this.setDirection(this.positionDirection);

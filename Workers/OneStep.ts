@@ -31,17 +31,21 @@ export class OneStep extends FutureTrader {
     }
 
     async placeSell() {
+
+        let ticker = this.futureSockets.ticker(this.PAIR)
+        let minSell = (this.bot.direction ? ticker?.bestAsk : ticker?.bestBid) as unknown as number
+
         await this.place_order(this.PAIR, 0,0,
             this.bot.direction, {
             type: "TAKE_PROFIT_MARKET",
-            stopPrice: this.roundPrice(this.positionEntry * this.add(1, this.bot.take_profit)),
+            stopPrice: this.roundPrice(this.maxFunc(minSell, this.positionEntry * this.add(1, this.bot.take_profit))),
             closePosition: true
         })
 
         await this.place_order(this.PAIR, 0,0,
             this.bot.direction, {
             type: "STOP_MARKET",
-            stopPrice: this.roundPrice(this.positionEntry * this.sub(1, this.bot.stop_loose)),
+            stopPrice: this.roundPrice(this.minFunc(minSell,this.positionEntry * this.sub(1, this.bot.stop_loose))),
             closePosition: true
         })
         if (!this.error) {

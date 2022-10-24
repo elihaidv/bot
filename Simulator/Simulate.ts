@@ -37,8 +37,8 @@ async function run() {
   dataManager = bot.isFuture ? new FutureDataManager(bot) : new DataManager(bot);
 
   dataManager.setExchangeInfo(bot.isFuture ?
-    await Binance().futuresExchangeInfo() :
-    await Binance().exchangeInfo())
+    await Binance({'family': 4}).futuresExchangeInfo() :
+    await Binance({'family': 4}).exchangeInfo())
 
   await dataManager.fetchChart()
 

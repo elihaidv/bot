@@ -76,9 +76,6 @@ var OneStep = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.place_order(this.SECOND, buyQu, buyPrice, !this.bot.direction, {})];
                     case 1:
                         _b.sent();
-                        if (!this.error) {
-                            this.bot.lastOrder = Models_1.Bot.STABLE;
-                        }
                         _b.label = 2;
                     case 2: return [2 /*return*/];
                 }

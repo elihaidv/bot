@@ -68,11 +68,11 @@ function run() {
                     dataManager = bot.isFuture ? new FutureDataManager_1.FutureDataManager(bot) : new DataManager_1.DataManager(bot);
                     _b = (_a = dataManager).setExchangeInfo;
                     if (!bot.isFuture) return [3 /*break*/, 3];
-                    return [4 /*yield*/, Binance().futuresExchangeInfo()];
+                    return [4 /*yield*/, Binance({ 'family': 4 }).futuresExchangeInfo()];
                 case 2:
                     _c = _f.sent();
                     return [3 /*break*/, 5];
-                case 3: return [4 /*yield*/, Binance().exchangeInfo()];
+                case 3: return [4 /*yield*/, Binance({ 'family': 4 }).exchangeInfo()];
                 case 4:
                     _c = _f.sent();
                     _f.label = 5;

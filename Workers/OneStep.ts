@@ -22,9 +22,6 @@ export class OneStep extends FutureTrader {
 
             await this.place_order(this.SECOND, buyQu, buyPrice, !this.bot.direction, {})
 
-            if (!this.error) {
-                this.bot.lastOrder = Bot.STABLE
-            }
         }
 
 

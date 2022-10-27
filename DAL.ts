@@ -30,8 +30,8 @@ export class DAL {
 
 
     async addSignaling(bot: Bot, signaling:Signaling) {
-        await this.dbo.collection('bot').updateOne({ _id: bot._id }, { $push: { signalings: signaling } })
         bot.signalings.push(signaling)
+        await this.dbo.collection('bot').updateOne({ _id: bot._id }, { $push: { signalings: signaling } })
       }
 
     removeSignaling(bot: Bot, signalingID:String) {

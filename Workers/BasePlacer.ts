@@ -21,12 +21,14 @@ export abstract class BasePlacer {
 
 
     myLastOrder: Order | undefined
-    myLastBuy: Order | undefined
+    myLastStandingBuy: Order | undefined
     myLastBuyAvg;
     currentPnl = 0
     standingBuy: Order | undefined
     oldestStandingBuy: Order | undefined
 
+    lastBuy: Order | undefined
+    lastSell: Order | undefined
 
     sockets = Sockets.getInstance()
 
@@ -98,6 +100,7 @@ export abstract class BasePlacer {
 
             this.myLastOrder ||= order
             if (order.side == this.buySide()) {
+                this.lastBuy ||= order
 
                 if (!sellOrders.join("").includes(order.orderId)){
                     this.standingBuy ||= order
@@ -105,8 +108,9 @@ export abstract class BasePlacer {
                     buys.push(order)
                 }
             } else {
-                if (order.clientOrderId.includes("SELLbig") && !this.myLastBuy) {  
-                    this.myLastBuy = this.orders.find(x => x.orderId == order.clientOrderId.split("SELLbig")[1])
+                this.lastSell ||= order
+                if (order.clientOrderId.includes("SELLbig") && !this.myLastStandingBuy) {  
+                    this.myLastStandingBuy = this.orders.find(x => x.orderId == order.clientOrderId.split("SELLbig")[1])
                 }
                 sellOrders.push(order.clientOrderId);
             }

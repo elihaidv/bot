@@ -48,8 +48,8 @@ export class WeightAvg extends BasePlacer {
         if (this.isFirst || !this.myLastOrder) {
             params.newClientOrderId = "FIRST" + this.PAIR
 
-        } else if (this.isNewAlgo && this.myLastBuy && this.myLastOrder!.side == this.sellSide()) {
-            buyPrice = this.myLastBuy?.price
+        } else if (this.isNewAlgo && this.myLastStandingBuy && this.myLastOrder!.side == this.sellSide()) {
+            buyPrice = this.myLastStandingBuy?.price
 
         } else if (this.myLastOrder!.side == this.sellSide()) {
             buyPrice = Math.min(this.myLastOrder!.price * (1 - this.bot.take_profit), buyPrice)
@@ -65,8 +65,8 @@ export class WeightAvg extends BasePlacer {
         if (this.isFirst || !this.myLastOrder) {
             buyQu = this.balance[this.SECOND].available * this.bot.amount_percent / buyPrice
 
-        } else if (this.isNewAlgo && this.myLastBuy && this.myLastOrder!.side == this.sellSide()) {
-            buyQu = this.myLastBuy?.origQty
+        } else if (this.isNewAlgo && this.myLastStandingBuy && this.myLastOrder!.side == this.sellSide()) {
+            buyQu = this.myLastStandingBuy?.origQty
 
         } else if (this.myLastOrder?.side == this.sellSide()) {
             buyQu = this.myLastOrder.executedQty

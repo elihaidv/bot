@@ -53,7 +53,7 @@ var DAL = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        cloneSteps = this.steps.slice();
+                        cloneSteps = this.steps.slice().sort(function (a, b) { return a[0] - b[0] || a[12] - b[12]; });
                         this.steps = [];
                         return [4 /*yield*/, new storage_1.Storage()
                                 .bucket('simulations-tradingbot')
@@ -61,6 +61,7 @@ var DAL = /** @class */ (function () {
                                 .save(cloneSteps
                                 .map(function (s) { return s.join(','); })
                                 .join('\n'), { resumable: false })
+                                .then(console.log)
                                 .catch(console.log)];
                     case 1:
                         _a.sent();
@@ -95,10 +96,12 @@ var DAL = /** @class */ (function () {
                         stepArr = [step.time, step.type, step.side, step.price, step.quantity, step.low, step.high, step.balanceSecond, step.positionSize, step.positionPnl, step.profit, step.balanceFirst, step.priority];
                         this.steps.push(stepArr);
                         this.stepsCounts++;
+                        if (this.stepsCounts % (PAGE_SIZE / 10) == 0) {
+                            this.awaiter = true;
+                        }
                         if (!(Math.floor(this.stepsCounts / PAGE_SIZE) > this.page)) return [3 /*break*/, 2];
                         this.page++;
                         this.saveInBucket();
-                        this.awaiter = true;
                         return [4 /*yield*/, this.updateProgress("running")];
                     case 1:
                         _a.sent();

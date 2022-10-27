@@ -46,8 +46,10 @@ export class SignaligProcessor {
   async placeOrders(signaling: Signaling) {
 
     for (let bot of this.bots) {
-      await DAL.instance.addSignaling(bot, signaling)
-      bot.binance?.orders.changed.push(signaling.coin1 + signaling.coin2 + bot.positionSide())
+      if (!bot.signalings.map(s => s.coin1 + s.coin2).includes(signaling.coin1 + signaling.coin2)){
+        await DAL.instance.addSignaling(bot, signaling)
+        bot.binance?.orders.changed.push(signaling.coin1 + signaling.coin2 + bot.positionSide())
+      }
     }
   }
 
@@ -116,13 +118,15 @@ export class SignalingPlacer extends FutureTrader {
       return
     }
 
+    const minAmount = parseFloat(this.filters.MIN_NOTIONAL.notional) + 1
+    let stoploose = signaling.stop
+
     if (this.isFirst()) {
 
       const price = this.roundPrice(this.minFunc(signaling.enter[0], this.futureSockets.prices[this.PAIR][0]))
-      const qu = 11 / price
 
       await this.place_order(
-        this.PAIR, qu, price, !this.bot.direction, {
+        this.PAIR, minAmount / price, price, !this.bot.direction, {
         newClientOrderId: "FIRST_" + signaling._id
       })
     } else {
@@ -137,10 +141,10 @@ export class SignalingPlacer extends FutureTrader {
 
           const step = (signaling.enter[0] - signaling.enter[1]) / 4
           const price = this.roundPrice(signaling.enter[0] - step * enterNum)
-          const qu = 11 / price
+          
 
           await this.place_order(
-            this.PAIR, qu, price, !this.bot.direction, {
+            this.PAIR, minAmount / price , price, !this.bot.direction, {
             newClientOrderId: `ENTER${enterNum + 1}_${signaling._id}`
           })
         }
@@ -158,7 +162,7 @@ export class SignalingPlacer extends FutureTrader {
 
         const match = this.myLastOrder!.clientOrderId.match(/EXIT(\d)/)
         exitNum = parseInt(match?.length ? match[1] : "1")
-
+        stoploose = signaling.enter[0]
 
         if (exitNum < 6) {
 
@@ -188,7 +192,7 @@ export class SignalingPlacer extends FutureTrader {
         this.bot.direction, {
         type: "STOP_MARKET",
         closePosition: true,
-        stopPrice: signaling.stop,
+        stopPrice: stoploose,
         newClientOrderId: "LASTSL_" + signaling._id
       })
     }

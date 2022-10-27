@@ -33,6 +33,7 @@ export class FutureDataManager extends DataManager {
             console.log("Closing position with profit of: " + (gain / this.bot.binance!.balance[this.bot.coin2] * 100).toFixed() + "%")
 
             DAL.instance.logStep({ type: 'Close Position',  priority: 5 })
+            this.bot.binance!.orders[this.PAIR] = []
         } else if (qu * pos.positionAmount < 0) {
             gain = (pos.positionEntry - order.price) * order.executedQty * (order.side == "BUY" ? 1 : -1)
             pos.positionAmount += qu
@@ -72,6 +73,7 @@ export class FutureDataManager extends DataManager {
 
         order.status = 'FILLED'
         this.bot.binance!.orders[this.PAIR].push(order)
+        console.log("Orders Executed: " ,this.bot.binance!.orders.length)
 
         this.openOrders = this.openOrders.filter(o => o.orderId != order.orderId)
     }

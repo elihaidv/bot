@@ -19,6 +19,7 @@ export class DataManager {
         //   throw new Error("Method not implemented.");
     }
     fullChart: Array<CandleStick> = [];
+    chart: Array<CandleStick> = [];
     openOrders: Array<Order> = [];
     time = 0
     bot: Bot
@@ -110,11 +111,10 @@ export class DataManager {
 
         this.fullChart = data.map(([time, high, low, close]) =>
             (Object.assign(new CandleStick(), { time, high, low, close })));
+
+        this.chart = this.fullChart.slice(this.startIndex, this.endIndex)
     }
 
-    get chart() {
-        return this.fullChart.slice(this.startIndex, this.endIndex)
-    }
 
 
     findIndexBetween(time, chart) {
@@ -148,13 +148,16 @@ export class DataManager {
 
         order.status = 'FILLED'
         this.bot.binance!.orders[this.PAIR].push(order)
+
+        console.log("Orders Executed: " ,this.bot.binance!.orders[this.PAIR].length)
         if (order.side == "SELL") {
-            console.log("balance: " + (this.bot.binance!.balance[this.bot.coin2].available))
+           // console.log("balance: " + (this.bot.binance!.balance[this.bot.coin2].available))
 
 
             //Check if 
             if (this.bot.binance!.balance[this.bot.coin1].available < this.filters.MIN_NOTIONAL.minNotional / order.avgPrice) {
                 DAL.instance.logStep({ type: 'Close Position', priority: 5 })
+                this.bot.binance!.orders[this.PAIR] = [order]
             }
         }
 

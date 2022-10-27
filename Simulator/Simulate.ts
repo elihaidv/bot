@@ -18,7 +18,7 @@ const Binance = require('node-binance-api');
 const { MongoClient, ObjectID } = require("mongodb");
 
 
-
+console.log(process.argv)
 const id = process.argv[3] || "61da8b2036520f0737301999";
 
 let dataManager: DataManager

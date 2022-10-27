@@ -43,6 +43,7 @@ var FutureDataManager = /** @class */ (function (_super) {
             pos.positionEntry = 0;
             console.log("Closing position with profit of: " + (gain / this.bot.binance.balance[this.bot.coin2] * 100).toFixed() + "%");
             DALSimulation_1.DAL.instance.logStep({ type: 'Close Position', priority: 5 });
+            this.bot.binance.orders[this.PAIR] = [];
         }
         else if (qu * pos.positionAmount < 0) {
             gain = (pos.positionEntry - order.price) * order.executedQty * (order.side == "BUY" ? 1 : -1);
@@ -74,6 +75,7 @@ var FutureDataManager = /** @class */ (function (_super) {
         });
         order.status = 'FILLED';
         this.bot.binance.orders[this.PAIR].push(order);
+        console.log("Orders Executed: ", this.bot.binance.orders.length);
         this.openOrders = this.openOrders.filter(function (o) { return o.orderId != order.orderId; });
     };
     FutureDataManager.prototype.closePosition = function (price) {

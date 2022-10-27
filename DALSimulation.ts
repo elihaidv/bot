@@ -28,10 +28,14 @@ export class DAL {
         this.steps.push(stepArr)
         this.stepsCounts++
 
+
+        if (this.stepsCounts % (PAGE_SIZE / 10) == 0) {
+            this.awaiter = true
+        }
+
         if (Math.floor(this.stepsCounts / PAGE_SIZE) > this.page) {
             this.page++
             this.saveInBucket()
-            this.awaiter = true
             await this.updateProgress("running")
 
         }
@@ -79,7 +83,7 @@ export class DAL {
 
     saveInBucket = async () => {
         try {
-            const cloneSteps = this.steps.slice()
+            const cloneSteps = this.steps.slice().sort((a, b) => a[0] - b[0] || a[12] - b[12])
             this.steps = []
             await new Storage()
                 .bucket('simulations-tradingbot')
@@ -87,6 +91,7 @@ export class DAL {
                 .save(cloneSteps
                     .map(s => s.join(','))
                     .join('\n'), { resumable: false })
+                .then(console.log)
                 .catch(console.log);
         } catch (e) {
             console.log(e)

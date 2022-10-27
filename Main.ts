@@ -21,6 +21,7 @@ import { TelegramClient } from "telegram";
 import { StringSession } from "telegram/sessions";
 import { NewMessage } from "telegram/events";
 import { OneStep } from './Workers/OneStep';
+import { OrderPlacer } from './Workers/PlaceOrders';
 
 
 let exchangeInfo, futuresExchangeInfo, first = true
@@ -78,8 +79,8 @@ async function execute() {
 
       await Promise.all(outdatedBots.map((b) => {
         switch (b.bot_type_id) {
-          // case "1":
-          //   return new OrderPlacer(b, exchangeInfo).place();
+          case "1":
+            return new OrderPlacer(b, exchangeInfo).place();
           case "2":
             return new WeightAvg(b, exchangeInfo).place();
           case "3":

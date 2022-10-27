@@ -232,10 +232,12 @@ export abstract class BasePlacer {
         }
     }
 
-    truncDigits = function (number: number, digits: number) {
+    truncDigits = function (number: number, digits: number, roundFunc: Function = Math.floor) {
         const fact = 10 ** digits;
-        return Math.floor(number * fact) / fact;
+        return roundFunc(number * fact) / fact;
     }
+
+
 
     countDecimals = function (number: number): number {
         if (Math.floor(number) === number) {

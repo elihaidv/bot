@@ -117,16 +117,17 @@ export class SignalingPlacer extends FutureTrader {
       this.bot.lastOrder = Bot.STABLE
       return
     }
-
-    const minAmount = parseFloat(this.filters.MIN_NOTIONAL.notional) + 1
+    
+    const minAmount = parseFloat(this.filters.MIN_NOTIONAL.notional)
     let stoploose = signaling.stop
 
     if (this.isFirst()) {
 
       const price = this.roundPrice(this.minFunc(signaling.enter[0], this.futureSockets.prices[this.PAIR][0]))
+      const qu = this.truncDigits(minAmount/ price, this.countDecimals(parseFloat(this.filters.LOT_SIZE.stepSize)), Math.ceil)
 
       await this.place_order(
-        this.PAIR, minAmount / price, price, !this.bot.direction, {
+        this.PAIR, qu, price, !this.bot.direction, {
         newClientOrderId: "FIRST_" + signaling._id
       })
     } else {

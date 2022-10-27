@@ -199,7 +199,7 @@ export class SignalingPlacer extends FutureTrader {
         newClientOrderId: "LASTSL_" + signaling._id
       })
     }
-    if (!this.error) {
+    if (this.error) {
       this.bot.binance!.orders.changed.push(this.PAIR + this.bot.positionSide())
     }
     this.bot.lastOrder = Bot.STABLE

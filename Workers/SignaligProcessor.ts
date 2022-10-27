@@ -142,10 +142,10 @@ export class SignalingPlacer extends FutureTrader {
 
           const step = (signaling.enter[0] - signaling.enter[1]) / 4
           const price = this.roundPrice(signaling.enter[0] - step * enterNum)
-          
+          const qu = this.truncDigits(minAmount/ price, this.countDecimals(parseFloat(this.filters.LOT_SIZE.stepSize)), Math.ceil)
 
           await this.place_order(
-            this.PAIR, minAmount / price , price, !this.bot.direction, {
+            this.PAIR, qu , price, !this.bot.direction, {
             newClientOrderId: `ENTER${enterNum + 1}_${signaling._id}`
           })
         }

@@ -110,6 +110,8 @@ export class SignalingPlacer extends FutureTrader {
   }
 
   async placeOrder(signaling: Signaling) {
+    this.error = false
+
     if (this.myLastOrder && !this.myLastOrder?.clientOrderId.includes(signaling._id)) {
       await this.closePosition(this.myLastOrder.clientOrderId.split("_")[1])
     } else if (this.myLastOrder?.clientOrderId.includes("LAST")) {
@@ -196,6 +198,9 @@ export class SignalingPlacer extends FutureTrader {
         stopPrice: stoploose,
         newClientOrderId: "LASTSL_" + signaling._id
       })
+    }
+    if (!this.error) {
+      this.bot.binance!.orders.changed.push(this.PAIR + this.bot.positionSide())
     }
     this.bot.lastOrder = Bot.STABLE
   }

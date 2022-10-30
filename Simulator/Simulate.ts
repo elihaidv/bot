@@ -14,8 +14,9 @@ import { OneStep } from "../Workers/OneStep";
 
 
 const Binance = require('node-binance-api');
+import {Log, Severity, CoralogixLogger, LoggerConfig} from "coralogix-logger";
 
-const { MongoClient, ObjectID } = require("mongodb");
+
 
 
 console.log(process.argv)

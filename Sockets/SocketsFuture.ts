@@ -1,5 +1,6 @@
 import { BaseSockets } from "./BaseSockets";
 import { Account, Bot, Key, Order } from "../Models";
+import { BotLogger } from "../Logger";
 
 export class SocketsFutures extends BaseSockets {
     futuresBookTickerStreams = new Array<Ticker>();
@@ -62,11 +63,19 @@ export class SocketsFutures extends BaseSockets {
                 (orderUpdate.orderStatus == 'EXPIRED' && orderUpdate.orderType == "LIMIT" && orderUpdate.originalOrderType != "TAKE_PROFIT")) {
                 if (!orderUpdate.clientOrderId.includes("BigPosition")) {
                     orders.changed.push(orderUpdate.symbol + orderUpdate.positionSide);
+                    BotLogger.instance.log({
+                        type: "OrderFilled - Futures",
+                        orderUpdate
+                    })
                 }
             }
 
             if (orderUpdate.orderStatus == 'EXPIRED') {
                 console.log('EXPIRED:', orderUpdate.symbol, orderUpdate.side, orderUpdate.originalPrice, orderUpdate.orderTradeTime)
+                BotLogger.instance.log({
+                    type: 'OrderExpiered',
+                    orderUpdate
+                })
             }
         }
 
@@ -113,7 +122,7 @@ export class SocketsFutures extends BaseSockets {
         return this.futuresBookTickerStreams.find(t => t.pair == pair)
     }
 
-    fetchOrdersBySymbol = async (acc:Account, PAIR:string) =>{
+    fetchOrdersBySymbol = async (acc: Account, PAIR: string) => {
         if (acc.orders[PAIR] === undefined) {
             acc.orders[PAIR] = []
 
@@ -161,17 +170,24 @@ export class SocketsFutures extends BaseSockets {
             const PAIR = bot.coin1 + bot.coin2
             const acc = this.accounts[bot.key_id] as Account
             try {
-               
+
                 await this.fetchOrdersBySymbol(acc, PAIR)
-               
-                if (bot.signalings){
-                   for (const s of bot.signalings){
-                       await this.fetchOrdersBySymbol(acc, s.coin1 + s.coin2)
-                   }
-               }
+
+                if (bot.signalings) {
+                    for (const s of bot.signalings) {
+                        await this.fetchOrdersBySymbol(acc, s.coin1 + s.coin2)
+                    }
+                }
             } catch (e) {
                 acc.orders[PAIR] = undefined
                 console.log("FetchInit Error: ", e, " Bot Id: ", bot.id())
+                BotLogger.instance.error({
+                    type: "FetchInitError - Futures",
+                    botId: bot.id(),
+                    error: e,
+                    pair: PAIR
+                })
+
             }
 
         }

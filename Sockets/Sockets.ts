@@ -1,5 +1,7 @@
 import { BaseSockets } from "./BaseSockets";
 import { Account, Bot, Key, Order } from "../Models";
+import { BotLogger } from "../Logger";
+import { Severity } from "coralogix-logger";
 
 const Binance = require('node-binance-api');
 
@@ -55,12 +57,22 @@ export class Sockets extends BaseSockets {
             if (data.x == 'TRADE') {
                 orders.changed.push(data.s);
                 console.log(data.S, data.s)
+
+                BotLogger.instance.log({
+                    type: "OrderFilled - Spot",
+                    order
+                })
             }
         }
     }
 
     execution_update = (orders) => (data) => {
         console.log(data)
+
+        BotLogger.instance.log({
+            type: "TradeEvent1",
+            message: JSON.stringify(data)
+        })
         if (!orders[data.s]) orders[data.s] = []
         let order = orders[data.s].find(o => o.orderId == data.i) as Order
 
@@ -106,6 +118,11 @@ export class Sockets extends BaseSockets {
         acc.binance.balance((error, balances) => {
             if (error) {
                 console.log('Balance error' + error.body)
+                BotLogger.instance.error({
+                    type: "BalanceError - Spot",
+                    account: acc,
+                    error
+                })
             } 
             for (let b in balances) {
                 balances[b].total = parseFloat(balances[b].available) + parseFloat(balances[b].onOrder)
@@ -121,6 +138,11 @@ export class Sockets extends BaseSockets {
                 this.execution_update(acc.orders))
         } catch (e: any) {
             console.log("UserSokcet", e.message)
+            BotLogger.instance.error({
+                type: "UserSokcetError - Spot",
+                account: acc,
+                e
+            })
         }
     }
 

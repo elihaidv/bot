@@ -1,5 +1,8 @@
 
+import { Severity } from 'coralogix-logger'
+import { Logger } from 'telegram'
 import { DAL } from '../DAL'
+import { BotLogger } from '../Logger'
 import { Bot, Order } from '../Models'
 import { Sockets } from '../Sockets/Sockets'
 
@@ -173,50 +176,53 @@ export abstract class BasePlacer {
             let res = await action(this.PAIR, qu, price, params)
             if (res.msg) {
                 console.log(res.msg, this.PAIR,  price || params.stopPrice || params.activationPrice, qu, this.bot.id())
-
-                DAL.instance.logError( {
+                const error =  {
+                    type: "PlaceOrderError",
                     bot_id: this.bot._id,
                     user_id: this.bot.user_id,
-                    type: type,
+                    side: type,
                     coin: this.PAIR,
                     amount: qu,
                     price: price,
                     message: res.msg,
                     created_at: new Date()
-                })
+                }
+                DAL.instance.logError(error)
+                BotLogger.instance.error(error)
 
                 this.error = true
                 return res
             } else {
 
                 console.log(res.symbol, res.side, res.price || params.stopPrice || params.activationPrice, res.origQty, res.status)
+                BotLogger.instance.log({
+                    type: "PlaceOrder",
+                    bot_id: this.bot._id,
+                    res
+                    
+                })
                 if (res.status == "EXPIRED") {
                     return res.status
                 }
             }
-            //     order = new Order()
-            //     order.type = type
-            //     order.coin = this.PAIR
-            //     order.price = price
-            //     order.amount = qu
-            //     order.this.bot_id = this.bot.id
-            //     order.save()
         } catch (e: any) {
             console.log(e.body || e, this.PAIR, price, qu, this.bot.id())
             this.error = true
                 
-
-            
-            DAL.instance.logError( {
-                user_id: this.bot.user_id,
+            const error =  {
+                type: "PlaceOrderError",
                 bot_id: this.bot._id,
-                type: type,
+                user_id: this.bot.user_id,
+                side: type,
                 coin: this.PAIR,
                 amount: qu,
                 price: price,
                 message: e.body || e,
                 created_at: new Date()
-            })
+            }
+            DAL.instance.logError(error)
+            BotLogger.instance.error(error)
+
             return e
         } finally {
 

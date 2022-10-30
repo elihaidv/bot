@@ -1,5 +1,6 @@
 import { BasePlacer } from "./BasePlacer"
 import { Bot, Order } from "../Models";
+import { BotLogger } from "../Logger";
 
 
 export class WeightAvg extends BasePlacer {
@@ -14,13 +15,18 @@ export class WeightAvg extends BasePlacer {
             !this.sockets.prices[this.PAIR] ||
             !this.sockets.orderBooks[this.PAIR]) return
 
+        const {binance, ...bot} = this.bot
+        BotLogger.instance.log({
+            type: "BotStart - Spot",
+            bot: bot,
+        })
+
         this.parseAllValues()
 
         await this.buyBNB()
 
         this.buildHistory()
 
-        // this.isFirst && console.log("FIRST")
         await this.placeBuy()
 
         !this.isFirst && await this.placeSell()
@@ -40,10 +46,10 @@ export class WeightAvg extends BasePlacer {
     }
 
     async placeBuy() {
-        let buyPrice, buyQu, maxBuyPrice = Object.keys(this.sockets.orderBooks[this.PAIR].bids)[0] as unknown as number
+        let fbuyPrice, buyPrice, average, buyQu, fbuyQu, maxBuyPrice = Object.keys(this.sockets.orderBooks[this.PAIR].bids)[0] as unknown as number
         let params: any = {};
 
-        buyPrice = maxBuyPrice * (1 - this.bot.buy_percent)
+        fbuyPrice = maxBuyPrice * (1 - this.bot.buy_percent)
 
         if (this.isFirst || !this.myLastOrder) {
             params.newClientOrderId = "FIRST" + this.PAIR
@@ -52,30 +58,43 @@ export class WeightAvg extends BasePlacer {
             buyPrice = this.myLastStandingBuy?.price
 
         } else if (this.myLastOrder!.side == this.sellSide()) {
-            buyPrice = Math.min(this.myLastOrder!.price * (1 - this.bot.take_profit), buyPrice)
+            buyPrice = Math.min(this.myLastOrder!.price * (1 - this.bot.take_profit), fbuyPrice)
 
         } else {
-            buyPrice = Math.min(this.myLastOrder!.price * (1 - this.bot.last_distance), buyPrice)
+            buyPrice = Math.min(this.myLastOrder!.price * (1 - this.bot.last_distance), fbuyPrice)
         }
 
         if (this.bot.SMA) {
-            buyPrice = Math.min(buyPrice, this.sockets.averagePrice(this.PAIR, this.bot.SMA))
+            average = this.sockets.averagePrice(this.PAIR, this.bot.SMA)
+            buyPrice = Math.min(buyPrice, average)
         }
 
         if (this.isFirst || !this.myLastOrder) {
-            buyQu = this.balance[this.SECOND].available * this.bot.amount_percent / buyPrice
+            fbuyQu = this.balance[this.SECOND].available * this.bot.amount_percent / buyPrice
 
         } else if (this.isNewAlgo && this.myLastStandingBuy && this.myLastOrder!.side == this.sellSide()) {
-            buyQu = this.myLastStandingBuy?.origQty
+            fbuyQu = this.myLastStandingBuy?.origQty
 
         } else if (this.myLastOrder?.side == this.sellSide()) {
-            buyQu = this.myLastOrder.executedQty
+            fbuyQu = this.myLastOrder.executedQty
 
         } else {
-            buyQu = this.myLastOrder!.origQty * (1 + this.bot.increase_factor)
+            fbuyQu = this.myLastOrder!.origQty * (1 + this.bot.increase_factor)
         }
 
-        buyQu = Math.min(this.balance[this.SECOND].available / buyPrice, buyQu)
+        buyQu = Math.min(this.balance[this.SECOND].available / buyPrice, fbuyQu)
+
+        BotLogger.instance.log({
+            type: "BeforeBuy - Spot",
+            fbuyPrice, buyPrice,fbuyQu, buyQu,
+            maxBuyPrice,balance:this.balance[this.SECOND],
+            params,average,
+            lastOrder: this.myLastOrder,
+            direction: this.bot.direction,
+            standingBuy: this.standingBuy,
+            oldestStandingBuy:this.oldestStandingBuy,
+            myLastBuyAvg: this.myLastBuyAvg,
+        })
 
         await this.place_order(this.SECOND, buyQu, buyPrice, true, params)
     }

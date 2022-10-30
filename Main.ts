@@ -22,6 +22,8 @@ import { StringSession } from "telegram/sessions";
 import { NewMessage } from "telegram/events";
 import { OneStep } from './Workers/OneStep';
 import { OrderPlacer } from './Workers/PlaceOrders';
+import { BotLogger } from './Logger';
+import { Severity } from 'coralogix-logger';
 
 
 let exchangeInfo, futuresExchangeInfo, first = true
@@ -104,8 +106,12 @@ async function execute() {
     
 
 
-  } catch (e) {
+  } catch (e: any) {
     console.log(e)
+    BotLogger.instance.log({
+      type: "GeneralError",
+      message: e?.message || e,
+    },Severity.error)
   }
   setTimeout(execute, 3000)
 }

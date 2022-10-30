@@ -263,7 +263,9 @@ var FutureTrader = /** @class */ (function (_super) {
                         _b.label = 6;
                     case 6:
                         if (!this.bot.stop_loose) return [3 /*break*/, 8];
-                        SLprice = this.sub(this.positionEntry, (((this.balance[this.SECOND] - this.currentPnl) * this.bot.stop_loose + this.currentPnl)) / this.positionAmount);
+                        SLprice = this.sub(this.positionEntry, (((this.balance[this.SECOND] * this.bot.stop_loose) / this.positionAmount) * this.positionEntry));
+                        console.log("SLprice: ", ((this.positionEntry - SLprice) / this.positionEntry) * this.positionAmount);
+                        console.log("SLprice-market: ", ((this.positionEntry - maxBuyPrice) / this.positionEntry) * this.positionAmount);
                         if (!(SLprice > 0)) return [3 /*break*/, 8];
                         return [4 /*yield*/, this.place_order(this.PAIR, 0, 0, this.bot.direction, {
                                 type: "STOP_MARKET",

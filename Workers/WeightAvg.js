@@ -131,8 +131,8 @@ var WeightAvg = /** @class */ (function (_super) {
                         if (this.isFirst || !this.myLastOrder) {
                             params.newClientOrderId = "FIRST" + this.PAIR;
                         }
-                        else if (this.isNewAlgo && this.myLastBuy && this.myLastOrder.side == this.sellSide()) {
-                            buyPrice = (_a = this.myLastBuy) === null || _a === void 0 ? void 0 : _a.price;
+                        else if (this.isNewAlgo && this.myLastStandingBuy && this.myLastOrder.side == this.sellSide()) {
+                            buyPrice = (_a = this.myLastStandingBuy) === null || _a === void 0 ? void 0 : _a.price;
                         }
                         else if (this.myLastOrder.side == this.sellSide()) {
                             buyPrice = Math.min(this.myLastOrder.price * (1 - this.bot.take_profit), buyPrice);
@@ -146,8 +146,8 @@ var WeightAvg = /** @class */ (function (_super) {
                         if (this.isFirst || !this.myLastOrder) {
                             buyQu = this.balance[this.SECOND].available * this.bot.amount_percent / buyPrice;
                         }
-                        else if (this.isNewAlgo && this.myLastBuy && this.myLastOrder.side == this.sellSide()) {
-                            buyQu = (_b = this.myLastBuy) === null || _b === void 0 ? void 0 : _b.origQty;
+                        else if (this.isNewAlgo && this.myLastStandingBuy && this.myLastOrder.side == this.sellSide()) {
+                            buyQu = (_b = this.myLastStandingBuy) === null || _b === void 0 ? void 0 : _b.origQty;
                         }
                         else if (((_c = this.myLastOrder) === null || _c === void 0 ? void 0 : _c.side) == this.sellSide()) {
                             buyQu = this.myLastOrder.executedQty;

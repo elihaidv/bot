@@ -187,7 +187,9 @@ export class FutureTrader extends BasePlacer {
 
 
         if (this.bot.stop_loose) {
-            const SLprice = this.sub(this.positionEntry, (((this.balance[this.SECOND] - this.currentPnl) * this.bot.stop_loose + this.currentPnl)) / this.positionAmount)
+            const SLprice = this.sub(this.positionEntry, (((this.balance[this.SECOND] * this.bot.stop_loose)/this.positionAmount) * this.positionEntry))
+            console.log("SLprice: ", ((this.positionEntry - SLprice) / this.positionEntry) * this.positionAmount) 
+            console.log("SLprice-market: ", ((this.positionEntry - maxBuyPrice) / this.positionEntry) * this.positionAmount) 
             if (SLprice > 0) {
                 await this.place_order(this.PAIR, 0, 0, this.bot.direction, {
                     type: "STOP_MARKET",

@@ -18,6 +18,7 @@ export class WeightAvg extends BasePlacer {
         const {binance, ...bot} = this.bot
         BotLogger.instance.log({
             type: "BotStart - Spot",
+            bot_id: this.bot._id,
             bot: bot,
         })
 
@@ -86,6 +87,7 @@ export class WeightAvg extends BasePlacer {
 
         BotLogger.instance.log({
             type: "BeforeBuy - Spot",
+            bot_id: this.bot._id,
             fbuyPrice, buyPrice,fbuyQu, buyQu,
             maxBuyPrice,balance:this.balance[this.SECOND],
             params,average,

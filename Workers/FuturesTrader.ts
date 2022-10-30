@@ -27,6 +27,7 @@ export class FutureTrader extends BasePlacer {
         const {binance, ...bot} = this.bot
         BotLogger.instance.log({
             type: "BotStart - Future",
+            bot_id: this.bot._id,
             bot,
         })
 
@@ -159,6 +160,7 @@ export class FutureTrader extends BasePlacer {
 
         BotLogger.instance.log({
             type: "BeforeBuy - Future",
+            bot_id: this.bot._id,
             fbuyPrice, buyPrice,fbuyQu, buyQu,
             maxBuyPrice,balance:this.balance[this.SECOND],
             positionAmount: this.positionAmount,

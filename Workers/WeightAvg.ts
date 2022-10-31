@@ -54,6 +54,7 @@ export class WeightAvg extends BasePlacer {
 
         if (this.isFirst || !this.myLastOrder) {
             params.newClientOrderId = "FIRST" + this.PAIR
+            buyPrice = fbuyPrice
 
         } else if (this.isNewAlgo && this.myLastStandingBuy && this.myLastOrder!.side == this.sellSide()) {
             buyPrice = this.myLastStandingBuy?.price

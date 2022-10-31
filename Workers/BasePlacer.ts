@@ -160,6 +160,12 @@ export abstract class BasePlacer {
             if (increaseToMinimum) {
                 qu = this.roundQu((parseFloat(minNotional) + 1) / price)
             } else {
+                BotLogger.instance.log({
+                    type: "QuantitiyTooLow",
+                    bot_id: this.bot._id,
+                    qu,price,params, minNotional
+                    
+                })
                 //console.log("quantity is to small" , qu , price , this.bot._id)
                 return
             }

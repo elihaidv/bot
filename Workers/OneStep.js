@@ -62,14 +62,14 @@ var OneStep = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     OneStep.prototype.placeBuy = function () {
-        var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var buyQu, fbuyPrice, buyPrice, average, maxBuyPrice, balanceLeveraged;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var ticker, buyQu, fbuyPrice, buyPrice, average, maxBuyPrice, balanceLeveraged;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
                         if (!!this.positionAmount) return [3 /*break*/, 2];
-                        buyQu = void 0, fbuyPrice = void 0, buyPrice = void 0, average = void 0, maxBuyPrice = (_a = this.futureSockets.ticker(this.PAIR)) === null || _a === void 0 ? void 0 : _a.bestBid;
+                        ticker = this.futureSockets.ticker(this.PAIR);
+                        buyQu = void 0, fbuyPrice = void 0, buyPrice = void 0, average = void 0, maxBuyPrice = ticker === null || ticker === void 0 ? void 0 : ticker.bestBid;
                         balanceLeveraged = this.balance[this.SECOND] * this.bot.leverage;
                         fbuyPrice = maxBuyPrice * this.sub(1, this.bot.buy_percent);
                         average = this.futureSockets.averagePrice(this.PAIR, this.bot.SMA);
@@ -90,8 +90,8 @@ var OneStep = /** @class */ (function (_super) {
                         });
                         return [4 /*yield*/, this.place_order(this.SECOND, buyQu, buyPrice, !this.bot.direction, {})];
                     case 1:
-                        _b.sent();
-                        _b.label = 2;
+                        _a.sent();
+                        _a.label = 2;
                     case 2: return [2 /*return*/];
                 }
             });

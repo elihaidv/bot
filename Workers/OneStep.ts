@@ -11,7 +11,8 @@ export class OneStep extends FutureTrader {
         if (!this.positionAmount) {
             // await this.cancelOrders()
 
-            let buyQu, fbuyPrice, buyPrice, average, maxBuyPrice = this.futureSockets.ticker(this.PAIR)?.bestBid as unknown as number
+            const ticker = this.futureSockets.ticker(this.PAIR)
+            let buyQu, fbuyPrice, buyPrice, average, maxBuyPrice = ticker?.bestBid as unknown as number
             let balanceLeveraged = this.balance[this.SECOND] * this.bot.leverage;
 
 

@@ -52,6 +52,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OneStep = void 0;
+var Logger_1 = require("../Logger");
 var Models_1 = require("../Models");
 var FuturesTrader_1 = require("./FuturesTrader");
 var cancelOrders = require('../CancelOrders');
@@ -63,16 +64,30 @@ var OneStep = /** @class */ (function (_super) {
     OneStep.prototype.placeBuy = function () {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var buyQu, buyPrice, maxBuyPrice, balanceLeveraged;
+            var buyQu, fbuyPrice, buyPrice, average, maxBuyPrice, balanceLeveraged;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         if (!!this.positionAmount) return [3 /*break*/, 2];
-                        buyQu = void 0, buyPrice = void 0, maxBuyPrice = (_a = this.futureSockets.ticker(this.PAIR)) === null || _a === void 0 ? void 0 : _a.bestBid;
+                        buyQu = void 0, fbuyPrice = void 0, buyPrice = void 0, average = void 0, maxBuyPrice = (_a = this.futureSockets.ticker(this.PAIR)) === null || _a === void 0 ? void 0 : _a.bestBid;
                         balanceLeveraged = this.balance[this.SECOND] * this.bot.leverage;
-                        buyPrice = maxBuyPrice * this.sub(1, this.bot.buy_percent);
-                        buyPrice = this.minFunc(buyPrice, this.futureSockets.averagePrice(this.PAIR, this.bot.SMA));
+                        fbuyPrice = maxBuyPrice * this.sub(1, this.bot.buy_percent);
+                        average = this.futureSockets.averagePrice(this.PAIR, this.bot.SMA);
+                        buyPrice = this.minFunc(fbuyPrice, average);
                         buyQu = balanceLeveraged * this.bot.amount_percent / buyPrice;
+                        Logger_1.BotLogger.instance.log({
+                            type: "BeforeBuy - OneStep",
+                            bot_id: this.bot._id,
+                            fbuyPrice: fbuyPrice,
+                            buyPrice: buyPrice,
+                            buyQu: buyQu,
+                            maxBuyPrice: maxBuyPrice,
+                            balance: this.balance[this.SECOND],
+                            positionAmount: this.positionAmount,
+                            positionEntry: this.positionEntry,
+                            lastOrder: this.myLastOrder,
+                            direction: this.bot.direction
+                        });
                         return [4 /*yield*/, this.place_order(this.SECOND, buyQu, buyPrice, !this.bot.direction, {})];
                     case 1:
                         _b.sent();
@@ -90,16 +105,27 @@ var OneStep = /** @class */ (function (_super) {
                     case 0:
                         ticker = this.futureSockets.ticker(this.PAIR);
                         minSell = (this.bot.direction ? ticker === null || ticker === void 0 ? void 0 : ticker.bestAsk : ticker === null || ticker === void 0 ? void 0 : ticker.bestBid);
+                        Logger_1.BotLogger.instance.log({
+                            type: "BeforeSell - OneStep",
+                            bot_id: this.bot._id,
+                            minSell: minSell,
+                            ticker: ticker,
+                            balance: this.balance[this.SECOND],
+                            positionAmount: this.positionAmount,
+                            positionEntry: this.positionEntry,
+                            lastOrder: this.myLastOrder,
+                            direction: this.bot.direction
+                        });
                         return [4 /*yield*/, this.place_order(this.PAIR, 0, 0, this.bot.direction, {
                                 type: "TAKE_PROFIT_MARKET",
-                                stopPrice: this.roundPrice(this.maxFunc(minSell, this.positionEntry * this.add(1, this.bot.take_profit))),
+                                stopPrice: this.roundPrice(this.maxFunc(this.positionEntry * this.add(1, this.bot.take_profit), minSell)),
                                 closePosition: true
                             })];
                     case 1:
                         _a.sent();
                         return [4 /*yield*/, this.place_order(this.PAIR, 0, 0, this.bot.direction, {
                                 type: "STOP_MARKET",
-                                stopPrice: this.roundPrice(this.minFunc(minSell, this.positionEntry * this.sub(1, this.bot.stop_loose))),
+                                stopPrice: this.roundPrice(this.minFunc(this.positionEntry * this.sub(1, this.bot.stop_loose), minSell)),
                                 closePosition: true
                             })];
                     case 2:

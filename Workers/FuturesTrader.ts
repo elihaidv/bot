@@ -205,7 +205,7 @@ export class FutureTrader extends BasePlacer {
 
 
         if (this.bot.stop_loose) {
-            const SLprice = this.sub(this.positionEntry, (((this.balance[this.SECOND] * this.bot.stop_loose)/this.positionAmount) * this.positionEntry))
+            const SLprice = this.sub(this.positionEntry, ((((this.balance[this.SECOND] * this.bot.stop_loose) +this.currentPnl)/this.positionAmount) * this.positionEntry))
           
             if (SLprice > 0) {
                 await this.place_order(this.PAIR, 0, 0, this.bot.direction, {

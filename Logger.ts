@@ -20,7 +20,7 @@ export class BotLogger {
         if (!this.isSemulation) {
             this.logger.addLog(new Log({
                 severity: severity,
-                text: JSON.stringify(message)
+                text: JSON.stringify(message, (k, v)=> v === undefined ? null : v)
             }));
         }
     }

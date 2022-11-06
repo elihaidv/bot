@@ -19,7 +19,7 @@ var BotLogger = /** @class */ (function () {
         if (!this.isSemulation) {
             this.logger.addLog(new coralogix_logger_1.Log({
                 severity: severity,
-                text: JSON.stringify(message)
+                text: JSON.stringify(message, function (k, v) { return v === undefined ? null : v; })
             }));
         }
     };

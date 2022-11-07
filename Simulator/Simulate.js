@@ -49,6 +49,7 @@ var Periodically_1 = require("../Workers/Periodically");
 var node_fetch_1 = require("node-fetch");
 var OneStep_1 = require("../Workers/OneStep");
 var Binance = require('node-binance-api');
+var PlaceOrders_1 = require("../Workers/PlaceOrders");
 console.log(process.argv);
 var id = process.argv[3] || "61da8b2036520f0737301999";
 var dataManager;
@@ -107,12 +108,8 @@ function run() {
                             executeds[dataManager.time] = o;
                             dataManager.orderexecute(o, t);
                             ToPlace = true;
-                            // // break;
-                            // dataManager.time += 60
-                            // i += 60
                         }
                         else if (dataManager.time - o.time >= bot.secound / 60 && bot.lastOrder != Models_1.Bot.STABLE) {
-                            // console.log("expire")
                             ToPlace = true;
                             break;
                         }
@@ -178,8 +175,9 @@ function place(bot) {
                 case 0:
                     dataManager.simulateState();
                     switch (bot.bot_type_id.toString()) {
-                        // case "1":
-                        //   return new OrderPlacer(b, exchangeInfo).place();
+                        case "1":
+                            worker = new PlaceOrders_1.OrderPlacer(bot, dataManager.exchangeInfo);
+                            break;
                         case "2":
                             worker = new WeightAvg_1.WeightAvg(bot, dataManager.exchangeInfo);
                             break;

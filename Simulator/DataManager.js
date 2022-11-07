@@ -231,7 +231,7 @@ var DataManager = /** @class */ (function () {
     };
     DataManager.prototype.averagePrice = function (pair, steps) {
         var start = Math.max(this.time - (steps * 5), 0);
-        return this.chart.map(function (x) { return x.close; }).slice(start, this.time).reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }) / (steps * 5);
+        return this.chart.map(function (x) { return x.close; }).slice(start, this.time).reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }, 0) / (steps * 5);
     };
     DataManager.prototype.averagePriceQuarter = function (pair) {
         var startTime = this.time + this.startIndex;

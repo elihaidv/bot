@@ -1,6 +1,7 @@
 
 import {BasePlacer} from './BasePlacer'
 import { Sockets } from '../Sockets/Sockets';
+import { Bot } from '../Models';
 
 export class OrderPlacer extends BasePlacer{
     
@@ -20,6 +21,10 @@ export class OrderPlacer extends BasePlacer{
         await this.split(this.bot.divide_buy, this.FIRST, calculations.buyPrice, calculations.buyQu, true, this.bot.diffrent_buy)
     
         await this.split(this.bot.divide_sell, this.SECOND, calculations.sellPrice, calculations.sellQu, false, this.bot.diffrent_sell)
+
+        if (!this.error){
+            this.bot.lastOrder = Bot.STABLE
+        }
     }
     
     
@@ -28,7 +33,7 @@ export class OrderPlacer extends BasePlacer{
         let minSellPrice = Object.keys(this.sockets.orderBooks[this.PAIR].asks)[0] as unknown as number
 
         let buyPrice = this.bot.buy_side == 'sell' ? minSellPrice : maxBuyPrice
-        buyPrice *= (1 - this.bot.buy_percent)
+        buyPrice *= (1 - this.bot.buy_percent) 
 
         let sellPrice = this.bot.sell_side == 'sell' ? minSellPrice : maxBuyPrice
         sellPrice *= (1 + this.bot.sell_percent)

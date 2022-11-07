@@ -36,9 +36,10 @@
             "args": [
                 "Simulator/Simulate.ts",
                 "7",
-                "63594b35af0bb27f8a46b5fa",
+                "6367e6bbc85e5c7bd27ae407",
                 "2021-09-25 00:20:00",
-                "2022-10-25 06:16:23"
+                "2022-10-25 06:16:23",
+                "quiet"
             ],
             "cwd": "${workspaceRoot}",
             "internalConsoleOptions": "openOnSessionStart",

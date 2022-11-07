@@ -55,7 +55,6 @@ exports.OneStep = void 0;
 var Logger_1 = require("../Logger");
 var Models_1 = require("../Models");
 var FuturesTrader_1 = require("./FuturesTrader");
-var cancelOrders = require('../CancelOrders');
 var OneStep = /** @class */ (function (_super) {
     __extends(OneStep, _super);
     function OneStep() {
@@ -81,6 +80,8 @@ var OneStep = /** @class */ (function (_super) {
                             fbuyPrice: fbuyPrice,
                             buyPrice: buyPrice,
                             buyQu: buyQu,
+                            average: average,
+                            ticker: ticker,
                             maxBuyPrice: maxBuyPrice,
                             balance: this.balance[this.SECOND],
                             positionAmount: this.positionAmount,
@@ -133,18 +134,6 @@ var OneStep = /** @class */ (function (_super) {
                         if (!this.error) {
                             this.bot.lastOrder = Models_1.Bot.STABLE;
                         }
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    OneStep.prototype.cancelOrders = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, cancelOrders(this.bot)];
-                    case 1:
-                        _a.sent();
                         return [2 /*return*/];
                 }
             });

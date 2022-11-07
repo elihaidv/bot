@@ -15,6 +15,7 @@ import { OneStep } from "../Workers/OneStep";
 
 const Binance = require('node-binance-api');
 import {Log, Severity, CoralogixLogger, LoggerConfig} from "coralogix-logger";
+import { OrderPlacer } from "../Workers/PlaceOrders";
 
 
 
@@ -74,11 +75,9 @@ async function run() {
         executeds[dataManager.time] = o
         dataManager.orderexecute(o, t)
         ToPlace = true
-        // // break;
-        // dataManager.time += 60
-        // i += 60
+
       } else if (dataManager.time - o.time >= bot.secound / 60 && bot.lastOrder != Bot.STABLE) {
-        // console.log("expire")
+   
         ToPlace = true
         break;
 
@@ -130,8 +129,9 @@ async function place(bot: Bot) {
 
   let worker: BasePlacer
   switch (bot.bot_type_id.toString()) {
-    // case "1":
-    //   return new OrderPlacer(b, exchangeInfo).place();
+    case "1":
+      worker = new OrderPlacer(bot, dataManager.exchangeInfo);
+      break
     case "2":
       worker = new WeightAvg(bot, dataManager.exchangeInfo)
       break

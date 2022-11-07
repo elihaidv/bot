@@ -3,7 +3,6 @@ import { BotLogger } from '../Logger';
 import { Account, Bot, Key, Order } from '../Models';
 import { SocketsFutures } from '../Sockets/SocketsFuture';
 import { FutureTrader } from './FuturesTrader';
-const cancelOrders = require('../CancelOrders');
 
 export class OneStep extends FutureTrader {
 
@@ -27,7 +26,7 @@ export class OneStep extends FutureTrader {
             BotLogger.instance.log({
                 type: "BeforeBuy - OneStep",
                 bot_id: this.bot._id,
-                fbuyPrice, buyPrice, buyQu,
+                fbuyPrice, buyPrice, buyQu,average,ticker,
                 maxBuyPrice,balance:this.balance[this.SECOND],
                 positionAmount: this.positionAmount,
                 positionEntry: this.positionEntry, 
@@ -75,7 +74,4 @@ export class OneStep extends FutureTrader {
         }
     }
 
-    async cancelOrders() {
-        await cancelOrders(this.bot)
-    }
 }

@@ -53,6 +53,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderPlacer = void 0;
 var BasePlacer_1 = require("./BasePlacer");
+var Models_1 = require("../Models");
 var OrderPlacer = /** @class */ (function (_super) {
     __extends(OrderPlacer, _super);
     function OrderPlacer() {
@@ -76,6 +77,9 @@ var OrderPlacer = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.split(this.bot.divide_sell, this.SECOND, calculations.sellPrice, calculations.sellQu, false, this.bot.diffrent_sell)];
                     case 2:
                         _a.sent();
+                        if (!this.error) {
+                            this.bot.lastOrder = Models_1.Bot.STABLE;
+                        }
                         return [2 /*return*/];
                 }
             });

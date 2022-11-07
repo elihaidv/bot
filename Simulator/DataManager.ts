@@ -221,7 +221,7 @@ export class DataManager {
 
     averagePrice(pair, steps) {
         const start = Math.max(this.time - (steps * 5), 0)
-        return this.chart.map(x => x.close).slice(start, this.time).reduce((a, b) => parseFloat(a) + parseFloat(b)) / (steps * 5)
+        return this.chart.map(x => x.close).slice(start, this.time).reduce((a, b) => parseFloat(a) + parseFloat(b),0) / (steps * 5)
     }
 
     averagePriceQuarter(pair) {

@@ -80,14 +80,15 @@ var FutureTrader = /** @class */ (function (_super) {
         return type ? this.binance.futuresBuy : this.binance.futuresSell;
     };
     FutureTrader.prototype.place = function () {
+        var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var _a, binance, bot, _b;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
+            var _b, binance, bot, _c;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
                     case 0:
-                        if (!this.binance || !this.balance[this.SECOND] || !this.futureSockets.prices[this.PAIR] || !this.orders || !this.orders.length || !this.futureSockets.ticker(this.PAIR))
+                        if (!this.binance || !this.balance[this.SECOND] || !this.futureSockets.prices[this.PAIR] || !this.orders || !this.orders.length || !((_a = this.futureSockets.ticker(this.PAIR)) === null || _a === void 0 ? void 0 : _a.bestBid))
                             return [2 /*return*/];
-                        _a = this.bot, binance = _a.binance, bot = __rest(_a, ["binance"]);
+                        _b = this.bot, binance = _b.binance, bot = __rest(_b, ["binance"]);
                         Logger_1.BotLogger.instance.log({
                             type: "BotStart - Future",
                             bot_id: this.bot._id,
@@ -99,15 +100,15 @@ var FutureTrader = /** @class */ (function (_super) {
                         this.buildHistory();
                         return [4 /*yield*/, this.placeBuy()];
                     case 1:
-                        _c.sent();
-                        _b = this.positionAmount != 0;
-                        if (!_b) return [3 /*break*/, 3];
+                        _d.sent();
+                        _c = this.positionAmount != 0;
+                        if (!_c) return [3 /*break*/, 3];
                         return [4 /*yield*/, this.placeSell()];
                     case 2:
-                        _b = (_c.sent());
-                        _c.label = 3;
+                        _c = (_d.sent());
+                        _d.label = 3;
                     case 3:
-                        _b;
+                        _c;
                         return [2 /*return*/];
                 }
             });

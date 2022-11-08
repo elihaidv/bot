@@ -8,7 +8,7 @@ const filename = `cryptoHistory/${SYMBOL}_${process.argv[3]}`
 function runMain(t) {
     const BASE_URL = process.argv[3] == "SPOT" ? "https://api.binance.com/api/v3/" : "https://fapi.binance.com/fapi/v1/"
 
-    fetch.fetchUrl(`${BASE_URL}klines?symbol=${SYMBOL}&interval=1m&startTime=${t}&limit=1000`, (e, m, b) => {
+    fetch.fetchUrl(`${BASE_URL}klines?symbol=${SYMBOL}&interval=1s&startTime=${t}&limit=1000`, (e, m, b) => {
         const data = JSON.parse(b)
         if (!data.length) {
             console.log(data)

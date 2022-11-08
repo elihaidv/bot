@@ -189,7 +189,7 @@ export abstract class BasePlacer {
                     side: type,
                     coin: this.PAIR,
                     amount: qu,
-                    price: price,
+                    price: price || params.stopPrice || params.activationPrice,
                     message: res.msg,
                     created_at: new Date()
                 }

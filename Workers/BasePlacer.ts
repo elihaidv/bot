@@ -139,8 +139,8 @@ export abstract class BasePlacer {
 
     abstract getAction(type: boolean): Function
 
-    async place_order(coin, qu, price, type: boolean, params?, increaseToMinimum = false) {
-        let minNotional = this.filters.MIN_NOTIONAL.minNotional || this.bot.minNotional
+    async place_order(coin, qu, price = 0, type: boolean, params?, increaseToMinimum = false) {
+        let minNotional = this.filters.MIN_NOTIONAL.minNotional ||this.filters.MIN_NOTIONAL.notional || this.bot.minNotional
 
 
         if (coin == "BNB") {

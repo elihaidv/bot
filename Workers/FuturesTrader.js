@@ -188,11 +188,11 @@ var FutureTrader = /** @class */ (function (_super) {
         return !this.positionAmount;
     };
     FutureTrader.prototype.placeBuy = function () {
-        var _a, _b, _c, _d, _e, _f, _g;
+        var _a, _b, _c, _d, _e, _f, _g, _h;
         return __awaiter(this, void 0, void 0, function () {
             var buyPrice, fbuyPrice, buyQu, fbuyQu, maxBuyPrice, balanceLeveraged, params;
-            return __generator(this, function (_h) {
-                switch (_h.label) {
+            return __generator(this, function (_j) {
+                switch (_j.label) {
                     case 0:
                         maxBuyPrice = (_a = this.futureSockets.ticker(this.PAIR)) === null || _a === void 0 ? void 0 : _a.bestBid;
                         balanceLeveraged = this.balance[this.SECOND] * this.bot.leverage;
@@ -205,7 +205,7 @@ var FutureTrader = /** @class */ (function (_super) {
                             fbuyPrice = ((_c = this.myLastOrder) === null || _c === void 0 ? void 0 : _c.avgPrice) * this.sub(1, this.bot.take_profit);
                         }
                         else {
-                            fbuyPrice = ((_d = this.myLastOrder) === null || _d === void 0 ? void 0 : _d.avgPrice) * this.sub(1, this.bot.last_distance);
+                            fbuyPrice = ((_d = this.myLastOrder) === null || _d === void 0 ? void 0 : _d.avgPrice) * this.sub(1, (_e = this.bot.last_distance) !== null && _e !== void 0 ? _e : 0);
                         }
                         buyPrice = this.minFunc(fbuyPrice, this.futureSockets.averagePrice(this.PAIR, this.bot.SMA), maxBuyPrice);
                         balanceLeveraged -= this.positionAmount * this.positionEntry;
@@ -213,10 +213,10 @@ var FutureTrader = /** @class */ (function (_super) {
                             buyQu = balanceLeveraged * this.bot.amount_percent * this.bot.increase_first / buyPrice;
                             this.error = true;
                         }
-                        else if (((_e = this.myLastOrder) === null || _e === void 0 ? void 0 : _e.side) == this.sellSide()) {
-                            buyQu = (_f = this.myLastOrder) === null || _f === void 0 ? void 0 : _f.executedQty;
+                        else if (((_f = this.myLastOrder) === null || _f === void 0 ? void 0 : _f.side) == this.sellSide()) {
+                            buyQu = (_g = this.myLastOrder) === null || _g === void 0 ? void 0 : _g.executedQty;
                         }
-                        else if ((_g = this.myLastOrder) === null || _g === void 0 ? void 0 : _g.isFirst()) {
+                        else if ((_h = this.myLastOrder) === null || _h === void 0 ? void 0 : _h.isFirst()) {
                             buyQu = this.myLastOrder.executedQty / this.bot.increase_first;
                         }
                         else {
@@ -250,7 +250,7 @@ var FutureTrader = /** @class */ (function (_super) {
                         });
                         return [4 /*yield*/, this.place_order(this.SECOND, Math.abs(buyQu), buyPrice, !this.bot.direction, params)];
                     case 1:
-                        _h.sent();
+                        _j.sent();
                         return [2 /*return*/];
                 }
             });

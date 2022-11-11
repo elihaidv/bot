@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@google-cloud/storage': ^6.4.1
   '@types/node': ^16.11.43
+  adm-zip: ^0.5.9
   body-parser: ^1.20.0
   cli-interact: ^0.1.9
   coralogix-logger: ^1.1.28
@@ -23,6 +24,7 @@ specifiers:
 
 dependencies:
   '@google-cloud/storage': 6.4.1
+  adm-zip: 0.5.9
   body-parser: 1.20.0
   coralogix-logger: 1.1.28
   dotenv: 10.0.0
@@ -140,6 +142,11 @@ packages:
     dependencies:
       mime-types: 2.1.35
       negotiator: 0.6.3
+    dev: false
+
+  /adm-zip/0.5.9:
+    resolution: {integrity: sha512-s+3fXLkeeLjZ2kLjCBwQufpI5fuN+kIGBxu6530nVQZGVol0d7Y/M88/xw9HGGUcJjKf8LutN3VPRUBq6N7Ajg==}
+    engines: {node: '>=6.0'}
     dev: false
 
   /agent-base/4.2.1:

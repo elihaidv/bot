@@ -131,7 +131,7 @@ export class FutureTrader extends BasePlacer {
         } else if (this.myLastOrder?.side == this.sellSide()) {
             fbuyPrice = this.myLastOrder?.avgPrice * this.sub(1, this.bot.take_profit)
         } else {
-            fbuyPrice = this.myLastOrder?.avgPrice * this.sub(1, this.bot.last_distance)
+            fbuyPrice = this.myLastOrder?.avgPrice * this.sub(1, this.bot.last_distance ?? 0)
         }
 
         buyPrice = this.minFunc(fbuyPrice, this.futureSockets.averagePrice(this.PAIR, this.bot.SMA), maxBuyPrice)

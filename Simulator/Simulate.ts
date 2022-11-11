@@ -14,7 +14,6 @@ import { OneStep } from "../Workers/OneStep";
 
 
 const Binance = require('node-binance-api');
-import {Log, Severity, CoralogixLogger, LoggerConfig} from "coralogix-logger";
 import { OrderPlacer } from "../Workers/PlaceOrders";
 
 
@@ -76,7 +75,7 @@ async function run() {
         dataManager.orderexecute(o, t)
         ToPlace = true
 
-      } else if (dataManager.time - o.time >= bot.secound / 60 && bot.lastOrder != Bot.STABLE) {
+      } else if (dataManager.time - o.time >= bot.secound && bot.lastOrder != Bot.STABLE) {
    
         ToPlace = true
         break;

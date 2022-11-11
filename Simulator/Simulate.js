@@ -109,7 +109,7 @@ function run() {
                             dataManager.orderexecute(o, t);
                             ToPlace = true;
                         }
-                        else if (dataManager.time - o.time >= bot.secound / 60 && bot.lastOrder != Models_1.Bot.STABLE) {
+                        else if (dataManager.time - o.time >= bot.secound && bot.lastOrder != Models_1.Bot.STABLE) {
                             ToPlace = true;
                             break;
                         }

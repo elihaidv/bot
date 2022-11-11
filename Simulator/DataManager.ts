@@ -7,6 +7,8 @@ const cf = require('node-fetch-cache')
 const fetch = cf.fetchBuilder.withCache(new cf.FileSystemCache({
     cacheDirectory: '/tmp/simcache',
 }));
+const admZip = require('adm-zip');
+
 
 
 import { SocketsFutures } from "../Sockets/SocketsFuture";
@@ -87,26 +89,34 @@ export class DataManager {
         return flag;
       }
     async fetchChart() {
+        const promises :Array<Promise<any>> = []
+        const start = new Date(process.argv[4]).getTime() - (this.bot.SMA * 5 * 60 * 1000)
+        const end = new Date(process.argv[5]).getTime()
+        let date = new Date(start)
 
-        const market = this.bot.isFuture ? "FUTURES" : "SPOT"
-        const  file = await fetch("https://itamars.live/storage/cryptoHistory/" + this.PAIR + "_" + market).then(r => r.text())
-        
-        let data = file.split('\n').map(l => l.split(","))
-
-        if (!process.argv[4]) {
-            this.time = 0
-
-        } else if (isNaN(process.argv[4] as any)) {
-            const start = new Date(process.argv[4]).getTime() - (this.bot.SMA * 5 * 60 * 1000)
-            const end = new Date(process.argv[5]).getTime()
-
-            this.startIndex = this.findIndexBetween(start, data)
-            this.endIndex = this.findIndexBetween(end, data)
-
-        } else {
-            this.time = data.length - parseInt(process.argv[4])
+        while (date.getTime() < end + 1000 * 60 * 60 *24) {
+            
+            const dateString = date.toISOString().split("T")[0]
+            
+            promises.push(fetch(`https://data.binance.vision/data/spot/daily/klines/MATICUSDT/1s/MATICUSDT-1s-${dateString}.zip`)
+                .then(res => res.buffer())
+                .then(r => new admZip(r)) 
+                .catch(console.log))
+    
+            date.setDate(date.getDate() + 1)
+    
         }
-        this.time = Math.max(this.time, this.bot.SMA * 5)
+        let files = await Promise.all(promises)
+        
+
+        const data = files.filter(x=>x).map(f=>f.getEntries()[0])
+                    .map(e=>e.getData().toString().split("\n").map(x=>x.split(",").map(y=>parseFloat(y)))).flat()
+
+
+        this.startIndex = this.findIndexBetween(start, data)
+        this.endIndex = this.findIndexBetween(end, data)
+
+        this.time = this.bot.SMA * 5
 
 
         this.fullChart = data.map(([time, high, low, close]) =>

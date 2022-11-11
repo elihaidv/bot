@@ -45,6 +45,7 @@ var cf = require('node-fetch-cache');
 var fetch = cf.fetchBuilder.withCache(new cf.FileSystemCache({
     cacheDirectory: '/tmp/simcache',
 }));
+var admZip = require('adm-zip');
 var Binance = require('node-binance-api');
 var DataManager = /** @class */ (function () {
     function DataManager(bot) {
@@ -120,28 +121,30 @@ var DataManager = /** @class */ (function () {
     };
     DataManager.prototype.fetchChart = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var market, file, data, start, end;
+            var promises, start, end, date, dateString, files, data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        market = this.bot.isFuture ? "FUTURES" : "SPOT";
-                        return [4 /*yield*/, fetch("https://itamars.live/storage/cryptoHistory/" + this.PAIR + "_" + market).then(function (r) { return r.text(); })];
+                        promises = [];
+                        start = new Date(process.argv[4]).getTime() - (this.bot.SMA * 5 * 60 * 1000);
+                        end = new Date(process.argv[5]).getTime();
+                        date = new Date(start);
+                        while (date.getTime() < end + 1000 * 60 * 60 * 24) {
+                            dateString = date.toISOString().split("T")[0];
+                            promises.push(fetch("https://data.binance.vision/data/spot/daily/klines/MATICUSDT/1s/MATICUSDT-1s-" + dateString + ".zip")
+                                .then(function (res) { return res.buffer(); })
+                                .then(function (r) { return new admZip(r); })
+                                .catch(console.log));
+                            date.setDate(date.getDate() + 1);
+                        }
+                        return [4 /*yield*/, Promise.all(promises)];
                     case 1:
-                        file = _a.sent();
-                        data = file.split('\n').map(function (l) { return l.split(","); });
-                        if (!process.argv[4]) {
-                            this.time = 0;
-                        }
-                        else if (isNaN(process.argv[4])) {
-                            start = new Date(process.argv[4]).getTime() - (this.bot.SMA * 5 * 60 * 1000);
-                            end = new Date(process.argv[5]).getTime();
-                            this.startIndex = this.findIndexBetween(start, data);
-                            this.endIndex = this.findIndexBetween(end, data);
-                        }
-                        else {
-                            this.time = data.length - parseInt(process.argv[4]);
-                        }
-                        this.time = Math.max(this.time, this.bot.SMA * 5);
+                        files = _a.sent();
+                        data = files.filter(function (x) { return x; }).map(function (f) { return f.getEntries()[0]; })
+                            .map(function (e) { return e.getData().toString().split("\n").map(function (x) { return x.split(",").map(function (y) { return parseFloat(y); }); }); }).flat();
+                        this.startIndex = this.findIndexBetween(start, data);
+                        this.endIndex = this.findIndexBetween(end, data);
+                        this.time = this.bot.SMA * 5;
                         this.fullChart = data.map(function (_a) {
                             var time = _a[0], high = _a[1], low = _a[2], close = _a[3];
                             return (Object.assign(new CandleStick(), { time: time, high: high, low: low, close: close }));

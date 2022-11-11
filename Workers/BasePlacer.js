@@ -160,13 +160,14 @@ var BasePlacer = /** @class */ (function () {
         return arr.reduce(function (a, b) { return a + (parseFloat(b.price) * (b.executedQty / overallQu)); }, 0.0);
     };
     BasePlacer.prototype.place_order = function (coin, qu, price, type, params, increaseToMinimum) {
+        if (price === void 0) { price = 0; }
         if (increaseToMinimum === void 0) { increaseToMinimum = false; }
         return __awaiter(this, void 0, void 0, function () {
             var minNotional, action, res, error, e_2, error;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        minNotional = this.filters.MIN_NOTIONAL.minNotional || this.bot.minNotional;
+                        minNotional = this.filters.MIN_NOTIONAL.minNotional || this.filters.MIN_NOTIONAL.notional || this.bot.minNotional;
                         if (coin == "BNB") {
                             qu -= this.bot.minbnb;
                         }
@@ -211,7 +212,7 @@ var BasePlacer = /** @class */ (function () {
                                 side: type,
                                 coin: this.PAIR,
                                 amount: qu,
-                                price: price,
+                                price: price || params.stopPrice || params.activationPrice,
                                 message: res.msg,
                                 created_at: new Date()
                             };

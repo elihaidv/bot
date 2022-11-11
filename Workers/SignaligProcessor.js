@@ -227,7 +227,7 @@ var SignalingPlacer = /** @class */ (function (_super) {
                         stoploose = signaling.stop;
                         if (!this.isFirst()) return [3 /*break*/, 5];
                         price = this.roundPrice(this.minFunc(signaling.enter[0], this.futureSockets.prices[this.PAIR][0]));
-                        qu = this.truncDigits(minAmount / price, this.countDecimals(parseFloat(this.filters.LOT_SIZE.stepSize)), Math.ceil);
+                        qu = 11 / price;
                         return [4 /*yield*/, this.place_order(this.PAIR, qu, price, !this.bot.direction, {
                                 newClientOrderId: "FIRST_" + signaling._id
                             })];
@@ -242,7 +242,7 @@ var SignalingPlacer = /** @class */ (function (_super) {
                         if (!(enterNum < 4)) return [3 /*break*/, 7];
                         step = (signaling.enter[0] - signaling.enter[1]) / 4;
                         price = this.roundPrice(signaling.enter[0] - step * enterNum);
-                        qu = this.truncDigits(minAmount / price, this.countDecimals(parseFloat(this.filters.LOT_SIZE.stepSize)), Math.ceil);
+                        qu = 11 / price;
                         return [4 /*yield*/, this.place_order(this.PAIR, qu, price, !this.bot.direction, {
                                 newClientOrderId: "ENTER" + (enterNum + 1) + "_" + signaling._id
                             })];

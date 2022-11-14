@@ -52,8 +52,10 @@ async function run() {
 
 
 
-  for (let i = dataManager.time; i < dataManager.chart.length - 1; i++) {
-    const t = dataManager.chart[i]
+  for (dataManager.time = dataManager.startIndex; dataManager.time < dataManager.endIndex; dataManager.time++) {
+    const t = dataManager.chart[dataManager.time]
+
+    if (!t) break;
 
     // const low = Math.min(t.low,  dataManager.chart[i - 1]?.low ?? Infinity)
     let ToPlace = false;
@@ -95,9 +97,9 @@ async function run() {
       DAL.instance.logStep({ "type": "😰Liquid", low: t.close, priority: 10 })
       break;
     }
-    dataManager.time++
   }
-  dataManager.closePosition(dataManager.chart[dataManager.time - 1].low);
+  dataManager.time--
+  dataManager.closePosition(dataManager.chart[dataManager.time].low);
   console.log("Profit: " + dataManager.profit)
   await DAL.instance.endTest()
  

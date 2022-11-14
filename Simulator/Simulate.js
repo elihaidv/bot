@@ -55,7 +55,7 @@ var id = process.argv[3] || "61da8b2036520f0737301999";
 var dataManager;
 function run() {
     return __awaiter(this, void 0, void 0, function () {
-        var simulation, bot, _a, _b, _c, executeds, i, t, ToPlace, _i, _d, o, _e;
+        var simulation, bot, _a, _b, _c, executeds, t, ToPlace, _i, _d, o, _e;
         return __generator(this, function (_f) {
             switch (_f.label) {
                 case 0: return [4 /*yield*/, (0, node_fetch_1.default)("https://itamars.live/api/simulations/" + id, {
@@ -88,11 +88,13 @@ function run() {
                 case 7:
                     _f.sent();
                     executeds = new Map();
-                    i = dataManager.time;
+                    dataManager.time = dataManager.startIndex;
                     _f.label = 8;
                 case 8:
-                    if (!(i < dataManager.chart.length - 1)) return [3 /*break*/, 14];
-                    t = dataManager.chart[i];
+                    if (!(dataManager.time < dataManager.endIndex)) return [3 /*break*/, 14];
+                    t = dataManager.chart[dataManager.time];
+                    if (!t)
+                        return [3 /*break*/, 14];
                     ToPlace = false;
                     for (_i = 0, _d = dataManager.openOrders.slice().reverse(); _i < _d.length; _i++) {
                         o = _d[_i];
@@ -135,13 +137,13 @@ function run() {
                         DALSimulation_1.DAL.instance.logStep({ "type": "😰Liquid", low: t.close, priority: 10 });
                         return [3 /*break*/, 14];
                     }
-                    dataManager.time++;
                     _f.label = 13;
                 case 13:
-                    i++;
+                    dataManager.time++;
                     return [3 /*break*/, 8];
                 case 14:
-                    dataManager.closePosition(dataManager.chart[dataManager.time - 1].low);
+                    dataManager.time--;
+                    dataManager.closePosition(dataManager.chart[dataManager.time].low);
                     console.log("Profit: " + dataManager.profit);
                     return [4 /*yield*/, DALSimulation_1.DAL.instance.endTest()];
                 case 15:

@@ -131,6 +131,9 @@ export class FutureTrader extends BasePlacer {
         } else if (this.myLastOrder?.side == this.sellSide()) {
             fbuyPrice = this.myLastOrder?.avgPrice * this.sub(1, this.bot.take_profit)
         } else {
+            if (this.bot.amount_percent > 0.9){
+                return
+            }
             fbuyPrice = this.myLastOrder?.avgPrice * this.sub(1, this.bot.last_distance ?? 0)
         }
 
@@ -205,7 +208,7 @@ export class FutureTrader extends BasePlacer {
 
 
         if (this.bot.stop_loose) {
-            const SLprice = this.sub(this.positionEntry, ((((this.balance[this.SECOND] * this.bot.stop_loose) +this.currentPnl)/this.positionAmount) * this.positionEntry))
+            const SLprice = this.sub(this.positionEntry, ((((this.balance[this.SECOND] * this.bot.stop_loose))/(this.positionAmount* this.positionEntry)) * this.positionEntry))
           
             if (SLprice > 0) {
                 await this.place_order(this.PAIR, 0, 0, this.bot.direction, {

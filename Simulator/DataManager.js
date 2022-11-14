@@ -126,12 +126,12 @@ var DataManager = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         promises = [];
-                        start = new Date(process.argv[4]).getTime() - (this.bot.SMA * 5 * 60 * 1000);
+                        start = new Date(process.argv[4]).getTime() - (500 * 15 * 60 * 1000);
                         end = new Date(process.argv[5]).getTime();
                         date = new Date(start);
                         while (date.getTime() < end + 1000 * 60 * 60 * 24) {
                             dateString = date.toISOString().split("T")[0];
-                            promises.push(fetch("https://data.binance.vision/data/spot/daily/klines/MATICUSDT/1s/MATICUSDT-1s-" + dateString + ".zip")
+                            promises.push(fetch("https://data.binance.vision/data/spot/daily/klines/" + this.PAIR + "/1s/" + this.PAIR + "-1s-" + dateString + ".zip")
                                 .then(function (res) { return res.buffer(); })
                                 .then(function (r) { return new admZip(r); })
                                 .catch(console.log));
@@ -140,11 +140,16 @@ var DataManager = /** @class */ (function () {
                         return [4 /*yield*/, Promise.all(promises)];
                     case 1:
                         files = _a.sent();
-                        data = files.filter(function (x) { return x; }).map(function (f) { return f.getEntries()[0]; })
-                            .map(function (e) { return e.getData().toString().split("\n").map(function (x) { return x.split(",").map(function (y) { return parseFloat(y); }); }); }).flat();
+                        data = files.filter(function (x) { return x; })
+                            .map(function (f) { return f.getEntries()[0]; })
+                            .map(function (e) { return e.getData().toString().split("\n")
+                            .filter(function (r) { return r; })
+                            .map(function (x) { return x.split(",")
+                            .map(function (y) { return parseFloat(y); }); }); })
+                            .flat();
                         this.startIndex = this.findIndexBetween(start, data);
                         this.endIndex = this.findIndexBetween(end, data);
-                        this.time = this.bot.SMA * 5;
+                        this.time = this.startIndex;
                         this.fullChart = data.map(function (_a) {
                             var time = _a[0], high = _a[1], low = _a[2], close = _a[3];
                             return (Object.assign(new CandleStick(), { time: time, high: high, low: low, close: close }));
@@ -233,12 +238,20 @@ var DataManager = /** @class */ (function () {
         });
     };
     DataManager.prototype.averagePrice = function (pair, steps) {
-        var start = Math.max(this.time - (steps * 5), 0);
-        return this.chart.map(function (x) { return x.close; }).slice(start, this.time).reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }, 0) / (steps * 5);
+        var count = Math.min(this.time, (steps * 5 * 60));
+        var start = this.time - count;
+        return this.chart
+            .map(function (x) { return x.close; })
+            .slice(start, this.time)
+            .reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }, 0) / count;
     };
     DataManager.prototype.averagePriceQuarter = function (pair) {
-        var startTime = this.time + this.startIndex;
-        return this.fullChart.map(function (x) { return x.close; }).slice(Math.max(startTime - 7500, 0), startTime).reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }) / Math.min(startTime, 7500);
+        var count = Math.min(this.time, (15 * 500 * 60));
+        var start = this.time - count;
+        return this.fullChart
+            .map(function (x) { return x.close; })
+            .slice(start, this.time)
+            .reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }) / count;
     };
     DataManager.prototype.simulateState = function () {
         // if (!this.bot.avoidCancel){

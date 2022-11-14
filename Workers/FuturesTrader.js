@@ -205,6 +205,9 @@ var FutureTrader = /** @class */ (function (_super) {
                             fbuyPrice = ((_c = this.myLastOrder) === null || _c === void 0 ? void 0 : _c.avgPrice) * this.sub(1, this.bot.take_profit);
                         }
                         else {
+                            if (this.bot.amount_percent > 0.9) {
+                                return [2 /*return*/];
+                            }
                             fbuyPrice = ((_d = this.myLastOrder) === null || _d === void 0 ? void 0 : _d.avgPrice) * this.sub(1, (_e = this.bot.last_distance) !== null && _e !== void 0 ? _e : 0);
                         }
                         buyPrice = this.minFunc(fbuyPrice, this.futureSockets.averagePrice(this.PAIR, this.bot.SMA), maxBuyPrice);
@@ -296,7 +299,7 @@ var FutureTrader = /** @class */ (function (_super) {
                         _b.label = 6;
                     case 6:
                         if (!this.bot.stop_loose) return [3 /*break*/, 8];
-                        SLprice = this.sub(this.positionEntry, ((((this.balance[this.SECOND] * this.bot.stop_loose) + this.currentPnl) / this.positionAmount) * this.positionEntry));
+                        SLprice = this.sub(this.positionEntry, ((((this.balance[this.SECOND] * this.bot.stop_loose)) / (this.positionAmount * this.positionEntry)) * this.positionEntry));
                         if (!(SLprice > 0)) return [3 /*break*/, 8];
                         return [4 /*yield*/, this.place_order(this.PAIR, 0, 0, this.bot.direction, {
                                 type: "STOP_MARKET",

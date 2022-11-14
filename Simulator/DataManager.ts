@@ -90,7 +90,7 @@ export class DataManager {
       }
     async fetchChart() {
         const promises :Array<Promise<any>> = []
-        const start = new Date(process.argv[4]).getTime() - (this.bot.SMA * 5 * 60 * 1000)
+        const start = new Date(process.argv[4]).getTime() - (500 * 15 * 60 * 1000)
         const end = new Date(process.argv[5]).getTime()
         let date = new Date(start)
 
@@ -98,7 +98,7 @@ export class DataManager {
             
             const dateString = date.toISOString().split("T")[0]
             
-            promises.push(fetch(`https://data.binance.vision/data/spot/daily/klines/MATICUSDT/1s/MATICUSDT-1s-${dateString}.zip`)
+            promises.push(fetch(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/1s/${this.PAIR}-1s-${dateString}.zip`)
                 .then(res => res.buffer())
                 .then(r => new admZip(r)) 
                 .catch(console.log))
@@ -109,14 +109,19 @@ export class DataManager {
         let files = await Promise.all(promises)
         
 
-        const data = files.filter(x=>x).map(f=>f.getEntries()[0])
-                    .map(e=>e.getData().toString().split("\n").map(x=>x.split(",").map(y=>parseFloat(y)))).flat()
+        const data = files.filter(x=>x)
+                    .map(f=>f.getEntries()[0])
+                    .map(e=>e.getData().toString().split("\n")
+                            .filter(r=>r)
+                            .map(x=>x.split(",")
+                                .map(y=>parseFloat(y))))
+                    .flat()
 
 
         this.startIndex = this.findIndexBetween(start, data)
         this.endIndex = this.findIndexBetween(end, data)
 
-        this.time = this.bot.SMA * 5
+        this.time = this.startIndex 
 
 
         this.fullChart = data.map(([time, high, low, close]) =>
@@ -230,13 +235,21 @@ export class DataManager {
     }
 
     averagePrice(pair, steps) {
-        const start = Math.max(this.time - (steps * 5), 0)
-        return this.chart.map(x => x.close).slice(start, this.time).reduce((a, b) => parseFloat(a) + parseFloat(b),0) / (steps * 5)
+        const count = Math.min(this.time,  (steps * 5 * 60))
+        const start = this.time - count
+        return this.chart
+                .map(x => x.close)
+                .slice(start, this.time)
+                .reduce((a, b) => parseFloat(a) + parseFloat(b),0) / count
     }
 
     averagePriceQuarter(pair) {
-        const startTime = this.time  + this.startIndex
-        return this.fullChart.map(x => x.close).slice(Math.max(startTime - 7500, 0), startTime).reduce((a, b) => parseFloat(a) + parseFloat(b)) / Math.min(startTime, 7500)
+        const count = Math.min(this.time,  (15 * 500 * 60))
+        const start = this.time - count
+        return this.fullChart
+                    .map(x => x.close)
+                    .slice(start, this.time)
+                    .reduce((a, b) => parseFloat(a) + parseFloat(b)) / count
     }
     simulateState() {
         // if (!this.bot.avoidCancel){

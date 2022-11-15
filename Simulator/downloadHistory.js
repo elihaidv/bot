@@ -15,11 +15,11 @@ async function runMain() {
             .then(r => console.log(`done ${date}`))
             .catch(console.log))
 
-        // if (promises.length == 10) {
-        //     await Promise.all(promises)
+        if (promises.length == 10) {
+            const arr = await Promise.all(promises)
             
-        //     promises.length = 0
-        // }
+            promises.length = 0
+        }
 
     }
     const arr = await Promise.all(promises)

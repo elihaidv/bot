@@ -9,10 +9,6 @@ const fetch = cf.fetchBuilder.withCache(new cf.FileSystemCache({
 }));
 const admZip = require('adm-zip');
 
-
-
-import { SocketsFutures } from "../Sockets/SocketsFuture";
-
 const Binance = require('node-binance-api');
 
 export class DataManager {

@@ -11,7 +11,7 @@ async function runMain() {
         
         promises.push(fetch(`https://data.binance.vision/data/spot/daily/klines/MATICUSDT/1s/MATICUSDT-1s-${date}.zip`)
             .then(res => res.buffer())
-            .then(r => new admZip(r)) 
+            // .then(r => new admZip(r)) 
             .then(r => console.log(`done ${date}`))
             .catch(console.log))
 

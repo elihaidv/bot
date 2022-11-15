@@ -121,13 +121,15 @@ var DataManager = /** @class */ (function () {
     };
     DataManager.prototype.fetchChart = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var promises, start, end, date, dateString, files, data;
+            var promises, today, start, end, date, dateString, files, data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         promises = [];
+                        today = new Date();
+                        today.setDate(today.getDate() - 2);
                         start = new Date(process.argv[4]).getTime() - (500 * 15 * 60 * 1000);
-                        end = new Date(process.argv[5]).getTime();
+                        end = Math.min(new Date(process.argv[5]).getTime(), today.getTime());
                         date = new Date(start);
                         while (date.getTime() < end + 1000 * 60 * 60 * 24) {
                             dateString = date.toISOString().split("T")[0];

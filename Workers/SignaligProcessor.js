@@ -205,7 +205,7 @@ var SignalingPlacer = /** @class */ (function (_super) {
     SignalingPlacer.prototype.placeOrder = function (signaling) {
         var _a, _b, _c, _d;
         return __awaiter(this, void 0, void 0, function () {
-            var minAmount, stoploose, price, qu, exitNum, match, enterNum, step, price, qu, sellPrice, sellQu, match, price, qu;
+            var minAmount, stoploose, price, qu, exitNum, match, enterNum, sellPrice, sellQu, match, price, qu;
             return __generator(this, function (_e) {
                 switch (_e.label) {
                     case 0:
@@ -233,54 +233,43 @@ var SignalingPlacer = /** @class */ (function (_super) {
                             })];
                     case 4:
                         _e.sent();
-                        return [3 /*break*/, 14];
+                        return [3 /*break*/, 12];
                     case 5:
                         exitNum = 0;
-                        if (!(((_c = this.myLastOrder) === null || _c === void 0 ? void 0 : _c.side) == this.buySide())) return [3 /*break*/, 9];
+                        if (!(((_c = this.myLastOrder) === null || _c === void 0 ? void 0 : _c.side) == this.buySide())) return [3 /*break*/, 7];
                         match = this.myLastOrder.clientOrderId.match(/ENTER(\d)/);
                         enterNum = parseInt((match === null || match === void 0 ? void 0 : match.length) ? match[1] : "1");
-                        if (!(enterNum < 4)) return [3 /*break*/, 7];
-                        step = (signaling.enter[0] - signaling.enter[1]) / 4;
-                        price = this.roundPrice(signaling.enter[0] - step * enterNum);
-                        qu = 11 / price;
-                        return [4 /*yield*/, this.place_order(this.PAIR, qu, price, !this.bot.direction, {
-                                newClientOrderId: "ENTER" + (enterNum + 1) + "_" + signaling._id
-                            })];
-                    case 6:
-                        _e.sent();
-                        _e.label = 7;
-                    case 7:
                         sellPrice = signaling.takeProfits[0];
                         sellQu = this.positionAmount / 3;
                         return [4 /*yield*/, this.place_order(this.PAIR, sellQu, sellPrice, this.bot.direction, {
                                 newClientOrderId: "EXIT1_" + signaling._id,
                                 reduceOnly: true
                             })];
-                    case 8:
+                    case 6:
                         _e.sent();
-                        return [3 /*break*/, 11];
-                    case 9:
-                        if (!(((_d = this.myLastOrder) === null || _d === void 0 ? void 0 : _d.side) == this.sellSide())) return [3 /*break*/, 11];
+                        return [3 /*break*/, 9];
+                    case 7:
+                        if (!(((_d = this.myLastOrder) === null || _d === void 0 ? void 0 : _d.side) == this.sellSide())) return [3 /*break*/, 9];
                         match = this.myLastOrder.clientOrderId.match(/EXIT(\d)/);
                         exitNum = parseInt((match === null || match === void 0 ? void 0 : match.length) ? match[1] : "1");
                         stoploose = signaling.enter[0];
-                        if (!(exitNum < 6)) return [3 /*break*/, 11];
+                        if (!(exitNum < 6)) return [3 /*break*/, 9];
                         price = signaling.takeProfits[exitNum];
                         qu = this.positionAmount / 3;
                         return [4 /*yield*/, this.place_order(this.PAIR, qu, price, this.bot.direction, {
                                 newClientOrderId: "EXIT" + (exitNum + 1) + "_" + signaling._id,
                                 reduceOnly: true
                             })];
-                    case 10:
+                    case 8:
                         _e.sent();
-                        _e.label = 11;
-                    case 11: return [4 /*yield*/, this.place_order(this.PAIR, 0, 0, this.bot.direction, {
+                        _e.label = 9;
+                    case 9: return [4 /*yield*/, this.place_order(this.PAIR, 0, 0, this.bot.direction, {
                             type: "TAKE_PROFIT_MARKET",
                             closePosition: true,
                             stopPrice: signaling.takeProfits[exitNum + 1],
                             newClientOrderId: "LASTTP_" + signaling._id
                         })];
-                    case 12:
+                    case 10:
                         _e.sent();
                         return [4 /*yield*/, this.place_order(this.PAIR, 0, 0, this.bot.direction, {
                                 type: "STOP_MARKET",
@@ -288,10 +277,10 @@ var SignalingPlacer = /** @class */ (function (_super) {
                                 stopPrice: stoploose,
                                 newClientOrderId: "LASTSL_" + signaling._id
                             })];
-                    case 13:
+                    case 11:
                         _e.sent();
-                        _e.label = 14;
-                    case 14:
+                        _e.label = 12;
+                    case 12:
                         if (this.error) {
                             this.bot.binance.orders.changed.push(this.PAIR + this.bot.positionSide());
                         }

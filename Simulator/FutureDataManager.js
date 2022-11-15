@@ -38,7 +38,7 @@ var FutureDataManager = /** @class */ (function (_super) {
         var pos = this.bot.binance.positions[this.PAIR + this.bot.positionSide()];
         if (order.closePosition) {
             console.log("SLprice1: ", ((pos.positionEntry - order.price) / pos.positionEntry) * pos.positionAmount);
-            order.executedQty = pos.positionAmount;
+            order.executedQty = Math.abs(pos.positionAmount);
             gain = (order.price - pos.positionEntry) * pos.positionAmount;
             pos.positionAmount = 0;
             pos.positionEntry = 0;

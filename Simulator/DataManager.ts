@@ -90,8 +90,11 @@ export class DataManager {
       }
     async fetchChart() {
         const promises :Array<Promise<any>> = []
+        const today = new Date();
+        today.setDate(today.getDate()-2);
+
         const start = new Date(process.argv[4]).getTime() - (500 * 15 * 60 * 1000)
-        const end = new Date(process.argv[5]).getTime()
+        const end = Math.min(new Date(process.argv[5]).getTime(), today.getTime())
         let date = new Date(start)
 
         while (date.getTime() < end + 1000 * 60 * 60 *24) {

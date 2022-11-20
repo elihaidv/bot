@@ -95,6 +95,7 @@ export abstract class BasePlacer {
     buildHistory() {
         const buys = Array<Order>()
         const sellOrders: Array<string> = []
+        this.myLastOrder = undefined
 
         for (let order of this.orders
             .filter(x => x.status.includes('FILLED'))
@@ -156,7 +157,7 @@ export abstract class BasePlacer {
         qu = this.roundQu(qu)
         price = this.roundPrice(price)
 
-        if ((qu * price) < minNotional && !params?.closePosition) {
+        if ((qu * price) < minNotional && !params?.closePosition && !params?.reduceOnly) {
             if (increaseToMinimum) {
                 qu = this.roundQu((parseFloat(minNotional) + 1) / price)
             } else {

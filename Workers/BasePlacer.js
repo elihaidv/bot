@@ -121,6 +121,7 @@ var BasePlacer = /** @class */ (function () {
         var _this = this;
         var buys = Array();
         var sellOrders = [];
+        this.myLastOrder = undefined;
         var _loop_1 = function (order) {
             this_1.myLastOrder || (this_1.myLastOrder = order);
             if (order.side == this_1.buySide()) {
@@ -177,7 +178,7 @@ var BasePlacer = /** @class */ (function () {
                         }
                         qu = this.roundQu(qu);
                         price = this.roundPrice(price);
-                        if ((qu * price) < minNotional && !(params === null || params === void 0 ? void 0 : params.closePosition)) {
+                        if ((qu * price) < minNotional && !(params === null || params === void 0 ? void 0 : params.closePosition) && !(params === null || params === void 0 ? void 0 : params.reduceOnly)) {
                             if (increaseToMinimum) {
                                 qu = this.roundQu((parseFloat(minNotional) + 1) / price);
                             }

@@ -1,3 +1,5 @@
+
+import { exec, spawn } from 'node:child_process';
 import * as fs from 'node:fs/promises'
 import { DAL } from "../DALSimulation";
 import { Account, Bot, Order } from "../Models";
@@ -7,26 +9,41 @@ const cf = require('node-fetch-cache')
 const fetch = cf.fetchBuilder.withCache(new cf.FileSystemCache({
     cacheDirectory: '/tmp/simcache',
 }));
-const admZip = require('adm-zip');
-
+const admZip = require('adm-zip')
 const Binance = require('node-binance-api');
 
 export class DataManager {
     hasMoney(t: CandleStick): boolean {
+        
         return true
         //   throw new Error("Method not implemented.");
     }
-    fullChart: Array<CandleStick> = [];
+    
     chart: Array<CandleStick> = [];
+    charts: { [key: string]: Array<CandleStick>; } = {};
+
     openOrders: Array<Order> = [];
-    time = 0
+    currentCandle = 0
     bot: Bot
     PAIR
     profit = 0;
     exchangeInfo: any
     filters: any
-    startIndex
-    endIndex
+
+    currentHour = 0
+    offsetInHour = 0
+
+    readonly UNIT_TIMES = ['1h', '15m', '5m', '1m', '1s']
+    readonly MIN_CHART_SIZE = 5 * 24 * 60 * 60
+    readonly UNIT_HOUR_CANDLES = {
+        '1h': 1,
+        '15m': 4,
+        '5m': 12,
+        '1m': 60,
+        '1s': 60 * 60
+    }
+
+
 
     sockets: BaseSockets
 
@@ -52,7 +69,7 @@ export class DataManager {
         //     return {msg:"Order Expire"}
         // }
         const order = new Order(type ? 'BUY' : "SELL", "NEW", p,
-            this.makeid(10), qu, qu, this.time, params.type || "LIMIT", params.newClientOrderId,
+            this.makeid(10), qu, qu, this.currentCandle, params.type || "LIMIT", params.newClientOrderId,
             this.bot.positionSide(), p)
         order.closePosition = params.closePosition
 
@@ -60,8 +77,8 @@ export class DataManager {
 
         DAL.instance.logStep({
             type: 'OpenOrder', side: order.side, price: order.price, quantity: order.origQty, priority: 8,
-            high: this.chart[this.time].high,
-            low: this.chart[this.time].low,
+            high: this.chart[this.currentCandle].high,
+            low: this.chart[this.currentCandle].low,
         })
         return order
     });
@@ -75,72 +92,125 @@ export class DataManager {
         }
         return result;
     }
-    async checkFileExists(filepath){
+    async checkFileExists(filepath) {
         let flag = true;
-        try{
-          await fs.access(filepath);
-        }catch(e){
-          flag = false;
+        try {
+            await fs.access(filepath);
+        } catch (e) {
+            flag = false;
         }
         return flag;
-      }
-    async fetchChart() {
-        const promises :Array<Promise<any>> = []
-        const today = new Date();
-        today.setDate(today.getDate()-2);
+    }
+    async fetchNextChart(start, end, unit) {
 
-        const start = new Date(process.argv[4]).getTime() - (500 * 15 * 60 * 1000)
-        const end = Math.min(new Date(process.argv[5]).getTime(), today.getTime())
+        let promises: Array<Promise<any>> = []
+
         let date = new Date(start)
 
-        while (date.getTime() < end + 1000 * 60 * 60 *24) {
-            
+        while (date.getTime() < end + 1000 * 60 * 60 * 24) {
+
             const dateString = date.toISOString().split("T")[0]
-            
-            promises.push(fetch(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/1s/${this.PAIR}-1s-${dateString}.zip`)
+
+            promises.push(fetch(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip`)
                 .then(res => res.buffer())
-                .then(r => new admZip(r)) 
+                .then(r => new admZip(r))
+                .then(f => f.getEntries()[0])
+                .then(zip => {
+                    console.log("downloded: ", dateString, unit);
+                    return zip
+                })
                 .catch(console.log))
-    
+
             date.setDate(date.getDate() + 1)
-    
+
         }
-        let files = await Promise.all(promises)
-        
-
-        const data = files.filter(x=>x)
-                    .map(f=>f.getEntries()[0])
-                    .map(e=>e.getData().toString().split("\n")
-                            .filter(r=>r)
-                            .map(x=>x.split(",")
-                                .map(y=>parseFloat(y))))
-                    .flat()
+        const files = await Promise.all(promises);
+        const data = files.filter(x => x)
+            .map(e => e.getData().toString().split("\n")
+                .filter(r => r)
+                .map(x => x.split(",")
+                    .map(y => parseFloat(y))))
+            .flat()
 
 
-        this.startIndex = this.findIndexBetween(start, data)
-        this.endIndex = this.findIndexBetween(end, data)
+        this.charts[unit] = data.map(([time, open, high, low, close]) =>
+            (Object.assign(new CandleStick(), { time, high, low, close })))
+    }
+    async fetchAllCharts(start, end) {
+        await Promise.all([
+            this.fetchNextChart(start, end, "1s"),
+            this.fetchNextChart(start, end, "1m"),
+            this.fetchNextChart(start, end, "5m"),
+            this.fetchNextChart(start, end, "15m"),
+            this.fetchNextChart(start, end, "1h")
+        ]);
 
-        this.time = this.startIndex 
+        for (let i = this.charts["1s"].length - 1; i > 0; i--) {
+            if (this.charts["1s"][i].time != this.charts["1s"][i - 1].time + 1000) {
+                this.charts["1s"].splice(i, 0, Object.assign(new CandleStick(), this.charts["1s"][i]))
+            }
+        }
 
 
-        this.fullChart = data.map(([time, high, low, close]) =>
-            (Object.assign(new CandleStick(), { time, high, low, close })));
+        this.chart = this.chart.slice(this.chart.length - this.MIN_CHART_SIZE)
 
-        this.chart = this.fullChart.slice(this.startIndex, this.endIndex)
+        this.chart = this.chart.concat(this.charts["1s"]);
+
+        this.currentHour = 0
+
     }
 
+    checkOrder(orders: Array<Order>) {
+        let ordersFound = orders
+        for (let unit of this.UNIT_TIMES) {
+            const candleIndex = this.currentHour * this.UNIT_HOUR_CANDLES[unit] + Math.floor(this.offsetInHour / (3600 / this.UNIT_HOUR_CANDLES[unit]))
 
+            let found = false
 
-    findIndexBetween(time, chart) {
-        if (time < chart[0][0]) {
+            for (let i = 0; i < this.UNIT_HOUR_CANDLES[unit]; i++) {
+
+                const t = this.charts[unit][candleIndex + i]
+                if (!t) {
+                    debugger
+                }
+
+                const ordersInInreval = ordersFound.filter(o =>
+                    ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > t.low ||
+                    ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < t.high)
+
+                if (ordersInInreval.length > 0) {
+                    ordersFound = ordersInInreval
+                    if (unit == "1s") {
+                        return ordersFound
+                    }
+                    found = true
+                    break
+                } else {
+                    const offset = (3600 / this.UNIT_HOUR_CANDLES[unit]) % 3600
+                    this.offsetInHour += offset
+                    this.currentCandle += offset
+                }
+            }
+            if (!found) {
+                break
+            }
+        }
+        this.currentHour++
+        this.offsetInHour = 0
+        this.currentCandle += 3600 - (this.currentCandle % 3600)
+        return []
+    }
+
+    findIndexBetween(time: number, chart: Array<CandleStick>) {
+        if (time < chart[0].time) {
             return 0
         }
         for (let i = 0; i < chart.length - 1; i++) {
-            if (chart[i][0] < time && chart[i + 1][0] >= time) {
+            if (chart[i].time < time && chart[i + 1].time >= time) {
                 return i
             }
         }
-        if (time > chart[chart.length - 1][0]) {
+        if (time > chart[chart.length - 1].time) {
             return chart.length - 1
         }
         return -1
@@ -163,9 +233,9 @@ export class DataManager {
         order.status = 'FILLED'
         this.bot.binance!.orders[this.PAIR].push(order)
 
-        console.log("Orders Executed: " ,this.bot.binance!.orders[this.PAIR].length)
+        console.log("Orders Executed: ", this.bot.binance!.orders[this.PAIR].length)
         if (order.side == "SELL") {
-           // console.log("balance: " + (this.bot.binance!.balance[this.bot.coin2].available))
+            // console.log("balance: " + (this.bot.binance!.balance[this.bot.coin2].available))
 
 
             //Check if 
@@ -234,25 +304,25 @@ export class DataManager {
     }
 
     averagePrice(pair, steps) {
-        const count = Math.min(this.time,  (steps * 5 * 60))
-        const start = this.time - count
+        const count = Math.min(this.currentCandle, (steps * 5 * 60))
+        const start = this.currentCandle - count
         return this.chart
-                .map(x => x.close)
-                .slice(start, this.time)
-                .reduce((a, b) => parseFloat(a) + parseFloat(b),0) / count
+            .map(x => x.close)
+            .slice(start, this.currentCandle)
+            .reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / count
     }
 
     averagePriceQuarter(pair) {
-        const count = Math.min(this.time,  (15 * 500 * 60))
-        const start = this.time - count
-        return this.fullChart
-                    .map(x => x.close)
-                    .slice(start, this.time)
-                    .reduce((a, b) => parseFloat(a) + parseFloat(b)) / count
+        const count = Math.min(this.currentCandle, (15 * 500 * 60))
+        const start = this.currentCandle - count
+        return this.chart
+            .map(x => x.close)
+            .slice(start, this.currentCandle)
+            .reduce((a, b) => parseFloat(a) + parseFloat(b)) / count
     }
     simulateState() {
         // if (!this.bot.avoidCancel){
-            this.openOrders = []
+        this.openOrders = []
         // }
 
 
@@ -260,12 +330,12 @@ export class DataManager {
             "asks": {},
             "bids": {},
         }
-        this.sockets.orderBooks[this.PAIR].asks[this.chart[this.time].high] = 1
-        this.sockets.orderBooks[this.PAIR].bids[this.chart[this.time].low] = 1
+        this.sockets.orderBooks[this.PAIR].asks[this.chart[this.currentCandle].high] = 1
+        this.sockets.orderBooks[this.PAIR].bids[this.chart[this.currentCandle].low] = 1
     }
     ticker(p): Ticker {
         let t = new Ticker();
-        t.bestBid = this.chart[this.time].close
+        t.bestBid = this.chart[this.currentCandle].close
         return t
     }
 }

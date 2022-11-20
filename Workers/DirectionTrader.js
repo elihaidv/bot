@@ -89,7 +89,7 @@ var DirectionTrader = /** @class */ (function (_super) {
                         _a.label = 5;
                     case 5:
                         if (!this.error) {
-                            this.bot.lastOrder = Models_1.Bot.STABLE;
+                            this.bot.status = Models_1.BotStatus.STABLE;
                         }
                         return [2 /*return*/];
                 }

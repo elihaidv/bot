@@ -1,6 +1,6 @@
 
 import { BotLogger } from '../Logger';
-import { Account, Bot, Key, Order } from '../Models';
+import { Account, Bot, BotStatus, Key, Order } from '../Models';
 import { SocketsFutures } from '../Sockets/SocketsFuture';
 import { FutureTrader } from './FuturesTrader';
 
@@ -70,7 +70,7 @@ export class OneStep extends FutureTrader {
             closePosition: true
         })
         if (!this.error) {
-            this.bot.lastOrder = Bot.STABLE
+            this.bot.status = BotStatus.STABLE
         }
     }
 

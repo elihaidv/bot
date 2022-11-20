@@ -1,8 +1,13 @@
 
 import { ObjectId } from "mongodb";
 
+export enum BotStatus {
+  STABLE,
+  ERROR,
+  WORK
+}
+
 export class Bot {
-  static STABLE = -1;
 
   _id;
   bot_type_id = "1";
@@ -52,6 +57,7 @@ export class Bot {
   user_id: any;
   signalings: Array<Signaling> = [];
   avoidCancel: boolean = false;
+  status: BotStatus = BotStatus.WORK;
 
   id(): String { return this._id.toString() }
 

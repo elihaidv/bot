@@ -262,7 +262,7 @@ var WeightAvg = /** @class */ (function (_super) {
                         _a.label = 13;
                     case 13:
                         if (!this.error) {
-                            this.bot.lastOrder = Models_1.Bot.STABLE;
+                            this.bot.status = Models_1.BotStatus.STABLE;
                         }
                         return [2 /*return*/];
                 }

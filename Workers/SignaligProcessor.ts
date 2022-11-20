@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { DAL } from "../DAL";
-import { average, Bot, Signaling, SignalingType } from "../Models";
+import { average, Bot,  BotStatus, Signaling, SignalingType } from "../Models";
 import { BasePlacer } from "./BasePlacer";
 import { FutureTrader } from "./FuturesTrader";
 const cancelOrders = require('../CancelOrders');
@@ -116,7 +116,7 @@ export class SignalingPlacer extends FutureTrader {
       await this.closePosition(this.myLastOrder.clientOrderId.split("_")[1])
     } else if (this.myLastOrder?.clientOrderId.includes("LAST")) {
       DAL.instance.removeSignaling(this.bot, signaling._id)
-      this.bot.lastOrder = Bot.STABLE
+      this.bot.status = BotStatus.STABLE
       return
     }
     
@@ -201,8 +201,10 @@ export class SignalingPlacer extends FutureTrader {
     }
     if (this.error) {
       this.bot.binance!.orders.changed.push(this.PAIR + this.bot.positionSide())
+      this.bot.status = BotStatus.ERROR
+
     }
-    this.bot.lastOrder = Bot.STABLE
+    this.bot.status = BotStatus.STABLE
   }
 }
 

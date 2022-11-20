@@ -274,6 +274,7 @@ var FutureTrader = /** @class */ (function (_super) {
                         else {
                             price = this.positionEntry * this.add(1, this.bot.take_profit);
                         }
+                        price = this.sub(price, this.currentPnl / amount);
                         if (!(this.standingBuy && this.bot.sellAdded && this.standingBuy.executedQty < this.positionAmount)) return [3 /*break*/, 2];
                         return [4 /*yield*/, this.placeSellFromBuy(this.standingBuy, price)];
                     case 1:
@@ -311,7 +312,7 @@ var FutureTrader = /** @class */ (function (_super) {
                         _b.label = 8;
                     case 8:
                         if (!this.error) {
-                            this.bot.lastOrder = Models_1.Bot.STABLE;
+                            this.bot.status = Models_1.BotStatus.STABLE;
                         }
                         return [2 /*return*/];
                 }

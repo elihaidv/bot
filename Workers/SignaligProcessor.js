@@ -218,7 +218,7 @@ var SignalingPlacer = /** @class */ (function (_super) {
                     case 2:
                         if ((_b = this.myLastOrder) === null || _b === void 0 ? void 0 : _b.clientOrderId.includes("LAST")) {
                             DAL_1.DAL.instance.removeSignaling(this.bot, signaling._id);
-                            this.bot.lastOrder = Models_1.Bot.STABLE;
+                            this.bot.status = Models_1.BotStatus.STABLE;
                             return [2 /*return*/];
                         }
                         _e.label = 3;
@@ -283,8 +283,9 @@ var SignalingPlacer = /** @class */ (function (_super) {
                     case 12:
                         if (this.error) {
                             this.bot.binance.orders.changed.push(this.PAIR + this.bot.positionSide());
+                            this.bot.status = Models_1.BotStatus.ERROR;
                         }
-                        this.bot.lastOrder = Models_1.Bot.STABLE;
+                        this.bot.status = Models_1.BotStatus.STABLE;
                         return [2 /*return*/];
                 }
             });

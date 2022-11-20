@@ -163,7 +163,7 @@ function filterOutdated(bots) {
             b.binance.orders.changed = b.binance.orders.changed.filter(function (p) { return p != PAIR; });
             return true;
         }
-        if (b.signalings && b.binance && b.binance.orders) {
+        if (b.signalings && b.binance && b.binance.orders && b.status != Models_1.BotStatus.ERROR) {
             for (var _i = 0, _a = b.signalings; _i < _a.length; _i++) {
                 var s = _a[_i];
                 if (b.binance.orders.changed.includes(s.coin1 + s.coin2 + b.positionSide())) {
@@ -171,7 +171,7 @@ function filterOutdated(bots) {
                 }
             }
         }
-        if (b.lastOrder == Models_1.Bot.STABLE)
+        if (b.status == Models_1.BotStatus.STABLE)
             return false;
         return !b.lastOrder || new Date().getTime() - b.lastOrder >= b.secound * 1000;
     });

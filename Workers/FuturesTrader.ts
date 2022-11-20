@@ -1,7 +1,7 @@
 
 import { throws } from 'assert';
 import { BasePlacer } from './BasePlacer'
-import { Account, Bot, Key, Order } from '../Models';
+import { Account, Bot, BotStatus, Key, Order } from '../Models';
 import { SocketsFutures } from '../Sockets/SocketsFuture';
 import { BotLogger } from '../Logger';
 
@@ -188,6 +188,8 @@ export class FutureTrader extends BasePlacer {
             price = this.positionEntry * this.add(1, this.bot.take_profit)
         }
 
+        price = this.sub(price, this.currentPnl / amount)
+        
         if (this.standingBuy && this.bot.sellAdded && this.standingBuy.executedQty < this.positionAmount) {
             amount = await this.placeSellFromBuy(this.standingBuy, price)
         }
@@ -220,7 +222,7 @@ export class FutureTrader extends BasePlacer {
         }
 
         if (!this.error) {
-            this.bot.lastOrder = Bot.STABLE
+            this.bot.status = BotStatus.STABLE
         }
     }
 

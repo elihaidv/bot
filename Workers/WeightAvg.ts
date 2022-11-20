@@ -1,5 +1,5 @@
 import { BasePlacer } from "./BasePlacer"
-import { Bot, Order } from "../Models";
+import { Bot, BotStatus, Order } from "../Models";
 import { BotLogger } from "../Logger";
 
 
@@ -162,7 +162,7 @@ export class WeightAvg extends BasePlacer {
 
 
         if (!this.error) {
-            this.bot.lastOrder = Bot.STABLE
+            this.bot.status = BotStatus.STABLE
         }
     }
 

@@ -59,7 +59,7 @@ var FutureDataManager = /** @class */ (function (_super) {
         this.bot.binance.balance[this.bot.coin2] += gain;
         this.profit += gain;
         console.log("Psition size: " + pos.positionAmount);
-        console.log("Profit: " + (this.profit / 100).toFixed(2) + "% Date: " + new Date(parseInt(this.chart[this.time].time)));
+        console.log("Profit: " + (this.profit / 100).toFixed(2) + "% Date: " + new Date(parseInt(this.chart[this.currentCandle].time)));
         DALSimulation_1.DAL.instance.logStep({
             type: order.type == "STOP_MARKET" ? "StopLoose" : 'Execute',
             side: order.side,
@@ -84,7 +84,7 @@ var FutureDataManager = /** @class */ (function (_super) {
             closePosition: true,
             price: price,
             type: "STOP_MARKET",
-        }), this.chart[this.time]);
+        }), this.chart[this.currentCandle]);
     };
     FutureDataManager.prototype.hasMoney = function (t) {
         var pos = this.bot.binance.positions[this.PAIR + this.bot.positionSide()];

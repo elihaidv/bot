@@ -1,6 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.average = exports.diffInPrecents = exports.Signaling = exports.SignalingType = exports.Key = exports.Account = exports.Order = exports.Bot = void 0;
+exports.average = exports.diffInPrecents = exports.Signaling = exports.SignalingType = exports.Key = exports.Account = exports.Order = exports.Bot = exports.BotStatus = void 0;
+var BotStatus;
+(function (BotStatus) {
+    BotStatus[BotStatus["STABLE"] = 0] = "STABLE";
+    BotStatus[BotStatus["ERROR"] = 1] = "ERROR";
+    BotStatus[BotStatus["WORK"] = 2] = "WORK";
+})(BotStatus = exports.BotStatus || (exports.BotStatus = {}));
 var Bot = /** @class */ (function () {
     function Bot() {
         this.bot_type_id = "1";
@@ -19,12 +25,12 @@ var Bot = /** @class */ (function () {
         this.dynamicDirection = false;
         this.signalings = [];
         this.avoidCancel = false;
+        this.status = BotStatus.WORK;
     }
     Bot.prototype.id = function () { return this._id.toString(); };
     Bot.prototype.positionSide = function () {
         return this.isFuture ? (this.mode ? (this.direction ? 'SHORT' : 'LONG') : 'BOTH') : '';
     };
-    Bot.STABLE = -1;
     return Bot;
 }());
 exports.Bot = Bot;

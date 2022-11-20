@@ -38,71 +38,74 @@ async function run() {
   dataManager = bot.isFuture ? new FutureDataManager(bot) : new DataManager(bot);
 
   dataManager.setExchangeInfo(bot.isFuture ?
-    await Binance({'family': 4}).futuresExchangeInfo() :
-    await Binance({'family': 4}).exchangeInfo())
+    await Binance({ 'family': 4 }).futuresExchangeInfo() :
+    await Binance({ 'family': 4 }).exchangeInfo())
 
-  await dataManager.fetchChart()
+
+  DAL.instance.init(dataManager, id)
+
+  const start = new Date(process.argv[4]).getTime() - (500 * 15 * 60 * 1000)
+  const end = new Date(process.argv[5]).getTime()
+  let endChunk = Math.min(end, start + dataManager.MIN_CHART_SIZE * 1000)
+
+  await dataManager.fetchAllCharts(start, endChunk)
+  dataManager.currentCandle = (500 * 15 * 60)
+  dataManager.currentHour = 125
 
   dataManager.initData()
-
-  DAL.instance.init(dataManager,id)
   await place(bot)
 
-  const executeds = new Map<Number, Order>()
+  let t = dataManager.chart[dataManager.currentCandle]
 
+  while (t && t.time <= end) {
 
-
-  for (dataManager.time = dataManager.startIndex; dataManager.time < dataManager.endIndex; dataManager.time++) {
-    const t = dataManager.chart[dataManager.time]
-
-    if (!t) break;
-
-    // const low = Math.min(t.low,  dataManager.chart[i - 1]?.low ?? Infinity)
     let ToPlace = false;
 
-    for (let o of dataManager.openOrders.slice().reverse()) {
+    const ordersToFill = dataManager.checkOrder(dataManager.openOrders)
 
-      // if (await checkTrailing(bot,o,t)) break;
-
-      //     case "TRAILING_STOP_MARKET": 
-      //     if (!trailing) {
-      //       trailing = t.high
-      //       // console.log(`Trailing activate ${o.side}: ${o.price}`)
-      //     }
-      if (("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > t.low ||
-        ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < t.high) {
-
-        console.log(`Execute ${o.side}: ${t.high} ~ ${t.low}`, new Date(parseFloat(t.time)))
-        executeds[dataManager.time] = o
-        dataManager.orderexecute(o, t)
-        ToPlace = true
-
-      } else if (dataManager.time - o.time >= bot.secound && bot.lastOrder != Bot.STABLE) {
-   
-        ToPlace = true
-        break;
-
-      }
+    t = dataManager.chart[dataManager.currentCandle]
+    if (!t) {
+      let startChunk = dataManager.chart.at(-1)!.time + 1000
+      let endChunk = Math.min(end, startChunk + dataManager.MIN_CHART_SIZE * 1000)
+      await dataManager.fetchAllCharts(startChunk, endChunk)
+      dataManager.currentCandle = dataManager.MIN_CHART_SIZE
+      t = dataManager.chart[dataManager.currentCandle]
     }
 
-    if (DAL.instance.awaiter){
+    if (ordersToFill.length) {
+      const o = ordersToFill[0]
+      console.log(`Execute ${o.side}: ${t.high} ~ ${t.low}`, new Date(parseFloat(t.time)))
+      dataManager.orderexecute(o, t)
+      ToPlace = true
+
+    } else if ( dataManager.openOrders.length &&
+                dataManager.currentCandle - dataManager.openOrders[0].time >= bot.secound &&
+                bot.lastOrder != Bot.STABLE) {
+      ToPlace = true
+    }
+
+    if (DAL.instance.awaiter) {
       console.log("awaiter")
       DAL.instance.awaiter = false
       await timeout(100)
     }
 
-    ToPlace && await place(bot)
+
     if (!dataManager.hasMoney(t) && t.close) {
       console.log("😰Liquid at: " + t.close)
       DAL.instance.logStep({ "type": "😰Liquid", low: t.close, priority: 10 })
       break;
-    }
+    }    
+
+    ToPlace && await place(bot)
+    dataManager.currentCandle++;
   }
-  dataManager.time--
-  dataManager.closePosition(dataManager.chart[dataManager.time].low);
+
+  dataManager.currentCandle--
+  dataManager.closePosition(dataManager.chart[dataManager.currentCandle].low);
   console.log("Profit: " + dataManager.profit)
   await DAL.instance.endTest()
- 
+
   exit(0)
 }
 
@@ -152,7 +155,7 @@ async function place(bot: Bot) {
     default: {
 
       worker = new OneStep(bot, dataManager.exchangeInfo);
-     
+
       // (worker as OneStep).cancelOrders = async () => {dataManager.openOrders = []}
       break
 

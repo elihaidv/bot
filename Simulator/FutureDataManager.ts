@@ -50,7 +50,7 @@ export class FutureDataManager extends DataManager {
         this.profit += gain
 
         console.log("Psition size: " + pos.positionAmount)
-        console.log("Profit: " + (this.profit / 100).toFixed(2) + "% Date: " + new Date(parseInt(this.chart[this.time].time)))
+        console.log("Profit: " + (this.profit / 100).toFixed(2) + "% Date: " + new Date(parseInt(this.chart[this.currentCandle].time)))
 
 
 
@@ -83,7 +83,7 @@ export class FutureDataManager extends DataManager {
             closePosition: true,
             price: price,
             type: "STOP_MARKET",
-        }), this.chart[this.time]);
+        }), this.chart[this.currentCandle]);
 
     }
 

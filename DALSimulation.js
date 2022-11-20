@@ -92,7 +92,7 @@ var DAL = /** @class */ (function () {
                     case 0:
                         if (this.isQuiet)
                             return [2 /*return*/];
-                        step.time = this.dataManager.chart[this.dataManager.time].time;
+                        step.time = this.dataManager.chart[this.dataManager.currentCandle].time;
                         stepArr = [step.time, step.type, step.side, step.price, step.quantity, step.low, step.high, step.balanceSecond, step.positionSize, step.positionPnl, step.profit, step.balanceFirst, step.priority];
                         this.steps.push(stepArr);
                         this.stepsCounts++;
@@ -112,10 +112,14 @@ var DAL = /** @class */ (function () {
         });
     };
     DAL.prototype.updateProgress = function (status) {
+        var start = new Date(process.argv[4]).getTime();
+        var end = new Date(process.argv[5]).getTime();
+        var time = this.dataManager.chart[this.dataManager.currentCandle].time;
+        var progress = Math.round((time - start) / (end - start) * 100);
         var data = JSON.stringify({
             profit: Number((this.dataManager.profit / 100).toPrecision(2)) + "%",
             maxPage: this.page - 1,
-            progress: status == "finished" ? 100 : ((this.dataManager.time / this.dataManager.chart.length) * 100),
+            progress: status == "finished" ? 100 : progress,
             status: status
         });
         console.log(data);

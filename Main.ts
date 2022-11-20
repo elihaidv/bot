@@ -4,7 +4,7 @@ const cancelOrders = require('./CancelOrders');
 import { DirectionTrader } from './Workers/DirectionTrader';
 import { DualBot } from './Workers/DualBot';
 import { FutureTrader } from './Workers/FuturesTrader';
-import { Bot, Key } from './Models'
+import { Bot, BotStatus, Key } from './Models'
 // import { OrderPlacer } from './PlaceOrders';
 import { Sockets } from './Sockets/Sockets';
 import { SocketsFutures } from './Sockets/SocketsFuture';
@@ -121,18 +121,18 @@ function filterOutdated(bots: Array<Bot>): Array<Bot> {
   return bots.filter(b => {
 
     const PAIR = b.coin1 + b.coin2 + b.positionSide()
-    if (b.binance && b.binance!.orders && b.binance!.orders.changed.includes(PAIR)) {
+    if (b.binance && b.binance!.orders && b.binance!.orders.changed.includes(PAIR) ) {
       b.binance!.orders.changed = b.binance!.orders.changed.filter(p => p != PAIR)
       return true
     }
-    if (b.signalings && b.binance && b.binance!.orders) {
+    if (b.signalings && b.binance && b.binance!.orders && b.status != BotStatus.ERROR) {
       for (let s of b.signalings) {
         if (b.binance!.orders.changed.includes(s.coin1 + s.coin2 + b.positionSide())) {
           return true
         }
       }
     }
-    if (b.lastOrder == Bot.STABLE) return false
+    if (b.status == BotStatus.STABLE) return false
     return !b.lastOrder || new Date().getTime() - b.lastOrder >= b.secound * 1000
   })
 }

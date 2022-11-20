@@ -50,23 +50,34 @@ var Binance = require('node-binance-api');
 var DataManager = /** @class */ (function () {
     function DataManager(bot) {
         var _this = this;
-        this.fullChart = [];
         this.chart = [];
+        this.charts = {};
         this.openOrders = [];
-        this.time = 0;
+        this.currentCandle = 0;
         this.profit = 0;
+        this.currentHour = 0;
+        this.offsetInHour = 0;
+        this.UNIT_TIMES = ['1h', '15m', '5m', '1m', '1s'];
+        this.MIN_CHART_SIZE = 5 * 24 * 60 * 60;
+        this.UNIT_HOUR_CANDLES = {
+            '1h': 1,
+            '15m': 4,
+            '5m': 12,
+            '1m': 60,
+            '1s': 60 * 60
+        };
         this.openOrder = function (type) { return (function (coin, qu, price, params) {
             var p = price || params.stopPrice || params.activationPrice;
             // if (type ? p > this.chart[this.time].high :  p < this.chart[this.time].low) {
             //     return {msg:"Order Expire"}
             // }
-            var order = new Models_1.Order(type ? 'BUY' : "SELL", "NEW", p, _this.makeid(10), qu, qu, _this.time, params.type || "LIMIT", params.newClientOrderId, _this.bot.positionSide(), p);
+            var order = new Models_1.Order(type ? 'BUY' : "SELL", "NEW", p, _this.makeid(10), qu, qu, _this.currentCandle, params.type || "LIMIT", params.newClientOrderId, _this.bot.positionSide(), p);
             order.closePosition = params.closePosition;
             _this.openOrders.push(order);
             DALSimulation_1.DAL.instance.logStep({
                 type: 'OpenOrder', side: order.side, price: order.price, quantity: order.origQty, priority: 8,
-                high: _this.chart[_this.time].high,
-                low: _this.chart[_this.time].low,
+                high: _this.chart[_this.currentCandle].high,
+                low: _this.chart[_this.currentCandle].low,
             });
             return order;
         }); };
@@ -119,59 +130,132 @@ var DataManager = /** @class */ (function () {
             });
         });
     };
-    DataManager.prototype.fetchChart = function () {
+    DataManager.prototype.fetchNextChart = function (start, end, unit) {
         return __awaiter(this, void 0, void 0, function () {
-            var promises, today, start, end, date, dateString, files, data;
+            var promises, date, _loop_1, this_1, files, data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         promises = [];
-                        today = new Date();
-                        today.setDate(today.getDate() - 2);
-                        start = new Date(process.argv[4]).getTime() - (500 * 15 * 60 * 1000);
-                        end = Math.min(new Date(process.argv[5]).getTime(), today.getTime());
                         date = new Date(start);
-                        while (date.getTime() < end + 1000 * 60 * 60 * 24) {
-                            dateString = date.toISOString().split("T")[0];
-                            promises.push(fetch("https://data.binance.vision/data/spot/daily/klines/" + this.PAIR + "/1s/" + this.PAIR + "-1s-" + dateString + ".zip")
+                        _loop_1 = function () {
+                            var dateString = date.toISOString().split("T")[0];
+                            promises.push(fetch("https://data.binance.vision/data/spot/daily/klines/" + this_1.PAIR + "/" + unit + "/" + this_1.PAIR + "-" + unit + "-" + dateString + ".zip")
                                 .then(function (res) { return res.buffer(); })
                                 .then(function (r) { return new admZip(r); })
+                                .then(function (f) { return f.getEntries()[0]; })
+                                .then(function (zip) {
+                                console.log("downloded: ", dateString, unit);
+                                return zip;
+                            })
                                 .catch(console.log));
                             date.setDate(date.getDate() + 1);
+                        };
+                        this_1 = this;
+                        while (date.getTime() < end + 1000 * 60 * 60 * 24) {
+                            _loop_1();
                         }
                         return [4 /*yield*/, Promise.all(promises)];
                     case 1:
                         files = _a.sent();
                         data = files.filter(function (x) { return x; })
-                            .map(function (f) { return f.getEntries()[0]; })
                             .map(function (e) { return e.getData().toString().split("\n")
                             .filter(function (r) { return r; })
                             .map(function (x) { return x.split(",")
                             .map(function (y) { return parseFloat(y); }); }); })
                             .flat();
-                        this.startIndex = this.findIndexBetween(start, data);
-                        this.endIndex = this.findIndexBetween(end, data);
-                        this.time = this.startIndex;
-                        this.fullChart = data.map(function (_a) {
-                            var time = _a[0], high = _a[1], low = _a[2], close = _a[3];
+                        this.charts[unit] = data.map(function (_a) {
+                            var time = _a[0], open = _a[1], high = _a[2], low = _a[3], close = _a[4];
                             return (Object.assign(new CandleStick(), { time: time, high: high, low: low, close: close }));
                         });
-                        this.chart = this.fullChart.slice(this.startIndex, this.endIndex);
                         return [2 /*return*/];
                 }
             });
         });
     };
+    DataManager.prototype.fetchAllCharts = function (start, end) {
+        return __awaiter(this, void 0, void 0, function () {
+            var i;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, Promise.all([
+                            this.fetchNextChart(start, end, "1s"),
+                            this.fetchNextChart(start, end, "1m"),
+                            this.fetchNextChart(start, end, "5m"),
+                            this.fetchNextChart(start, end, "15m"),
+                            this.fetchNextChart(start, end, "1h")
+                        ])];
+                    case 1:
+                        _a.sent();
+                        for (i = this.charts["1s"].length - 1; i > 0; i--) {
+                            if (this.charts["1s"][i].time != this.charts["1s"][i - 1].time + 1000) {
+                                this.charts["1s"].splice(i, 0, Object.assign(new CandleStick(), this.charts["1s"][i]));
+                            }
+                        }
+                        this.chart = this.chart.slice(this.chart.length - this.MIN_CHART_SIZE);
+                        this.chart = this.chart.concat(this.charts["1s"]);
+                        this.currentHour = 0;
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    DataManager.prototype.checkOrder = function (orders) {
+        var ordersFound = orders;
+        for (var _i = 0, _a = this.UNIT_TIMES; _i < _a.length; _i++) {
+            var unit = _a[_i];
+            var candleIndex = this.currentHour * this.UNIT_HOUR_CANDLES[unit] + Math.floor(this.offsetInHour / (3600 / this.UNIT_HOUR_CANDLES[unit]));
+            var found = false;
+            var _loop_2 = function (i) {
+                var t = this_2.charts[unit][candleIndex + i];
+                if (!t) {
+                    debugger;
+                }
+                var ordersInInreval = ordersFound.filter(function (o) {
+                    return ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > t.low ||
+                        ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < t.high;
+                });
+                if (ordersInInreval.length > 0) {
+                    ordersFound = ordersInInreval;
+                    if (unit == "1s") {
+                        return { value: ordersFound };
+                    }
+                    found = true;
+                    return "break";
+                }
+                else {
+                    var offset = (3600 / this_2.UNIT_HOUR_CANDLES[unit]) % 3600;
+                    this_2.offsetInHour += offset;
+                    this_2.currentCandle += offset;
+                }
+            };
+            var this_2 = this;
+            for (var i = 0; i < this.UNIT_HOUR_CANDLES[unit]; i++) {
+                var state_1 = _loop_2(i);
+                if (typeof state_1 === "object")
+                    return state_1.value;
+                if (state_1 === "break")
+                    break;
+            }
+            if (!found) {
+                break;
+            }
+        }
+        this.currentHour++;
+        this.offsetInHour = 0;
+        this.currentCandle += 3600 - (this.currentCandle % 3600);
+        return [];
+    };
     DataManager.prototype.findIndexBetween = function (time, chart) {
-        if (time < chart[0][0]) {
+        if (time < chart[0].time) {
             return 0;
         }
         for (var i = 0; i < chart.length - 1; i++) {
-            if (chart[i][0] < time && chart[i + 1][0] >= time) {
+            if (chart[i].time < time && chart[i + 1].time >= time) {
                 return i;
             }
         }
-        if (time > chart[chart.length - 1][0]) {
+        if (time > chart[chart.length - 1].time) {
             return chart.length - 1;
         }
         return -1;
@@ -240,19 +324,19 @@ var DataManager = /** @class */ (function () {
         });
     };
     DataManager.prototype.averagePrice = function (pair, steps) {
-        var count = Math.min(this.time, (steps * 5 * 60));
-        var start = this.time - count;
+        var count = Math.min(this.currentCandle, (steps * 5 * 60));
+        var start = this.currentCandle - count;
         return this.chart
             .map(function (x) { return x.close; })
-            .slice(start, this.time)
+            .slice(start, this.currentCandle)
             .reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }, 0) / count;
     };
     DataManager.prototype.averagePriceQuarter = function (pair) {
-        var count = Math.min(this.time, (15 * 500 * 60));
-        var start = this.time - count;
-        return this.fullChart
+        var count = Math.min(this.currentCandle, (15 * 500 * 60));
+        var start = this.currentCandle - count;
+        return this.chart
             .map(function (x) { return x.close; })
-            .slice(start, this.time)
+            .slice(start, this.currentCandle)
             .reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }) / count;
     };
     DataManager.prototype.simulateState = function () {
@@ -263,12 +347,12 @@ var DataManager = /** @class */ (function () {
             "asks": {},
             "bids": {},
         };
-        this.sockets.orderBooks[this.PAIR].asks[this.chart[this.time].high] = 1;
-        this.sockets.orderBooks[this.PAIR].bids[this.chart[this.time].low] = 1;
+        this.sockets.orderBooks[this.PAIR].asks[this.chart[this.currentCandle].high] = 1;
+        this.sockets.orderBooks[this.PAIR].bids[this.chart[this.currentCandle].low] = 1;
     };
     DataManager.prototype.ticker = function (p) {
         var t = new Ticker();
-        t.bestBid = this.chart[this.time].close;
+        t.bestBid = this.chart[this.currentCandle].close;
         return t;
     };
     return DataManager;

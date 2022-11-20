@@ -1,7 +1,7 @@
 
 import {BasePlacer} from './BasePlacer'
 import { Sockets } from '../Sockets/Sockets';
-import { Bot } from '../Models';
+import { Bot, BotStatus } from '../Models';
 
 export class OrderPlacer extends BasePlacer{
     
@@ -23,7 +23,7 @@ export class OrderPlacer extends BasePlacer{
         await this.split(this.bot.divide_sell, this.SECOND, calculations.sellPrice, calculations.sellQu, false, this.bot.diffrent_sell)
 
         if (!this.error){
-            this.bot.lastOrder = Bot.STABLE
+            this.bot.status = BotStatus.STABLE
         }
     }
     

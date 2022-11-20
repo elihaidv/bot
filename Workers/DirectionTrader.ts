@@ -1,5 +1,5 @@
 import { FutureTrader } from './FuturesTrader';
-import { Bot } from '../Models';
+import { Bot, BotStatus } from '../Models';
 
 export class DirectionTrader extends FutureTrader {
 
@@ -35,7 +35,7 @@ export class DirectionTrader extends FutureTrader {
         }
 
         if (!this.error) {
-            this.bot.lastOrder = Bot.STABLE
+            this.bot.status = BotStatus.STABLE
         }
     }
 

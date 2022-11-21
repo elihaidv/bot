@@ -241,9 +241,13 @@ var DataManager = /** @class */ (function () {
                 break;
             }
         }
-        this.currentHour++;
         this.offsetInHour = 0;
         this.currentCandle += 3600 - (this.currentCandle % 3600);
+        if (this.chart[this.currentCandle]) {
+            this.currentHour = (this.chart[this.currentCandle].time - this.charts["1h"][0].time) / 3600000;
+            var diff = this.chart[this.currentCandle].time - this.charts["1h"][this.currentHour].time;
+            console.log("diff", diff);
+        }
         return [];
     };
     DataManager.prototype.findIndexBetween = function (time, chart) {

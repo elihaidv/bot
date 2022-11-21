@@ -194,11 +194,18 @@ export class DataManager {
             if (!found) {
                 break
             }
-        }
-        this.currentHour++
+        }   
+    
+        
         this.offsetInHour = 0
         this.currentCandle += 3600 - (this.currentCandle % 3600)
-        return []
+        if (this.chart[this.currentCandle]){
+            this.currentHour =  (this.chart[this.currentCandle].time - this.charts["1h"][0].time) / 3600000 
+            const diff = this.chart[this.currentCandle].time - this.charts["1h"][this.currentHour].time
+            
+        }
+    
+         return []
     }
 
     findIndexBetween(time: number, chart: Array<CandleStick>) {

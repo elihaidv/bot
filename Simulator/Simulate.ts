@@ -1,7 +1,7 @@
 import { DirectionTrader } from "../Workers/DirectionTrader";
 import { DualBot } from "../Workers/DualBot";
 import { FutureTrader } from "../Workers/FuturesTrader";
-import { Bot, Key, Order } from "../Models";
+import { Bot, BotStatus, Key, Order } from "../Models";
 import { WeightAvg } from "../Workers/WeightAvg";
 import { BasePlacer } from "../Workers/BasePlacer";
 import { CandleStick, DataManager } from "./DataManager";
@@ -80,7 +80,7 @@ async function run() {
 
     } else if ( dataManager.openOrders.length &&
                 dataManager.currentCandle - dataManager.openOrders[0].time >= bot.secound &&
-                bot.lastOrder != Bot.STABLE) {
+                bot.status != BotStatus.STABLE) {
       ToPlace = true
     }
 

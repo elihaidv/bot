@@ -255,7 +255,7 @@ var SignalingPlacer = /** @class */ (function (_super) {
                         stoploose = signaling.enter[0];
                         if (!(exitNum < 6)) return [3 /*break*/, 9];
                         price = signaling.takeProfits[exitNum];
-                        qu = this.positionAmount / 3;
+                        qu = this.positionAmount / 5;
                         return [4 /*yield*/, this.place_order(this.PAIR, qu, price, this.bot.direction, {
                                 newClientOrderId: "EXIT" + (exitNum + 1) + "_" + signaling._id,
                                 reduceOnly: true

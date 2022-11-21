@@ -117,7 +117,7 @@ function run() {
                     }
                     else if (dataManager.openOrders.length &&
                         dataManager.currentCandle - dataManager.openOrders[0].time >= bot.secound &&
-                        bot.lastOrder != Models_1.Bot.STABLE) {
+                        bot.status != Models_1.BotStatus.STABLE) {
                         ToPlace = true;
                     }
                     if (!DALSimulation_1.DAL.instance.awaiter) return [3 /*break*/, 12];

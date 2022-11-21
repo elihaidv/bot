@@ -156,6 +156,9 @@ export abstract class BasePlacer {
 
         qu = this.roundQu(qu)
         price = this.roundPrice(price)
+        
+        this.bot.lastOrder = new Date().getTime()
+
 
         if ((qu * price) < minNotional && !params?.closePosition && !params?.reduceOnly) {
             if (increaseToMinimum) {

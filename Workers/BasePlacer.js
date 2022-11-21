@@ -178,6 +178,7 @@ var BasePlacer = /** @class */ (function () {
                         }
                         qu = this.roundQu(qu);
                         price = this.roundPrice(price);
+                        this.bot.lastOrder = new Date().getTime();
                         if ((qu * price) < minNotional && !(params === null || params === void 0 ? void 0 : params.closePosition) && !(params === null || params === void 0 ? void 0 : params.reduceOnly)) {
                             if (increaseToMinimum) {
                                 qu = this.roundQu((parseFloat(minNotional) + 1) / price);

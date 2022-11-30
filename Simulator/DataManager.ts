@@ -21,6 +21,7 @@ export class DataManager {
     
     chart: Array<CandleStick> = [];
     charts: { [key: string]: Array<CandleStick>; } = {};
+    hoursChart: Array<CandleStick> = []
 
     openOrders: Array<Order> = [];
     currentCandle = 0
@@ -30,17 +31,26 @@ export class DataManager {
     exchangeInfo: any
     filters: any
 
-    currentHour = 0
-    offsetInHour = 0
+    // currentHour = 0
+    // offsetInHour = 0
+    currentCandleStick: CandleStick | undefined
 
     readonly UNIT_TIMES = ['1h', '15m', '5m', '1m', '1s']
     readonly MIN_CHART_SIZE = 5 * 24 * 60 * 60
-    readonly UNIT_HOUR_CANDLES = {
-        '1h': 1,
-        '15m': 4,
-        '5m': 12,
-        '1m': 60,
-        '1s': 60 * 60
+    // readonly UNIT_HOUR_CANDLES = {
+    //     '1h': 1,
+    //     '15m': 4,
+    //     '5m': 12,
+    //     '1m': 60,
+    //     '1s': 60 * 60
+    // }
+
+    readonly UNIT_NEXT_LEVEL = {
+        '1s':60,
+        '1m':5,
+        '5m':3,
+        '15m':4,
+        '1h':1
     }
 
 
@@ -69,7 +79,7 @@ export class DataManager {
         //     return {msg:"Order Expire"}
         // }
         const order = new Order(type ? 'BUY' : "SELL", "NEW", p,
-            this.makeid(10), qu, qu, this.currentCandle, params.type || "LIMIT", params.newClientOrderId,
+            this.makeid(10), qu, qu, this.chart[this.currentCandle].time, params.type || "LIMIT", params.newClientOrderId,
             this.bot.positionSide(), p)
         order.closePosition = params.closePosition
 
@@ -156,56 +166,129 @@ export class DataManager {
 
         this.chart = this.chart.concat(this.charts["1s"]);
 
-        this.currentHour = 0
 
+        for (let unitIndex = 0; unitIndex < this.UNIT_TIMES.length; unitIndex++) {
+            const unit = this.UNIT_TIMES[unitIndex]
+
+            for (let i = 0; i < this.charts[unit].length - 1; i++) {
+                if (this.charts[unit][i + 1]){
+                    this.charts[unit][i].next = this.charts[unit][i + 1]
+                }
+                if (unitIndex > 0) {
+                    const parent = this.charts[this.UNIT_TIMES[unitIndex - 1]][Math.floor(i / this.UNIT_NEXT_LEVEL[unit])]
+                    this.charts[unit][i].parent = parent
+                    parent.children.push(this.charts[unit][i])
+                }
+            }
+        }
+        this.hoursChart = this.charts["1h"]
+        // this.charts = {}
     }
 
-    checkOrder(orders: Array<Order>) {
+    checkOrder(orders: Array<Order>, secounds: number) {
         let ordersFound = orders
-        for (let unit of this.UNIT_TIMES) {
-            const candleIndex = this.currentHour * this.UNIT_HOUR_CANDLES[unit] + Math.floor(this.offsetInHour / (3600 / this.UNIT_HOUR_CANDLES[unit]))
 
-            let found = false
+        if (!this.currentCandleStick) {
+            this.currentCandleStick = this.hoursChart[Math.floor((this.chart[this.currentCandle].time - this.hoursChart[0].time) / 3600 / 1000)]
+        } else {
+            this.currentCandleStick = this.currentCandleStick?.next ?? this.currentCandleStick?.parent?.next 
+            if (!this.currentCandleStick) {
+                return []
+            }
+        }
 
-            for (let i = 0; i < this.UNIT_HOUR_CANDLES[unit]; i++) {
+        let maxTime = this.chart[this.currentCandle].time + secounds * 1000
+        let candle = this.currentCandleStick
 
-                const t = this.charts[unit][candleIndex + i]
-                if (!t) {
-                    debugger
+        while (true){
+            const ordersInInreval = ordersFound.filter(o =>
+                ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > candle.low ||
+                ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < candle.high)
+
+            if (ordersInInreval.length == 0) {
+                if (secounds > 0 && candle.time > maxTime) {
+                    this.currentCandleStick = candle
+                    this.currentCandle = (candle.time - this.chart[0].time) / 1000
+                    return []
                 }
-
-                const ordersInInreval = ordersFound.filter(o =>
-                    ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > t.low ||
-                    ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < t.high)
-
-                if (ordersInInreval.length > 0) {
-                    ordersFound = ordersInInreval
-                    if (unit == "1s") {
-                        return ordersFound
-                    }
-                    found = true
-                    break
+                if (candle.next) {
+                    candle = candle.next
                 } else {
-                    const offset = (3600 / this.UNIT_HOUR_CANDLES[unit]) % 3600
-                    this.offsetInHour += offset
-                    this.currentCandle += offset
+                    if (candle.parent && candle.parent.next) {
+                        candle = candle.parent.next
+                    } else { 
+                        this.currentCandle  = -1
+                        this.currentCandleStick = undefined
+                        return []
+                    }
+                } 
+            } else {
+                if (candle.children.length){
+                    candle = candle.children[0] 
+                } else {
+                    this.currentCandleStick = candle
+                    this.currentCandle = (candle.time - this.chart[0].time) / 1000
+                    return ordersInInreval
                 }
             }
-            if (!found) {
-                break
-            }
-        }   
+        }
+        
+        // for (let unitIndex = 0; unitIndex < this.UNIT_TIMES.length; unitIndex++) {
+        //     const unit = this.UNIT_TIMES[unitIndex]
+        //     const candleIndex = this.currentHour * this.UNIT_HOUR_CANDLES[unit] + Math.floor(this.offsetInHour / (3600 / this.UNIT_HOUR_CANDLES[unit]))
+
+        //     const candleCountUntilNextBlock = this.UNIT_NEXT_LEVEL[unit] - Math.floor(this.offsetInHour / (3600 / this.UNIT_HOUR_CANDLES[unit])) % this.UNIT_NEXT_LEVEL[unit]
+        //     let found = false
+
+        //     for (let i = 0; i < this.UNIT_NEXT_LEVEL[unit]; i++) {
+
+        //         const t = this.charts[unit][candleIndex + i]
+        //         if (!t) {
+        //             //  debugger
+        //             return []
+        //         }
+
+        //         const ordersInInreval = ordersFound.filter(o =>
+        //             ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > t.low ||
+        //             ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < t.high)
+
+        //         if (ordersInInreval.length > 0) {
+        //             ordersFound = ordersInInreval
+        //             if (unit == "1s") {
+        //                 return ordersFound
+        //             }
+        //             found = true
+        //             break
+        //         } else {
+        //             const offset = (3600 / this.UNIT_HOUR_CANDLES[unit]) 
+        //             this.offsetInHour = ((t.time % 3600000) / 1000) + offset
+        //             this.currentCandle += offset % 3600
+        //             if (i >= candleCountUntilNextBlock - 1){
+        //                 if (this.chart[this.currentCandle - 3600].time < this.charts["1h"][this.currentHour].time){
+        //                     unitIndex -= 2;
+        //                     found = true
+        //                 } else {
+        //                     this.currentCandle -= 3600
+        //                 }
+
+        //                 break
+        //             }
+        //         }
+        //     }
+        //     if (!found) {
+        //         break
+        //     }
+        // }   
     
         
-        this.offsetInHour = 0
-        this.currentCandle += 3600 - (this.currentCandle % 3600)
-        if (this.chart[this.currentCandle]){
-            this.currentHour =  (this.chart[this.currentCandle].time - this.charts["1h"][0].time) / 3600000 
-            const diff = this.chart[this.currentCandle].time - this.charts["1h"][this.currentHour].time
+        // this.offsetInHour = 0
+        // this.currentCandle += 3600 - (this.currentCandle % 3600)
+        // if (this.chart[this.currentCandle]){
+        //     this.currentHour =  (this.chart[this.currentCandle].time - this.charts["1h"][0].time) / 3600000 
             
-        }
+        // }
     
-         return []
+        //  return []
     }
 
     findIndexBetween(time: number, chart: Array<CandleStick>) {
@@ -349,6 +432,9 @@ export class DataManager {
 
 export class CandleStick {
     time; high; low; close;
+    next: CandleStick | undefined;
+    parent: CandleStick | undefined;
+    children: CandleStick[] = [];
 }
 
 

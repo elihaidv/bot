@@ -5,6 +5,8 @@
     "sourceMap": false,
     "noEmitOnError": true,
     "strict": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "resolveJsonModule":true,
+    "esModuleInterop":true
   },
 }

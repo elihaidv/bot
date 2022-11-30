@@ -3,7 +3,7 @@ import { Severity } from 'coralogix-logger'
 import { Logger } from 'telegram'
 import { DAL } from '../DAL'
 import { BotLogger } from '../Logger'
-import { Bot, Order } from '../Models'
+import { Bot, BotStatus, Order } from '../Models'
 import { Sockets } from '../Sockets/Sockets'
 
 export abstract class BasePlacer {
@@ -56,7 +56,7 @@ export abstract class BasePlacer {
         this.filters = this.exchangeInfo.filters.reduce((a, b) => { a[b.filterType] = b; return a }, {})
 
         this.bot = _bot
-
+        this.bot.status = BotStatus.WORK
     }
 
     async buyBNB() {
@@ -156,7 +156,7 @@ export abstract class BasePlacer {
 
         qu = this.roundQu(qu)
         price = this.roundPrice(price)
-        
+
         this.bot.lastOrder = new Date().getTime()
 
 

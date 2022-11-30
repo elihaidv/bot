@@ -119,9 +119,15 @@ export class SignalingPlacer extends FutureTrader {
       this.bot.status = BotStatus.STABLE
       return
     }
+
+    if ( this.biggerThan(this.futureSockets.prices[this.PAIR][0], signaling.takeProfits[0])){
+      this.bot.binance!.orders.changed.push(this.PAIR + this.bot.positionSide())
+      this.bot.status = BotStatus.ERROR
+      return
+    }
     
     const minAmount = parseFloat(this.filters.MIN_NOTIONAL.notional)
-    let stoploose = signaling.stop
+    let stoploose = signaling.enter[1]
 
     if (this.isFirst()) {
 
@@ -130,42 +136,54 @@ export class SignalingPlacer extends FutureTrader {
 
       await this.place_order(
         this.PAIR, qu, price, !this.bot.direction, {
-        newClientOrderId: "FIRST_" + signaling._id
+        newClientOrderId: "FIRST_" + signaling._id,
+        type: "MARKET"
+      })
+
+
+      const sellPrice = signaling.takeProfits[0]
+      const sellQu = this.positionAmount / 3 
+
+      await this.place_order(
+        this.PAIR, sellQu, sellPrice, this.bot.direction, {
+        newClientOrderId: `EXIT1_${signaling._id}`,
+        reduceOnly: true
       })
     } else {
       let exitNum = 0
 
-      if (this.myLastOrder?.side == this.buySide()) {
-        const match = this.myLastOrder!.clientOrderId.match(/ENTER(\d)/)
-        const enterNum = parseInt(match?.length ? match[1] : "1")
+      // if (this.myLastOrder?.side == this.buySide()) {
+      //   const match = this.myLastOrder!.clientOrderId.match(/ENTER(\d)/)
+      //   const enterNum = parseInt(match?.length ? match[1] : "1")
 
 
-        // if (enterNum < 4) {
+      //   // if (enterNum < 4) {
 
-        //   const step = (signaling.enter[0] - signaling.enter[1]) / 4
-        //   const price = this.roundPrice(signaling.enter[0] - step * enterNum)
-        //   const qu = 11 / price
+      //   //   const step = (signaling.enter[0] - signaling.enter[1]) / 4
+      //   //   const price = this.roundPrice(signaling.enter[0] - step * enterNum)
+      //   //   const qu = 11 / price
 
-        //   await this.place_order(
-        //     this.PAIR, qu, price, !this.bot.direction, {
-        //     newClientOrderId: `ENTER${enterNum + 1}_${signaling._id}`
-        //   })
-        // }
+      //   //   await this.place_order(
+      //   //     this.PAIR, qu, price, !this.bot.direction, {
+      //   //     newClientOrderId: `ENTER${enterNum + 1}_${signaling._id}`
+      //   //   })
+      //   // }
 
-        const sellPrice = signaling.takeProfits[0]
-        const sellQu = this.positionAmount / 3 
+      //   const sellPrice = signaling.takeProfits[0]
+      //   const sellQu = this.positionAmount / 3 
 
-        await this.place_order(
-          this.PAIR, sellQu, sellPrice, this.bot.direction, {
-          newClientOrderId: `EXIT1_${signaling._id}`,
-          reduceOnly: true
-        })
+      //   await this.place_order(
+      //     this.PAIR, sellQu, sellPrice, this.bot.direction, {
+      //     newClientOrderId: `EXIT1_${signaling._id}`,
+      //     reduceOnly: true
+      //   })
 
-      } else if (this.myLastOrder?.side == this.sellSide()) {
+      // } else
+       if (this.myLastOrder?.side == this.sellSide()) {
 
         const match = this.myLastOrder!.clientOrderId.match(/EXIT(\d)/)
         exitNum = parseInt(match?.length ? match[1] : "1")
-        stoploose = signaling.enter[0]
+        stoploose = exitNum < 2 ? signaling.enter[0] : signaling.takeProfits[exitNum - 2] 
 
         if (exitNum < 6) {
 

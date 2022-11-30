@@ -35,9 +35,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DAL = void 0;
-var node_fetch_1 = require("node-fetch");
+var node_fetch_1 = __importDefault(require("node-fetch"));
 var storage_1 = require("@google-cloud/storage");
 var PAGE_SIZE = 2000;
 var DAL = /** @class */ (function () {

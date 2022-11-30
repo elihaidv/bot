@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.average = exports.diffInPrecents = exports.Signaling = exports.SignalingType = exports.Key = exports.Account = exports.Order = exports.Bot = exports.BotStatus = void 0;
 var BotStatus;
 (function (BotStatus) {
-    BotStatus[BotStatus["STABLE"] = 0] = "STABLE";
-    BotStatus[BotStatus["ERROR"] = 1] = "ERROR";
-    BotStatus[BotStatus["WORK"] = 2] = "WORK";
+    BotStatus[BotStatus["WORK"] = 0] = "WORK";
+    BotStatus[BotStatus["STABLE"] = 1] = "STABLE";
+    BotStatus[BotStatus["ERROR"] = 2] = "ERROR";
 })(BotStatus = exports.BotStatus || (exports.BotStatus = {}));
 var Bot = /** @class */ (function () {
     function Bot() {

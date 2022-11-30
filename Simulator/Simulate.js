@@ -35,6 +35,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var DirectionTrader_1 = require("../Workers/DirectionTrader");
 var DualBot_1 = require("../Workers/DualBot");
@@ -46,7 +49,11 @@ var FutureDataManager_1 = require("./FutureDataManager");
 var process_1 = require("process");
 var DALSimulation_1 = require("../DALSimulation");
 var Periodically_1 = require("../Workers/Periodically");
-var node_fetch_1 = require("node-fetch");
+var exchangeInfo_json_1 = __importDefault(require("./exchangeInfo.json"));
+var cf = require('node-fetch-cache');
+var fetch = cf.fetchBuilder.withCache(new cf.FileSystemCache({
+    cacheDirectory: '/tmp/simcache',
+}));
 var OneStep_1 = require("../Workers/OneStep");
 var Binance = require('node-binance-api');
 var PlaceOrders_1 = require("../Workers/PlaceOrders");
@@ -58,7 +65,7 @@ function run() {
         var simulation, bot, _a, _b, _c, start, end, endChunk, t, ToPlace, ordersToFill, startChunk, endChunk_1, o, _d;
         return __generator(this, function (_e) {
             switch (_e.label) {
-                case 0: return [4 /*yield*/, (0, node_fetch_1.default)("https://itamars.live/api/simulations/" + id, {
+                case 0: return [4 /*yield*/, fetch("https://itamars.live/api/simulations/" + id, {
                         headers: {
                             "API-KEY": "WkqrHeuts2mIOJHMcxoK"
                         }
@@ -68,47 +75,47 @@ function run() {
                     bot = Object.assign(new Models_1.Bot(), simulation);
                     dataManager = bot.isFuture ? new FutureDataManager_1.FutureDataManager(bot) : new DataManager_1.DataManager(bot);
                     _b = (_a = dataManager).setExchangeInfo;
-                    if (!bot.isFuture) return [3 /*break*/, 3];
-                    return [4 /*yield*/, Binance({ 'family': 4 }).futuresExchangeInfo()];
-                case 2:
+                    if (!bot.isFuture) return [3 /*break*/, 2];
+                    _c = exchangeInfo_json_1.default;
+                    return [3 /*break*/, 4];
+                case 2: return [4 /*yield*/, Binance({ 'family': 4 }).exchangeInfo()];
+                case 3:
                     _c = _e.sent();
-                    return [3 /*break*/, 5];
-                case 3: return [4 /*yield*/, Binance({ 'family': 4 }).exchangeInfo()];
+                    _e.label = 4;
                 case 4:
-                    _c = _e.sent();
-                    _e.label = 5;
-                case 5:
                     _b.apply(_a, [_c]);
                     DALSimulation_1.DAL.instance.init(dataManager, id);
                     start = new Date(process.argv[4]).getTime() - (500 * 15 * 60 * 1000);
                     end = new Date(process.argv[5]).getTime();
                     endChunk = Math.min(end, start + dataManager.MIN_CHART_SIZE * 1000);
                     return [4 /*yield*/, dataManager.fetchAllCharts(start, endChunk)];
-                case 6:
+                case 5:
                     _e.sent();
                     dataManager.currentCandle = (500 * 15 * 60);
-                    dataManager.currentHour = 125;
                     dataManager.initData();
                     return [4 /*yield*/, place(bot)];
-                case 7:
+                case 6:
                     _e.sent();
                     t = dataManager.chart[dataManager.currentCandle];
-                    _e.label = 8;
-                case 8:
-                    if (!(t && t.time <= end)) return [3 /*break*/, 15];
+                    _e.label = 7;
+                case 7:
+                    if (!(t && t.time <= end)) return [3 /*break*/, 14];
                     ToPlace = false;
-                    ordersToFill = dataManager.checkOrder(dataManager.openOrders);
+                    ordersToFill = dataManager.checkOrder(dataManager.openOrders, bot.status != Models_1.BotStatus.STABLE ? bot.secound : 0);
                     t = dataManager.chart[dataManager.currentCandle];
-                    if (!!t) return [3 /*break*/, 10];
+                    if (!!t) return [3 /*break*/, 9];
                     startChunk = dataManager.chart.at(-1).time + 1000;
                     endChunk_1 = Math.min(end, startChunk + dataManager.MIN_CHART_SIZE * 1000);
                     return [4 /*yield*/, dataManager.fetchAllCharts(startChunk, endChunk_1)];
-                case 9:
+                case 8:
                     _e.sent();
                     dataManager.currentCandle = dataManager.MIN_CHART_SIZE;
                     t = dataManager.chart[dataManager.currentCandle];
-                    _e.label = 10;
-                case 10:
+                    if (!t) {
+                        return [3 /*break*/, 14];
+                    }
+                    _e.label = 9;
+                case 9:
                     if (ordersToFill.length) {
                         o = ordersToFill[0];
                         console.log("Execute " + o.side + ": " + t.high + " ~ " + t.low, new Date(parseFloat(t.time)));
@@ -116,39 +123,39 @@ function run() {
                         ToPlace = true;
                     }
                     else if (dataManager.openOrders.length &&
-                        dataManager.currentCandle - dataManager.openOrders[0].time >= bot.secound &&
+                        (t.time - dataManager.openOrders[0].time) * 1000 >= bot.secound &&
                         bot.status != Models_1.BotStatus.STABLE) {
                         ToPlace = true;
                     }
-                    if (!DALSimulation_1.DAL.instance.awaiter) return [3 /*break*/, 12];
+                    if (!DALSimulation_1.DAL.instance.awaiter) return [3 /*break*/, 11];
                     console.log("awaiter");
                     DALSimulation_1.DAL.instance.awaiter = false;
                     return [4 /*yield*/, timeout(100)];
-                case 11:
+                case 10:
                     _e.sent();
-                    _e.label = 12;
-                case 12:
+                    _e.label = 11;
+                case 11:
                     if (!dataManager.hasMoney(t) && t.close) {
                         console.log("😰Liquid at: " + t.close);
                         DALSimulation_1.DAL.instance.logStep({ "type": "😰Liquid", low: t.close, priority: 10 });
-                        return [3 /*break*/, 15];
+                        return [3 /*break*/, 14];
                     }
                     _d = ToPlace;
-                    if (!_d) return [3 /*break*/, 14];
+                    if (!_d) return [3 /*break*/, 13];
                     return [4 /*yield*/, place(bot)];
-                case 13:
+                case 12:
                     _d = (_e.sent());
-                    _e.label = 14;
-                case 14:
+                    _e.label = 13;
+                case 13:
                     _d;
                     dataManager.currentCandle++;
-                    return [3 /*break*/, 8];
-                case 15:
+                    return [3 /*break*/, 7];
+                case 14:
                     dataManager.currentCandle--;
                     dataManager.closePosition(dataManager.chart[dataManager.currentCandle].low);
                     console.log("Profit: " + dataManager.profit);
                     return [4 /*yield*/, DALSimulation_1.DAL.instance.endTest()];
-                case 16:
+                case 15:
                     _e.sent();
                     (0, process_1.exit)(0);
                     return [2 /*return*/];

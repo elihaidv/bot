@@ -39,6 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BasePlacer = void 0;
 var DAL_1 = require("../DAL");
 var Logger_1 = require("../Logger");
+var Models_1 = require("../Models");
 var Sockets_1 = require("../Sockets/Sockets");
 var BasePlacer = /** @class */ (function () {
     function BasePlacer(_bot, _exchangeInfo) {
@@ -77,6 +78,7 @@ var BasePlacer = /** @class */ (function () {
         this.exchangeInfo = _exchangeInfo.symbols.find(function (s) { return s.symbol == _this.PAIR; });
         this.filters = this.exchangeInfo.filters.reduce(function (a, b) { a[b.filterType] = b; return a; }, {});
         this.bot = _bot;
+        this.bot.status = Models_1.BotStatus.WORK;
     }
     BasePlacer.prototype.buyBNB = function () {
         return __awaiter(this, void 0, void 0, function () {

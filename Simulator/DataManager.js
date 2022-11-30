@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -37,7 +56,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CandleStick = exports.DataManager = void 0;
-var fs = require("node:fs/promises");
+var fs = __importStar(require("node:fs/promises"));
 var DALSimulation_1 = require("../DALSimulation");
 var Models_1 = require("../Models");
 var Sockets_1 = require("../Sockets/Sockets");
@@ -52,26 +71,32 @@ var DataManager = /** @class */ (function () {
         var _this = this;
         this.chart = [];
         this.charts = {};
+        this.hoursChart = [];
         this.openOrders = [];
         this.currentCandle = 0;
         this.profit = 0;
-        this.currentHour = 0;
-        this.offsetInHour = 0;
         this.UNIT_TIMES = ['1h', '15m', '5m', '1m', '1s'];
         this.MIN_CHART_SIZE = 5 * 24 * 60 * 60;
-        this.UNIT_HOUR_CANDLES = {
-            '1h': 1,
+        // readonly UNIT_HOUR_CANDLES = {
+        //     '1h': 1,
+        //     '15m': 4,
+        //     '5m': 12,
+        //     '1m': 60,
+        //     '1s': 60 * 60
+        // }
+        this.UNIT_NEXT_LEVEL = {
+            '1s': 60,
+            '1m': 5,
+            '5m': 3,
             '15m': 4,
-            '5m': 12,
-            '1m': 60,
-            '1s': 60 * 60
+            '1h': 1
         };
         this.openOrder = function (type) { return (function (coin, qu, price, params) {
             var p = price || params.stopPrice || params.activationPrice;
             // if (type ? p > this.chart[this.time].high :  p < this.chart[this.time].low) {
             //     return {msg:"Order Expire"}
             // }
-            var order = new Models_1.Order(type ? 'BUY' : "SELL", "NEW", p, _this.makeid(10), qu, qu, _this.currentCandle, params.type || "LIMIT", params.newClientOrderId, _this.bot.positionSide(), p);
+            var order = new Models_1.Order(type ? 'BUY' : "SELL", "NEW", p, _this.makeid(10), qu, qu, _this.chart[_this.currentCandle].time, params.type || "LIMIT", params.newClientOrderId, _this.bot.positionSide(), p);
             order.closePosition = params.closePosition;
             _this.openOrders.push(order);
             DALSimulation_1.DAL.instance.logStep({
@@ -175,7 +200,7 @@ var DataManager = /** @class */ (function () {
     };
     DataManager.prototype.fetchAllCharts = function (start, end) {
         return __awaiter(this, void 0, void 0, function () {
-            var i;
+            var i, unitIndex, unit, i, parent_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, Promise.all([
@@ -194,61 +219,121 @@ var DataManager = /** @class */ (function () {
                         }
                         this.chart = this.chart.slice(this.chart.length - this.MIN_CHART_SIZE);
                         this.chart = this.chart.concat(this.charts["1s"]);
-                        this.currentHour = 0;
+                        for (unitIndex = 0; unitIndex < this.UNIT_TIMES.length; unitIndex++) {
+                            unit = this.UNIT_TIMES[unitIndex];
+                            for (i = 0; i < this.charts[unit].length - 1; i++) {
+                                if (this.charts[unit][i + 1]) {
+                                    this.charts[unit][i].next = this.charts[unit][i + 1];
+                                }
+                                if (unitIndex > 0) {
+                                    parent_1 = this.charts[this.UNIT_TIMES[unitIndex - 1]][Math.floor(i / this.UNIT_NEXT_LEVEL[unit])];
+                                    this.charts[unit][i].parent = parent_1;
+                                    parent_1.children.push(this.charts[unit][i]);
+                                }
+                            }
+                        }
+                        this.hoursChart = this.charts["1h"];
                         return [2 /*return*/];
                 }
             });
         });
     };
-    DataManager.prototype.checkOrder = function (orders) {
+    DataManager.prototype.checkOrder = function (orders, secounds) {
+        var _a, _b, _c, _d;
         var ordersFound = orders;
-        for (var _i = 0, _a = this.UNIT_TIMES; _i < _a.length; _i++) {
-            var unit = _a[_i];
-            var candleIndex = this.currentHour * this.UNIT_HOUR_CANDLES[unit] + Math.floor(this.offsetInHour / (3600 / this.UNIT_HOUR_CANDLES[unit]));
-            var found = false;
-            var _loop_2 = function (i) {
-                var t = this_2.charts[unit][candleIndex + i];
-                if (!t) {
-                    debugger;
+        if (!this.currentCandleStick) {
+            this.currentCandleStick = this.hoursChart[Math.floor((this.chart[this.currentCandle].time - this.hoursChart[0].time) / 3600 / 1000)];
+        }
+        else {
+            this.currentCandleStick = (_b = (_a = this.currentCandleStick) === null || _a === void 0 ? void 0 : _a.next) !== null && _b !== void 0 ? _b : (_d = (_c = this.currentCandleStick) === null || _c === void 0 ? void 0 : _c.parent) === null || _d === void 0 ? void 0 : _d.next;
+            if (!this.currentCandleStick) {
+                return [];
+            }
+        }
+        var maxTime = this.chart[this.currentCandle].time + secounds * 1000;
+        var candle = this.currentCandleStick;
+        while (true) {
+            var ordersInInreval = ordersFound.filter(function (o) {
+                return ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > candle.low ||
+                    ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < candle.high;
+            });
+            if (ordersInInreval.length == 0) {
+                if (secounds > 0 && candle.time > maxTime) {
+                    this.currentCandleStick = candle;
+                    this.currentCandle = (candle.time - this.chart[0].time) / 1000;
+                    return [];
                 }
-                var ordersInInreval = ordersFound.filter(function (o) {
-                    return ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > t.low ||
-                        ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < t.high;
-                });
-                if (ordersInInreval.length > 0) {
-                    ordersFound = ordersInInreval;
-                    if (unit == "1s") {
-                        return { value: ordersFound };
-                    }
-                    found = true;
-                    return "break";
+                if (candle.next) {
+                    candle = candle.next;
                 }
                 else {
-                    var offset = (3600 / this_2.UNIT_HOUR_CANDLES[unit]) % 3600;
-                    this_2.offsetInHour += offset;
-                    this_2.currentCandle += offset;
+                    if (candle.parent && candle.parent.next) {
+                        candle = candle.parent.next;
+                    }
+                    else {
+                        this.currentCandle = -1;
+                        this.currentCandleStick = undefined;
+                        return [];
+                    }
                 }
-            };
-            var this_2 = this;
-            for (var i = 0; i < this.UNIT_HOUR_CANDLES[unit]; i++) {
-                var state_1 = _loop_2(i);
-                if (typeof state_1 === "object")
-                    return state_1.value;
-                if (state_1 === "break")
-                    break;
             }
-            if (!found) {
-                break;
+            else {
+                if (candle.children.length) {
+                    candle = candle.children[0];
+                }
+                else {
+                    this.currentCandleStick = candle;
+                    this.currentCandle = (candle.time - this.chart[0].time) / 1000;
+                    return ordersInInreval;
+                }
             }
         }
-        this.offsetInHour = 0;
-        this.currentCandle += 3600 - (this.currentCandle % 3600);
-        if (this.chart[this.currentCandle]) {
-            this.currentHour = (this.chart[this.currentCandle].time - this.charts["1h"][0].time) / 3600000;
-            var diff = this.chart[this.currentCandle].time - this.charts["1h"][this.currentHour].time;
-            console.log("diff", diff);
-        }
-        return [];
+        // for (let unitIndex = 0; unitIndex < this.UNIT_TIMES.length; unitIndex++) {
+        //     const unit = this.UNIT_TIMES[unitIndex]
+        //     const candleIndex = this.currentHour * this.UNIT_HOUR_CANDLES[unit] + Math.floor(this.offsetInHour / (3600 / this.UNIT_HOUR_CANDLES[unit]))
+        //     const candleCountUntilNextBlock = this.UNIT_NEXT_LEVEL[unit] - Math.floor(this.offsetInHour / (3600 / this.UNIT_HOUR_CANDLES[unit])) % this.UNIT_NEXT_LEVEL[unit]
+        //     let found = false
+        //     for (let i = 0; i < this.UNIT_NEXT_LEVEL[unit]; i++) {
+        //         const t = this.charts[unit][candleIndex + i]
+        //         if (!t) {
+        //             //  debugger
+        //             return []
+        //         }
+        //         const ordersInInreval = ordersFound.filter(o =>
+        //             ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > t.low ||
+        //             ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < t.high)
+        //         if (ordersInInreval.length > 0) {
+        //             ordersFound = ordersInInreval
+        //             if (unit == "1s") {
+        //                 return ordersFound
+        //             }
+        //             found = true
+        //             break
+        //         } else {
+        //             const offset = (3600 / this.UNIT_HOUR_CANDLES[unit]) 
+        //             this.offsetInHour = ((t.time % 3600000) / 1000) + offset
+        //             this.currentCandle += offset % 3600
+        //             if (i >= candleCountUntilNextBlock - 1){
+        //                 if (this.chart[this.currentCandle - 3600].time < this.charts["1h"][this.currentHour].time){
+        //                     unitIndex -= 2;
+        //                     found = true
+        //                 } else {
+        //                     this.currentCandle -= 3600
+        //                 }
+        //                 break
+        //             }
+        //         }
+        //     }
+        //     if (!found) {
+        //         break
+        //     }
+        // }   
+        // this.offsetInHour = 0
+        // this.currentCandle += 3600 - (this.currentCandle % 3600)
+        // if (this.chart[this.currentCandle]){
+        //     this.currentHour =  (this.chart[this.currentCandle].time - this.charts["1h"][0].time) / 3600000 
+        // }
+        //  return []
     };
     DataManager.prototype.findIndexBetween = function (time, chart) {
         if (time < chart[0].time) {
@@ -364,6 +449,7 @@ var DataManager = /** @class */ (function () {
 exports.DataManager = DataManager;
 var CandleStick = /** @class */ (function () {
     function CandleStick() {
+        this.children = [];
     }
     return CandleStick;
 }());

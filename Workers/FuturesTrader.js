@@ -119,9 +119,9 @@ var FutureTrader = /** @class */ (function (_super) {
         for (var _i = 0; _i < arguments.length; _i++) {
             values[_i] = arguments[_i];
         }
-        if (this.isSemulation) {
-            values.pop();
-        }
+        // if (this.isSemulation){
+        //     values.pop()
+        // }
         return this.bot.direction ? Math.max.apply(Math, values) : Math.min.apply(Math, values);
     };
     FutureTrader.prototype.maxFunc = function () {
@@ -129,9 +129,9 @@ var FutureTrader = /** @class */ (function (_super) {
         for (var _i = 0; _i < arguments.length; _i++) {
             values[_i] = arguments[_i];
         }
-        if (this.isSemulation) {
-            values.pop();
-        }
+        // if (this.isSemulation){
+        //     values.pop()
+        // }
         return this.bot.direction ? Math.min.apply(Math, values) : Math.max.apply(Math, values);
     };
     FutureTrader.prototype.calculatePrice = function () {

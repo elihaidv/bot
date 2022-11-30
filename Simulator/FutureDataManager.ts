@@ -73,7 +73,6 @@ export class FutureDataManager extends DataManager {
 
         order.status = 'FILLED'
         this.bot.binance!.orders[this.PAIR].push(order)
-        console.log("Orders Executed: " ,this.bot.binance!.orders.length)
 
         this.openOrders = this.openOrders.filter(o => o.orderId != order.orderId)
     }

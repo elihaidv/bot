@@ -2,9 +2,10 @@
 import { ObjectId } from "mongodb";
 
 export enum BotStatus {
+  WORK,
   STABLE,
   ERROR,
-  WORK
+  
 }
 
 export class Bot {

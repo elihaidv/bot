@@ -9,7 +9,13 @@ import { FutureDataManager } from "./FutureDataManager";
 import { exit } from "process";
 import { DAL } from "../DALSimulation";
 import { Periodically } from "../Workers/Periodically";
-import fetch from 'node-fetch';
+import exchangeInfo from './exchangeInfo.json'
+
+
+const cf = require('node-fetch-cache')
+const fetch = cf.fetchBuilder.withCache(new cf.FileSystemCache({
+  cacheDirectory: '/tmp/simcache',
+}));
 import { OneStep } from "../Workers/OneStep";
 
 
@@ -38,7 +44,7 @@ async function run() {
   dataManager = bot.isFuture ? new FutureDataManager(bot) : new DataManager(bot);
 
   dataManager.setExchangeInfo(bot.isFuture ?
-    await Binance({ 'family': 4 }).futuresExchangeInfo() :
+    exchangeInfo:
     await Binance({ 'family': 4 }).exchangeInfo())
 
 
@@ -50,7 +56,6 @@ async function run() {
 
   await dataManager.fetchAllCharts(start, endChunk)
   dataManager.currentCandle = (500 * 15 * 60)
-  dataManager.currentHour = 125
 
   dataManager.initData()
   await place(bot)
@@ -61,7 +66,7 @@ async function run() {
 
     let ToPlace = false;
 
-    const ordersToFill = dataManager.checkOrder(dataManager.openOrders)
+    const ordersToFill = dataManager.checkOrder(dataManager.openOrders, bot.status != BotStatus.STABLE ? bot.secound : 0)
 
     t = dataManager.chart[dataManager.currentCandle]
     if (!t) {
@@ -70,6 +75,9 @@ async function run() {
       await dataManager.fetchAllCharts(startChunk, endChunk)
       dataManager.currentCandle = dataManager.MIN_CHART_SIZE
       t = dataManager.chart[dataManager.currentCandle]
+      if (!t){
+        break;
+      }
     }
 
     if (ordersToFill.length) {
@@ -78,9 +86,9 @@ async function run() {
       dataManager.orderexecute(o, t)
       ToPlace = true
 
-    } else if ( dataManager.openOrders.length &&
-                dataManager.currentCandle - dataManager.openOrders[0].time >= bot.secound &&
-                bot.status != BotStatus.STABLE) {
+    } else if (dataManager.openOrders.length &&
+      (t.time - dataManager.openOrders[0].time) * 1000 >= bot.secound &&
+      bot.status != BotStatus.STABLE) {
       ToPlace = true
     }
 
@@ -95,7 +103,7 @@ async function run() {
       console.log("😰Liquid at: " + t.close)
       DAL.instance.logStep({ "type": "😰Liquid", low: t.close, priority: 10 })
       break;
-    }    
+    }
 
     ToPlace && await place(bot)
     dataManager.currentCandle++;

@@ -120,16 +120,18 @@ export class SignalingPlacer extends FutureTrader {
       return
     }
 
-    if ( this.biggerThan(this.futureSockets.prices[this.PAIR][0], signaling.takeProfits[0])){
-      this.bot.binance!.orders.changed.push(this.PAIR + this.bot.positionSide())
-      this.bot.status = BotStatus.ERROR
-      return
-    }
+   
     
     const minAmount = parseFloat(this.filters.MIN_NOTIONAL.notional)
     let stoploose = signaling.enter[1]
 
     if (this.isFirst()) {
+
+      if ( this.biggerThan(this.futureSockets.prices[this.PAIR][0], signaling.takeProfits[0])){
+        this.bot.binance!.orders.changed.push(this.PAIR + this.bot.positionSide())
+        this.bot.status = BotStatus.ERROR
+        return
+      }
 
       const price = this.roundPrice(this.minFunc(signaling.enter[0], this.futureSockets.prices[this.PAIR][0]))
       const qu = 11 / price
@@ -140,16 +142,18 @@ export class SignalingPlacer extends FutureTrader {
         type: "MARKET"
       })
 
+      this.positionAmount = qu
 
-      const sellPrice = signaling.takeProfits[0]
-      const sellQu = this.positionAmount / 3 
+      // const sellPrice = signaling.takeProfits[0]
+      // const sellQu = this.positionAmount / 3 
 
-      await this.place_order(
-        this.PAIR, sellQu, sellPrice, this.bot.direction, {
-        newClientOrderId: `EXIT1_${signaling._id}`,
-        reduceOnly: true
-      })
-    } else {
+      // await this.place_order(
+      //   this.PAIR, sellQu, sellPrice, this.bot.direction, {
+      //   newClientOrderId: `EXIT1_${signaling._id}`,
+      //   reduceOnly: true
+      // })
+    }
+    // } else {
       let exitNum = 0
 
       // if (this.myLastOrder?.side == this.buySide()) {
@@ -179,11 +183,10 @@ export class SignalingPlacer extends FutureTrader {
       //   })
 
       // } else
-       if (this.myLastOrder?.side == this.sellSide()) {
 
-        const match = this.myLastOrder!.clientOrderId.match(/EXIT(\d)/)
-        exitNum = parseInt(match?.length ? match[1] : "1")
-        stoploose = exitNum < 2 ? signaling.enter[0] : signaling.takeProfits[exitNum - 2] 
+        const match = this.myLastOrder?.clientOrderId.match(/EXIT(\d)/)
+        exitNum = parseInt(match?.length ? match[1] : "0")
+        stoploose = exitNum == 0 ? signaling.enter[1] : signaling.takeProfits[exitNum - 1] 
 
         if (exitNum < 6) {
 
@@ -196,7 +199,7 @@ export class SignalingPlacer extends FutureTrader {
             reduceOnly: true
           })
         }
-      }
+      
 
 
       await this.place_order(
@@ -216,7 +219,7 @@ export class SignalingPlacer extends FutureTrader {
         stopPrice: stoploose,
         newClientOrderId: "LASTSL_" + signaling._id
       })
-    }
+    
     if (this.error) {
       this.bot.binance!.orders.changed.push(this.PAIR + this.bot.positionSide())
       this.bot.status = BotStatus.ERROR

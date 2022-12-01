@@ -233,7 +233,7 @@ var SignalingPlacer = /** @class */ (function (_super) {
                         if (!this.isFirst()) return [3 /*break*/, 6];
                         price = this.roundPrice(this.minFunc(signaling.enter[0], this.futureSockets.prices[this.PAIR][0]));
                         qu = 11 / price;
-                        return [4 /*yield*/, this.place_order(this.PAIR, qu, 0, !this.bot.direction, {
+                        return [4 /*yield*/, this.place_order(this.PAIR, qu, false, !this.bot.direction, {
                                 newClientOrderId: "FIRST_" + signaling._id,
                                 type: "MARKET"
                             })];

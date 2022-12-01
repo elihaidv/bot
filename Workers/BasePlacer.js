@@ -163,7 +163,6 @@ var BasePlacer = /** @class */ (function () {
         return arr.reduce(function (a, b) { return a + (parseFloat(b.price) * (b.executedQty / overallQu)); }, 0.0);
     };
     BasePlacer.prototype.place_order = function (coin, qu, price, type, params, increaseToMinimum) {
-        if (price === void 0) { price = 0; }
         if (increaseToMinimum === void 0) { increaseToMinimum = false; }
         return __awaiter(this, void 0, void 0, function () {
             var minNotional, action, res, error, e_2, error;
@@ -179,23 +178,25 @@ var BasePlacer = /** @class */ (function () {
                             price = this.align(price, type, qu);
                         }
                         qu = this.roundQu(qu);
-                        price = this.roundPrice(price);
                         this.bot.lastOrder = new Date().getTime();
-                        if ((qu * price) < minNotional && !(params === null || params === void 0 ? void 0 : params.closePosition) && !(params === null || params === void 0 ? void 0 : params.reduceOnly)) {
-                            if (increaseToMinimum) {
-                                qu = this.roundQu((parseFloat(minNotional) + 1) / price);
-                            }
-                            else {
-                                Logger_1.BotLogger.instance.log({
-                                    type: "QuantitiyTooLow",
-                                    bot_id: this.bot._id,
-                                    qu: qu,
-                                    price: price,
-                                    params: params,
-                                    minNotional: minNotional
-                                });
-                                //console.log("quantity is to small" , qu , price , this.bot._id)
-                                return [2 /*return*/];
+                        if (price) {
+                            price = this.roundPrice(price);
+                            if ((qu * price) < minNotional && !(params === null || params === void 0 ? void 0 : params.closePosition) && !(params === null || params === void 0 ? void 0 : params.reduceOnly)) {
+                                if (increaseToMinimum) {
+                                    qu = this.roundQu((parseFloat(minNotional) + 1) / price);
+                                }
+                                else {
+                                    Logger_1.BotLogger.instance.log({
+                                        type: "QuantitiyTooLow",
+                                        bot_id: this.bot._id,
+                                        qu: qu,
+                                        price: price,
+                                        params: params,
+                                        minNotional: minNotional
+                                    });
+                                    console.log("quantity is to small", qu, price, this.bot._id);
+                                    return [2 /*return*/];
+                                }
                             }
                         }
                         this.bot.lastOrder = new Date().getTime();

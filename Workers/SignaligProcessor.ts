@@ -135,7 +135,7 @@ export class SignalingPlacer extends FutureTrader {
       const qu = 11 / price
 
       await this.place_order(
-        this.PAIR, qu, 0, !this.bot.direction, {
+        this.PAIR, qu, false, !this.bot.direction, {
         newClientOrderId: "FIRST_" + signaling._id,
         type: "MARKET"
       })

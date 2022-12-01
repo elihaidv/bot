@@ -140,7 +140,7 @@ export abstract class BasePlacer {
 
     abstract getAction(type: boolean): Function
 
-    async place_order(coin, qu, price = 0, type: boolean, params?, increaseToMinimum = false) {
+    async place_order(coin, qu, price, type: boolean, params?, increaseToMinimum = false) {
         let minNotional = this.filters.MIN_NOTIONAL.minNotional ||this.filters.MIN_NOTIONAL.notional || this.bot.minNotional
 
 
@@ -155,23 +155,24 @@ export abstract class BasePlacer {
         }
 
         qu = this.roundQu(qu)
-        price = this.roundPrice(price)
 
         this.bot.lastOrder = new Date().getTime()
 
-
-        if ((qu * price) < minNotional && !params?.closePosition && !params?.reduceOnly) {
-            if (increaseToMinimum) {
-                qu = this.roundQu((parseFloat(minNotional) + 1) / price)
-            } else {
-                BotLogger.instance.log({
-                    type: "QuantitiyTooLow",
-                    bot_id: this.bot._id,
-                    qu,price,params, minNotional
-                    
-                })
-                //console.log("quantity is to small" , qu , price , this.bot._id)
-                return
+        if (price){
+            price = this.roundPrice(price)
+            if ((qu * price) < minNotional && !params?.closePosition && !params?.reduceOnly) {
+                if (increaseToMinimum) {
+                    qu = this.roundQu((parseFloat(minNotional) + 1) / price)
+                } else {
+                    BotLogger.instance.log({
+                        type: "QuantitiyTooLow",
+                        bot_id: this.bot._id,
+                        qu,price,params, minNotional
+                        
+                    })
+                    console.log("quantity is to small" , qu , price , this.bot._id)
+                    return
+                }
             }
         }
 

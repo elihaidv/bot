@@ -6,7 +6,7 @@ import { WeightAvg } from "../Workers/WeightAvg";
 import { BasePlacer } from "../Workers/BasePlacer";
 import { CandleStick, DataManager } from "./DataManager";
 import { FutureDataManager } from "./FutureDataManager";
-import { exit } from "process";
+import { env, exit } from "process";
 import { DAL } from "../DALSimulation";
 import { Periodically } from "../Workers/Periodically";
 import exchangeInfo from './exchangeInfo.json'
@@ -24,7 +24,6 @@ import { OrderPlacer } from "../Workers/PlaceOrders";
 
 
 
-
 console.log(process.argv)
 const id = process.argv[3] || "61da8b2036520f0737301999";
 
@@ -38,6 +37,10 @@ async function run() {
   }).then(r => r.json())
 
   const bot: Bot = Object.assign(new Bot(), simulation);
+
+  if (simulation.variations){
+    Object.assign(bot, simulation.variations[env.CLOUD_RUN_TASK_INDEX ?? 0]);
+  }
 
 
 

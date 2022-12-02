@@ -1,7 +1,7 @@
 import { DataManager } from "./Simulator/DataManager";
 import fetch from 'node-fetch';
 import { Storage } from "@google-cloud/storage";
-import { exit } from "process";
+import { env, exit } from "process";
 
 const PAGE_SIZE = 2000
 export class DAL {
@@ -17,6 +17,8 @@ export class DAL {
     async init(dataManager: DataManager | null, simulationId) {
         this.dataManager = dataManager
         this.simulationId = simulationId
+
+        setTimeout(() => this.updateProgress("timeout"), 3400000)
     }
 
     async logStep(step) {
@@ -53,7 +55,8 @@ export class DAL {
             profit: Number((this.dataManager.profit / 100).toPrecision(2)) + "%",
             maxPage: this.page - 1,
             progress: status == "finished" ? 100 : progress,
-            status: status
+            status: status,
+            variation: env.CLOUD_RUN_TASK_INDEX
         })
         console.log(data)
 
@@ -93,7 +96,7 @@ export class DAL {
             this.steps = []
             await new Storage()
                 .bucket('simulations-tradingbot')
-                .file(`simulation${process.argv[3]}/${this.page}.csv`)
+                .file(`simulation${process.argv[3]}-${env.CLOUD_RUN_TASK_INDEX}/${this.page}.csv`)
                 .save(cloneSteps
                     .map(s => s.join(','))
                     .join('\n'), { resumable: false })

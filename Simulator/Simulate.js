@@ -61,43 +61,47 @@ console.log(process.argv);
 var id = process.argv[3] || "61da8b2036520f0737301999";
 var dataManager;
 function run() {
+    var _a;
     return __awaiter(this, void 0, void 0, function () {
-        var simulation, bot, _a, _b, _c, start, end, endChunk, t, ToPlace, ordersToFill, startChunk, endChunk_1, o, _d;
-        return __generator(this, function (_e) {
-            switch (_e.label) {
+        var simulation, bot, _b, _c, _d, start, end, endChunk, t, ToPlace, ordersToFill, startChunk, endChunk_1, o, _e;
+        return __generator(this, function (_f) {
+            switch (_f.label) {
                 case 0: return [4 /*yield*/, fetch("https://itamars.live/api/simulations/" + id, {
                         headers: {
                             "API-KEY": "WkqrHeuts2mIOJHMcxoK"
                         }
                     }).then(function (r) { return r.json(); })];
                 case 1:
-                    simulation = _e.sent();
+                    simulation = _f.sent();
                     bot = Object.assign(new Models_1.Bot(), simulation);
+                    if (simulation.variations) {
+                        Object.assign(bot, simulation.variations[(_a = process_1.env.CLOUD_RUN_TASK_INDEX) !== null && _a !== void 0 ? _a : 0]);
+                    }
                     dataManager = bot.isFuture ? new FutureDataManager_1.FutureDataManager(bot) : new DataManager_1.DataManager(bot);
-                    _b = (_a = dataManager).setExchangeInfo;
+                    _c = (_b = dataManager).setExchangeInfo;
                     if (!bot.isFuture) return [3 /*break*/, 2];
-                    _c = exchangeInfo_json_1.default;
+                    _d = exchangeInfo_json_1.default;
                     return [3 /*break*/, 4];
                 case 2: return [4 /*yield*/, Binance({ 'family': 4 }).exchangeInfo()];
                 case 3:
-                    _c = _e.sent();
-                    _e.label = 4;
+                    _d = _f.sent();
+                    _f.label = 4;
                 case 4:
-                    _b.apply(_a, [_c]);
+                    _c.apply(_b, [_d]);
                     DALSimulation_1.DAL.instance.init(dataManager, id);
                     start = new Date(process.argv[4]).getTime() - (500 * 15 * 60 * 1000);
                     end = new Date(process.argv[5]).getTime();
                     endChunk = Math.min(end, start + dataManager.MIN_CHART_SIZE * 1000);
                     return [4 /*yield*/, dataManager.fetchAllCharts(start, endChunk)];
                 case 5:
-                    _e.sent();
+                    _f.sent();
                     dataManager.currentCandle = (500 * 15 * 60);
                     dataManager.initData();
                     return [4 /*yield*/, place(bot)];
                 case 6:
-                    _e.sent();
+                    _f.sent();
                     t = dataManager.chart[dataManager.currentCandle];
-                    _e.label = 7;
+                    _f.label = 7;
                 case 7:
                     if (!(t && t.time <= end)) return [3 /*break*/, 14];
                     ToPlace = false;
@@ -108,13 +112,13 @@ function run() {
                     endChunk_1 = Math.min(end, startChunk + dataManager.MIN_CHART_SIZE * 1000);
                     return [4 /*yield*/, dataManager.fetchAllCharts(startChunk, endChunk_1)];
                 case 8:
-                    _e.sent();
+                    _f.sent();
                     dataManager.currentCandle = dataManager.MIN_CHART_SIZE;
                     t = dataManager.chart[dataManager.currentCandle];
                     if (!t) {
                         return [3 /*break*/, 14];
                     }
-                    _e.label = 9;
+                    _f.label = 9;
                 case 9:
                     if (ordersToFill.length) {
                         o = ordersToFill[0];
@@ -132,22 +136,22 @@ function run() {
                     DALSimulation_1.DAL.instance.awaiter = false;
                     return [4 /*yield*/, timeout(100)];
                 case 10:
-                    _e.sent();
-                    _e.label = 11;
+                    _f.sent();
+                    _f.label = 11;
                 case 11:
                     if (!dataManager.hasMoney(t) && t.close) {
                         console.log("😰Liquid at: " + t.close);
                         DALSimulation_1.DAL.instance.logStep({ "type": "😰Liquid", low: t.close, priority: 10 });
                         return [3 /*break*/, 14];
                     }
-                    _d = ToPlace;
-                    if (!_d) return [3 /*break*/, 13];
+                    _e = ToPlace;
+                    if (!_e) return [3 /*break*/, 13];
                     return [4 /*yield*/, place(bot)];
                 case 12:
-                    _d = (_e.sent());
-                    _e.label = 13;
+                    _e = (_f.sent());
+                    _f.label = 13;
                 case 13:
-                    _d;
+                    _e;
                     dataManager.currentCandle++;
                     return [3 /*break*/, 7];
                 case 14:
@@ -156,7 +160,7 @@ function run() {
                     console.log("Profit: " + dataManager.profit);
                     return [4 /*yield*/, DALSimulation_1.DAL.instance.endTest()];
                 case 15:
-                    _e.sent();
+                    _f.sent();
                     (0, process_1.exit)(0);
                     return [2 /*return*/];
             }

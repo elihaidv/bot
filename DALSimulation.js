@@ -42,6 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DAL = void 0;
 var node_fetch_1 = __importDefault(require("node-fetch"));
 var storage_1 = require("@google-cloud/storage");
+var process_1 = require("process");
 var PAGE_SIZE = 2000;
 var DAL = /** @class */ (function () {
     function DAL() {
@@ -60,7 +61,7 @@ var DAL = /** @class */ (function () {
                         this.steps = [];
                         return [4 /*yield*/, new storage_1.Storage()
                                 .bucket('simulations-tradingbot')
-                                .file("simulation" + process.argv[3] + "/" + this.page + ".csv")
+                                .file("simulation" + process.argv[3] + "-" + process_1.env.CLOUD_RUN_TASK_INDEX + "/" + this.page + ".csv")
                                 .save(cloneSteps
                                 .map(function (s) { return s.join(','); })
                                 .join('\n'), { resumable: false })
@@ -80,9 +81,11 @@ var DAL = /** @class */ (function () {
     }
     DAL.prototype.init = function (dataManager, simulationId) {
         return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
             return __generator(this, function (_a) {
                 this.dataManager = dataManager;
                 this.simulationId = simulationId;
+                setTimeout(function () { return _this.updateProgress("timeout"); }, 3400000);
                 return [2 /*return*/];
             });
         });
@@ -123,7 +126,8 @@ var DAL = /** @class */ (function () {
             profit: Number((this.dataManager.profit / 100).toPrecision(2)) + "%",
             maxPage: this.page - 1,
             progress: status == "finished" ? 100 : progress,
-            status: status
+            status: status,
+            variation: process_1.env.CLOUD_RUN_TASK_INDEX
         });
         console.log(data);
         return (0, node_fetch_1.default)("https://itamars.live/api/simulations/" + this.simulationId, {

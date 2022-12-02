@@ -186,7 +186,8 @@ export class SignalingPlacer extends FutureTrader {
 
         const match = this.myLastOrder?.clientOrderId.match(/EXIT(\d)/)
         exitNum = parseInt(match?.length ? match[1] : "0")
-        stoploose = exitNum == 0 ? signaling.enter[1] : signaling.takeProfits[exitNum - 1] 
+        stoploose = exitNum == 0 ? signaling.enter[1] : 
+                    exitNum == 1 ? signaling.enter[0] : signaling.takeProfits[exitNum - 2] 
 
         if (exitNum < 6) {
 

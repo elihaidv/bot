@@ -245,7 +245,8 @@ var SignalingPlacer = /** @class */ (function (_super) {
                         exitNum = 0;
                         match = (_c = this.myLastOrder) === null || _c === void 0 ? void 0 : _c.clientOrderId.match(/EXIT(\d)/);
                         exitNum = parseInt((match === null || match === void 0 ? void 0 : match.length) ? match[1] : "0");
-                        stoploose = exitNum == 0 ? signaling.enter[1] : signaling.takeProfits[exitNum - 1];
+                        stoploose = exitNum == 0 ? signaling.enter[1] :
+                            exitNum == 1 ? signaling.enter[0] : signaling.takeProfits[exitNum - 2];
                         if (!(exitNum < 6)) return [3 /*break*/, 7];
                         price = signaling.takeProfits[exitNum];
                         qu = this.positionAmount / 5;

@@ -1,3 +1,4 @@
+import { env } from "node:process";
 import { DAL } from "../DALSimulation";
 import { Bot, Order } from "../Models";
 import { SocketsFutures } from "../Sockets/SocketsFuture";
@@ -50,7 +51,7 @@ export class FutureDataManager extends DataManager {
         this.profit += gain
 
         console.log("Psition size: " + pos.positionAmount)
-        console.log("Profit: " + (this.profit / 100).toFixed(2) + "% Date: " + new Date(parseInt(this.chart[this.currentCandle].time)))
+        console.log("Variation: " + env.CLOUD_RUN_TASK_INDEX + "Profit: " + (this.profit / 100).toFixed(2) + "% Date: " + new Date(parseInt(this.chart[this.currentCandle].time)))
 
 
 

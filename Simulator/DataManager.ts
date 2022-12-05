@@ -121,21 +121,21 @@ export class DataManager {
 
             const dateString = date.toISOString().split("T")[0]
 
-            
+
 
             promises.push(
                 DAL.instance.getHistoryFromBucket(this.PAIR, unit, dateString)
-                .then(res => res ? res : 
-                    fetch(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip`)
-                    .then(res => res.buffer())
-                    .then(r => new admZip(r))
-                    .then(f => f.getEntries()[0].getData().toString())
-                    .then(s => DAL.instance.saveHistoryInBucket(s, this.PAIR, unit, dateString)))
-                .then(zip => {
-                    console.log("downloded: ", dateString, unit);
-                    return zip
-                })
-                .catch(console.log))
+                    .then(res => res ? res :
+                        fetch(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip`)
+                            .then(res => res.buffer())
+                            .then(r => new admZip(r))
+                            .then(f => f.getEntries()[0].getData().toString())
+                            .then(s => DAL.instance.saveHistoryInBucket(s, this.PAIR, unit, dateString)))
+                    .then(zip => {
+                        console.log("downloded: ", dateString, unit);
+                        return zip
+                    })
+                    .catch(console.log))
 
             date.setDate(date.getDate() + 1)
 
@@ -165,6 +165,28 @@ export class DataManager {
         this.chart = this.chart.slice(this.chart.length - this.MIN_CHART_SIZE)
 
         this.chart = this.chart.concat(this.charts["1s"]);
+
+        let closeSum = 0
+        let sma = this.bot.SMA * 5 * 60
+        let closeSum500 = 0
+        let sma500 = 500 * 15 * 60
+
+        for (let i = 0; i < this.chart.length; i++) {
+            if (i >= sma) {
+                closeSum -= this.chart[i - sma].close
+            }
+
+            if (i >= sma500) {
+                closeSum500 -= this.chart[i - sma500].close
+            }
+
+            closeSum += this.chart[i].close
+            this.chart[i].sma = closeSum / Math.min(i + 1, sma)
+
+            closeSum500 += this.chart[i].close
+            this.chart[i].sma500 = closeSum500 / Math.min(i + 1, sma500)
+
+        }
 
 
         for (let unitIndex = 0; unitIndex < this.UNIT_TIMES.length; unitIndex++) {
@@ -233,7 +255,7 @@ export class DataManager {
             }
         }
 
-  
+
     }
 
     findIndexBetween(time: number, chart: Array<CandleStick>) {
@@ -337,44 +359,12 @@ export class DataManager {
         }
 
     }
-    averagePriceCached = 0
-    lastAveragePrice = 0
     averagePrice(pair, steps) {
-        const count = Math.min(this.currentCandle, (steps * 5 * 60))
-        const start = this.currentCandle - count
-
-        if (!this.averagePriceCached) {
-            this.averagePriceCached = this.chart
-                .map(x => x.close)
-                .slice(start, this.currentCandle)
-                .reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / count
-            
-        } else {
-            this.averagePriceCached = this.averagePriceCached + (this.chart[this.currentCandle].close - this.lastAveragePrice) / count
-            
-        }
-        this.lastAveragePrice = this.chart[start].close
-        return this.averagePriceCached
+        return this.chart[this.currentCandle].sma
 
     }
-    averagePriceQuaterCached = 0
-    lastAveragePriceQuater = 0
     averagePriceQuarter(pair) {
-        const count = Math.min(this.currentCandle, (15 * 500 * 60))
-        const start = this.currentCandle - count
-
-        if (!this.averagePriceQuaterCached) {
-            this.averagePriceQuaterCached = this.chart
-                .map(x => x.close)
-                .slice(start, this.currentCandle)
-                .reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / count
-        
-        } else {
-            this.averagePriceQuaterCached = this.averagePriceQuaterCached + (this.chart[this.currentCandle].close - this.lastAveragePriceQuater) / count
-            
-        }
-        this.lastAveragePriceQuater = this.chart[start].close
-        return this.averagePriceQuaterCached
+        return this.chart[this.currentCandle].sma500
     }
     simulateState() {
         // if (!this.bot.avoidCancel){
@@ -401,6 +391,7 @@ export class CandleStick {
     next: CandleStick | undefined;
     parent: CandleStick | undefined;
     children: CandleStick[] = [];
+    sma; sma500;
 }
 
 

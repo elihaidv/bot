@@ -225,8 +225,9 @@ export class SignalingPlacer extends FutureTrader {
       this.bot.binance!.orders.changed.push(this.PAIR + this.bot.positionSide())
       this.bot.status = BotStatus.ERROR
 
+    } else {
+      this.bot.status = BotStatus.STABLE
     }
-    this.bot.status = BotStatus.STABLE
   }
 }
 

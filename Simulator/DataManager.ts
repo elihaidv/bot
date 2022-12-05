@@ -14,11 +14,11 @@ const Binance = require('node-binance-api');
 
 export class DataManager {
     hasMoney(t: CandleStick): boolean {
-        
+
         return true
         //   throw new Error("Method not implemented.");
     }
-    
+
     chart: Array<CandleStick> = [];
     charts: { [key: string]: Array<CandleStick>; } = {};
     hoursChart: Array<CandleStick> = []
@@ -46,11 +46,11 @@ export class DataManager {
     // }
 
     readonly UNIT_NEXT_LEVEL = {
-        '1s':60,
-        '1m':5,
-        '5m':3,
-        '15m':4,
-        '1h':1
+        '1s': 60,
+        '1m': 5,
+        '5m': 3,
+        '15m': 4,
+        '1h': 1
     }
 
 
@@ -121,10 +121,16 @@ export class DataManager {
 
             const dateString = date.toISOString().split("T")[0]
 
-            promises.push(fetch(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip`)
-                .then(res => res.buffer())
-                .then(r => new admZip(r))
-                .then(f => f.getEntries()[0])
+            
+
+            promises.push(
+                DAL.instance.getHistoryFromBucket(this.PAIR, unit, dateString)
+                .then(res => res ? res : 
+                    fetch(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip`)
+                    .then(res => res.buffer())
+                    .then(r => new admZip(r))
+                    .then(f => f.getEntries()[0].getData().toString())
+                    .then(s => DAL.instance.saveHistoryInBucket(s, this.PAIR, unit, dateString)))
                 .then(zip => {
                     console.log("downloded: ", dateString, unit);
                     return zip
@@ -135,15 +141,9 @@ export class DataManager {
 
         }
         const files = await Promise.all(promises);
-        const data = files.filter(x => x)
-            .map(e => e.getData().toString().split("\n")
-                .filter(r => r)
-                .map(x => x.split(",")
-                    .map(y => parseFloat(y))))
-            .flat()
+        const data = files.filter(x => x).flat()
 
-
-        this.charts[unit] = data.map(([time, open, high, low, close]) =>
+        this.charts[unit] = data.map(([time, high, low, close]) =>
             (Object.assign(new CandleStick(), { time, high, low, close })))
     }
     async fetchAllCharts(start, end) {
@@ -171,7 +171,7 @@ export class DataManager {
             const unit = this.UNIT_TIMES[unitIndex]
 
             for (let i = 0; i < this.charts[unit].length - 1; i++) {
-                if (this.charts[unit][i + 1]){
+                if (this.charts[unit][i + 1]) {
                     this.charts[unit][i].next = this.charts[unit][i + 1]
                 }
                 if (unitIndex > 0) {
@@ -191,7 +191,7 @@ export class DataManager {
         if (!this.currentCandleStick) {
             this.currentCandleStick = this.hoursChart[Math.floor((this.chart[this.currentCandle].time - this.hoursChart[0].time) / 3600 / 1000)]
         } else {
-            this.currentCandleStick = this.currentCandleStick?.next ?? this.currentCandleStick?.parent?.next 
+            this.currentCandleStick = this.currentCandleStick?.next ?? this.currentCandleStick?.parent?.next
             if (!this.currentCandleStick) {
                 return []
             }
@@ -200,7 +200,7 @@ export class DataManager {
         let maxTime = this.chart[this.currentCandle].time + secounds * 1000
         let candle = this.currentCandleStick
 
-        while (true){
+        while (true) {
             const ordersInInreval = ordersFound.filter(o =>
                 ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > candle.low ||
                 ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < candle.high)
@@ -216,15 +216,15 @@ export class DataManager {
                 } else {
                     if (candle.parent && candle.parent.next) {
                         candle = candle.parent.next
-                    } else { 
-                        this.currentCandle  = -1
+                    } else {
+                        this.currentCandle = -1
                         this.currentCandleStick = undefined
                         return []
                     }
-                } 
+                }
             } else {
-                if (candle.children.length){
-                    candle = candle.children[0] 
+                if (candle.children.length) {
+                    candle = candle.children[0]
                 } else {
                     this.currentCandleStick = candle
                     this.currentCandle = (candle.time - this.chart[0].time) / 1000
@@ -232,63 +232,8 @@ export class DataManager {
                 }
             }
         }
-        
-        // for (let unitIndex = 0; unitIndex < this.UNIT_TIMES.length; unitIndex++) {
-        //     const unit = this.UNIT_TIMES[unitIndex]
-        //     const candleIndex = this.currentHour * this.UNIT_HOUR_CANDLES[unit] + Math.floor(this.offsetInHour / (3600 / this.UNIT_HOUR_CANDLES[unit]))
 
-        //     const candleCountUntilNextBlock = this.UNIT_NEXT_LEVEL[unit] - Math.floor(this.offsetInHour / (3600 / this.UNIT_HOUR_CANDLES[unit])) % this.UNIT_NEXT_LEVEL[unit]
-        //     let found = false
-
-        //     for (let i = 0; i < this.UNIT_NEXT_LEVEL[unit]; i++) {
-
-        //         const t = this.charts[unit][candleIndex + i]
-        //         if (!t) {
-        //             //  debugger
-        //             return []
-        //         }
-
-        //         const ordersInInreval = ordersFound.filter(o =>
-        //             ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > t.low ||
-        //             ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < t.high)
-
-        //         if (ordersInInreval.length > 0) {
-        //             ordersFound = ordersInInreval
-        //             if (unit == "1s") {
-        //                 return ordersFound
-        //             }
-        //             found = true
-        //             break
-        //         } else {
-        //             const offset = (3600 / this.UNIT_HOUR_CANDLES[unit]) 
-        //             this.offsetInHour = ((t.time % 3600000) / 1000) + offset
-        //             this.currentCandle += offset % 3600
-        //             if (i >= candleCountUntilNextBlock - 1){
-        //                 if (this.chart[this.currentCandle - 3600].time < this.charts["1h"][this.currentHour].time){
-        //                     unitIndex -= 2;
-        //                     found = true
-        //                 } else {
-        //                     this.currentCandle -= 3600
-        //                 }
-
-        //                 break
-        //             }
-        //         }
-        //     }
-        //     if (!found) {
-        //         break
-        //     }
-        // }   
-    
-        
-        // this.offsetInHour = 0
-        // this.currentCandle += 3600 - (this.currentCandle % 3600)
-        // if (this.chart[this.currentCandle]){
-        //     this.currentHour =  (this.chart[this.currentCandle].time - this.charts["1h"][0].time) / 3600000 
-            
-        // }
-    
-        //  return []
+  
     }
 
     findIndexBetween(time: number, chart: Array<CandleStick>) {
@@ -392,23 +337,44 @@ export class DataManager {
         }
 
     }
-
+    averagePriceCached = 0
+    lastAveragePrice = 0
     averagePrice(pair, steps) {
         const count = Math.min(this.currentCandle, (steps * 5 * 60))
         const start = this.currentCandle - count
-        return this.chart
-            .map(x => x.close)
-            .slice(start, this.currentCandle)
-            .reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / count
-    }
 
+        if (!this.averagePriceCached) {
+            this.averagePriceCached = this.chart
+                .map(x => x.close)
+                .slice(start, this.currentCandle)
+                .reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / count
+            
+        } else {
+            this.averagePriceCached = this.averagePriceCached + (this.chart[this.currentCandle].close - this.lastAveragePrice) / count
+            
+        }
+        this.lastAveragePrice = this.chart[start].close
+        return this.averagePriceCached
+
+    }
+    averagePriceQuaterCached = 0
+    lastAveragePriceQuater = 0
     averagePriceQuarter(pair) {
         const count = Math.min(this.currentCandle, (15 * 500 * 60))
         const start = this.currentCandle - count
-        return this.chart
-            .map(x => x.close)
-            .slice(start, this.currentCandle)
-            .reduce((a, b) => parseFloat(a) + parseFloat(b)) / count
+
+        if (!this.averagePriceQuaterCached) {
+            this.averagePriceQuaterCached = this.chart
+                .map(x => x.close)
+                .slice(start, this.currentCandle)
+                .reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / count
+        
+        } else {
+            this.averagePriceQuaterCached = this.averagePriceQuaterCached + (this.chart[this.currentCandle].close - this.lastAveragePriceQuater) / count
+            
+        }
+        this.lastAveragePriceQuater = this.chart[start].close
+        return this.averagePriceQuaterCached
     }
     simulateState() {
         // if (!this.bot.avoidCancel){

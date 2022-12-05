@@ -78,6 +78,62 @@ var DAL = /** @class */ (function () {
                 }
             });
         }); };
+        this.saveHistoryInBucket = function (history, pair, unit, date) { return __awaiter(_this, void 0, void 0, function () {
+            var historyArray, e_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        historyArray = history.split("\n")
+                            .filter(function (r) { return r; })
+                            .map(function (x) { return x.split(",")
+                            .map(function (y) { return parseFloat(y); }); })
+                            .map(function (_a) {
+                            var time = _a[0], open = _a[1], high = _a[2], low = _a[3], close = _a[4];
+                            return [time, high, low, close];
+                        });
+                        return [4 /*yield*/, new storage_1.Storage()
+                                .bucket('crypto-history')
+                                .file("spot/" + pair + "/" + unit + "/" + date + ".csv")
+                                .save(historyArray.map(function (e) { return e.join(','); }).join('\n'), { resumable: false })
+                                .then(console.log)
+                                .catch(console.log)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, historyArray];
+                    case 2:
+                        e_2 = _a.sent();
+                        console.log(e_2);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); };
+        this.getHistoryFromBucket = function (pair, unit, date) { return __awaiter(_this, void 0, void 0, function () {
+            var file, e_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, new storage_1.Storage()
+                                .bucket('crypto-history')
+                                .file("spot/" + pair + "/" + unit + "/" + date + ".csv")
+                                .download()];
+                    case 1:
+                        file = _a.sent();
+                        return [2 /*return*/, file[0].toString().split("\n")
+                                .map(function (x) { return x.split(",")
+                                .map(function (y) { return parseFloat(y); }); })];
+                    case 2:
+                        e_3 = _a.sent();
+                        if (!e_3.message.includes("No such object")) {
+                            console.log(e_3.message);
+                        }
+                        return [2 /*return*/, null];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); };
     }
     DAL.prototype.init = function (dataManager, simulationId) {
         return __awaiter(this, void 0, void 0, function () {

@@ -2,6 +2,7 @@ import { DataManager } from "./Simulator/DataManager";
 import fetch from 'node-fetch';
 import { Storage } from "@google-cloud/storage";
 import { env, exit } from "process";
+import { ExecOptions } from "child_process";
 
 const PAGE_SIZE = 2000
 export class DAL {
@@ -104,6 +105,46 @@ export class DAL {
                 .catch(console.log);
         } catch (e) {
             console.log(e)
+        }
+    }
+
+    saveHistoryInBucket = async (history, pair, unit, date) => {
+        try {
+            const historyArray = history.split("\n")
+                        .filter(r => r)
+                        .map(x => x.split(",")
+                            .map(y => parseFloat(y)))
+                        .map(([time, open, high, low, close]) =>[time, high, low, close])
+
+            await new Storage()
+                .bucket('crypto-history')
+                .file(`spot/${pair}/${unit}/${date}.csv`)
+                .save(historyArray.map(e => e.join(',')).join('\n'), { resumable: false })
+                .then(console.log)
+                .catch(console.log);
+
+            return historyArray
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    getHistoryFromBucket = async (pair, unit, date) => {
+        try {
+            const file = await new Storage()
+                .bucket('crypto-history')
+                .file(`spot/${pair}/${unit}/${date}.csv`)
+                .download()
+
+            return file[0].toString().split("\n")
+                            .map(x => x.split(",")
+                                .map(y => parseFloat(y)))
+        } catch (e:any) {
+            if (!e.message.includes("No such object")) {
+                console.log(e.message)
+            }
+            return null
+
         }
     }
 

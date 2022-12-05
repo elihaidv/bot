@@ -1,3 +1,4 @@
+const AdmZip = require('adm-zip');
 const fs = require('fs/promises')
 const cf = require('node-fetch-cache')
 const fetch = cf.fetchBuilder.withCache(new cf.FileSystemCache({
@@ -8,7 +9,7 @@ const fetch = cf.fetchBuilder.withCache(new cf.FileSystemCache({
 
 async function main() {
     const regex = '📦#(.*)\/(.*)-(.*)🔦(.*)IDEA(.*)🪤Maxleveragerecommended:(.*)✓ENTRY:-(.*)-(.*)💵Target1:(.*)💵Target2:(.*)💵Target3:(.*)💵Target4:(.*)💵Target5:(.*)💵Target6:(.*)🪄Stop\\|Loss:(.*)'
-    const data = await fs.readFile('/home/elihai/Downloads/ChatExport_2022-09-20/result.json', 'utf8')
+    const data = await fs.readFile('/home/elihai/Downloads/ChatExport_2022-12-04/result.json', 'utf8')
 
     let balance = 10000
     const messages = JSON.parse(data).messages
@@ -18,7 +19,8 @@ async function main() {
             const match = lines.match(regex)
             if (match) {
                 let time = message.date_unixtime * 1000
-                console.log(`Signaling: ${match[5]}${match[1]}/${match[2]}-${new Date(time)}`)
+                const date = new Date(time)
+                console.log(`Signaling: ${match[5]}${match[1]}/${match[2]}-${date}`)
                 const sign = match[4] == 'Bullish' ? 1 : -1
                 const enters = [parseFloat(match[7]), (parseFloat(match[7]) + parseFloat(match[8])) / 2, parseFloat(match[8])]
                 const targets = [parseFloat(match[9]), parseFloat(match[10]), parseFloat(match[11]), parseFloat(match[12]), parseFloat(match[13]), parseFloat(match[14])]
@@ -27,8 +29,15 @@ async function main() {
                 let stopExit = false
 
                 while (enterCount < enters.length && exitCount < targets.length && !stopExit) {
-                    const res = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${match[1]}${match[2]}&interval=1m&startTime=${time}&limit=1000`)
-                        .then((x) => x.json())
+                    const res = await fetch(`https://data.binance.vision/data/spot/daily/klines/${match[1]}${match[2]}/1m/${match[1]}${match[2]}-1m-${date.getFullYear()}-${date.getMonth()}.zip`)
+                        .then(res => res.buffer())
+                        .then(r => new AdmZip(r))
+                        .then(f => f.getEntries()[0])
+                        res = res.map(e => e.getData().toString().split("\n")
+                                    .filter(r => r)
+                                    .map(x => x.split(",")
+                                        .map(y => parseFloat(y))))
+
 
                     
 

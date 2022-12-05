@@ -107,6 +107,10 @@ var DataManager = /** @class */ (function () {
             return order;
         }); };
         this.candlesticks = function () { return new Promise(function (resolve) { return Binance().candlesticks(_this.PAIR, "1m", function (e, t, s) { return resolve(t); }); }); };
+        this.averagePriceCached = 0;
+        this.lastAveragePrice = 0;
+        this.averagePriceQuaterCached = 0;
+        this.lastAveragePriceQuater = 0;
         this.bot = bot;
         this.PAIR = this.bot.coin1 + this.bot.coin2;
         this.sockets = Sockets_1.Sockets.getInstance();
@@ -158,6 +162,7 @@ var DataManager = /** @class */ (function () {
     DataManager.prototype.fetchNextChart = function (start, end, unit) {
         return __awaiter(this, void 0, void 0, function () {
             var promises, date, _loop_1, this_1, files, data;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -165,10 +170,13 @@ var DataManager = /** @class */ (function () {
                         date = new Date(start);
                         _loop_1 = function () {
                             var dateString = date.toISOString().split("T")[0];
-                            promises.push(fetch("https://data.binance.vision/data/spot/daily/klines/" + this_1.PAIR + "/" + unit + "/" + this_1.PAIR + "-" + unit + "-" + dateString + ".zip")
-                                .then(function (res) { return res.buffer(); })
-                                .then(function (r) { return new admZip(r); })
-                                .then(function (f) { return f.getEntries()[0]; })
+                            promises.push(DALSimulation_1.DAL.instance.getHistoryFromBucket(this_1.PAIR, unit, dateString)
+                                .then(function (res) { return res ? res :
+                                fetch("https://data.binance.vision/data/spot/daily/klines/" + _this.PAIR + "/" + unit + "/" + _this.PAIR + "-" + unit + "-" + dateString + ".zip")
+                                    .then(function (res) { return res.buffer(); })
+                                    .then(function (r) { return new admZip(r); })
+                                    .then(function (f) { return f.getEntries()[0].getData().toString(); })
+                                    .then(function (s) { return DALSimulation_1.DAL.instance.saveHistoryInBucket(s, _this.PAIR, unit, dateString); }); })
                                 .then(function (zip) {
                                 console.log("downloded: ", dateString, unit);
                                 return zip;
@@ -183,14 +191,9 @@ var DataManager = /** @class */ (function () {
                         return [4 /*yield*/, Promise.all(promises)];
                     case 1:
                         files = _a.sent();
-                        data = files.filter(function (x) { return x; })
-                            .map(function (e) { return e.getData().toString().split("\n")
-                            .filter(function (r) { return r; })
-                            .map(function (x) { return x.split(",")
-                            .map(function (y) { return parseFloat(y); }); }); })
-                            .flat();
+                        data = files.filter(function (x) { return x; }).flat();
                         this.charts[unit] = data.map(function (_a) {
-                            var time = _a[0], open = _a[1], high = _a[2], low = _a[3], close = _a[4];
+                            var time = _a[0], high = _a[1], low = _a[2], close = _a[3];
                             return (Object.assign(new CandleStick(), { time: time, high: high, low: low, close: close }));
                         });
                         return [2 /*return*/];
@@ -288,52 +291,6 @@ var DataManager = /** @class */ (function () {
                 }
             }
         }
-        // for (let unitIndex = 0; unitIndex < this.UNIT_TIMES.length; unitIndex++) {
-        //     const unit = this.UNIT_TIMES[unitIndex]
-        //     const candleIndex = this.currentHour * this.UNIT_HOUR_CANDLES[unit] + Math.floor(this.offsetInHour / (3600 / this.UNIT_HOUR_CANDLES[unit]))
-        //     const candleCountUntilNextBlock = this.UNIT_NEXT_LEVEL[unit] - Math.floor(this.offsetInHour / (3600 / this.UNIT_HOUR_CANDLES[unit])) % this.UNIT_NEXT_LEVEL[unit]
-        //     let found = false
-        //     for (let i = 0; i < this.UNIT_NEXT_LEVEL[unit]; i++) {
-        //         const t = this.charts[unit][candleIndex + i]
-        //         if (!t) {
-        //             //  debugger
-        //             return []
-        //         }
-        //         const ordersInInreval = ordersFound.filter(o =>
-        //             ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > t.low ||
-        //             ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < t.high)
-        //         if (ordersInInreval.length > 0) {
-        //             ordersFound = ordersInInreval
-        //             if (unit == "1s") {
-        //                 return ordersFound
-        //             }
-        //             found = true
-        //             break
-        //         } else {
-        //             const offset = (3600 / this.UNIT_HOUR_CANDLES[unit]) 
-        //             this.offsetInHour = ((t.time % 3600000) / 1000) + offset
-        //             this.currentCandle += offset % 3600
-        //             if (i >= candleCountUntilNextBlock - 1){
-        //                 if (this.chart[this.currentCandle - 3600].time < this.charts["1h"][this.currentHour].time){
-        //                     unitIndex -= 2;
-        //                     found = true
-        //                 } else {
-        //                     this.currentCandle -= 3600
-        //                 }
-        //                 break
-        //             }
-        //         }
-        //     }
-        //     if (!found) {
-        //         break
-        //     }
-        // }   
-        // this.offsetInHour = 0
-        // this.currentCandle += 3600 - (this.currentCandle % 3600)
-        // if (this.chart[this.currentCandle]){
-        //     this.currentHour =  (this.chart[this.currentCandle].time - this.charts["1h"][0].time) / 3600000 
-        // }
-        //  return []
     };
     DataManager.prototype.findIndexBetween = function (time, chart) {
         if (time < chart[0].time) {
@@ -415,18 +372,34 @@ var DataManager = /** @class */ (function () {
     DataManager.prototype.averagePrice = function (pair, steps) {
         var count = Math.min(this.currentCandle, (steps * 5 * 60));
         var start = this.currentCandle - count;
-        return this.chart
-            .map(function (x) { return x.close; })
-            .slice(start, this.currentCandle)
-            .reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }, 0) / count;
+        if (!this.averagePriceCached) {
+            this.averagePriceCached = this.chart
+                .map(function (x) { return x.close; })
+                .slice(start, this.currentCandle)
+                .reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }, 0) / count;
+            this.lastAveragePrice = this.chart[start].close;
+        }
+        else {
+            this.averagePriceCached = this.averagePriceCached + (this.chart[this.currentCandle].close - this.lastAveragePrice) / count;
+            this.lastAveragePrice = this.chart[start].close;
+        }
+        return this.averagePriceCached;
     };
     DataManager.prototype.averagePriceQuarter = function (pair) {
         var count = Math.min(this.currentCandle, (15 * 500 * 60));
         var start = this.currentCandle - count;
-        return this.chart
-            .map(function (x) { return x.close; })
-            .slice(start, this.currentCandle)
-            .reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }) / count;
+        if (!this.averagePriceQuaterCached) {
+            this.averagePriceQuaterCached = this.chart
+                .map(function (x) { return x.close; })
+                .slice(start, this.currentCandle)
+                .reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }, 0) / count;
+            this.lastAveragePriceQuater = this.chart[start].close;
+        }
+        else {
+            this.averagePriceQuaterCached = this.averagePriceQuaterCached + (this.chart[this.currentCandle].close - this.lastAveragePriceQuater) / count;
+            this.lastAveragePriceQuater = this.chart[start].close;
+        }
+        return this.averagePriceQuaterCached;
     };
     DataManager.prototype.simulateState = function () {
         // if (!this.bot.avoidCancel){

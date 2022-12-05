@@ -54,7 +54,7 @@ export class Bot {
   mode: boolean = false;
   lastStopPrice = 0;
   classname: any;
-  dynamicDirection: boolean = false;
+  dynamicDirection: any = false;
   user_id: any;
   signalings: Array<Signaling> = [];
   avoidCancel: boolean = false;

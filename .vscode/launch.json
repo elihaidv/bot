@@ -36,8 +36,8 @@
             "args": [
                 "Simulator/Simulate.ts",
                 "7",
-                "638902227669aa78222854fa",
-                "2022-11-01 14:31:57","2022-12-01 05:11:34",
+                "638ca8943aa3e742a50d8846",
+                "2022-11-04 14:02:51","2022-12-01 14:02:51",
                 "quiet"
             ],
             "cwd": "${workspaceRoot}",
@@ -45,7 +45,10 @@
             "skipFiles": [
                 "<node_internals>/**",
                 "node_modules/**"
-            ]
+            ],
+            "env": {
+                "GOOGLE_APPLICATION_CREDENTIALS": "trading-cloud.json"
+            }
         },
         {
             "name": "fetch history",

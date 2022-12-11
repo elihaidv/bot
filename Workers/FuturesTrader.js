@@ -156,7 +156,7 @@ var FutureTrader = /** @class */ (function (_super) {
         if (this.bot.dynamicDirection) {
             if (!this.positionAmount) {
                 var maxBuyPrice = (_a = this.futureSockets.ticker(this.PAIR)) === null || _a === void 0 ? void 0 : _a.bestBid;
-                var avgWeekPrice = this.futureSockets.averagePriceQuarter(this.PAIR);
+                var avgWeekPrice = this.futureSockets.averagePriceQuarter(this.PAIR, this.bot.longSMA);
                 this.setDirection(this.bot.dynamicDirection == 2 ? maxBuyPrice > avgWeekPrice : maxBuyPrice < avgWeekPrice);
             }
             else {

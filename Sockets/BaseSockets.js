@@ -52,7 +52,7 @@ var BaseSockets = /** @class */ (function () {
             return !arr1.filter(function (i) { return arr2.indexOf(i) == -1; }).length && !arr2.filter(function (i) { return arr1.indexOf(i) == -1; }).length;
         };
         this.averagePrice = function (pair, steps) { return _this.prices[pair].slice(0, steps).reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }, 0) / steps; };
-        this.averagePriceQuarter = function (pair) { return _this.pricesQuarter[pair].reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }, 0) / _this.prices[pair].length; };
+        this.averagePriceQuarter = function (pair, steps) { return _this.pricesQuarter[pair].slice(0, steps).reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }, 0) / steps; };
     }
     BaseSockets.prototype.updateDepthSockets = function () {
         var _this = this;

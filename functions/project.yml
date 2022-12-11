@@ -1,0 +1,7 @@
+packages:
+  - name: simulator
+    actions:
+      - name: simulate
+        limits:
+          timeout: 5000
+          memory: 1000

@@ -26,7 +26,21 @@ export class DAL {
         if (this.isQuiet) return
 
         step.time = this.dataManager.chart[this.dataManager.currentCandle].time
-        const stepArr = [step.time, step.type, step.side, step.price, step.quantity, step.low, step.high, step.balanceSecond, step.positionSize, step.positionPnl, step.profit, step.balanceFirst, step.priority]
+        const stepArr = [step.time,
+        step.type,
+        step.side, step.price,
+        step.quantity,
+        step.low,
+        step.high,
+        step.balanceSecond,
+        step.positionSize,
+        step.positionPnl,
+        step.profit,
+        step.balanceFirst,
+        step.priority,
+        step.sma,
+        step.longSMA,
+        ]
 
         this.steps.push(stepArr)
         this.stepsCounts++
@@ -57,7 +71,7 @@ export class DAL {
             maxPage: this.page - 1,
             progress: status == "finished" ? 100 : progress,
             status: status,
-            variation: env.CLOUD_RUN_TASK_INDEX
+            variation: env.JOB_COMPLETION_INDEX
         })
         console.log(data)
 
@@ -97,7 +111,7 @@ export class DAL {
             this.steps = []
             await new Storage()
                 .bucket('simulations-tradingbot')
-                .file(`simulation${process.argv[3]}-${env.CLOUD_RUN_TASK_INDEX}/${this.page}.csv`)
+                .file(`simulation${process.argv[3]}-${env.JOB_COMPLETION_INDEX}/${this.page}.csv`)
                 .save(cloneSteps
                     .map(s => s.join(','))
                     .join('\n'), { resumable: false })
@@ -110,11 +124,14 @@ export class DAL {
 
     saveHistoryInBucket = async (history, pair, unit, date) => {
         try {
+
             const historyArray = history.split("\n")
-                        .filter(r => r)
-                        .map(x => x.split(",")
-                            .map(y => parseFloat(y)))
-                        .map(([time, open, high, low, close]) =>[time, high, low, close])
+                .filter(r => r)
+                .map(x => x.split(",")
+                    .map(y => parseFloat(y)))
+                .map(([time, open, high, low, close]) => [time, high, low, close])
+
+            if (this.isQuiet) return historyArray
 
             await new Storage()
                 .bucket('crypto-history')
@@ -131,15 +148,16 @@ export class DAL {
 
     getHistoryFromBucket = async (pair, unit, date) => {
         try {
+            if (this.isQuiet) return
             const file = await new Storage()
                 .bucket('crypto-history')
                 .file(`spot/${pair}/${unit}/${date}.csv`)
                 .download()
 
             return file[0].toString().split("\n")
-                            .map(x => x.split(",")
-                                .map(y => parseFloat(y)))
-        } catch (e:any) {
+                .map(x => x.split(",")
+                    .map(y => parseFloat(y)))
+        } catch (e: any) {
             if (!e.message.includes("No such object")) {
                 console.log(e.message)
             }

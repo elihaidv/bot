@@ -39,7 +39,7 @@ async function run() {
   const bot: Bot = Object.assign(new Bot(), simulation);
 
   if (simulation.variations){
-    Object.assign(bot, simulation.variations[env.CLOUD_RUN_TASK_INDEX ?? 0]);
+    Object.assign(bot, simulation.variations[env.JOB_COMPLETION_INDEX ?? 0]);
   }
 
 
@@ -53,12 +53,12 @@ async function run() {
 
   DAL.instance.init(dataManager, id)
 
-  const start = new Date(process.argv[4]).getTime() - (500 * 15 * 60 * 1000)
+  const start = new Date(process.argv[4]).getTime() - (bot.longSMA * 15 * 60 * 1000)
   const end = new Date(process.argv[5]).getTime()
   let endChunk = Math.min(end, start + dataManager.MIN_CHART_SIZE * 1000)
 
   await dataManager.fetchAllCharts(start, endChunk)
-  dataManager.currentCandle = (500 * 15 * 60)
+  dataManager.currentCandle = (bot.longSMA * 15 * 60)
 
   dataManager.initData()
   await place(bot)

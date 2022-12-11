@@ -26,6 +26,7 @@ var Bot = /** @class */ (function () {
         this.signalings = [];
         this.avoidCancel = false;
         this.status = BotStatus.WORK;
+        this.longSMA = 500;
     }
     Bot.prototype.id = function () { return this._id.toString(); };
     Bot.prototype.positionSide = function () {

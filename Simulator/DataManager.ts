@@ -89,6 +89,8 @@ export class DataManager {
             type: 'OpenOrder', side: order.side, price: order.price, quantity: order.origQty, priority: 8,
             high: this.chart[this.currentCandle].high,
             low: this.chart[this.currentCandle].low,
+            sma: this.chart[this.currentCandle].sma,
+            longSMA: this.chart[this.currentCandle].longSMA,
         })
         return order
     });
@@ -168,23 +170,23 @@ export class DataManager {
 
         let closeSum = 0
         let sma = this.bot.SMA * 5 * 60
-        let closeSum500 = 0
-        let sma500 = 500 * 15 * 60
+        let closeSumLong = 0
+        let longSMA = this.bot.longSMA * 15 * 60
 
         for (let i = 0; i < this.chart.length; i++) {
             if (i >= sma) {
                 closeSum -= this.chart[i - sma].close
             }
 
-            if (i >= sma500) {
-                closeSum500 -= this.chart[i - sma500].close
+            if (i >= longSMA) {
+                closeSumLong -= this.chart[i - longSMA].close
             }
 
             closeSum += this.chart[i].close
             this.chart[i].sma = closeSum / Math.min(i + 1, sma)
 
-            closeSum500 += this.chart[i].close
-            this.chart[i].sma500 = closeSum500 / Math.min(i + 1, sma500)
+            closeSumLong += this.chart[i].close
+            this.chart[i].longSMA = closeSumLong / Math.min(i + 1, longSMA)
 
         }
 
@@ -364,7 +366,7 @@ export class DataManager {
 
     }
     averagePriceQuarter(pair) {
-        return this.chart[this.currentCandle].sma500
+        return this.chart[this.currentCandle].longSMA
     }
     simulateState() {
         // if (!this.bot.avoidCancel){
@@ -382,6 +384,7 @@ export class DataManager {
     ticker(p): Ticker {
         let t = new Ticker();
         t.bestBid = this.chart[this.currentCandle].close
+        t.bestAsk = this.chart[this.currentCandle].close
         return t
     }
 }
@@ -391,7 +394,7 @@ export class CandleStick {
     next: CandleStick | undefined;
     parent: CandleStick | undefined;
     children: CandleStick[] = [];
-    sma; sma500;
+    sma; longSMA;
 }
 
 

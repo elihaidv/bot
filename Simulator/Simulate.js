@@ -75,7 +75,7 @@ function run() {
                     simulation = _f.sent();
                     bot = Object.assign(new Models_1.Bot(), simulation);
                     if (simulation.variations) {
-                        Object.assign(bot, simulation.variations[(_a = process_1.env.CLOUD_RUN_TASK_INDEX) !== null && _a !== void 0 ? _a : 0]);
+                        Object.assign(bot, simulation.variations[(_a = process_1.env.JOB_COMPLETION_INDEX) !== null && _a !== void 0 ? _a : 0]);
                     }
                     dataManager = bot.isFuture ? new FutureDataManager_1.FutureDataManager(bot) : new DataManager_1.DataManager(bot);
                     _c = (_b = dataManager).setExchangeInfo;
@@ -89,13 +89,13 @@ function run() {
                 case 4:
                     _c.apply(_b, [_d]);
                     DALSimulation_1.DAL.instance.init(dataManager, id);
-                    start = new Date(process.argv[4]).getTime() - (500 * 15 * 60 * 1000);
+                    start = new Date(process.argv[4]).getTime() - (bot.longSMA * 15 * 60 * 1000);
                     end = new Date(process.argv[5]).getTime();
                     endChunk = Math.min(end, start + dataManager.MIN_CHART_SIZE * 1000);
                     return [4 /*yield*/, dataManager.fetchAllCharts(start, endChunk)];
                 case 5:
                     _f.sent();
-                    dataManager.currentCandle = (500 * 15 * 60);
+                    dataManager.currentCandle = (bot.longSMA * 15 * 60);
                     dataManager.initData();
                     return [4 /*yield*/, place(bot)];
                 case 6:

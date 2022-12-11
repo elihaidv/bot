@@ -59,6 +59,7 @@ export class Bot {
   signalings: Array<Signaling> = [];
   avoidCancel: boolean = false;
   status: BotStatus = BotStatus.WORK;
+  longSMA: number = 500;
 
   id(): String { return this._id.toString() }
 

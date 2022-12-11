@@ -61,7 +61,7 @@ var DAL = /** @class */ (function () {
                         this.steps = [];
                         return [4 /*yield*/, new storage_1.Storage()
                                 .bucket('simulations-tradingbot')
-                                .file("simulation" + process.argv[3] + "-" + process_1.env.CLOUD_RUN_TASK_INDEX + "/" + this.page + ".csv")
+                                .file("simulation" + process.argv[3] + "-" + process_1.env.JOB_COMPLETION_INDEX + "/" + this.page + ".csv")
                                 .save(cloneSteps
                                 .map(function (s) { return s.join(','); })
                                 .join('\n'), { resumable: false })
@@ -92,6 +92,8 @@ var DAL = /** @class */ (function () {
                             var time = _a[0], open = _a[1], high = _a[2], low = _a[3], close = _a[4];
                             return [time, high, low, close];
                         });
+                        if (this.isQuiet)
+                            return [2 /*return*/, historyArray];
                         return [4 /*yield*/, new storage_1.Storage()
                                 .bucket('crypto-history')
                                 .file("spot/" + pair + "/" + unit + "/" + date + ".csv")
@@ -115,6 +117,8 @@ var DAL = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
+                        if (this.isQuiet)
+                            return [2 /*return*/];
                         return [4 /*yield*/, new storage_1.Storage()
                                 .bucket('crypto-history')
                                 .file("spot/" + pair + "/" + unit + "/" + date + ".csv")
@@ -155,7 +159,21 @@ var DAL = /** @class */ (function () {
                         if (this.isQuiet)
                             return [2 /*return*/];
                         step.time = this.dataManager.chart[this.dataManager.currentCandle].time;
-                        stepArr = [step.time, step.type, step.side, step.price, step.quantity, step.low, step.high, step.balanceSecond, step.positionSize, step.positionPnl, step.profit, step.balanceFirst, step.priority];
+                        stepArr = [step.time,
+                            step.type,
+                            step.side, step.price,
+                            step.quantity,
+                            step.low,
+                            step.high,
+                            step.balanceSecond,
+                            step.positionSize,
+                            step.positionPnl,
+                            step.profit,
+                            step.balanceFirst,
+                            step.priority,
+                            step.sma,
+                            step.longSMA,
+                        ];
                         this.steps.push(stepArr);
                         this.stepsCounts++;
                         if (this.stepsCounts % (PAGE_SIZE / 10) == 0) {
@@ -183,7 +201,7 @@ var DAL = /** @class */ (function () {
             maxPage: this.page - 1,
             progress: status == "finished" ? 100 : progress,
             status: status,
-            variation: process_1.env.CLOUD_RUN_TASK_INDEX
+            variation: process_1.env.JOB_COMPLETION_INDEX
         });
         console.log(data);
         return (0, node_fetch_1.default)("https://itamars.live/api/simulations/" + this.simulationId, {

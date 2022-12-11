@@ -60,7 +60,7 @@ var FutureDataManager = /** @class */ (function (_super) {
         this.bot.binance.balance[this.bot.coin2] += gain;
         this.profit += gain;
         console.log("Psition size: " + pos.positionAmount);
-        console.log("Variation: " + node_process_1.env.CLOUD_RUN_TASK_INDEX + "Profit: " + (this.profit / 100).toFixed(2) + "% Date: " + new Date(parseInt(this.chart[this.currentCandle].time)));
+        console.log("Variation: " + node_process_1.env.JOB_COMPLETION_INDEX + "Profit: " + (this.profit / 100).toFixed(2) + "% Date: " + new Date(parseInt(this.chart[this.currentCandle].time)));
         DALSimulation_1.DAL.instance.logStep({
             type: order.type == "STOP_MARKET" ? "StopLoose" : 'Execute',
             side: order.side,

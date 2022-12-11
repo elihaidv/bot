@@ -22,7 +22,7 @@ export abstract class BaseSockets {
 
     averagePrice = (pair, steps) => this.prices[pair].slice(0, steps).reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / steps;
 
-    averagePriceQuarter = (pair) => this.pricesQuarter[pair].reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / this.prices[pair].length;
+    averagePriceQuarter = (pair, steps) => this.pricesQuarter[pair].slice(0, steps).reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / steps;
 
   
     updateDepthSockets() {

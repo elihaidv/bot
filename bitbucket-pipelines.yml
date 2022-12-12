@@ -5,9 +5,7 @@ pipelines:
           name: production
           image: eeacms/rsync
           script:
-           
-           
+            - apt-get update && apt-get install -y tsc
+            - tsc --skipLibCheck --resolveJsonModule --esModuleInterop -t es5 Simulator/rabbitConsumer.ts
             - rsync -rzvP -r --exclude-from=.gitignore $BITBUCKET_CLONE_DIR/ $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
-            - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && php8.0 /root/composer.phar install"
-            - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && php artisan db:seed --force"
-            - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && php artisan queue:restart"
+            - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && npm install"

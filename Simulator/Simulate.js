@@ -47,6 +47,7 @@ var Models_1 = require("../Models");
 var WeightAvg_1 = require("../Workers/WeightAvg");
 var DataManager_1 = require("./DataManager");
 var FutureDataManager_1 = require("./FutureDataManager");
+var process_1 = require("process");
 var DALSimulation_1 = require("../DALSimulation");
 var Periodically_1 = require("../Workers/Periodically");
 var exchangeInfo_json_1 = __importDefault(require("./exchangeInfo.json"));
@@ -54,6 +55,7 @@ var fetch = require('node-fetch');
 var OneStep_1 = require("../Workers/OneStep");
 var Binance = require('node-binance-api');
 var PlaceOrders_1 = require("../Workers/PlaceOrders");
+process_1.env.GOOGLE_APPLICATION_CREDENTIALS = "trading-cloud.json";
 var dataManager;
 function run(simulationId, variation, startStr, endStr) {
     return __awaiter(this, void 0, void 0, function () {

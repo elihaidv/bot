@@ -7,3 +7,4 @@ pipelines:
           script:
             - rsync -rzvP -r --exclude-from=.gitignore $BITBUCKET_CLONE_DIR/ $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
             - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && npm install"
+            - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && pm2 restart rabbitConsumer"

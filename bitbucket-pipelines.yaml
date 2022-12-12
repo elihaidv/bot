@@ -1,8 +1,8 @@
 pipelines:
   branches:
-    test:
+    master:
       - step:
-          name: master
+          name: production
           image: treyjones/tsc:latest
           script:
             - apt-get update && apt-get install -y rsync ssh

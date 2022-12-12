@@ -59,6 +59,7 @@ amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', function (error0
                         case 0:
                             _a.trys.push([0, 2, , 3]);
                             args = JSON.parse(msg.content.toString());
+                            console.log("Simulating: ", args.simulationId, args.variation, args.start, args.end);
                             return [4 /*yield*/, (0, Simulate_1.run)(args.simulationId, args.variation, args.start, args.end)];
                         case 1:
                             _a.sent();

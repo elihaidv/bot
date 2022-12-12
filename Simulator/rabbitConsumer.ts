@@ -20,6 +20,7 @@ amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', function (error0
     channel.consume(queue, async function (msg) {
       try {
         const args = JSON.parse(msg.content.toString());
+        console.log("Simulating: ", args.simulationId, args.variation, args.start, args.end)
         await run(args.simulationId, args.variation, args.start, args.end)
         channel.ack(msg);
       } catch (e) {

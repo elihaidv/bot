@@ -3,9 +3,10 @@ pipelines:
     master:
       - step:
           name: production
-          image: treyjones/tsc:latest
+          image: eeacms/rsync
           script:
-            - apt-get update && apt-get install -y rsync ssh
+           
+           
             - rsync -rzvP -r --exclude-from=.gitignore $BITBUCKET_CLONE_DIR/ $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
             - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && php8.0 /root/composer.phar install"
             - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && php artisan db:seed --force"

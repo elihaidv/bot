@@ -32,3 +32,6 @@ amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', function (error0
     });
   });
 });
+process.on('uncaughtException', function(err) {
+  console.log('Caught exception: ' + err);
+});

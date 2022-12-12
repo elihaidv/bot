@@ -47,7 +47,6 @@ var Models_1 = require("../Models");
 var WeightAvg_1 = require("../Workers/WeightAvg");
 var DataManager_1 = require("./DataManager");
 var FutureDataManager_1 = require("./FutureDataManager");
-var process_1 = require("process");
 var DALSimulation_1 = require("../DALSimulation");
 var Periodically_1 = require("../Workers/Periodically");
 var exchangeInfo_json_1 = __importDefault(require("./exchangeInfo.json"));
@@ -156,7 +155,6 @@ function run(simulationId, variation, startStr, endStr) {
                     return [4 /*yield*/, DALSimulation_1.DAL.instance.endTest()];
                 case 15:
                     _e.sent();
-                    (0, process_1.exit)(0);
                     return [2 /*return*/];
             }
         });

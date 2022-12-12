@@ -65,9 +65,7 @@ var DAL = /** @class */ (function () {
                                 .file("simulation" + this.simulationId + "-" + this.variation + "/" + this.page + ".csv")
                                 .save(cloneSteps
                                 .map(function (s) { return s.join(','); })
-                                .join('\n'), { resumable: false })
-                                .then(console.log)
-                                .catch(console.log)];
+                                .join('\n'), { resumable: false })];
                     case 1:
                         _a.sent();
                         return [3 /*break*/, 3];

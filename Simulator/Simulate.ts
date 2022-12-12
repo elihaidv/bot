@@ -110,7 +110,6 @@ export async function run(simulationId: string, variation:number, startStr: stri
   console.log("Profit: " + dataManager.profit)
   await DAL.instance.endTest()
 
-  exit(0)
 }
 
 // async function checkTrailing(bot: Bot, o: Order, t: CandleStick) {

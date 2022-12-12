@@ -122,9 +122,7 @@ export class DAL {
                 .file(`simulation${this.simulationId}-${this.variation}/${this.page}.csv`)
                 .save(cloneSteps
                     .map(s => s.join(','))
-                    .join('\n'), { resumable: false })
-                .then(console.log)
-                .catch(console.log);
+                    .join('\n'), { resumable: false });
         } catch (e) {
             console.log(e)
         }

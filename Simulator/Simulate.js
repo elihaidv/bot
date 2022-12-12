@@ -75,7 +75,7 @@ function run() {
                     simulation = _f.sent();
                     bot = Object.assign(new Models_1.Bot(), simulation);
                     if (simulation.variations) {
-                        Object.assign(bot, simulation.variations[(_a = process_1.env.JOB_COMPLETION_INDEX) !== null && _a !== void 0 ? _a : 0]);
+                        Object.assign(bot, simulation.variations[(_a = process_1.env.CLOUD_RUN_TASK_INDEX) !== null && _a !== void 0 ? _a : 0]);
                     }
                     dataManager = bot.isFuture ? new FutureDataManager_1.FutureDataManager(bot) : new DataManager_1.DataManager(bot);
                     _c = (_b = dataManager).setExchangeInfo;

@@ -1,136 +1,173 @@
 import { DirectionTrader } from "../Workers/DirectionTrader";
 import { DualBot } from "../Workers/DualBot";
 import { FutureTrader } from "../Workers/FuturesTrader";
-import { Bot, Key, Order } from "../Models";
+import { Bot, BotStatus, Key, Order } from "../Models";
 import { WeightAvg } from "../Workers/WeightAvg";
 import { BasePlacer } from "../Workers/BasePlacer";
 import { CandleStick, DataManager } from "./DataManager";
 import { FutureDataManager } from "./FutureDataManager";
-import { exit } from "process";
+import { env, exit } from "process";
+import { DAL } from "../DALSimulation";
+import { Periodically } from "../Workers/Periodically";
+import exchangeInfo from './exchangeInfo.json'
+
+const fetch = require('node-fetch');
+import { OneStep } from "../Workers/OneStep";
+
 
 const Binance = require('node-binance-api');
-
-const { MongoClient, ObjectID } = require("mongodb");
-
-const DB = require('../DB')
+import { OrderPlacer } from "../Workers/PlaceOrders";
 
 
-const uri = DB.USERNAME ?
-  `mongodb://${DB.USERNAME}:${DB.PASSWORD}@${DB.ADDRESS}?writeConcern=majority` :
-  `mongodb://127.0.0.1:27017/trading_bot?writeConcern=majority`;
-const id = process.argv[2] || "61da8b2036520f0737301999";
+
+let dataManager: DataManager
+export async function run(simulationId: string, variation:number, startStr: string, endStr: string) {
+
+  const simulation = await fetch("https://itamars.live/api/simulations/" + simulationId, {
+    headers: {
+      "API-KEY": "WkqrHeuts2mIOJHMcxoK"
+    }
+  }).then(r => r.json())
+
+  const bot: Bot = Object.assign(new Bot(), simulation);
+
+  if (simulation.variations) {
+    Object.assign(bot, simulation.variations[variation]);
+  }
 
 
-let trailing;
-let exchangeInfo, dataManager: DataManager
-async function run() {
-  const db = await MongoClient.connect(uri)
-  const dbo = db.db("trading_bot")
-  const bots = await dbo.collection('bot').find({ _id: ObjectID(id) }).toArray()
-  let keys: Array<Key> = await dbo.collection('key').find({}).toArray()
-  let t
-
-  const bot: Bot = Object.assign(new Bot(), bots[0]);
-
-  exchangeInfo = bot.isFuture ?
-    await Binance().futuresExchangeInfo() :
-    await Binance().exchangeInfo()
 
   dataManager = bot.isFuture ? new FutureDataManager(bot) : new DataManager(bot);
 
-  await dataManager.fetchChart()
+  dataManager.setExchangeInfo(bot.isFuture ?
+    exchangeInfo :
+    await Binance({ 'family': 4 }).exchangeInfo())
+
+
+  DAL.instance.init(dataManager, simulationId, variation, startStr, endStr)
+
+  const start = new Date(startStr).getTime() - (bot.longSMA * 15 * 60 * 1000)
+  const end = new Date(endStr).getTime()
+  let endChunk = Math.min(end, start + dataManager.MIN_CHART_SIZE * 1000)
+
+  await dataManager.fetchAllCharts(start, endChunk)
+  dataManager.currentCandle = (bot.longSMA * 15 * 60)
 
   dataManager.initData()
-
   await place(bot)
 
-  const executeds = new Map<Number, Order>()
+  let t = dataManager.chart[dataManager.currentCandle]
 
-  for (let i = dataManager.time; i < dataManager.chart.length; i++) {
-    const t = dataManager.chart[i]
+  while (t && t.time <= end) {
 
-    // const low = Math.min(t.low,  dataManager.chart[i - 1]?.low ?? Infinity)
+    let ToPlace = false;
 
+    const ordersToFill = dataManager.checkOrder(dataManager.openOrders, bot.status != BotStatus.STABLE ? bot.secound : 0)
 
-    for (let o of dataManager.openOrders.slice().reverse()) {
-      // if (await checkTrailing(bot,o,t)) break;
-
-      //     case "TRAILING_STOP_MARKET": 
-      //     if (!trailing) {
-      //       trailing = t.high
-      //       // console.log(`Trailing activate ${o.side}: ${o.price}`)
-      //     }
-      if (("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > t.low ||
-          ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < t.high) {
-
-        console.log(`Execute ${o.side}: ${t.high} ~ ${t.low}`)
-        executeds[dataManager.time] = o
-        dataManager.orderexecute(o)
-        await place(bot)
+    t = dataManager.chart[dataManager.currentCandle]
+    if (!t) {
+      let startChunk = dataManager.chart.at(-1)!.time + 1000
+      let endChunk = Math.min(end, startChunk + dataManager.MIN_CHART_SIZE * 1000)
+      await dataManager.fetchAllCharts(startChunk, endChunk)
+      dataManager.currentCandle = dataManager.MIN_CHART_SIZE
+      t = dataManager.chart[dataManager.currentCandle]
+      if (!t) {
         break;
-
-      } else if (dataManager.time - o.time >= bot.secound / 60 && bot.lastOrder != Bot.STABLE) {
-        // console.log("expire")
-        await place(bot)
-        break;
-
       }
     }
+
+    if (ordersToFill.length) {
+      const o = ordersToFill[0]
+      console.log(`Execute ${o.side}: ${t.high} ~ ${t.low}`, new Date(parseFloat(t.time)))
+      dataManager.orderexecute(o, t)
+      ToPlace = true
+
+    } else if (dataManager.openOrders.length &&
+      (t.time - dataManager.openOrders[0].time) * 1000 >= bot.secound &&
+      bot.status != BotStatus.STABLE) {
+      ToPlace = true
+    }
+
+    if (DAL.instance.awaiter) {
+      console.log("awaiter")
+      DAL.instance.awaiter = false
+      await timeout(100)
+    }
+
+
     if (!dataManager.hasMoney(t) && t.close) {
       console.log("😰Liquid at: " + t.close)
+      DAL.instance.logStep({ "type": "😰Liquid", low: t.close, priority: 10 })
       break;
     }
-    dataManager.time++
+
+    ToPlace && await place(bot)
+    dataManager.currentCandle++;
   }
-  dataManager.closePosition(dataManager.chart.at(-1)?.low);
+
+  dataManager.currentCandle--
+  dataManager.closePosition(dataManager.chart[dataManager.currentCandle].low);
   console.log("Profit: " + dataManager.profit)
-  // console.log(JSON.stringify(executeds))
-  // console.log(JSON.stringify(dataManager.chart.map(c=>(["", parseFloat(c.high),parseFloat(c.close),parseFloat(c.close),parseFloat(c.low)]))))
+  await DAL.instance.endTest()
+
   exit(0)
 }
 
-async function checkTrailing(bot: Bot, o: Order, t: CandleStick) {
+// async function checkTrailing(bot: Bot, o: Order, t: CandleStick) {
 
-  if (trailing && o.type == "TRAILING_STOP_MARKET") {
-    const direction = bot.direction;
-    trailing = direction ? Math.min(t.low, trailing) : Math.max(t.high, trailing)
-    console.log(`Trailing Update: ${trailing}`)
+//   if (trailing && o.type == "TRAILING_STOP_MARKET") {
+//     const direction = bot.direction;
+//     trailing = direction ? Math.min(t.low, trailing) : Math.max(t.high, trailing)
+//     console.log(`Trailing Update: ${trailing}`)
 
-    if ((direction ? -1 : 1) * (trailing - t.close) / trailing > bot.callbackRate / 100) {
-      console.log(`Execute Trailing ${o.side}: ${t.high} ~ ${t.low}`)
-      o.price = t.close
-      dataManager.orderexecute(o)
-      await place(bot)
-      return true
-    }
-  }
-  return false
-}
+//     if ((direction ? -1 : 1) * (trailing - t.close) / trailing > bot.callbackRate / 100) {
+//       console.log(`Execute Trailing ${o.side}: ${t.high} ~ ${t.low}`)
+//       o.price = t.close
+//       dataManager.orderexecute(o)
+//       await place(bot)
+//       return true
+//     }
+//   }
+//   return false
+// }
 
 async function place(bot: Bot) {
   dataManager.simulateState()
-  trailing = null;
+  // trailing = null;
 
   let worker: BasePlacer
   switch (bot.bot_type_id.toString()) {
-    // case "1":
-    //   return new OrderPlacer(b, exchangeInfo).place();
+    case "1":
+      worker = new OrderPlacer(bot, dataManager.exchangeInfo);
+      break
     case "2":
-      worker = new WeightAvg(bot, exchangeInfo)
+      worker = new WeightAvg(bot, dataManager.exchangeInfo)
       break
     case "3":
-      worker = new FutureTrader(bot, exchangeInfo)
+      worker = new FutureTrader(bot, dataManager.exchangeInfo)
       break
     case "4":
-      worker = new DualBot(bot, exchangeInfo)
+      worker = new DualBot(bot, dataManager.exchangeInfo)
       break
-    default:
-      worker = new DirectionTrader(bot, exchangeInfo)
+    case "5":
+      worker = new DirectionTrader(bot, dataManager.exchangeInfo)
+      break
+    case "6":
+      worker = new Periodically(bot, dataManager.exchangeInfo)
+      break
+    case "7":
+    default: {
+
+      worker = new OneStep(bot, dataManager.exchangeInfo);
+
+      // (worker as OneStep).cancelOrders = async () => {dataManager.openOrders = []}
       break
 
+    }
   }
-
   worker.getAction = dataManager.openOrder
   await worker.place();
 }
-run()
+function timeout(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}

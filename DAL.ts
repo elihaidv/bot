@@ -1,7 +1,5 @@
-
-
-
-const { MongoClient } = require("mongodb");
+import { MongoClient,ObjectId } from "mongodb";
+import { Bot, Signaling } from "./Models";
 const DB = require('./DB')
 
 const uri = DB.USERNAME ?
@@ -11,6 +9,8 @@ const uri = DB.USERNAME ?
 export class DAL {
     static instance = new DAL()
     dbo
+    currentTestId
+    started
 
     async init() {
         let db = await MongoClient.connect(uri)
@@ -26,5 +26,16 @@ export class DAL {
 
     logError(error) {
         this.dbo.collection('error').insertOne(error)
+    }
+
+
+    async addSignaling(bot: Bot, signaling:Signaling) {
+        bot.signalings.push(signaling)
+        await this.dbo.collection('bot').updateOne({ _id: bot._id }, { $push: { signalings: signaling } })
+      }
+
+    removeSignaling(bot: Bot, signalingID:String) {
+        this.dbo.collection('bot').updateOne({ _id: bot._id }, { $pull: { signalings: { _id: signalingID} } })
+        bot.signalings = bot.signalings.filter(s => s._id != signalingID)    
     }
 }

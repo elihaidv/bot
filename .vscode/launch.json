@@ -20,21 +20,47 @@
             ]
         },
         {
+            "name": "Channel",
+            "program": "${workspaceFolder}/Simulator/SimulateChannel.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
             "name": "Simulate",
             "type": "node",
             "request": "launch",
             "runtimeExecutable": "ts-node",
             "args": [
                 "Simulator/Simulate.ts",
-                "623dbe7a998b8114d3706f13",
-                "200000"
+                "7",
+                "639207433aa3e742a50d8867",
+                "2022-11-04 14:02:51","2022-12-01 14:02:51",
+                "quiet"
             ],
             "cwd": "${workspaceRoot}",
             "internalConsoleOptions": "openOnSessionStart",
             "skipFiles": [
                 "<node_internals>/**",
                 "node_modules/**"
-            ]
+            ],
+            "env": {
+                "GOOGLE_APPLICATION_CREDENTIALS": "trading-cloud.json"
+            }
+        },
+        {
+            "name": "fetch history",
+            "program": "${workspaceFolder}/Simulator/historicalChartsFetcher.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "args": [
+                "MATICBUSD", "2021-08-28 15:32:19"
+            ],
+            "type": "node"
         },
         {
             "name": "Attach by Process ID",

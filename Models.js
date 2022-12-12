@@ -1,12 +1,19 @@
 "use strict";
-exports.__esModule = true;
-exports.Key = exports.Account = exports.Order = exports.Bot = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.average = exports.diffInPrecents = exports.Signaling = exports.SignalingType = exports.Key = exports.Account = exports.Order = exports.Bot = exports.BotStatus = void 0;
+var BotStatus;
+(function (BotStatus) {
+    BotStatus[BotStatus["WORK"] = 0] = "WORK";
+    BotStatus[BotStatus["STABLE"] = 1] = "STABLE";
+    BotStatus[BotStatus["ERROR"] = 2] = "ERROR";
+})(BotStatus = exports.BotStatus || (exports.BotStatus = {}));
 var Bot = /** @class */ (function () {
     function Bot() {
         this.bot_type_id = "1";
         this.coin1 = "";
         this.coin2 = "";
         this.stop_loose = 0;
+        this.SMA = 0;
         this.take_profit = 0;
         this.secound = 0;
         this.isFuture = false;
@@ -15,12 +22,16 @@ var Bot = /** @class */ (function () {
         this.bigPosition = 0.5;
         this.mode = false;
         this.lastStopPrice = 0;
+        this.dynamicDirection = false;
+        this.signalings = [];
+        this.avoidCancel = false;
+        this.status = BotStatus.WORK;
+        this.longSMA = 500;
     }
     Bot.prototype.id = function () { return this._id.toString(); };
     Bot.prototype.positionSide = function () {
         return this.isFuture ? (this.mode ? (this.direction ? 'SHORT' : 'LONG') : 'BOTH') : '';
     };
-    Bot.STABLE = -1;
     return Bot;
 }());
 exports.Bot = Bot;
@@ -76,3 +87,74 @@ var Key = /** @class */ (function () {
     return Key;
 }());
 exports.Key = Key;
+var SignalingType = /** @class */ (function () {
+    function SignalingType(regex, coin1, coin2, direction, leverage, enterPriceStart, enterPriceEnd, takeProfitStart, takeProfitEnd, stop, longTerm) {
+        this.regex = regex;
+        this.coin1 = coin1;
+        this.coin2 = coin2;
+        this.direction = direction;
+        this.leverage = leverage;
+        this.enterPriceStart = enterPriceStart;
+        this.enterPriceEnd = enterPriceEnd;
+        this.takeProfitStart = takeProfitStart;
+        this.takeProfitEnd = takeProfitEnd;
+        this.stopPrice = stop;
+        this.longTerm = longTerm;
+    }
+    return SignalingType;
+}());
+exports.SignalingType = SignalingType;
+var Signaling = /** @class */ (function () {
+    function Signaling() {
+        this.lervrage = "1";
+        this.enter = [];
+        this.takeProfits = [];
+        this.date = new Date();
+    }
+    Object.defineProperty(Signaling.prototype, "pair", {
+        get: function () {
+            return this.coin1 + this.coin2;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Signaling.prototype, "eep", {
+        get: function () {
+            return average([average(this.enter), this.enter[0]]);
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Signaling.prototype, "stopPercent", {
+        get: function () {
+            return Math.abs(diffInPrecents(this.eep, this.stop));
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Signaling.prototype, "profitercent", {
+        get: function () {
+            return Math.abs(diffInPrecents(this.takeProfits[0], this.eep));
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Signaling.prototype, "lowEnter", {
+        get: function () {
+            return this.enter.at(-1);
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return Signaling;
+}());
+exports.Signaling = Signaling;
+function diffInPrecents(a, b) {
+    return ((a - b) / a) * 100;
+}
+exports.diffInPrecents = diffInPrecents;
+function average(arr) {
+    var sum = arr.reduce(function (a, b) { return a + b; }, 0);
+    return (sum / arr.length) || 0;
+}
+exports.average = average;

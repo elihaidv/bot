@@ -1,7 +1,7 @@
 
 
 import { FutureTrader } from './FuturesTrader';
-import { Account, Bot, Key, Order } from '../Models';
+import { Account, Bot, BotStatus, Key, Order } from '../Models';
 
 export class DualBot extends FutureTrader {
     bigPosition: Order | undefined
@@ -104,7 +104,7 @@ export class DualBot extends FutureTrader {
 
 
         if (!this.error) {
-            this.bot.lastOrder = Bot.STABLE
+            this.bot.status = BotStatus.STABLE
         }
     }
 

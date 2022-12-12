@@ -22,7 +22,7 @@ export abstract class BaseSockets {
 
     averagePrice = (pair, steps) => this.prices[pair].slice(0, steps).reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / steps;
 
-    averagePriceQuarter = (pair) => this.pricesQuarter[pair].reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / this.prices[pair].length;
+    averagePriceQuarter = (pair, steps) => this.pricesQuarter[pair].slice(0, steps).reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / steps;
 
   
     updateDepthSockets() {
@@ -38,12 +38,12 @@ export abstract class BaseSockets {
     }
 
     updatePricesSockets() {
-        if (this.chartsSocket) this.binance.websockets.terminate(this.chartsSocket);
+        if (this.chartsSocket) this.binance.futuresTerminate(this.chartsSocket);
 
-        this.chartsSocket = this.binance.websockets.chart(this.pairs, "5m", (symbol, interval, chart) =>
+        this.chartsSocket = this.binance.futuresChart(this.pairs, "5m", (symbol, interval, chart) =>
             this.prices[symbol] = Object.values(chart).map(c => (c as any).close).reverse())
 
-        this.chartsSocket = this.binance.websockets.chart(this.pairs, "15m", (symbol, interval, chart) =>
+        this.chartsSocket = this.binance.futuresChart(this.pairs, "15m", (symbol, interval, chart) =>
             this.pricesQuarter[symbol] = Object.values(chart).map(c => (c as any).close).reverse())
     }
 
@@ -81,6 +81,12 @@ export abstract class BaseSockets {
 
     isPairsChanged(bots:Array<Bot>) {
         let botsPairs = bots.map((b) => b.coin1 + b.coin2)
+
+        botsPairs = botsPairs.concat(bots
+            .map(({signalings}) => signalings || [])
+            .map(s => s.map(({coin1, coin2}) => coin1 + coin2))
+            .reduce((a, c) => a.concat(c), []))
+
         botsPairs = Array.from(new Set(botsPairs));
 
         if (!this.compare(botsPairs, this.pairs)) {

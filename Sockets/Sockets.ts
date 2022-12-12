@@ -1,5 +1,7 @@
 import { BaseSockets } from "./BaseSockets";
 import { Account, Bot, Key, Order } from "../Models";
+import { BotLogger } from "../Logger";
+import { Severity } from "coralogix-logger";
 
 const logger = require('log4js').getLogger("sockets");
 const Binance = require('node-binance-api');
@@ -55,15 +57,33 @@ export class Sockets extends BaseSockets {
 
             if (data.x == 'TRADE') {
                 orders.changed.push(data.s);
+<<<<<<< HEAD
                 // console.log(data.S, data.s)
                 logger.info(data.S, data.s);
+=======
+                console.log(data.S, data.s)
+
+                BotLogger.instance.log({
+                    type: "OrderFilled - Spot",
+                    order
+                })
+>>>>>>> test
             }
         }
     }
 
     execution_update = (orders) => (data) => {
+<<<<<<< HEAD
         // console.log(data)
         logger.info(data);
+=======
+        console.log(data)
+
+        BotLogger.instance.log({
+            type: "TradeEvent1",
+            message: JSON.stringify(data)
+        })
+>>>>>>> test
         if (!orders[data.s]) orders[data.s] = []
         let order = orders[data.s].find(o => o.orderId == data.i) as Order
 
@@ -96,7 +116,7 @@ export class Sockets extends BaseSockets {
 
         if (this.depthCacheSocket) this.binance.websockets.terminate(this.depthCacheSocket);
 
-        this.depthCacheSocket = this.binance.websockets.depthCache(this.pairs, (symbol, depth) => {
+        this.depthCacheSocket = this.binance.websockets.depthCache(this.pairs.filter(x=>x), (symbol, depth) => {
             if (!this.orderBooks[symbol]) this.orderBooks[symbol] = {}
 
             this.orderBooks[symbol].bids = this.binance.sortBids(depth.bids);
@@ -110,6 +130,11 @@ export class Sockets extends BaseSockets {
         acc.binance.balance((error, balances) => {
             if (error) {
                 console.log('Balance error' + error.body)
+                BotLogger.instance.error({
+                    type: "BalanceError - Spot",
+                    account: acc,
+                    error
+                })
             } 
             for (let b in balances) {
                 balances[b].total = parseFloat(balances[b].available) + parseFloat(balances[b].onOrder)
@@ -124,8 +149,17 @@ export class Sockets extends BaseSockets {
                 this.balance_update(acc.balance, acc.orders),
                 this.execution_update(acc.orders))
         } catch (e: any) {
+<<<<<<< HEAD
             // console.log("UserSokcet", e.message)
             logger.error(e.message);
+=======
+            console.log("UserSokcet", e.message)
+            BotLogger.instance.error({
+                type: "UserSokcetError - Spot",
+                account: acc,
+                e
+            })
+>>>>>>> test
         }
     }
 

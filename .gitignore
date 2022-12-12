@@ -1,6 +1,8 @@
 node_modules
-DB.js
 cryptoHistory/*
 .vscode
 *.js
 *.log
+res
+trading-cloud.json
+spot

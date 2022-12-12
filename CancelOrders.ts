@@ -1,10 +1,9 @@
+import { Severity } from "coralogix-logger";
+import { BotLogger } from "./Logger";
 import { Bot } from "./Models";
 
-const logger = require('log4js').getLogger("cancelOrders");
-
-
-async function cancelOrders(bot: Bot) {
-    const PAIR = bot.coin1 + bot.coin2
+async function cancelOrders(bot: Bot, pair?) {
+    const PAIR = pair ? pair : (bot.coin1 + bot.coin2)
     if (bot.binance && bot.binance!.orders[PAIR]) {
         const openOrders = bot.binance!.orders[PAIR]
             .filter(o => o.status == "NEW" || o.status == "PARTIALLY_FILLED")
@@ -15,10 +14,15 @@ async function cancelOrders(bot: Bot) {
                 bot.isFuture ?
                     bot.binance!.binance.futuresCancel(PAIR, { orderId: o.orderId.toString() }) :
                     bot.binance!.binance.cancel(PAIR, o.orderId)));
-            logger.info("cancel order! => PAIR = ", PAIR, ", orderId = ");
+
         } catch (e: any) {
-            // console.log(e.body)
-            logger.error(e.body);
+            console.log("Cancel Error" + e.body)
+            BotLogger.instance.error({
+                type: "CancelError",
+                bot_id: bot._id,
+                coin: PAIR,
+                message: e.body
+            })
         }
     }
 }

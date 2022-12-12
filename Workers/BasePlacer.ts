@@ -1,6 +1,9 @@
 
+import { Severity } from 'coralogix-logger'
+import { Logger } from 'telegram'
 import { DAL } from '../DAL'
-import { Bot, Order } from '../Models'
+import { BotLogger } from '../Logger'
+import { Bot, BotStatus, Order } from '../Models'
 import { Sockets } from '../Sockets/Sockets'
 
 const logger = require('log4js').getLogger("basePlacer");
@@ -24,11 +27,14 @@ export abstract class BasePlacer {
 
 
     myLastOrder: Order | undefined
-    myLastBuyPrice: number = 0
+    myLastStandingBuy: Order | undefined
     myLastBuyAvg;
     currentPnl = 0
     standingBuy: Order | undefined
+    oldestStandingBuy: Order | undefined
 
+    lastBuy: Order | undefined
+    lastSell: Order | undefined
 
     sockets = Sockets.getInstance()
 
@@ -52,7 +58,7 @@ export abstract class BasePlacer {
         this.filters = this.exchangeInfo.filters.reduce((a, b) => { a[b.filterType] = b; return a }, {})
 
         this.bot = _bot
-
+        this.bot.status = BotStatus.WORK
     }
 
     async buyBNB() {
@@ -94,6 +100,7 @@ export abstract class BasePlacer {
     buildHistory() {
         const buys = Array<Order>()
         const sellOrders: Array<string> = []
+        this.myLastOrder = undefined
 
         for (let order of this.orders
             .filter(x => x.status.includes('FILLED'))
@@ -102,12 +109,18 @@ export abstract class BasePlacer {
 
             this.myLastOrder ||= order
             if (order.side == this.buySide()) {
+                this.lastBuy ||= order
 
-                if (!sellOrders.includes("SELL" + order.orderId)){
+                if (!sellOrders.join("").includes(order.orderId)){
                     this.standingBuy ||= order
+                    this.oldestStandingBuy = order
                     buys.push(order)
                 }
             } else {
+                this.lastSell ||= order
+                if (order.clientOrderId.includes("SELLbig") && !this.myLastStandingBuy) {  
+                    this.myLastStandingBuy = this.orders.find(x => x.orderId == order.clientOrderId.split("SELLbig")[1])
+                }
                 sellOrders.push(order.clientOrderId);
             }
 
@@ -132,8 +145,8 @@ export abstract class BasePlacer {
 
     abstract getAction(type: boolean): Function
 
-    async place_order(coin, qu, price, type: boolean, params?) {
-        let minNotional = this.filters.MIN_NOTIONAL.minNotional || this.bot.minNotional
+    async place_order(coin, qu, price, type: boolean, params?, increaseToMinimum = false) {
+        let minNotional = this.filters.MIN_NOTIONAL.minNotional ||this.filters.MIN_NOTIONAL.notional || this.bot.minNotional
 
 
         if (coin == "BNB") {
@@ -147,9 +160,26 @@ export abstract class BasePlacer {
         }
 
         qu = this.roundQu(qu)
-        price = this.roundPrice(price)
 
-        if ((qu * price) < minNotional) return
+        this.bot.lastOrder = new Date().getTime()
+
+        if (price){
+            price = this.roundPrice(price)
+            if ((qu * price) < minNotional && !params?.closePosition && !params?.reduceOnly) {
+                if (increaseToMinimum) {
+                    qu = this.roundQu((parseFloat(minNotional) + 1) / price)
+                } else {
+                    BotLogger.instance.log({
+                        type: "QuantitiyTooLow",
+                        bot_id: this.bot._id,
+                        qu,price,params, minNotional
+                        
+                    })
+                    console.log("quantity is to small" , qu , price , this.bot._id)
+                    return
+                }
+            }
+        }
 
         this.bot.lastOrder = new Date().getTime()
 
@@ -162,32 +192,35 @@ export abstract class BasePlacer {
             let res = await action(this.PAIR, qu, price, params)
             if (res.msg) {
                 console.log(res.msg, this.PAIR,  price || params.stopPrice || params.activationPrice, qu, this.bot.id())
-
-                DAL.instance.logError( {
-                    bot_id: this.bot.id,
-                    type: type,
+                const error =  {
+                    type: "PlaceOrderError",
+                    bot_id: this.bot._id,
+                    user_id: this.bot.user_id,
+                    side: type,
                     coin: this.PAIR,
                     amount: qu,
-                    price: price,
-                    message: res.msg
-                })
+                    price: price || params.stopPrice || params.activationPrice,
+                    message: res.msg,
+                    created_at: new Date()
+                }
+                DAL.instance.logError(error)
+                BotLogger.instance.error(error)
 
                 this.error = true
                 return res
             } else {
 
                 console.log(res.symbol, res.side, res.price || params.stopPrice || params.activationPrice, res.origQty, res.status)
+                BotLogger.instance.log({
+                    type: "PlaceOrder",
+                    bot_id: this.bot._id,
+                    res
+                    
+                })
                 if (res.status == "EXPIRED") {
                     return res.status
                 }
             }
-            //     order = new Order()
-            //     order.type = type
-            //     order.coin = this.PAIR
-            //     order.price = price
-            //     order.amount = qu
-            //     order.this.bot_id = this.bot.id
-            //     order.save()
         } catch (e: any) {
             logger.error(e);
 
@@ -195,17 +228,20 @@ export abstract class BasePlacer {
             logger.info(e.body || e, this.PAIR, price, qu, this.bot.id())
             this.error = true
                 
-
-            
-            DAL.instance.logError( {
+            const error =  {
+                type: "PlaceOrderError",
+                bot_id: this.bot._id,
                 user_id: this.bot.user_id,
-                bot_id: this.bot.id,
-                type: type,
+                side: type,
                 coin: this.PAIR,
                 amount: qu,
                 price: price,
-                message: e.body || e
-            })
+                message: e.body || e,
+                created_at: new Date()
+            }
+            DAL.instance.logError(error)
+            BotLogger.instance.error(error)
+
             return e
         } finally {
 
@@ -221,10 +257,12 @@ export abstract class BasePlacer {
         }
     }
 
-    truncDigits = function (number: number, digits: number) {
+    truncDigits = function (number: number, digits: number, roundFunc: Function = Math.floor) {
         const fact = 10 ** digits;
-        return Math.floor(number * fact) / fact;
+        return roundFunc(number * fact) / fact;
     }
+
+
 
     countDecimals = function (number: number): number {
         if (Math.floor(number) === number) {
@@ -236,5 +274,9 @@ export abstract class BasePlacer {
         if (!number.toString().includes(".")) return 0;
         return number.toString().split(".")[1].length || 0;
     }
-}
 
+    get isSemulation() {
+        return process.argv.join("").includes("Simulate")
+    }
+        
+}

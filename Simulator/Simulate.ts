@@ -39,7 +39,7 @@ async function run() {
   const bot: Bot = Object.assign(new Bot(), simulation);
 
   if (simulation.variations){
-    Object.assign(bot, simulation.variations[env.JOB_COMPLETION_INDEX ?? 0]);
+    Object.assign(bot, simulation.variations[env.CLOUD_RUN_TASK_INDEX ?? 0]);
   }
 
 

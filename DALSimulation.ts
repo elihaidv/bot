@@ -3,6 +3,8 @@ import fetch from 'node-fetch';
 import { Storage } from "@google-cloud/storage";
 import { env, exit } from "process";
 import { ExecOptions } from "child_process";
+import { promises } from "fs" 
+
 
 const PAGE_SIZE = 2000
 export class DAL {
@@ -71,7 +73,7 @@ export class DAL {
             maxPage: this.page - 1,
             progress: status == "finished" ? 100 : progress,
             status: status,
-            variation: env.JOB_COMPLETION_INDEX
+            variation: env.CLOUD_RUN_TASK_INDEX
         })
         console.log(data)
 
@@ -111,7 +113,7 @@ export class DAL {
             this.steps = []
             await new Storage()
                 .bucket('simulations-tradingbot')
-                .file(`simulation${process.argv[3]}-${env.JOB_COMPLETION_INDEX}/${this.page}.csv`)
+                .file(`simulation${process.argv[3]}-${env.CLOUD_RUN_TASK_INDEX}/${this.page}.csv`)
                 .save(cloneSteps
                     .map(s => s.join(','))
                     .join('\n'), { resumable: false })
@@ -131,14 +133,14 @@ export class DAL {
                     .map(y => parseFloat(y)))
                 .map(([time, open, high, low, close]) => [time, high, low, close])
 
-            if (this.isQuiet) return historyArray
-
-            await new Storage()
-                .bucket('crypto-history')
-                .file(`spot/${pair}/${unit}/${date}.csv`)
-                .save(historyArray.map(e => e.join(',')).join('\n'), { resumable: false })
-                .then(console.log)
-                .catch(console.log);
+            await promises.mkdir(`spot/${pair}/${unit}`, { recursive: true })
+            promises.writeFile(`spot/${pair}/${unit}/${date}.csv`, historyArray.map(e => e.join(',')).join('\n'), { })
+            // await new Storage()
+            //     .bucket('crypto-history')
+            //     .file(`spot/${pair}/${unit}/${date}.csv`)
+            //     .save(, { resumable: false })
+            //     .then(console.log)
+            //     .catch(console.log);
 
             return historyArray
         } catch (e) {
@@ -148,17 +150,17 @@ export class DAL {
 
     getHistoryFromBucket = async (pair, unit, date) => {
         try {
-            if (this.isQuiet) return
-            const file = await new Storage()
-                .bucket('crypto-history')
-                .file(`spot/${pair}/${unit}/${date}.csv`)
-                .download()
+            const file = await promises.readFile(`spot/${pair}/${unit}/${date}.csv`)
+            // const file = await new Storage()
+            //     .bucket('crypto-history')
+            //     .file(`spot/${pair}/${unit}/${date}.csv`)
+            //     .download()
 
-            return file[0].toString().split("\n")
+            return file.toString().split("\n")
                 .map(x => x.split(",")
                     .map(y => parseFloat(y)))
         } catch (e: any) {
-            if (!e.message.includes("No such object")) {
+            if (!e.message.includes("no such file")) {
                 console.log(e.message)
             }
             return null

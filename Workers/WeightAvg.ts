@@ -81,16 +81,7 @@ export class WeightAvg extends BasePlacer {
             fbuyQu = this.myLastOrder.executedQty
 
         } else {
-<<<<<<< HEAD
-            buyQu = Math.min(this.balance[this.SECOND].available / buyPrice,
-                this.myLastOrder!.origQty * (1 + this.bot.increase_factor))
-
-            let minNotional = this.filters.MIN_NOTIONAL.minNotional
-            buyQu = Math.max(buyQu , minNotional / buyPrice)
-    
-=======
             fbuyQu = this.myLastOrder!.origQty * (1 + this.bot.increase_factor)
->>>>>>> test
         }
 
         buyQu = Math.min(this.balance[this.SECOND].available / buyPrice, fbuyQu)

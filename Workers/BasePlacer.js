@@ -41,6 +41,7 @@ var DAL_1 = require("../DAL");
 var Logger_1 = require("../Logger");
 var Models_1 = require("../Models");
 var Sockets_1 = require("../Sockets/Sockets");
+var logger = require('log4js').getLogger("basePlacer");
 var BasePlacer = /** @class */ (function () {
     function BasePlacer(_bot, _exchangeInfo) {
         var _this = this;
@@ -99,7 +100,8 @@ var BasePlacer = /** @class */ (function () {
                         return [3 /*break*/, 4];
                     case 3:
                         e_1 = _a.sent();
-                        console.log(e_1);
+                        // console.log(e)
+                        logger.error(e_1);
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/];
                 }
@@ -117,6 +119,7 @@ var BasePlacer = /** @class */ (function () {
                 return parseFloat(orderPrice) - tick;
             }
         }
+        logger.info("price = ", price);
         return price;
     };
     BasePlacer.prototype.buildHistory = function () {
@@ -240,7 +243,9 @@ var BasePlacer = /** @class */ (function () {
                         return [3 /*break*/, 5];
                     case 3:
                         e_2 = _a.sent();
-                        console.log(e_2.body || e_2, this.PAIR, price, qu, this.bot.id());
+                        logger.error(e_2);
+                        // console.log(e.body || e, this.PAIR, price, qu, this.bot.id())
+                        logger.info(e_2.body || e_2, this.PAIR, price, qu, this.bot.id());
                         this.error = true;
                         error = {
                             type: "PlaceOrderError",

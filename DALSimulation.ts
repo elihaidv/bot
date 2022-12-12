@@ -16,10 +16,16 @@ export class DAL {
     page = 0
     simulationId
     awaiter = false
+    variation = 0
+    start
+    end
 
-    async init(dataManager: DataManager | null, simulationId) {
+    async init(dataManager: DataManager | null, simulationId, variation, start, end) {
         this.dataManager = dataManager
         this.simulationId = simulationId
+        this.variation = variation
+        this.start = start
+        this.end = end
 
         setTimeout(() => this.updateProgress("timeout"), 3400000)
     }
@@ -63,8 +69,8 @@ export class DAL {
 
     updateProgress(status) {
 
-        const start = new Date(process.argv[4]).getTime()
-        const end = new Date(process.argv[5]).getTime()
+        const start = new Date(this.start).getTime()
+        const end = new Date(this.end).getTime()
         const time = this.dataManager.chart[this.dataManager.currentCandle].time
         const progress = Math.round((time - start) / (end - start) * 100)
 
@@ -73,7 +79,7 @@ export class DAL {
             maxPage: this.page - 1,
             progress: status == "finished" ? 100 : progress,
             status: status,
-            variation: env.CLOUD_RUN_TASK_INDEX
+            variation: this.variation
         })
         console.log(data)
 
@@ -92,7 +98,7 @@ export class DAL {
     }
 
     get isQuiet() {
-        return process.argv[6] == 'quiet'
+        return process.argv.join("").includes('quiet')
     }
 
     async endTest() {
@@ -113,7 +119,7 @@ export class DAL {
             this.steps = []
             await new Storage()
                 .bucket('simulations-tradingbot')
-                .file(`simulation${process.argv[3]}-${env.CLOUD_RUN_TASK_INDEX}/${this.page}.csv`)
+                .file(`simulation${this.simulationId}-${this.variation}/${this.page}.csv`)
                 .save(cloneSteps
                     .map(s => s.join(','))
                     .join('\n'), { resumable: false })

@@ -12,6 +12,8 @@
   "dependencies": {
     "@google-cloud/storage": "^6.4.1",
     "adm-zip": "^0.5.9",
+    "amqp": "^0.2.7",
+    "amqplib": "^0.10.3",
     "body-parser": "^1.20.0",
     "coralogix-logger": "^1.1.28",
     "dotenv": "^10.0.0",
@@ -21,6 +23,8 @@
     "http": "0.0.1-security",
     "https": "^1.0.0",
     "input": "^1.0.1",
+    "kafka-queue": "^1.0.4",
+    "kafkajs": "^2.2.3",
     "mongodb": "^3.6.9",
     "node-binance-api": "^0.13.1",
     "node-fetch": "2",

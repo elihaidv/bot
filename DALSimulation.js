@@ -42,7 +42,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DAL = void 0;
 var node_fetch_1 = __importDefault(require("node-fetch"));
 var storage_1 = require("@google-cloud/storage");
-var process_1 = require("process");
 var fs_1 = require("fs");
 var PAGE_SIZE = 2000;
 var DAL = /** @class */ (function () {
@@ -52,6 +51,7 @@ var DAL = /** @class */ (function () {
         this.stepsCounts = 0;
         this.page = 0;
         this.awaiter = false;
+        this.variation = 0;
         this.saveInBucket = function () { return __awaiter(_this, void 0, void 0, function () {
             var cloneSteps, e_1;
             return __generator(this, function (_a) {
@@ -62,7 +62,7 @@ var DAL = /** @class */ (function () {
                         this.steps = [];
                         return [4 /*yield*/, new storage_1.Storage()
                                 .bucket('simulations-tradingbot')
-                                .file("simulation" + process.argv[3] + "-" + process_1.env.CLOUD_RUN_TASK_INDEX + "/" + this.page + ".csv")
+                                .file("simulation" + this.simulationId + "-" + this.variation + "/" + this.page + ".csv")
                                 .save(cloneSteps
                                 .map(function (s) { return s.join(','); })
                                 .join('\n'), { resumable: false })
@@ -144,12 +144,15 @@ var DAL = /** @class */ (function () {
             });
         }); };
     }
-    DAL.prototype.init = function (dataManager, simulationId) {
+    DAL.prototype.init = function (dataManager, simulationId, variation, start, end) {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
                 this.dataManager = dataManager;
                 this.simulationId = simulationId;
+                this.variation = variation;
+                this.start = start;
+                this.end = end;
                 setTimeout(function () { return _this.updateProgress("timeout"); }, 3400000);
                 return [2 /*return*/];
             });
@@ -197,8 +200,8 @@ var DAL = /** @class */ (function () {
         });
     };
     DAL.prototype.updateProgress = function (status) {
-        var start = new Date(process.argv[4]).getTime();
-        var end = new Date(process.argv[5]).getTime();
+        var start = new Date(this.start).getTime();
+        var end = new Date(this.end).getTime();
         var time = this.dataManager.chart[this.dataManager.currentCandle].time;
         var progress = Math.round((time - start) / (end - start) * 100);
         var data = JSON.stringify({
@@ -206,7 +209,7 @@ var DAL = /** @class */ (function () {
             maxPage: this.page - 1,
             progress: status == "finished" ? 100 : progress,
             status: status,
-            variation: process_1.env.CLOUD_RUN_TASK_INDEX
+            variation: this.variation
         });
         console.log(data);
         return (0, node_fetch_1.default)("https://itamars.live/api/simulations/" + this.simulationId, {
@@ -223,7 +226,7 @@ var DAL = /** @class */ (function () {
     };
     Object.defineProperty(DAL.prototype, "isQuiet", {
         get: function () {
-            return process.argv[6] == 'quiet';
+            return process.argv.join("").includes('quiet');
         },
         enumerable: false,
         configurable: true

@@ -28,7 +28,7 @@ var BotLogger = /** @class */ (function () {
     };
     Object.defineProperty(BotLogger.prototype, "isSemulation", {
         get: function () {
-            return process.argv[1].includes("Simulate");
+            return process.argv.join("").includes("Simulate");
         },
         enumerable: false,
         configurable: true

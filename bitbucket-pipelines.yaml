@@ -1,0 +1,11 @@
+pipelines:
+  branches:
+    master:
+      - step:
+          name: production
+          image: eeacms/rsync
+          script:
+            - rsync -rzvP -r --exclude-from=.gitignore $BITBUCKET_CLONE_DIR/ $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
+            - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && php8.0 /root/composer.phar install"
+            - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && php artisan db:seed --force"
+            - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && php artisan queue:restart"

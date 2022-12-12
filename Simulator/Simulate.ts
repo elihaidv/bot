@@ -11,11 +11,7 @@ import { DAL } from "../DALSimulation";
 import { Periodically } from "../Workers/Periodically";
 import exchangeInfo from './exchangeInfo.json'
 
-
-const cf = require('node-fetch-cache')
-const fetch = cf.fetchBuilder.withCache(new cf.FileSystemCache({
-  cacheDirectory: '/tmp/simcache',
-}));
+const fetch = require('node-fetch');
 import { OneStep } from "../Workers/OneStep";
 
 
@@ -24,13 +20,10 @@ import { OrderPlacer } from "../Workers/PlaceOrders";
 
 
 
-console.log(process.argv)
-const id = process.argv[3] || "61da8b2036520f0737301999";
-
 let dataManager: DataManager
-async function run() {
+export async function run(simulationId: string, variation:number, startStr: string, endStr: string) {
 
-  const simulation = await fetch("https://itamars.live/api/simulations/" + id, {
+  const simulation = await fetch("https://itamars.live/api/simulations/" + simulationId, {
     headers: {
       "API-KEY": "WkqrHeuts2mIOJHMcxoK"
     }
@@ -38,8 +31,8 @@ async function run() {
 
   const bot: Bot = Object.assign(new Bot(), simulation);
 
-  if (simulation.variations){
-    Object.assign(bot, simulation.variations[env.CLOUD_RUN_TASK_INDEX ?? 0]);
+  if (simulation.variations) {
+    Object.assign(bot, simulation.variations[variation]);
   }
 
 
@@ -47,14 +40,14 @@ async function run() {
   dataManager = bot.isFuture ? new FutureDataManager(bot) : new DataManager(bot);
 
   dataManager.setExchangeInfo(bot.isFuture ?
-    exchangeInfo:
+    exchangeInfo :
     await Binance({ 'family': 4 }).exchangeInfo())
 
 
-  DAL.instance.init(dataManager, id)
+  DAL.instance.init(dataManager, simulationId, variation, startStr, endStr)
 
-  const start = new Date(process.argv[4]).getTime() - (bot.longSMA * 15 * 60 * 1000)
-  const end = new Date(process.argv[5]).getTime()
+  const start = new Date(startStr).getTime() - (bot.longSMA * 15 * 60 * 1000)
+  const end = new Date(endStr).getTime()
   let endChunk = Math.min(end, start + dataManager.MIN_CHART_SIZE * 1000)
 
   await dataManager.fetchAllCharts(start, endChunk)
@@ -78,7 +71,7 @@ async function run() {
       await dataManager.fetchAllCharts(startChunk, endChunk)
       dataManager.currentCandle = dataManager.MIN_CHART_SIZE
       t = dataManager.chart[dataManager.currentCandle]
-      if (!t){
+      if (!t) {
         break;
       }
     }
@@ -178,4 +171,3 @@ async function place(bot: Bot) {
 function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-run()

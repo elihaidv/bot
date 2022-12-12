@@ -268,7 +268,7 @@ export abstract class BasePlacer {
     }
 
     get isSemulation() {
-        return process.argv[1].includes("Simulate")
+        return process.argv.join("").includes("Simulate")
     }
         
 }

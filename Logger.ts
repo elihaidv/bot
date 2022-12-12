@@ -30,6 +30,6 @@ export class BotLogger {
     }
 
     get isSemulation() {
-        return process.argv[1].includes("Simulate")
+        return process.argv.join("").includes("Simulate")
     }
 }

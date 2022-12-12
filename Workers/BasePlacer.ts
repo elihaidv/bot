@@ -6,7 +6,6 @@ import { BotLogger } from '../Logger'
 import { Bot, BotStatus, Order } from '../Models'
 import { Sockets } from '../Sockets/Sockets'
 
-const logger = require('log4js').getLogger("basePlacer");
 
 
 export abstract class BasePlacer {
@@ -70,7 +69,6 @@ export abstract class BasePlacer {
                 await this.binance!.marketBuy(bnbPair, this.bot.bnbamount)
             } catch (e) {
                 // console.log(e)
-                logger.error(e);
             }
         }
     }
@@ -89,7 +87,6 @@ export abstract class BasePlacer {
             }
         }
 
-        logger.info("price = ", price);
         return price
     }
 
@@ -222,10 +219,6 @@ export abstract class BasePlacer {
                 }
             }
         } catch (e: any) {
-            logger.error(e);
-
-            // console.log(e.body || e, this.PAIR, price, qu, this.bot.id())
-            logger.info(e.body || e, this.PAIR, price, qu, this.bot.id())
             this.error = true
                 
             const error =  {

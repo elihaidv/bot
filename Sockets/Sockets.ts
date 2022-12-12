@@ -3,7 +3,6 @@ import { Account, Bot, Key, Order } from "../Models";
 import { BotLogger } from "../Logger";
 import { Severity } from "coralogix-logger";
 
-const logger = require('log4js').getLogger("sockets");
 const Binance = require('node-binance-api');
 
 
@@ -97,7 +96,6 @@ export class Sockets extends BaseSockets {
         if (newOrder.status == 'FILLED') {
             orders.changed.push(data.s);
             // console.log(data.S, data.s)
-            logger.info(data.S, data.s);
         }
 
     }

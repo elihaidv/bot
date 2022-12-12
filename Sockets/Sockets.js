@@ -55,7 +55,6 @@ exports.Sockets = void 0;
 var BaseSockets_1 = require("./BaseSockets");
 var Models_1 = require("../Models");
 var Logger_1 = require("../Logger");
-var logger = require('log4js').getLogger("sockets");
 var Binance = require('node-binance-api');
 var Sockets = /** @class */ (function (_super) {
     __extends(Sockets, _super);
@@ -116,7 +115,6 @@ var Sockets = /** @class */ (function (_super) {
             if (newOrder.status == 'FILLED') {
                 orders.changed.push(data.s);
                 // console.log(data.S, data.s)
-                logger.info(data.S, data.s);
             }
         }; };
         return _this;

@@ -38,7 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Simulate_1 = require("./Simulate");
 var amqp = require('amqplib/callback_api');
-amqp.connect('amqp://localhost', function (error0, connection) {
+amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', function (error0, connection) {
     if (error0) {
         throw error0;
     }

@@ -30,6 +30,7 @@ export class DataManager {
     profit = 0;
     exchangeInfo: any
     filters: any
+    dal = new DAL()
 
     // currentHour = 0
     // offsetInHour = 0
@@ -85,7 +86,7 @@ export class DataManager {
 
         this.openOrders.push(order)
 
-        DAL.instance.logStep({
+        this.dal.logStep({
             type: 'OpenOrder', side: order.side, price: order.price, quantity: order.origQty, priority: 8,
             high: this.chart[this.currentCandle].high,
             low: this.chart[this.currentCandle].low,
@@ -126,13 +127,13 @@ export class DataManager {
 
 
             promises.push(
-                DAL.instance.getHistoryFromBucket(this.PAIR, unit, dateString)
+                this.dal.getHistoryFromBucket(this.PAIR, unit, dateString)
                     .then(res => res ? res :
                         fetch(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip`)
                             .then(res => res.buffer())
                             .then(r => new admZip(r))
                             .then(f => f.getEntries()[0].getData().toString())
-                            .then(s => DAL.instance.saveHistoryInBucket(s, this.PAIR, unit, dateString)))
+                            .then(s => this.dal.saveHistoryInBucket(s, this.PAIR, unit, dateString)))
                     .then(zip => {
                         console.log("downloded: ", dateString, unit);
                         return zip
@@ -299,12 +300,12 @@ export class DataManager {
 
             //Check if 
             if (this.bot.binance!.balance[this.bot.coin1].available < this.filters.MIN_NOTIONAL.minNotional / order.avgPrice) {
-                DAL.instance.logStep({ type: 'Close Position', priority: 5 })
+                this.dal.logStep({ type: 'Close Position', priority: 5 })
                 this.bot.binance!.orders[this.PAIR] = [order]
             }
         }
 
-        DAL.instance.logStep({
+        this.dal.logStep({
             type: order.type == "STOP_MARKET" ? "StopLoose" : 'Execute',
             side: order.side,
             high: t.high,

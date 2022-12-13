@@ -8,7 +8,6 @@ import { promises } from "fs"
 
 const PAGE_SIZE = 2000
 export class DAL {
-    static instance = new DAL()
     started
     dataManager
     steps = Array<Array<any>>()

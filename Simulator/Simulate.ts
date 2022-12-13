@@ -23,7 +23,7 @@ env.GOOGLE_APPLICATION_CREDENTIALS = "trading-cloud.json"
 let dataManager: DataManager
 export async function run(simulationId: string, variation:number, startStr: string, endStr: string) {
 
-  const simulation = await fetch("https://itamars.live/api/simulations/" + simulationId, {
+  const simulation = await fetch("https://itamars.live/api/simulations/" + simulationId + "?var=" + variation, {
     headers: {
       "API-KEY": "WkqrHeuts2mIOJHMcxoK"
     }
@@ -44,7 +44,7 @@ export async function run(simulationId: string, variation:number, startStr: stri
     await Binance({ 'family': 4 }).exchangeInfo())
 
 
-  DAL.instance.init(dataManager, simulationId, variation, startStr, endStr)
+  dataManager.dal.init(dataManager, simulationId, variation, startStr, endStr)
 
   const start = new Date(startStr).getTime() - (bot.longSMA * 15 * 60 * 1000)
   const end = new Date(endStr).getTime()
@@ -88,16 +88,16 @@ export async function run(simulationId: string, variation:number, startStr: stri
       ToPlace = true
     }
 
-    if (DAL.instance.awaiter) {
+    if (dataManager.dal.awaiter) {
       console.log("awaiter")
-      DAL.instance.awaiter = false
+      dataManager.dal.awaiter = false
       await timeout(100)
     }
 
 
     if (!dataManager.hasMoney(t) && t.close) {
       console.log("😰Liquid at: " + t.close)
-      DAL.instance.logStep({ "type": "😰Liquid", low: t.close, priority: 10 })
+      dataManager.dal.logStep({ "type": "😰Liquid", low: t.close, priority: 10 })
       break;
     }
 
@@ -108,7 +108,7 @@ export async function run(simulationId: string, variation:number, startStr: stri
   dataManager.currentCandle--
   dataManager.closePosition(dataManager.chart[dataManager.currentCandle].low);
   console.log("Profit: " + dataManager.profit)
-  await DAL.instance.endTest()
+  await dataManager.dal.endTest()
 
 }
 

@@ -10,10 +10,10 @@ pipelines:
           name: Build TypeScript
           script:
             - npm install -g typescript
-            - npx tsc
+            - tsc --skipLibCheck --resolveJsonModule --esModuleInterop -t es5 Simulator/rabbitConsumer.ts
       - step:
           name: Deploy to Server
           script:
-            - scp -r build/ $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
+            - scp -r . $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
             - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && npm install"
             - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && pm2 reload rabbitConsumer"

@@ -75,6 +75,7 @@ var DataManager = /** @class */ (function () {
         this.openOrders = [];
         this.currentCandle = 0;
         this.profit = 0;
+        this.dal = new DALSimulation_1.DAL();
         this.UNIT_TIMES = ['1h', '15m', '5m', '1m', '1s'];
         this.MIN_CHART_SIZE = 5 * 24 * 60 * 60;
         // readonly UNIT_HOUR_CANDLES = {
@@ -99,7 +100,7 @@ var DataManager = /** @class */ (function () {
             var order = new Models_1.Order(type ? 'BUY' : "SELL", "NEW", p, _this.makeid(10), qu, qu, _this.chart[_this.currentCandle].time, params.type || "LIMIT", params.newClientOrderId, _this.bot.positionSide(), p);
             order.closePosition = params.closePosition;
             _this.openOrders.push(order);
-            DALSimulation_1.DAL.instance.logStep({
+            _this.dal.logStep({
                 type: 'OpenOrder', side: order.side, price: order.price, quantity: order.origQty, priority: 8,
                 high: _this.chart[_this.currentCandle].high,
                 low: _this.chart[_this.currentCandle].low,
@@ -168,18 +169,18 @@ var DataManager = /** @class */ (function () {
                         date = new Date(start);
                         _loop_1 = function () {
                             var dateString = date.toISOString().split("T")[0];
-                            promises.push(DALSimulation_1.DAL.instance.getHistoryFromBucket(this_1.PAIR, unit, dateString)
+                            promises.push(this_1.dal.getHistoryFromBucket(this_1.PAIR, unit, dateString)
                                 .then(function (res) { return res ? res :
                                 fetch("https://data.binance.vision/data/spot/daily/klines/" + _this.PAIR + "/" + unit + "/" + _this.PAIR + "-" + unit + "-" + dateString + ".zip")
                                     .then(function (res) { return res.buffer(); })
                                     .then(function (r) { return new admZip(r); })
                                     .then(function (f) { return f.getEntries()[0].getData().toString(); })
-                                    .then(function (s) { return DALSimulation_1.DAL.instance.saveHistoryInBucket(s, _this.PAIR, unit, dateString); }); })
+                                    .then(function (s) { return _this.dal.saveHistoryInBucket(s, _this.PAIR, unit, dateString); }); })
                                 .then(function (zip) {
                                 console.log("downloded: ", dateString, unit);
                                 return zip;
                             })
-                                .catch(console.log));
+                                .catch(console.error));
                             date.setDate(date.getDate() + 1);
                         };
                         this_1 = this;
@@ -334,11 +335,11 @@ var DataManager = /** @class */ (function () {
             // console.log("balance: " + (this.bot.binance!.balance[this.bot.coin2].available))
             //Check if 
             if (this.bot.binance.balance[this.bot.coin1].available < this.filters.MIN_NOTIONAL.minNotional / order.avgPrice) {
-                DALSimulation_1.DAL.instance.logStep({ type: 'Close Position', priority: 5 });
+                this.dal.logStep({ type: 'Close Position', priority: 5 });
                 this.bot.binance.orders[this.PAIR] = [order];
             }
         }
-        DALSimulation_1.DAL.instance.logStep({
+        this.dal.logStep({
             type: order.type == "STOP_MARKET" ? "StopLoose" : 'Execute',
             side: order.side,
             high: t.high,

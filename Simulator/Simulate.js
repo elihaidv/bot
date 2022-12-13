@@ -48,7 +48,6 @@ var WeightAvg_1 = require("../Workers/WeightAvg");
 var DataManager_1 = require("./DataManager");
 var FutureDataManager_1 = require("./FutureDataManager");
 var process_1 = require("process");
-var DALSimulation_1 = require("../DALSimulation");
 var Periodically_1 = require("../Workers/Periodically");
 var exchangeInfo_json_1 = __importDefault(require("./exchangeInfo.json"));
 var fetch = require('node-fetch');
@@ -62,7 +61,7 @@ function run(simulationId, variation, startStr, endStr) {
         var simulation, bot, _a, _b, _c, start, end, endChunk, t, ToPlace, ordersToFill, startChunk, endChunk_1, o, _d;
         return __generator(this, function (_e) {
             switch (_e.label) {
-                case 0: return [4 /*yield*/, fetch("https://itamars.live/api/simulations/" + simulationId, {
+                case 0: return [4 /*yield*/, fetch("https://itamars.live/api/simulations/" + simulationId + "?var=" + variation, {
                         headers: {
                             "API-KEY": "WkqrHeuts2mIOJHMcxoK"
                         }
@@ -84,7 +83,7 @@ function run(simulationId, variation, startStr, endStr) {
                     _e.label = 4;
                 case 4:
                     _b.apply(_a, [_c]);
-                    DALSimulation_1.DAL.instance.init(dataManager, simulationId, variation, startStr, endStr);
+                    dataManager.dal.init(dataManager, simulationId, variation, startStr, endStr);
                     start = new Date(startStr).getTime() - (bot.longSMA * 15 * 60 * 1000);
                     end = new Date(endStr).getTime();
                     endChunk = Math.min(end, start + dataManager.MIN_CHART_SIZE * 1000);
@@ -127,9 +126,9 @@ function run(simulationId, variation, startStr, endStr) {
                         bot.status != Models_1.BotStatus.STABLE) {
                         ToPlace = true;
                     }
-                    if (!DALSimulation_1.DAL.instance.awaiter) return [3 /*break*/, 11];
+                    if (!dataManager.dal.awaiter) return [3 /*break*/, 11];
                     console.log("awaiter");
-                    DALSimulation_1.DAL.instance.awaiter = false;
+                    dataManager.dal.awaiter = false;
                     return [4 /*yield*/, timeout(100)];
                 case 10:
                     _e.sent();
@@ -137,7 +136,7 @@ function run(simulationId, variation, startStr, endStr) {
                 case 11:
                     if (!dataManager.hasMoney(t) && t.close) {
                         console.log("😰Liquid at: " + t.close);
-                        DALSimulation_1.DAL.instance.logStep({ "type": "😰Liquid", low: t.close, priority: 10 });
+                        dataManager.dal.logStep({ "type": "😰Liquid", low: t.close, priority: 10 });
                         return [3 /*break*/, 14];
                     }
                     _d = ToPlace;
@@ -154,7 +153,7 @@ function run(simulationId, variation, startStr, endStr) {
                     dataManager.currentCandle--;
                     dataManager.closePosition(dataManager.chart[dataManager.currentCandle].low);
                     console.log("Profit: " + dataManager.profit);
-                    return [4 /*yield*/, DALSimulation_1.DAL.instance.endTest()];
+                    return [4 /*yield*/, dataManager.dal.endTest()];
                 case 15:
                     _e.sent();
                     return [2 /*return*/];

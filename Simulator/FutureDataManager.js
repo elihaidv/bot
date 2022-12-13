@@ -16,7 +16,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FutureDataManager = void 0;
-var DALSimulation_1 = require("../DALSimulation");
 var Models_1 = require("../Models");
 var SocketsFuture_1 = require("../Sockets/SocketsFuture");
 var DataManager_1 = require("./DataManager");
@@ -43,7 +42,7 @@ var FutureDataManager = /** @class */ (function (_super) {
             pos.positionAmount = 0;
             pos.positionEntry = 0;
             console.log("Closing position with profit of: " + (gain / this.bot.binance.balance[this.bot.coin2] * 100).toFixed() + "%");
-            DALSimulation_1.DAL.instance.logStep({ type: 'Close Position', priority: 5 });
+            this.dal.logStep({ type: 'Close Position', priority: 5 });
             this.bot.binance.orders[this.PAIR] = [];
         }
         else if (qu * pos.positionAmount < 0) {
@@ -59,8 +58,8 @@ var FutureDataManager = /** @class */ (function (_super) {
         this.bot.binance.balance[this.bot.coin2] += gain;
         this.profit += gain;
         console.log("Psition size: " + pos.positionAmount);
-        console.log("Variation: " + DALSimulation_1.DAL.instance.variation + "Profit: " + (this.profit / 100).toFixed(2) + "% Date: " + new Date(parseInt(this.chart[this.currentCandle].time)));
-        DALSimulation_1.DAL.instance.logStep({
+        console.log("Variation: " + this.dal.variation + "Profit: " + (this.profit / 100).toFixed(2) + "% Date: " + new Date(parseInt(this.chart[this.currentCandle].time)));
+        this.dal.logStep({
             type: order.type == "STOP_MARKET" ? "StopLoose" : 'Execute',
             side: order.side,
             price: order.price,

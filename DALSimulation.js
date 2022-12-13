@@ -71,7 +71,7 @@ var DAL = /** @class */ (function () {
                         return [3 /*break*/, 3];
                     case 2:
                         e_1 = _a.sent();
-                        console.log(e_1);
+                        console.error(e_1);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -104,7 +104,7 @@ var DAL = /** @class */ (function () {
                         return [2 /*return*/, historyArray];
                     case 2:
                         e_2 = _a.sent();
-                        console.log(e_2);
+                        console.error(e_2);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -134,7 +134,7 @@ var DAL = /** @class */ (function () {
                     case 2:
                         e_3 = _a.sent();
                         if (!e_3.message.includes("no such file")) {
-                            console.log(e_3.message);
+                            console.error(e_3.message);
                         }
                         return [2 /*return*/, null];
                     case 3: return [2 /*return*/];
@@ -144,14 +144,12 @@ var DAL = /** @class */ (function () {
     }
     DAL.prototype.init = function (dataManager, simulationId, variation, start, end) {
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
             return __generator(this, function (_a) {
                 this.dataManager = dataManager;
                 this.simulationId = simulationId;
                 this.variation = variation;
                 this.start = start;
                 this.end = end;
-                setTimeout(function () { return _this.updateProgress("timeout"); }, 3400000);
                 return [2 /*return*/];
             });
         });
@@ -220,7 +218,7 @@ var DAL = /** @class */ (function () {
             }
         }).then(function (r) { return r.text(); })
             .then(console.log)
-            .catch(console.log);
+            .catch(console.error);
     };
     Object.defineProperty(DAL.prototype, "isQuiet", {
         get: function () {
@@ -248,7 +246,6 @@ var DAL = /** @class */ (function () {
             });
         });
     };
-    DAL.instance = new DAL();
     return DAL;
 }());
 exports.DAL = DAL;

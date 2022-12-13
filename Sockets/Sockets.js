@@ -155,7 +155,7 @@ var Sockets = /** @class */ (function (_super) {
             acc.socket = acc.binance.websockets.userData(this.balance_update(acc.balance, acc.orders), this.execution_update(acc.orders));
         }
         catch (e) {
-            console.log("UserSokcet", e.message);
+            console.error("UserSokcet", e.message);
             Logger_1.BotLogger.instance.error({
                 type: "UserSokcetError - Spot",
                 account: acc,

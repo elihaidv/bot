@@ -268,7 +268,7 @@ var SocketsFutures = /** @class */ (function (_super) {
                     case 8:
                         e_1 = _c.sent();
                         acc.orders[PAIR] = undefined;
-                        console.log("FetchInit Error: ", e_1, " Bot Id: ", bot.id());
+                        console.error("FetchInit Error: ", e_1, " Bot Id: ", bot.id());
                         Logger_1.BotLogger.instance.error({
                             type: "FetchInitError - Futures",
                             botId: bot.id(),

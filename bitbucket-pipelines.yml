@@ -8,6 +8,6 @@ pipelines:
             - npm install
             - npm install -g typescript
             - tsc --skipLibCheck --resolveJsonModule --esModuleInterop -t es5 Simulator/rabbitConsumer.ts
-            - scp -r $(pwd). $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
+            - scp -r $(pwd)/* $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
             - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && npm install"
             - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && pm2 reload rabbitConsumer"

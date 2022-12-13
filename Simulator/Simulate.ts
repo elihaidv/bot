@@ -27,7 +27,7 @@ export async function run(simulationId: string, variation:number, startStr: stri
     headers: {
       "API-KEY": "WkqrHeuts2mIOJHMcxoK"
     }
-  }).then(r => r.json())
+  }).then(r => r.json()).catch(console.error)
 
   const bot: Bot = Object.assign(new Bot(), simulation);
 

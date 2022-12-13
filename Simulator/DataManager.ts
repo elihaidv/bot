@@ -137,7 +137,7 @@ export class DataManager {
                         console.log("downloded: ", dateString, unit);
                         return zip
                     })
-                    .catch(console.log))
+                    .catch(console.error))
 
             date.setDate(date.getDate() + 1)
 

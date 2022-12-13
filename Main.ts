@@ -111,7 +111,7 @@ async function execute() {
 
 
   } catch (e: any) {
-    console.log(e)
+    console.error(e)
     BotLogger.instance.log({
       type: "GeneralError",
       message: e?.message || e,

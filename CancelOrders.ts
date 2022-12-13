@@ -16,7 +16,7 @@ async function cancelOrders(bot: Bot, pair?) {
                     bot.binance!.binance.cancel(PAIR, o.orderId)));
 
         } catch (e: any) {
-            console.log("Cancel Error" + e.body)
+            console.error("Cancel Error" + e.body)
             BotLogger.instance.error({
                 type: "CancelError",
                 bot_id: bot._id,

@@ -27,7 +27,7 @@ export class DAL {
         this.start = start
         this.end = end
 
-        setTimeout(() => this.updateProgress("timeout"), 3400000)
+        // setTimeout(() => this.updateProgress("timeout"), 3400000)
     }
 
     async logStep(step) {
@@ -94,7 +94,7 @@ export class DAL {
 
         }).then(r => r.text())
             .then(console.log)
-            .catch(console.log)
+            .catch(console.error)
     }
 
     get isQuiet() {
@@ -124,7 +124,7 @@ export class DAL {
                     .map(s => s.join(','))
                     .join('\n'), { resumable: false });
         } catch (e) {
-            console.log(e)
+            console.error(e)
         }
     }
 
@@ -148,7 +148,7 @@ export class DAL {
 
             return historyArray
         } catch (e) {
-            console.log(e)
+            console.error(e)
         }
     }
 
@@ -165,7 +165,7 @@ export class DAL {
                     .map(y => parseFloat(y)))
         } catch (e: any) {
             if (!e.message.includes("no such file")) {
-                console.log(e.message)
+                console.error(e.message)
             }
             return null
 

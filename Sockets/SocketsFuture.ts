@@ -180,7 +180,7 @@ export class SocketsFutures extends BaseSockets {
                 }
             } catch (e) {
                 acc.orders[PAIR] = undefined
-                console.log("FetchInit Error: ", e, " Bot Id: ", bot.id())
+                console.error("FetchInit Error: ", e, " Bot Id: ", bot.id())
                 BotLogger.instance.error({
                     type: "FetchInitError - Futures",
                     botId: bot.id(),

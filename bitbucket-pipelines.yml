@@ -9,6 +9,7 @@ pipelines:
       - step:
           name: Build TypeScript
           script:
+            - npm install -g typescript
             - npx tsc
       - step:
           name: Deploy to Server

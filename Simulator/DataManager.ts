@@ -54,6 +54,14 @@ export class DataManager {
         '1h': 1
     }
 
+    readonly SECOUNDS_IN_UNIT = {
+        '1s': 1,
+        '1m': 60,
+        '5m': 60 * 5,
+        '15m': 60 * 15,
+        '1h': 60 * 60
+    }
+
 
 
     sockets: BaseSockets
@@ -138,7 +146,9 @@ export class DataManager {
                         console.log("downloded: ", dateString, unit);
                         return zip
                     })
-                    .catch(console.error))
+                    .catch((e) => {
+                        console.error("Error in:", dateString, unit, e)
+                    }))
 
             date.setDate(date.getDate() + 1)
 
@@ -149,14 +159,36 @@ export class DataManager {
         this.charts[unit] = data.map(([time, high, low, close]) =>
             (Object.assign(new CandleStick(), { time, high, low, close })))
     }
+    buildCharts() {
+        const highers = {}
+        const lowers = {}
+
+        this.UNIT_TIMES.forEach(unit => {
+            this.charts[unit] ||= []
+        })
+        for (let i = 1; i < this.charts["1s"].length + 1; i++) {
+            for (let j = 0; j < this.UNIT_TIMES.length - 1; j++) {
+                const unit = this.UNIT_TIMES[j]
+
+                highers[unit] = Math.max(highers[unit] || 0, this.charts["1s"][i-1].high)
+                lowers[unit] = Math.min(lowers[unit] || Infinity, this.charts["1s"][i-1].low)
+
+                if (i && i % this.SECOUNDS_IN_UNIT[unit] == 0) {
+                    this.charts[unit].push(Object.assign(new CandleStick(), {
+                        time: this.charts["1s"][i-1].time - this.SECOUNDS_IN_UNIT[unit] * 1000,
+                        high: highers[unit],
+                        low: lowers[unit],
+                        close: this.charts["1s"][i-1].close
+                    }))
+                    highers[unit] = 0
+                    lowers[unit] = Infinity
+                }
+            }
+        }
+    }
     async fetchAllCharts(start, end) {
-        await Promise.all([
-            this.fetchNextChart(start, end, "1s"),
-            this.fetchNextChart(start, end, "1m"),
-            this.fetchNextChart(start, end, "5m"),
-            this.fetchNextChart(start, end, "15m"),
-            this.fetchNextChart(start, end, "1h")
-        ]);
+        await this.fetchNextChart(start, end, "1s")
+
 
         for (let i = this.charts["1s"].length - 1; i > 0; i--) {
             if (this.charts["1s"][i].time != this.charts["1s"][i - 1].time + 1000) {
@@ -164,6 +196,8 @@ export class DataManager {
             }
         }
 
+
+        this.buildCharts()
 
         this.chart = this.chart.slice(this.chart.length - this.MIN_CHART_SIZE)
 
@@ -203,14 +237,15 @@ export class DataManager {
                     const parent = this.charts[this.UNIT_TIMES[unitIndex - 1]][Math.floor(i / this.UNIT_NEXT_LEVEL[unit])]
                     this.charts[unit][i].parent = parent
                     if (!parent) {
-                        debugger
-                    }
+                         debugger
+                    } else {
                     parent.children.push(this.charts[unit][i])
+                    }
                 }
             }
         }
         this.hoursChart = this.charts["1h"]
-        // this.charts = {}
+        this.charts = {}
     }
 
     checkOrder(orders: Array<Order>, secounds: number) {

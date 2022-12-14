@@ -135,6 +135,7 @@ export class DAL {
                 .map(x => x.split(",")
                     .map(y => parseFloat(y)))
                 .map(([time, open, high, low, close]) => [time, high, low, close])
+                .filter(([time, high, low, close]) => time && high && low && close)
 
             await promises.mkdir(`spot/${pair}/${unit}`, { recursive: true })
             promises.writeFile(`spot/${pair}/${unit}/${date}.csv`, historyArray.map(e => e.join(',')).join('\n'), { })
@@ -144,7 +145,7 @@ export class DAL {
             //     .save(, { resumable: false })
             //     .then(console.log)
             //     .catch(console.log);
-
+            console.log(historyArray.length)
             return historyArray
         } catch (e) {
             console.error(e)
@@ -159,9 +160,13 @@ export class DAL {
             //     .file(`spot/${pair}/${unit}/${date}.csv`)
             //     .download()
 
-            return file.toString().split("\n")
+            const res =  file.toString().split("\n")
                 .map(x => x.split(",")
                     .map(y => parseFloat(y)))
+
+            
+            console.log(res.length)
+            return res
         } catch (e: any) {
             if (!e.message.includes("no such file")) {
                 console.error(e.message)

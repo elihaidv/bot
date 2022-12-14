@@ -202,6 +202,9 @@ export class DataManager {
                 if (unitIndex > 0) {
                     const parent = this.charts[this.UNIT_TIMES[unitIndex - 1]][Math.floor(i / this.UNIT_NEXT_LEVEL[unit])]
                     this.charts[unit][i].parent = parent
+                    if (!parent) {
+                        debugger
+                    }
                     parent.children.push(this.charts[unit][i])
                 }
             }

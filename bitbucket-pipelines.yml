@@ -10,5 +10,5 @@ pipelines:
             - npm install -g typescript
             - tsc --skipLibCheck --resolveJsonModule --esModuleInterop -t es5 Simulator/rabbitConsumer.ts
             - rsync -rzvP -r --exclude-from=.gitignore $BITBUCKET_CLONE_DIR/ $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
-            - ssh $DEPLOY_USER@$DEPLOY_HOST "cd /root/bot && npm install"
+            - ssh $DEPLOY_USER@$DEPLOY_HOST "cd /root/bot && ls -l"
             - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && pm2 reload rabbitConsumer"

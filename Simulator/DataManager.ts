@@ -36,7 +36,7 @@ export class DataManager {
     // offsetInHour = 0
     currentCandleStick: CandleStick | undefined
 
-    readonly UNIT_TIMES = ['1h', '15m', '5m', '1m', '1s']
+    readonly UNIT_TIMES = ['1h', '15m', '5m', '1m', '15s', '5s', '1s']
     readonly MIN_CHART_SIZE = 5 * 24 * 60 * 60
     // readonly UNIT_HOUR_CANDLES = {
     //     '1h': 1,
@@ -47,7 +47,9 @@ export class DataManager {
     // }
 
     readonly UNIT_NEXT_LEVEL = {
-        '1s': 60,
+        '1s': 5,
+        '5s': 3,
+        '15s': 4,
         '1m': 5,
         '5m': 3,
         '15m': 4,
@@ -56,6 +58,8 @@ export class DataManager {
 
     readonly SECOUNDS_IN_UNIT = {
         '1s': 1,
+        '5s': 5,
+        '15s': 15,
         '1m': 60,
         '5m': 60 * 5,
         '15m': 60 * 15,

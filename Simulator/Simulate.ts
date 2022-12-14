@@ -19,6 +19,7 @@ const Binance = require('node-binance-api');
 import { OrderPlacer } from "../Workers/PlaceOrders";
 
 env.GOOGLE_APPLICATION_CREDENTIALS = "trading-cloud.json"
+env.IS_SIMULATION = "true"
 
 let dataManager: DataManager
 export async function run(simulationId: string, variation:number, startStr: string, endStr: string) {

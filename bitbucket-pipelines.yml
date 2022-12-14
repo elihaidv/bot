@@ -5,9 +5,10 @@ pipelines:
       - step:
           name: Deploy to production
           script:
+            - apt-get update && apt-get install -y rsync ssh
             - npm install
             - npm install -g typescript
             - tsc --skipLibCheck --resolveJsonModule --esModuleInterop -t es5 Simulator/rabbitConsumer.ts
-            - scp -r $(pwd)/* $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
+            - rsync -rzvP -r --exclude-from=.gitignore $BITBUCKET_CLONE_DIR/ $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
             - ssh $DEPLOY_USER@$DEPLOY_HOST "cd /root/bot && npm install"
             - ssh $DEPLOY_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && pm2 reload rabbitConsumer"

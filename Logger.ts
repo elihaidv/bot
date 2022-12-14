@@ -1,4 +1,5 @@
 import { CoralogixLogger, Log, LoggerConfig, Severity } from "coralogix-logger";
+import { env } from "node:process";
 
 export class BotLogger {
     static instance: BotLogger = new BotLogger();
@@ -30,6 +31,7 @@ export class BotLogger {
     }
 
     get isSemulation() {
-        return process.argv.join("").includes("Simulat")
+        
+        return env.IS_SIMULATION == "true"
     }
 }

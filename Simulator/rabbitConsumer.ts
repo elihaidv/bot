@@ -15,10 +15,14 @@ amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', {
     var queue = 'simulationsPr';
 
     channel.assertQueue(queue, {
-      durable: false
+      durable: false,
+      arguments: {
+        "x-max-priority": 10
+      }
     });
 
     channel.prefetch(1);
+
     channel.consume(queue, async function (msg) {
       try {
         const args = JSON.parse(msg.content.toString());

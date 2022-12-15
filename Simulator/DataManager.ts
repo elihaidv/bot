@@ -5,10 +5,7 @@ import { DAL } from "../DALSimulation";
 import { Account, Bot, Order } from "../Models";
 import { BaseSockets } from "../Sockets/BaseSockets";
 import { Sockets } from "../Sockets/Sockets";
-const cf = require('node-fetch-cache')
-const fetch = cf.fetchBuilder.withCache(new cf.FileSystemCache({
-    cacheDirectory: '/tmp/simcache',
-}));
+const fetch = require('node-fetch')
 const admZip = require('adm-zip')
 const Binance = require('node-binance-api');
 

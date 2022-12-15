@@ -2,7 +2,9 @@ import { run } from "./Simulate";
 
 var amqp = require('amqplib/callback_api');
 
-amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', function (error0, connection) {
+amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', {
+  heartbeat: 120
+},function (error0, connection) {
   if (error0) {
     throw error0;
   }
@@ -10,7 +12,7 @@ amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', function (error0
     if (error1) {
       throw error1;
     }
-    var queue = 'simulations';
+    var queue = 'simulationsPr';
 
     channel.assertQueue(queue, {
       durable: false
@@ -31,7 +33,4 @@ amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', function (error0
       noAck: false
     });
   });
-});
-process.on('uncaughtException', function(err) {
-  console.log('Caught exception: ' + err);
 });

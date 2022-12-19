@@ -138,13 +138,14 @@ export class DAL {
                 .filter(([time, high, low, close]) => time && high && low && close)
 
             await promises.mkdir(`spot/${pair}/${unit}`, { recursive: true })
-            promises.writeFile(`spot/${pair}/${unit}/${date}.csv`, historyArray.map(e => e.join(',')).join('\n'), { })
+            await promises.writeFile(`spot/${pair}/${unit}/${date}.csv`, historyArray.map(e => e.join(',')).join('\n'), { })
             // await new Storage()
             //     .bucket('crypto-history')
             //     .file(`spot/${pair}/${unit}/${date}.csv`)
             //     .save(, { resumable: false })
             //     .then(console.log)
             //     .catch(console.log);
+
             console.log(historyArray.length)
             return historyArray
         } catch (e) {
@@ -164,8 +165,9 @@ export class DAL {
                 .map(x => x.split(",")
                     .map(y => parseFloat(y)))
 
-            
-            console.log(res.length)
+            if (res.length < 86000) {
+                console.error("history too short", res.length, pair, unit, date)
+            }
             return res
         } catch (e: any) {
             if (!e.message.includes("no such file")) {

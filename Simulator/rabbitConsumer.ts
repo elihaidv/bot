@@ -33,7 +33,7 @@ amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', {
         await run(args.simulationId, args.variation, args.start, args.end)
         channel.ack(msg);
       } catch (e) {
-        channel.error(e);
+        channel.ack(e);
         sendError(e)
       }
 

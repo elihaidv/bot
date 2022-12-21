@@ -1,6 +1,6 @@
-# tsc --skipLibCheck --resolveJsonModule --esModuleInterop --outDir build -t es5 Simulator/rabbitConsumer.ts
-# cp package.json DB.js trading-cloud.json build
-# git add . && git commit -m "A" && git push
+tsc --skipLibCheck --resolveJsonModule --esModuleInterop --outDir build -t es5 Simulator/rabbitConsumer.ts
+cp package.json DB.js trading-cloud.json build
+git add . && git commit -m "A" && git push
 
 servers=(
     # "137.184.11.204"
@@ -27,7 +27,8 @@ do echo "Deploying to $server"
 # rsync -rzvP  -r -q  -e "ssh -i $HOME/.ssh/simulator" countfiles.sh root@$server:/root/bot
 # ssh root@$server -i $HOME/.ssh/simulator "cd /root/bot && ./countfiles.sh"
 
-    # rsync -rzvP  -r -q -e "ssh -i $HOME/.ssh/simulator" build/* root@$server:/root/bot
-    # ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && npm install"
+    rsync -rzvP  -r -q -e "ssh -i $HOME/.ssh/simulator" build/* root@$server:/root/bot
+    ssh root@$server -i $HOME/.ssh/simulator "cd /root/bot && rm -rf spot"
+    ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && npm install"
     ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && pm2 reload rabbitConsumer"
 done

@@ -51,7 +51,7 @@ export class FutureDataManager extends DataManager {
         this.profit += gain
 
         console.log("Psition size: " + pos.positionAmount)
-        console.log("Variation: " + this.dal.variation + "Profit: " + (this.profit / 100).toFixed(2) + "% Date: " + new Date(parseInt(this.chart[this.currentCandle].time)))
+        console.log("Variation: " + this.dal.variation + "Profit: " + (this.profit / 100).toFixed(2) + "% Date: " + new Date(parseInt(t.time)))
 
 
 
@@ -78,12 +78,12 @@ export class FutureDataManager extends DataManager {
         this.openOrders = this.openOrders.filter(o => o.orderId != order.orderId)
     }
 
-    closePosition(price) {
+    closePosition(t: CandleStick) {
         this.orderexecute(Object.assign(new Order(),{
             closePosition: true,
-            price: price,
+            price: t.close,
             type: "STOP_MARKET",
-        }), this.chart[this.currentCandle]);
+        }), t);
 
     }
 

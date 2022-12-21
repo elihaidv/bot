@@ -35,9 +35,9 @@
             "runtimeExecutable": "ts-node",
             "args": [
                 "Simulator/local.ts",
-                "639aff8e2d665630c2153909",
-                "12",
-                "2019-11-04 14:02:51",
+                "63a06463f925044b4a562ff7",
+                "0",
+                "2019-11-28 14:02:51",
                 "2022-12-01 14:02:51",
                 "quiet"
             ],
@@ -48,7 +48,8 @@
                 "node_modules/**"
             ],
             "env": {
-                "GOOGLE_APPLICATION_CREDENTIALS": "trading-cloud.json"
+                "GOOGLE_APPLICATION_CREDENTIALS": "trading-cloud.json",
+                "TZ":"UTC"
             }
         },
         {

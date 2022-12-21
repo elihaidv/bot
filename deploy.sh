@@ -23,13 +23,11 @@ servers=(
 
 for server in "${servers[@]}"
 do echo "Deploying to $server"
-# ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && pm2 logs rabbitConsumer --lines 30"
+#     ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && pm2 logs rabbitConsumer --lines 30"
 # rsync -rzvP  -r -q  -e "ssh -i $HOME/.ssh/simulator" countfiles.sh root@$server:/root/bot
 # ssh root@$server -i $HOME/.ssh/simulator "cd /root/bot && ./countfiles.sh"
 
-    # ssh root@$server -i $HOME/.ssh/simulator "df"
     rsync -rzvP  -r -q -e "ssh -i $HOME/.ssh/simulator" build/* root@$server:/root/bot
-    ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && rm -rf spot"
     ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && npm install"
     ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && pm2 reload rabbitConsumer"
 done

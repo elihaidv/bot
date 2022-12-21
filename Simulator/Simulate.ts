@@ -69,6 +69,9 @@ export async function run(simulationId: string, variation:number, startStr: stri
     if (!t) {
       let startChunk = dataManager.chart.at(-1)!.time + 1000
       let endChunk = Math.min(end, startChunk + dataManager.MIN_CHART_SIZE * 1000)
+      if (endChunk <= startChunk) {
+        break;
+      }
       await dataManager.fetchAllCharts(startChunk, endChunk)
       dataManager.currentCandle = dataManager.MIN_CHART_SIZE
       t = dataManager.chart[dataManager.currentCandle]
@@ -107,7 +110,8 @@ export async function run(simulationId: string, variation:number, startStr: stri
   }
 
   dataManager.currentCandle--
-  dataManager.closePosition(dataManager.chart[dataManager.currentCandle].low);
+  const lastCandle = dataManager.chart[dataManager.currentCandle] || dataManager.chart.at(-1)
+  dataManager.closePosition(lastCandle);
   console.log("Profit: " + dataManager.profit)
   await dataManager.dal.endTest()
 

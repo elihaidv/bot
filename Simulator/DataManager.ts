@@ -238,6 +238,7 @@ export class DataManager {
 
         let copiedChart: CandleStick[] = []
         for (let i = 0; i < this.charts["1s"].length - 1; i++) {
+            copiedChart.push(this.charts["1s"][i])
             const diff = this.charts["1s"][i + 1].time - this.charts["1s"][i].time
             if (diff > 1000) {
                 const items = Array.from({ length: diff / 1000 - 1 }, (_, j) => {
@@ -249,7 +250,6 @@ export class DataManager {
             } else if (diff < 0) {
                 debugger
             }
-            copiedChart.push(this.charts["1s"][i])
         }
         copiedChart.push(this.charts["1s"].at(-1)!)
 

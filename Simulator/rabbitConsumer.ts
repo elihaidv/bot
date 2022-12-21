@@ -1,10 +1,12 @@
 import { run } from "./Simulate";
+import fetch from 'node-fetch';
 
 var amqp = require('amqplib/callback_api');
+let lastSim: any = {}
 
 amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', {
   heartbeat: 120
-},function (error0, connection) {
+}, function (error0, connection) {
   if (error0) {
     throw error0;
   }
@@ -26,11 +28,13 @@ amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', {
     channel.consume(queue, async function (msg) {
       try {
         const args = JSON.parse(msg.content.toString());
+        lastSim = args
         console.log("Simulating: ", args.simulationId, args.variation, args.start, args.end)
         await run(args.simulationId, args.variation, args.start, args.end)
         channel.ack(msg);
       } catch (e) {
-        channel.ack(msg);
+        channel.error(e);
+        sendError(e)
       }
 
     }, {
@@ -38,3 +42,26 @@ amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', {
     });
   });
 });
+
+process.on('uncaughtException', function (err) {
+  console.error(err);
+  sendError(err)
+});
+
+function sendError(err) {
+  return fetch("https://itamars.live/api/simulations/" + lastSim.simulationId, {
+    method: 'PUT',
+    body: JSON.stringify({
+      status: "error",
+      error: err
+    }),
+    headers: {
+      "API-KEY": "WkqrHeuts2mIOJHMcxoK",
+      "Accept": "application/json",
+      'Content-Type': 'application/json',
+    }
+
+  }).then(r => r.text())
+    .then(console.log)
+    .catch(console.error)
+}

@@ -35,7 +35,7 @@ amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', {
         console.error("success");
       } catch (e) {
         console.error(e);
-        channel.ack(e);
+        channel.ack(msg);
         sendError(e)
       }
 

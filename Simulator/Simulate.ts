@@ -4,7 +4,7 @@ import { FutureTrader } from "../Workers/FuturesTrader";
 import { Bot, BotStatus, Key, Order } from "../Models";
 import { WeightAvg } from "../Workers/WeightAvg";
 import { BasePlacer } from "../Workers/BasePlacer";
-import { CandleStick, DataManager } from "./DataManager";
+import { CandleStick, DataManager, SECONDS_IN_DAY } from "./DataManager";
 import { FutureDataManager } from "./FutureDataManager";
 import { env, exit } from "process";
 import { DAL } from "../DALSimulation";
@@ -49,7 +49,7 @@ export async function run(simulationId: string, variation:number, startStr: stri
   dataManager.dal.init(dataManager, simulationId, variation, startStr, endStr)
 
   const start = new Date(startStr).getTime() - (bot.longSMA * 15 * 60 * 1000)
-  const end = new Date(endStr).getTime()
+  const end =  Math.min(new Date(endStr).getTime(), new Date().getTime() - SECONDS_IN_DAY * 1000 * 2)
   let endChunk = Math.min(end, start + dataManager.MIN_CHART_SIZE * 1000)
 
   await dataManager.fetchAllCharts(start, endChunk)

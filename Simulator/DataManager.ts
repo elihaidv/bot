@@ -10,7 +10,7 @@ const admZip = require('adm-zip')
 const Binance = require('node-binance-api');
 const crypto = require('crypto');
 
-const SECONDS_IN_DAY = 24 * 60 * 60
+export const SECONDS_IN_DAY = 24 * 60 * 60
 
 export class DataManager {
     hasMoney(t: CandleStick): boolean {
@@ -228,6 +228,7 @@ export class DataManager {
         }
     }
     async fetchAllCharts(start, end) {
+        
         await this.fetchNextChart(start, end, "1s")
 
         const diff = new Date(new Date(end).toISOString().split("T")[0]).getTime() + SECONDS_IN_DAY * 1000 - this.charts["1s"].at(-1)?.time

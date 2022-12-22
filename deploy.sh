@@ -28,7 +28,8 @@ do echo "Deploying to $server"
 # ssh root@$server -i $HOME/.ssh/simulator "cd /root/bot && ./countfiles.sh"
 
     rsync -rzvP  -r -q -e "ssh -i $HOME/.ssh/simulator" build/* root@$server:/root/bot
-    ssh root@$server -i $HOME/.ssh/simulator "cd /root/bot && rm -rf spot"
-    ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && npm install"
+    # ssh root@$server -i $HOME/.ssh/simulator "cd /root/bot && rm -rf spot"
+    ssh root@$server -i $HOME/.ssh/simulator "rm -rf /root/.pm2/logs/*"
+    # ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && npm install"
     ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && pm2 reload rabbitConsumer"
 done

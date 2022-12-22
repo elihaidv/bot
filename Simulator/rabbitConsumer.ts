@@ -32,7 +32,9 @@ amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', {
         console.log("Simulating: ", args.simulationId, args.variation, args.start, args.end)
         await run(args.simulationId, args.variation, args.start, args.end)
         channel.ack(msg);
+        console.error("success");
       } catch (e) {
+        console.error(e);
         channel.ack(e);
         sendError(e)
       }

@@ -19,6 +19,7 @@ const Binance = require('node-binance-api');
 import { OrderPlacer } from "../Workers/PlaceOrders";
 
 env.GOOGLE_APPLICATION_CREDENTIALS = "trading-cloud.json"
+env.TZ="UTC"
 env.IS_SIMULATION = "true"
 
 let dataManager: DataManager
@@ -110,8 +111,10 @@ export async function run(simulationId: string, variation:number, startStr: stri
   }
 
   dataManager.currentCandle--
-  const lastCandle = dataManager.chart[dataManager.currentCandle] || dataManager.chart.at(-1)
-  dataManager.closePosition(lastCandle);
+  if (!dataManager.chart[dataManager.currentCandle]) {
+    dataManager.currentCandle = dataManager.chart.length - 1
+  }
+  dataManager.closePosition();
   console.log("Profit: " + dataManager.profit)
   await dataManager.dal.endTest()
 

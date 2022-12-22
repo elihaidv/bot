@@ -78,12 +78,12 @@ export class FutureDataManager extends DataManager {
         this.openOrders = this.openOrders.filter(o => o.orderId != order.orderId)
     }
 
-    closePosition(t: CandleStick) {
+    closePosition() {
         this.orderexecute(Object.assign(new Order(),{
             closePosition: true,
-            price: t.close,
+            price: this.chart[this.chart.length - 1].close,
             type: "STOP_MARKET",
-        }), t);
+        }), this.chart[this.chart.length - 1]);
 
     }
 

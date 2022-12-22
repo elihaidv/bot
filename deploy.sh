@@ -1,6 +1,6 @@
 tsc --skipLibCheck --resolveJsonModule --esModuleInterop --outDir build -t es5 Simulator/rabbitConsumer.ts
 cp package.json DB.js trading-cloud.json build
-sed -i 's/debugger;/ /g' build/**/*.js
+sed -i 's/debugger;/console.error("debugger");/g' build/**/*.js
 git add . && git commit -m "A" && git push
 
 servers=(

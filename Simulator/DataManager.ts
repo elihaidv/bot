@@ -424,8 +424,8 @@ export class DataManager {
 
     }
 
-    closePosition(t: CandleStick) {
-        const price = t.close
+    closePosition() {
+        const price = this.chart[this.currentCandle].close
         this.bot.binance!.balance[this.bot.coin2].available += this.bot.binance!.balance[this.bot.coin1].available * price;
         this.bot.binance!.balance[this.bot.coin2].total += this.bot.binance!.balance[this.bot.coin1].total * price;
 

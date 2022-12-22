@@ -1,4 +1,4 @@
-import { DataManager } from "./Simulator/DataManager";
+import { CandleStick, DataManager } from "./Simulator/DataManager";
 import fetch from 'node-fetch';
 import { Storage } from "@google-cloud/storage";
 import { env, exit } from "process";
@@ -66,11 +66,11 @@ export class DAL {
 
     }
 
-    updateProgress(status) {
+    updateProgress(status, t:CandleStick|null = null) {
 
         const start = new Date(this.start).getTime()
         const end = new Date(this.end).getTime()
-        const time = this.dataManager.chart[this.dataManager.currentCandle].time
+        const time = t?.time ?? this.dataManager.chart[this.dataManager.currentCandle].time
         const progress = Math.round((time - start) / (end - start) * 100)
 
         const data = JSON.stringify({

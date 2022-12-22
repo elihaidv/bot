@@ -3,6 +3,7 @@ import fetch from 'node-fetch';
 
 var amqp = require('amqplib/callback_api');
 let lastSim: any = {}
+let extChannel: any
 
 amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', {
   heartbeat: 120
@@ -15,6 +16,7 @@ amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', {
       throw error1;
     }
     var queue = 'simulationsPr';
+    extChannel = channel
 
     channel.assertQueue(queue, {
       durable: false,
@@ -48,6 +50,7 @@ amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', {
 process.on('uncaughtException', function (err) {
   console.error(err);
   sendError(err)
+  extChannel.ack(lastSim)
 });
 
 function sendError(err) {

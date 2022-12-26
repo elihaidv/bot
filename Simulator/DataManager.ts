@@ -231,9 +231,23 @@ export class DataManager {
         
         await this.fetchNextChart(start, end, "1s")
 
-        const diff = new Date(new Date(end).toISOString().split("T")[0]).getTime() + SECONDS_IN_DAY * 1000 - this.charts["1s"].at(-1)?.time
+        let diff = this.charts["1s"].at(0)?.time - new Date(new Date(start).toISOString().split("T")[0]).getTime()
+        if (diff != 0) {
+            const items = Array.from({ length: diff / 1000 }, (_, j) => {
+                const newCandle = Object.assign(new CandleStick(), this.charts["1s"].at(0))
+                newCandle.time = start + 1000 * j
+                return newCandle
+            }) 
+            this.charts["1s"] = items.concat(this.charts["1s"])
+        }
+
+        diff = new Date(new Date(end).toISOString().split("T")[0]).getTime() + SECONDS_IN_DAY * 1000 - this.charts["1s"].at(-1)?.time
         if (diff != 1000) {
-            const items = Array.from({ length: diff / 1000 - 1 }, (_, i) => Object.assign(new CandleStick(), this.charts["1s"].at(-1)))
+            const items = Array.from({ length: diff / 1000 - 1 }, (_, j) => {
+                const newCandle = Object.assign(new CandleStick(), this.charts["1s"].at(-1))
+                newCandle.time += 1000 * (j + 1)
+                return newCandle
+            }) 
             this.charts["1s"] = this.charts["1s"].concat(items)
         }
 

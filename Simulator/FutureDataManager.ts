@@ -51,7 +51,7 @@ export class FutureDataManager extends DataManager {
         this.profit += gain
 
         console.log("Psition size: " + pos.positionAmount)
-        console.log("Variation: " + this.dal.variation + "Profit: " + (this.profit / 100).toFixed(2) + "% Date: " + new Date(parseInt(t.time)))
+        console.log("Variation: " + this.dal.variation + " Profit: " + (this.profit / 100).toFixed(2) + "% Date: " + new Date(parseInt(t.time)))
 
 
 

@@ -33,5 +33,5 @@ do echo "Deploying to $server"
     ssh root@$server -i $HOME/.ssh/simulator "rm -rf /root/.pm2/logs/*"
     # ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && npm install"
     # ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && pm2 stop rabbitConsumer"ts
-    ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && pm2 reload Simulator/rabbitConsumer.js -node-args=\"--max-old-space-size=4096\""
+    ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && pm2 reload Simulator/rabbitConsumer.js --node-args=\"--max-old-space-size=4096\""
 done

@@ -4,34 +4,42 @@ sed -i 's/debugger;/console.error("debugger");/g' build/**/*.js
 git add . && git commit -m "A" && git push
 
 servers=(
-    # "137.184.11.204"
-    # "137.184.179.207"
-    # "137.184.46.247"
+    "137.184.124.50"
+    "137.184.5.238"
+    "143.198.146.81"
+    "143.198.75.7"
     "146.190.116.103" 
-    # "146.190.122.121"
-    # "146.190.122.81"
-    # "146.190.33.175"
     "146.190.36.25" 
-    # "146.190.49.91"
+    "159.223.200.43"
+    "159.223.201.42"
+    "159.223.201.66"
     "161.35.225.173"
-    # "161.35.233.186" 
-    # "164.92.109.80"
-    # "164.92.125.56"
-    # "165.232.143.238"
-    # "64.227.97.125"
-
+    "164.92.112.73"
+    "164.92.65.225"
+    "164.92.69.32"
+    "164.92.70.95"
+    "164.92.73.53"
 )
 
 for server in "${servers[@]}"
 do echo "Deploying to $server"
-    # ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && pm2 logs rabbitConsumer --lines 30"
-# rsync -rzvP  -r -q  -e "ssh -i $HOME/.ssh/simulator" countfiles.sh root@$server:/root/bot
-# ssh root@$server -i $HOME/.ssh/simulator "cd /root/bot && ./countfiles.sh"
+# ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && pm2 start Simulator/rabbitConsumer.js --node-args=\"--max-old-space-size=4096\""
+# ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && pm2 save"
 
-    rsync -rzvP  -r -q -e "ssh -i $HOME/.ssh/simulator" build/* root@$server:/root/bot
+
+    # ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && pm2 logs rabbitConsumer --lines 30"
+# ssh root@$server -i $HOME/.ssh/simulator "cd /root/bot && ./countfiles.sh"
+    # rsync -rzvP  -r -q -e "ssh -i $HOME/.ssh/simulator" build/* root@$server:/root/bot
     # ssh root@$server -i $HOME/.ssh/simulator "cd /root/bot && rm -rf spot"
-    ssh root@$server -i $HOME/.ssh/simulator "rm -rf /root/.pm2/logs/*"
-    # ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && npm install"
-    # ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && pm2 stop rabbitConsumer"ts
+    # ssh root@$server -i $HOME/.ssh/simulator "rm -rf /root/.pm2/logs/*"
+    # ssh root@$server -i $HOME/.ssh/simulator "cat /root/.pm2/logs/rabbitConsumer-error.log | sort"
+    # ssh root@$server -i $HOME/.ssh/simulator "wc -l /root/bot/spot/ETHUSDT/1s/2022-01-05.csv"
+    # ssh root@$server -i $HOME/.ssh/simulator "tail /root/.pm2/pm2.log"
+    # ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && pm2 restart Simulator/rabbitConsumer.js --node-args=\"--max-old-space-size=4096\""
+    # ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && pm2 reload Simulator/rabbitConsumer.js --node-args=\"--max-old-space-size=4096\""
+
+    rsync -rzvP  -r -q  -e "ssh -i $HOME/.ssh/simulator" countfiles.sh root@$server:/root/bot
+    ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && npm install"
     ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && pm2 reload Simulator/rabbitConsumer.js --node-args=\"--max-old-space-size=4096\""
+
 done

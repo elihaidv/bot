@@ -5,6 +5,8 @@ import { env, exit } from "process";
 import { ExecOptions } from "child_process";
 import { promises } from "fs" 
 
+var ip = require('ip');
+
 
 const PAGE_SIZE = 2000
 export class DAL {
@@ -78,7 +80,8 @@ export class DAL {
             maxPage: this.page - 1,
             progress: status == "finished" ? 100 : progress,
             status: status,
-            variation: this.variation
+            variation: this.variation,
+            ip: ip.address()
         })
         console.log(data)
 

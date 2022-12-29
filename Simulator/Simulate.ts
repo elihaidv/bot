@@ -81,6 +81,13 @@ export async function run(simulationId: string, variation:number, startStr: stri
       }
     }
 
+
+    if (!dataManager.hasMoney(t) && t.close) {
+      console.log("😰Liquid at: " + t.close)
+      dataManager.dal.logStep({ "type": "😰Liquid", low: t.close, priority: 10 })
+      break;
+    }
+
     if (ordersToFill.length) {
       const o = ordersToFill[0]
       console.log(`Execute ${o.side}: ${t.high} ~ ${t.low}`, new Date(parseFloat(t.time)))
@@ -97,13 +104,6 @@ export async function run(simulationId: string, variation:number, startStr: stri
       console.log("awaiter")
       dataManager.dal.awaiter = false
       await timeout(100)
-    }
-
-
-    if (!dataManager.hasMoney(t) && t.close) {
-      console.log("😰Liquid at: " + t.close)
-      dataManager.dal.logStep({ "type": "😰Liquid", low: t.close, priority: 10 })
-      break;
     }
 
     ToPlace && await place(bot)

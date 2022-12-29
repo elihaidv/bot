@@ -23,6 +23,7 @@
     "http": "0.0.1-security",
     "https": "^1.0.0",
     "input": "^1.0.1",
+    "ip": "^1.1.8",
     "kafka-queue": "^1.0.4",
     "kafkajs": "^2.2.3",
     "mongodb": "^3.6.9",

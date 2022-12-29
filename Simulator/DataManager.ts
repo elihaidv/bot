@@ -325,7 +325,7 @@ export class DataManager {
         let ordersFound = orders
 
         if (!this.chart[this.currentCandle]) {
-            debugger
+            // debugger
             return []
         }
 

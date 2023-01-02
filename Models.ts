@@ -60,6 +60,9 @@ export class Bot {
   avoidCancel: boolean = false;
   status: BotStatus = BotStatus.WORK;
   longSMA: number = 500;
+  profitNum: number = 0
+  lequided: boolean = false
+  variation: number = 0
 
   id(): String { return this._id.toString() }
 
@@ -84,6 +87,7 @@ export class Order {
   positionSide: any;
   avgPrice: any;
   closePosition: any;
+  bot: Bot | undefined
 
 
   constructor(

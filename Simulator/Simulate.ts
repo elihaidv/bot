@@ -19,52 +19,62 @@ const Binance = require('node-binance-api');
 import { OrderPlacer } from "../Workers/PlaceOrders";
 
 env.GOOGLE_APPLICATION_CREDENTIALS = "trading-cloud.json"
-env.TZ="UTC"
+env.TZ = "UTC"
 env.IS_SIMULATION = "true"
 
 let dataManager: DataManager
-export async function run(simulationId: string, variation:number, startStr: string, endStr: string) {
+export async function run(simulationId: string, variation: string | number, startStr: string, endStr: string) {
 
-  const simulation = await fetch("https://itamars.live/api/simulations/" + simulationId + "?var=" + variation, {
+  const simulation = await fetch(`https://itamars.live/api/simulations/${simulationId}?vars=${variation}`, {
     headers: {
       "API-KEY": "WkqrHeuts2mIOJHMcxoK"
     }
   }).then(r => r.json()).catch(console.error)
 
-  const bot: Bot = Object.assign(new Bot(), simulation);
+  const bots: Bot[] = []
 
-  if (simulation.variations) {
-    Object.assign(bot, simulation.variations[variation]);
+  if (typeof variation === "number" || !variation.includes("-")) {
+    bots.push(Object.assign(new Bot(), simulation));
+  } else {
+    const startIndex = parseInt(variation.split("-")[0])
+    const endIndex = parseInt(variation.split("-")[1])
+
+    for (let i = startIndex; i <= endIndex; i++) {
+      bots.push(Object.assign(new Bot(), simulation));
+      Object.assign(bots[i - startIndex], simulation.variations[i]);
+      bots[i - startIndex].variation = i
+    }
   }
 
 
+  dataManager = bots[0].isFuture ? new FutureDataManager(bots) : new DataManager(bots);
 
-  dataManager = bot.isFuture ? new FutureDataManager(bot) : new DataManager(bot);
-
-  dataManager.setExchangeInfo(bot.isFuture ?
+  dataManager.setExchangeInfo(bots[0].isFuture ?
     exchangeInfo :
     await Binance({ 'family': 4 }).exchangeInfo())
 
 
-  dataManager.dal.init(dataManager, simulationId, variation, startStr, endStr)
+  dataManager.dal.init(dataManager, simulationId, startStr, endStr)
 
-  const start = new Date(startStr).getTime() - (bot.longSMA * 15 * 60 * 1000)
-  const end =  Math.min(new Date(endStr).getTime(), new Date().getTime() - SECONDS_IN_DAY * 1000 * 2)
+  const maxLongSMA = Math.max(...bots.map(b => b.longSMA))
+  const start = new Date(startStr).getTime() - (maxLongSMA * 15 * 60 * 1000)
+  const end = Math.min(new Date(endStr).getTime(), new Date().getTime() - SECONDS_IN_DAY * 1000 * 2)
   let endChunk = Math.min(end, start + dataManager.MIN_CHART_SIZE * 1000)
 
   await dataManager.fetchAllCharts(start, endChunk)
-  dataManager.currentCandle = (bot.longSMA * 15 * 60)
+  dataManager.currentCandle = (maxLongSMA * 15 * 60)
 
   dataManager.initData()
-  await place(bot)
+
+  await place(bots)
 
   let t = dataManager.chart[dataManager.currentCandle]
 
   while (t && t.time <= end) {
 
-    let ToPlace = false;
+    let botsToPlace: Bot[] = [];
 
-    const ordersToFill = dataManager.checkOrder(dataManager.openOrders, bot.status != BotStatus.STABLE ? bot.secound : 0)
+    const ordersToFill = dataManager.checkOrder(dataManager.openOrders)
 
     t = dataManager.chart[dataManager.currentCandle]
     if (!t) {
@@ -82,22 +92,25 @@ export async function run(simulationId: string, variation:number, startStr: stri
     }
 
 
-    if (!dataManager.hasMoney(t) && t.close) {
-      console.log("😰Liquid at: " + t.close)
-      dataManager.dal.logStep({ "type": "😰Liquid", low: t.close, priority: 10 })
-      break;
-    }
+    dataManager.hasMoney(t)
 
     if (ordersToFill.length) {
-      const o = ordersToFill[0]
-      console.log(`Execute ${o.side}: ${t.high} ~ ${t.low}`, new Date(parseFloat(t.time)))
-      dataManager.orderexecute(o, t)
-      ToPlace = true
+      ordersToFill.forEach(o => {
+        console.log(`Execute ${o.side}: ${t.high} ~ ${t.low}`, new Date(parseFloat(t.time)))
+        dataManager.orderexecute(o, t)
+        if (!botsToPlace.includes(o.bot!)) {
+          botsToPlace.push(o.bot!)
+        }
+      });
 
-    } else if (dataManager.openOrders.length &&
-      (t.time - dataManager.openOrders[0].time) * 1000 >= bot.secound &&
-      bot.status != BotStatus.STABLE) {
-      ToPlace = true
+    } else if (dataManager.openOrders.length) {
+      for (let o of dataManager.openOrders) {
+
+        if ((t.time - o.time) * 1000 >= o.bot!.secound &&
+          o.bot!.status != BotStatus.STABLE) {
+          botsToPlace.push(o.bot!)
+        }
+      }
     }
 
     if (dataManager.dal.awaiter) {
@@ -106,7 +119,7 @@ export async function run(simulationId: string, variation:number, startStr: stri
       await timeout(100)
     }
 
-    ToPlace && await place(bot)
+    await place(botsToPlace)
     dataManager.currentCandle++;
   }
 
@@ -115,8 +128,10 @@ export async function run(simulationId: string, variation:number, startStr: stri
     dataManager.currentCandle = dataManager.chart.length - 1
   }
   dataManager.closePosition();
-  console.log("Profit: " + dataManager.profit)
-  await dataManager.dal.endTest()
+  bots.forEach(b =>  console.log("Profit: " + b.profitNum + " Variant: " + b.variation ))
+  // console.log("Profit: " + dataManager.profit)
+  await bots.map(b => dataManager.dal.endTest(b))
+
 
 }
 
@@ -138,42 +153,44 @@ export async function run(simulationId: string, variation:number, startStr: stri
 //   return false
 // }
 
-async function place(bot: Bot) {
-  dataManager.simulateState()
+async function place(bots: Bot[]) {
+  dataManager.simulateState(bots)
   // trailing = null;
 
-  let worker: BasePlacer
-  switch (bot.bot_type_id.toString()) {
-    case "1":
-      worker = new OrderPlacer(bot, dataManager.exchangeInfo);
-      break
-    case "2":
-      worker = new WeightAvg(bot, dataManager.exchangeInfo)
-      break
-    case "3":
-      worker = new FutureTrader(bot, dataManager.exchangeInfo)
-      break
-    case "4":
-      worker = new DualBot(bot, dataManager.exchangeInfo)
-      break
-    case "5":
-      worker = new DirectionTrader(bot, dataManager.exchangeInfo)
-      break
-    case "6":
-      worker = new Periodically(bot, dataManager.exchangeInfo)
-      break
-    case "7":
-    default: {
+  for (const bot of bots) {
+    let worker: BasePlacer
+    switch (bot.bot_type_id.toString()) {
+      case "1":
+        worker = new OrderPlacer(bot, dataManager.exchangeInfo);
+        break
+      case "2":
+        worker = new WeightAvg(bot, dataManager.exchangeInfo)
+        break
+      case "3":
+        worker = new FutureTrader(bot, dataManager.exchangeInfo)
+        break
+      case "4":
+        worker = new DualBot(bot, dataManager.exchangeInfo)
+        break
+      case "5":
+        worker = new DirectionTrader(bot, dataManager.exchangeInfo)
+        break
+      case "6":
+        worker = new Periodically(bot, dataManager.exchangeInfo)
+        break
+      case "7":
+      default: {
 
-      worker = new OneStep(bot, dataManager.exchangeInfo);
+        worker = new OneStep(bot, dataManager.exchangeInfo);
 
-      // (worker as OneStep).cancelOrders = async () => {dataManager.openOrders = []}
-      break
+        // (worker as OneStep).cancelOrders = async () => {dataManager.openOrders = []}
+        break
 
+      }
     }
+    worker.getAction = dataManager.openOrder(bot)
+    await worker.place();
   }
-  worker.getAction = dataManager.openOrder
-  await worker.place();
 }
 function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));

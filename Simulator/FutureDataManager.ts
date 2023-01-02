@@ -6,8 +6,8 @@ import { CandleStick, DataManager } from "./DataManager";
 
 export class FutureDataManager extends DataManager {
 
-    constructor(bot: Bot) {
-        super(bot);
+    constructor(bots: Bot[]) {
+        super(bots);
         this.sockets = SocketsFutures.getFInstance()
         this.sockets.averagePrice = this.averagePrice.bind(this)
         this.sockets.averagePriceQuarter = this.averagePriceQuarter.bind(this)
@@ -19,22 +19,23 @@ export class FutureDataManager extends DataManager {
 
 
     orderexecute(order: Order, t: CandleStick) {
+        const bot = order.bot || this.bots[0]
         let qu = (order.side == "BUY" ? 1 : -1) * order.executedQty
 
         let gain = 0
 
-        const pos = this.bot.binance!.positions[this.PAIR + this.bot.positionSide()]
+        const pos = bot.binance!.positions[this.PAIR + bot.positionSide()]
 
 
         if (order.closePosition) {
             console.log("SLprice1: ", ((pos.positionEntry - order.price) / pos.positionEntry) * pos.positionAmount)
-            order.executedQty = Math.abs(pos.positionAmount)
+             order.executedQty = Math.abs(pos.positionAmount)
             gain = (order.price - pos.positionEntry) * pos.positionAmount
             pos.positionAmount = 0
             pos.positionEntry = 0
-            console.log("Closing position with profit of: " + (gain / this.bot.binance!.balance[this.bot.coin2] * 100).toFixed() + "%")
-            this.dal.logStep({ type: 'Close Position',  priority: 5 })
-            this.bot.binance!.orders[this.PAIR] = []
+            console.log("Closing position with profit of: " + (gain / bot.binance!.balance[bot.coin2] * 100).toFixed() + "%")
+            this.dal.logStep({ type: 'Close Position', priority: 5 }, bot)
+            bot.binance!.orders[this.PAIR] = []
         } else if (qu * pos.positionAmount < 0) {
             gain = (pos.positionEntry - order.price) * order.executedQty * (order.side == "BUY" ? 1 : -1)
             pos.positionAmount += qu
@@ -45,13 +46,13 @@ export class FutureDataManager extends DataManager {
         }
 
         order.pnl = gain
-        
+
         gain -= (order.avgPrice * order.executedQty * 0.0002)
-        this.bot.binance!.balance[this.bot.coin2] += gain
-        this.profit += gain
+        bot.binance!.balance[bot.coin2] += gain
+        bot.profitNum += gain
 
         console.log("Psition size: " + pos.positionAmount)
-        console.log("Variation: " + this.dal.variation + " Profit: " + (this.profit / 100).toFixed(2) + "% Date: " + new Date(parseInt(t.time)))
+        console.log("Variation: " + bot.variation + " Profit: " + (bot.profitNum / 100).toFixed(2) + "% Date: " + new Date(parseInt(t.time)))
 
 
 
@@ -64,22 +65,22 @@ export class FutureDataManager extends DataManager {
             low: t.low,
             positionSize: pos.positionAmount,
             positionPnl: (order.price - pos.positionEntry) * pos.positionAmount,
-            profit: (this.profit / 100).toFixed(0) + "%",
+            profit: (bot.profitNum / 100).toFixed(0) + "%",
 
-            balanceSecond: (this.bot.binance!.balance[this.bot.coin2]).toFixed(2),
-            balanceFirst: (this.bot.binance!.balance[this.bot.coin1]).toFixed(2),
+            balanceSecond: (bot.binance!.balance[bot.coin2]).toFixed(2),
+            balanceFirst: (bot.binance!.balance[bot.coin1]).toFixed(2),
             priority: 1
-        })
+        }, bot)
 
 
         order.status = 'FILLED'
-        this.bot.binance!.orders[this.PAIR].push(order)
+        bot.binance!.orders[this.PAIR].push(order)
 
         this.openOrders = this.openOrders.filter(o => o.orderId != order.orderId)
     }
 
     closePosition() {
-        this.orderexecute(Object.assign(new Order(),{
+        this.orderexecute(Object.assign(new Order(), {
             closePosition: true,
             price: this.chart[this.chart.length - 1].close,
             type: "STOP_MARKET",
@@ -87,9 +88,14 @@ export class FutureDataManager extends DataManager {
 
     }
 
-    hasMoney(t: CandleStick): boolean {
-        const pos = this.bot.binance!.positions[this.PAIR + this.bot.positionSide()]
-        const profit = (t.close - pos.positionEntry) * pos.positionAmount
-        return -profit < this.bot.binance!.balance[this.bot.coin2]
+    hasMoney(t: CandleStick) {
+        for (const bot of this.bots) {
+            const pos = bot.binance!.positions[this.PAIR + bot.positionSide()]
+            const profit = (t.close - pos.positionEntry) * pos.positionAmount
+            bot.lequided = -profit > bot.binance!.balance[bot.coin2]
+            if (bot.lequided) {
+                this.dal.logStep({ "type": "😰Liquid", low: t.close, priority: 10 }, bot)
+            }
+        }
     }
 }

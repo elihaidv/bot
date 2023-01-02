@@ -141,16 +141,16 @@ export class FutureTrader extends BasePlacer {
 
         balanceLeveraged -= this.positionAmount * this.positionEntry
 
-        if (this.isFirst()) {
+        if (this.isFirst() || !this.myLastOrder) {
             buyQu = balanceLeveraged * this.bot.amount_percent * this.bot.increase_first / buyPrice
             this.error = true
-        } else if (this.myLastOrder?.side == this.sellSide()) {
-            buyQu = this.myLastOrder?.executedQty
-        } else if (this.myLastOrder?.isFirst()) {
+        } else if (this.myLastOrder.side == this.sellSide()) {
+            buyQu = this.myLastOrder.executedQty
+        } else if (this.myLastOrder.isFirst()) {
             buyQu = this.myLastOrder.executedQty / this.bot.increase_first
         } else {
-            fbuyQu = this.myLastOrder!.executedQty * (1 + this.bot.increase_factor)
-            buyQu = Math.max(fbuyQu, parseFloat(this.myLastOrder!.executedQty.toString()) + parseFloat(this.filters.LOT_SIZE.stepSize))
+            fbuyQu = this.myLastOrder.executedQty * (1 + this.bot.increase_factor)
+            buyQu = Math.max(fbuyQu, parseFloat(this.myLastOrder.executedQty.toString()) + parseFloat(this.filters.LOT_SIZE.stepSize))
         }
 
         if (!this.bot.multiassets) {

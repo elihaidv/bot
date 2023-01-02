@@ -4,6 +4,7 @@ import { Storage } from "@google-cloud/storage";
 import { env, exit } from "process";
 import { ExecOptions } from "child_process";
 import { promises } from "fs" 
+import { Bot } from "./Models";
 
 var ip = require('ip');
 
@@ -12,75 +13,77 @@ const PAGE_SIZE = 2000
 export class DAL {
     started
     dataManager
-    steps = Array<Array<any>>()
-    stepsCounts = 0
-    page = 0
+    variations:{[n:number]:DALVariation} = {}
     simulationId
     awaiter = false
-    variation = 0
     start
     end
 
-    async init(dataManager: DataManager | null, simulationId, variation, start, end) {
+    async init(dataManager: DataManager | null, simulationId, start, end) {
         this.dataManager = dataManager
         this.simulationId = simulationId
-        this.variation = variation
         this.start = start
         this.end = end
 
         // setTimeout(() => this.updateProgress("timeout"), 3400000)
     }
 
-    async logStep(step) {
+    async logStep(step, bot:Bot) {
         if (this.isQuiet) return
+
+        if (!this.variations[bot.variation]) {
+            this.variations[bot.variation] = new DALVariation()
+        }
+        const dalVariation = this.variations[bot.variation]
 
         step.time = this.dataManager.chart[this.dataManager.currentCandle].time
         const stepArr = [step.time,
-        step.type,
-        step.side, step.price,
-        step.quantity,
-        step.low,
-        step.high,
-        step.balanceSecond,
-        step.positionSize,
-        step.positionPnl,
-        step.profit,
-        step.balanceFirst,
-        step.priority,
-        step.sma,
-        step.longSMA,
+            step.type,
+            step.side, step.price,
+            step.quantity,
+            step.low,
+            step.high,
+            step.balanceSecond,
+            step.positionSize,
+            step.positionPnl,
+            step.profit,
+            step.balanceFirst,
+            step.priority,
+            step.sma && step.sma[bot.SMA],
+            step.longSMA && step.longSMA[bot.longSMA],
         ]
 
-        this.steps.push(stepArr)
-        this.stepsCounts++
+        dalVariation.steps.push(stepArr)
+        dalVariation.stepsCounts++
 
 
-        if (this.stepsCounts % (PAGE_SIZE / 10) == 0) {
+        if (dalVariation.stepsCounts % (PAGE_SIZE / 10) == 0) {
             this.awaiter = true
         }
 
-        if (Math.floor(this.stepsCounts / PAGE_SIZE) > this.page) {
-            this.page++
-            this.saveInBucket()
-            await this.updateProgress("running")
+        if (Math.floor(dalVariation.stepsCounts / PAGE_SIZE) > dalVariation.page) {
+            dalVariation.page++
+            this.saveInBucket(bot.variation)
+            await this.updateProgress("running", null, bot)
 
         }
 
     }
 
-    updateProgress(status, t:CandleStick|null = null) {
+    updateProgress(status, t:CandleStick|null = null,  bot:Bot) {
 
         const start = new Date(this.start).getTime()
         const end = new Date(this.end).getTime()
         const time = t?.time ?? this.dataManager.chart[this.dataManager.currentCandle].time
         const progress = Math.round((time - start) / (end - start) * 100)
+        const dalVariation = this.variations[bot.variation]
 
         const data = JSON.stringify({
-            profit: Number((this.dataManager.profit / 100).toPrecision(2)) + "%",
-            maxPage: this.page - 1,
+            profit: (bot.profitNum / 100).toPrecision(2) + "%",
+            maxPage: dalVariation.page - 1,
             progress: status == "finished" ? 100 : progress,
             status: status,
-            variation: this.variation,
+            variation: bot.variation,
             ip: ip.address()
         })
         console.log(data)
@@ -103,25 +106,27 @@ export class DAL {
         return process.argv.join("").includes('quiet')
     }
 
-    async endTest() {
+    async endTest(bot:Bot) {
 
         if (this.isQuiet) return
 
 
-        this.page++
-        await this.updateProgress("finished")
+        const dalVariation = this.variations[bot.variation]
+        dalVariation.page++
+        await this.updateProgress("finished", null, bot)
 
-        await this.saveInBucket()
+        await this.saveInBucket(bot.variation)
 
     }
 
-    saveInBucket = async () => {
+    saveInBucket = async (variation) => {
         try {
-            const cloneSteps = this.steps.slice().sort((a, b) => a[0] - b[0] || a[12] - b[12])
-            this.steps = []
+            const dalVariation = this.variations[variation]
+            const cloneSteps = dalVariation.steps.slice().sort((a, b) => a[0] - b[0] || a[12] - b[12])
+            dalVariation.steps = []
             await new Storage()
                 .bucket('simulations-tradingbot')
-                .file(`simulation${this.simulationId}-${this.variation}/${this.page}.csv`)
+                .file(`simulation${this.simulationId}-${variation}/${dalVariation.page}.csv`)
                 .save(cloneSteps
                     .map(s => s.join(','))
                     .join('\n'), { resumable: false });
@@ -181,4 +186,11 @@ export class DAL {
         }
     }
 
+}
+
+class DALVariation {
+
+    steps = Array<Array<any>>()
+    stepsCounts = 0
+    page = 0
 }

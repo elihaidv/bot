@@ -35,7 +35,7 @@ export class DataManager {
     currentCandleStick: CandleStick | undefined
 
     readonly UNIT_TIMES = ['1h', '15m', '5m', '1m', '15s', '5s', '1s']
-    readonly MIN_CHART_SIZE = 5 * SECONDS_IN_DAY
+    readonly MIN_CHART_SIZE = 7 * SECONDS_IN_DAY
     // readonly UNIT_HOUR_CANDLES = {
     //     '1h': 1,
     //     '15m': 4,

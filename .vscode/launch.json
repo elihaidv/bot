@@ -35,11 +35,11 @@
             "runtimeExecutable": "ts-node",
             "args": [
                 "Simulator/local.ts",
-                "63b2e68b4283983ce67aa192",
-                "0-8",
-                "2022-01-02 14:02:51",
-                "2023-01-02 14:02:51",
-                "quiet"
+                "63c3a5fa3d0c334f984269f8",
+                0,
+                "2023-01-11 07:21:26",
+                "2023-01-15 14:02:51",
+                ""
             ],
             "cwd": "${workspaceRoot}",
             "internalConsoleOptions": "openOnSessionStart",

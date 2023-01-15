@@ -216,7 +216,7 @@ export class DataManager {
 
                 if (i && i % this.SECOUNDS_IN_UNIT[unit] == 0) {
                     this.charts[unit].push(Object.assign(new CandleStick(), {
-                        time: this.charts["1s"][i - 1].time - this.SECOUNDS_IN_UNIT[unit] * 1000,
+                        time: this.charts["1s"][i - 1].time - this.SECOUNDS_IN_UNIT[unit] * 1000 + 1000,
                         high: highers[unit],
                         low: lowers[unit],
                         close: this.charts["1s"][i - 1].close
@@ -305,7 +305,8 @@ export class DataManager {
             const unit = this.UNIT_TIMES[unitIndex]
 
             for (let i = 0; i < this.charts[unit].length - 1; i++) {
-                if (this.charts[unit][i + 1]) {
+                if (this.charts[unit][i + 1] ) {
+                    this.charts[unit][i].lastChild = unit!="1h" && (i + 1) % this.UNIT_NEXT_LEVEL[unit] == 0
                     this.charts[unit][i].next = this.charts[unit][i + 1]
                 }
                 if (unitIndex > 0) {
@@ -332,7 +333,7 @@ export class DataManager {
         }
 
         if (!this.currentCandleStick) {
-            this.currentCandleStick = this.hoursChart[Math.floor((this.chart[this.currentCandle].time - this.hoursChart[0].time) / 3600 / 1000)]
+            this.currentCandleStick = this.chart[this.currentCandle]
         } else {
             this.currentCandleStick = this.currentCandleStick?.next ?? this.currentCandleStick?.parent?.next
             if (!this.currentCandleStick) {
@@ -353,14 +354,14 @@ export class DataManager {
 
             if (!ordersInInreval.length) {
                 if (candle.time > maxTime) {
-                    this.currentCandleStick = candle
-                    this.currentCandle = (candle.time - this.chart[0].time) / 1000
-                    if (!this.chart[this.currentCandle] || this.chart[this.currentCandle].time != candle.time) {
+                    this.currentCandle = (maxTime - this.chart[0].time) / 1000
+                    this.currentCandleStick = this.chart[this.currentCandle]
+                    if (!this.chart[this.currentCandle] ) {
                         debugger
                     }
                     return []
                 }
-                if (candle.next) {
+                if (candle.next && !candle.lastChild) {
                     candle = candle.next
                 } else {
                     if (candle.parent && candle.parent.next) {
@@ -528,6 +529,11 @@ export class CandleStick {
     parent: CandleStick | undefined;
     children: CandleStick[] = [];
     sma = {}; longSMA = {};
+    lastChild = false
+    
+    get date() {
+        return new Date(this.time)
+    }
 }
 
 

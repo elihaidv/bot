@@ -27,7 +27,8 @@ export async function run(simulationId: string, variation: string | number, star
 
   const simulation = await fetch(`https://itamars.live/api/simulations/${simulationId}?vars=${variation}`, {
     headers: {
-      "API-KEY": "WkqrHeuts2mIOJHMcxoK"
+      "API-KEY": "WkqrHeuts2mIOJHMcxoK",
+      "Accept": "application/json"
     }
   }).then(r => r.json()).catch(console.error)
 
@@ -62,7 +63,7 @@ export async function run(simulationId: string, variation: string | number, star
   let endChunk = Math.min(end, start + dataManager.MIN_CHART_SIZE * 1000)
 
   await dataManager.fetchAllCharts(start, endChunk)
-  dataManager.currentCandle = (maxLongSMA * 15 * 60)
+  dataManager.currentCandle = (maxLongSMA * 15 * 60) + (start / 1000) % SECONDS_IN_DAY
 
   dataManager.initData()
 

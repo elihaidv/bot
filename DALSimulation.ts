@@ -49,8 +49,8 @@ export class DAL {
             step.profit,
             step.balanceFirst,
             step.priority,
-            step.sma && step.sma[bot.SMA],
-            step.longSMA && step.longSMA[bot.longSMA],
+            step.sma && step.sma[bot.SMA * 5 * 60],
+            step.longSMA && step.longSMA[bot.longSMA * 15 * 60],
         ]
 
         dalVariation.steps.push(stepArr)

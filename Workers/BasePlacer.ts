@@ -1,6 +1,4 @@
 
-import { Severity } from 'coralogix-logger'
-import { Logger } from 'telegram'
 import { DAL } from '../DAL'
 import { BotLogger } from '../Logger'
 import { Bot, BotStatus, Order } from '../Models'

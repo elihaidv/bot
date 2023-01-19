@@ -50,7 +50,6 @@ export class DataManager {
 
     chart: Array<CandleStick> = [];
     charts: { [key: string]: Array<CandleStick>; } = {};
-    hoursChart: Array<CandleStick> = []
     historyCandles: Array<CandleStick> = []
 
     openOrders: Array<Order> = [];
@@ -67,7 +66,7 @@ export class DataManager {
     // offsetInHour = 0
     currentCandleStick: CandleStick | undefined
 
-   
+
 
 
 
@@ -169,9 +168,16 @@ export class DataManager {
             return
         }
     }
-    async fetchNextChart(start, end, unit) {
 
-        let promises: { [k: string]: Promise<Array<Array<string>>> } = {}
+    processFile = (unit, dateString, date,) => this.fetchFile(unit, dateString)
+        .then(d => d.map(([time, high, low, close]) =>
+            (Object.assign(new CandleStick(), { time, high, low, close }))))
+        .then(d => this.buildCharts(d, date))
+        .then(d => this.connectCharts(d));
+
+    async fetchNextChart(start, end, unit): Promise<{ [k: string]: Array<CandleStick> } >  {
+
+        let promises: { [k: string]: Promise<{ [k: string]: Array<CandleStick> } >} = {}
 
         let date = new Date(start - start % (SECONDS_IN_DAY * 1000))
 
@@ -179,7 +185,7 @@ export class DataManager {
 
             const dateString = date.toISOString().split("T")[0]
 
-            promises[dateString] = this.fetchFile(unit, dateString)
+            promises[dateString] = this.processFile(unit, dateString, date.getTime())
 
             date.setDate(date.getDate() + 1)
 
@@ -190,46 +196,47 @@ export class DataManager {
             const tempFailed = this.failed
             this.failed = []
             for (const f of tempFailed) {
-                promises[f] = this.fetchFile(unit, f)
+                promises[f] = this.processFile(unit, f, new Date(f).getTime())
             }
             await Promise.all(Object.values(promises));
         }
 
         const files = await Promise.all(Object.values(promises));
 
-        const data = files
-            .filter(x => x)
-            .flat()
-
-        this.charts[unit] = data.map(([time, high, low, close]) =>
-            (Object.assign(new CandleStick(), { time, high, low, close })))
+        return files.reduce((a, b) => {
+            Object.keys(b).forEach(k => a[k] = a[k] ? a[k].concat(b[k]) : b[k])
+            return a
+        })
     }
-    buildCharts() {
+    buildCharts(seconds: CandleStick[], start): { [k: string]: Array<CandleStick> } {
         const highers = {}
         const lowers = {}
+        const charts: { [k: string]: Array<CandleStick> } = {}
+
+        seconds = this.paddEmptyCandles(seconds, start)
 
         UNIT_TIMES.forEach(unit => {
-            this.charts[unit] ||= []
+            charts[unit] ||= []
             highers[unit] = 0
             lowers[unit] = Infinity
         })
-        const length = this.charts["1s"].length + 1
+        const length = seconds.length + 1
         for (let i = 1; i < length; i++) {
-            const candle = this.charts["1s"][i - 1]
+            const candle = seconds[i - 1]
             for (let j = 0; j < UNIT_TIMES.length - 1; j++) {
                 const unit = UNIT_TIMES[j]
 
-                if (highers[unit] < candle.high){
+                if (highers[unit] < candle.high) {
                     highers[unit] = candle.high
                 }
 
-                if (lowers[unit] > candle.low){
+                if (lowers[unit] > candle.low) {
                     lowers[unit] = candle.low
                 }
 
 
                 if (i && i % SECOUNDS_IN_UNIT[unit] == 0) {
-                    this.charts[unit].push(Object.assign(new CandleStick(), {
+                    charts[unit].push(Object.assign(new CandleStick(), {
                         time: candle.time - SECOUNDS_IN_UNIT[unit] * 1000 + 1000,
                         high: highers[unit],
                         low: lowers[unit],
@@ -240,36 +247,38 @@ export class DataManager {
                 }
             }
         }
-    
+        charts["1s"] = seconds
+        return charts
+
     }
-    paddEmptyCandles(start, end) {
-        let diff = this.charts["1s"].at(0)?.time - new Date(new Date(start).toISOString().split("T")[0]).getTime()
+    paddEmptyCandles(chart, start) {
+        let diff = chart.at(0)?.time - start
         if (diff != 0) {
             const items = Array.from({ length: diff / 1000 }, (_, j) => {
-                const newCandle = Object.assign(new CandleStick(), this.charts["1s"].at(0))
+                const newCandle = Object.assign(new CandleStick(), chart.at(0))
                 newCandle.time = start + 1000 * j
                 return newCandle
             })
-            this.charts["1s"] = items.concat(this.charts["1s"])
+            chart = items.concat(chart)
         }
 
-        diff = new Date(new Date(end).toISOString().split("T")[0]).getTime() + SECONDS_IN_DAY * 1000 - this.charts["1s"].at(-1)?.time
+        diff = start + SECONDS_IN_DAY * 1000 - chart.at(-1)?.time
         if (diff != 1000) {
             const items = Array.from({ length: diff / 1000 - 1 }, (_, j) => {
-                const newCandle = Object.assign(new CandleStick(), this.charts["1s"].at(-1))
+                const newCandle = Object.assign(new CandleStick(), chart.at(-1))
                 newCandle.time += 1000 * (j + 1)
                 return newCandle
             })
-            this.charts["1s"] = this.charts["1s"].concat(items)
+            chart = chart.concat(items)
         }
 
         let copiedChart: CandleStick[] = []
-        for (let i = 0; i < this.charts["1s"].length - 1; i++) {
-            copiedChart.push(this.charts["1s"][i])
-            const diff = this.charts["1s"][i + 1].time - this.charts["1s"][i].time
+        for (let i = 0; i < chart.length - 1; i++) {
+            copiedChart.push(chart[i])
+            const diff = chart[i + 1].time - chart[i].time
             if (diff > 1000) {
                 const items = Array.from({ length: diff / 1000 - 1 }, (_, j) => {
-                    const newCandle = Object.assign(new CandleStick(), this.charts["1s"][i])
+                    const newCandle = Object.assign(new CandleStick(), chart[i])
                     newCandle.time += 1000 * (j + 1)
                     return newCandle
                 })
@@ -279,7 +288,7 @@ export class DataManager {
             }
         }
         const d = new Date()
-        copiedChart.push(this.charts["1s"].at(-1)!)
+        copiedChart.push(chart.at(-1)!)
         return copiedChart
     }
 
@@ -326,48 +335,38 @@ export class DataManager {
         }
     }
 
-    connectCharts(){
+    connectCharts(charts: { [k: string]: Array<CandleStick> }) : { [k: string]: Array<CandleStick> }{
         for (let unitIndex = 0; unitIndex < UNIT_TIMES.length; unitIndex++) {
             const unit = UNIT_TIMES[unitIndex]
 
-            for (let i = 0; i < this.charts[unit].length - 1; i++) {
-                if (this.charts[unit][i + 1] ) {
-                    this.charts[unit][i].lastChild = unit!="1h" && (i + 1) % UNIT_NEXT_LEVEL[unit] == 0
-                    this.charts[unit][i].next = this.charts[unit][i + 1]
+            for (let i = 0; i < charts[unit].length - 1; i++) {
+                if (charts[unit][i + 1]) {
+                    charts[unit][i].lastChild = unit != "1h" && (i + 1) % UNIT_NEXT_LEVEL[unit] == 0
+                    charts[unit][i].next = charts[unit][i + 1]
                 }
                 if (unitIndex > 0) {
-                    const parent = this.charts[UNIT_TIMES[unitIndex - 1]][Math.floor(i / UNIT_NEXT_LEVEL[unit])]
-                    this.charts[unit][i].parent = parent
+                    const parent = charts[UNIT_TIMES[unitIndex - 1]][Math.floor(i / UNIT_NEXT_LEVEL[unit])]
+                    charts[unit][i].parent = parent
                     if (!parent) {
                         debugger
                     } else {
-                        parent.children.push(this.charts[unit][i])
+                        parent.children.push(charts[unit][i])
                     }
                 }
             }
         }
+        return charts
     }
 
     async fetchAllCharts(start, end) {
-        await this.fetchNextChart(start, end, "1s")
+        const charts = await this.fetchNextChart(start, end, "1s")
 
-        this.charts["1s"] = this.paddEmptyCandles(start, end)
-
-        this.buildCharts()
-
-        this.connectCharts()
-
-        this.chart = this.charts["1s"];
-
-        this.historyCandles = this.historyCandles.concat(this.charts["5m"])
-        this.historyCandles = this.historyCandles.slice(Math.max(0,this.historyCandles.length - this.minHistoryCandles * 3))
+        this.chart = charts["1s"]
+        
+        this.historyCandles = this.historyCandles.concat(charts["5m"])
+        this.historyCandles = this.historyCandles.slice(Math.max(0, this.historyCandles.length - this.minHistoryCandles * 3))
 
         this.calculateSmas()
-
-      
-        this.hoursChart = this.charts["1h"]
-        this.charts = {}
-
     }
 
     checkOrder(orders: Array<Order>) {
@@ -387,8 +386,8 @@ export class DataManager {
             }
         }
 
-        let maxTime = orders.filter(o=>o.bot!.status != BotStatus.STABLE)
-                            .reduce((a,o)=>Math.min(a,o.time + o.bot!.secound * 1000), Number.MAX_SAFE_INTEGER)
+        let maxTime = orders.filter(o => o.bot!.status != BotStatus.STABLE)
+            .reduce((a, o) => Math.min(a, o.time + o.bot!.secound * 1000), Number.MAX_SAFE_INTEGER)
         let candle = this.currentCandleStick
 
         while (true) {
@@ -396,13 +395,13 @@ export class DataManager {
                 ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > candle.low ||
                 ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < candle.high)
 
-      
+
 
             if (!ordersInInreval.length) {
                 if (candle.time > maxTime) {
                     this.currentCandle = (maxTime - this.chart[0].time) / 1000
                     this.currentCandleStick = this.chart[this.currentCandle]
-                    if (!this.chart[this.currentCandle] ) {
+                    if (!this.chart[this.currentCandle]) {
                         debugger
                     }
                     return []
@@ -547,10 +546,10 @@ export class DataManager {
     averagePriceQuarter(pair, steps) {
         return this.chart[this.currentCandle].parent?.parent?.parent?.parent?.longSMA[steps * 3]
     }
-    simulateState(bots:Bot[]) {
+    simulateState(bots: Bot[]) {
         // if (!this.bot.avoidCancel){
 
-        this.openOrders = this.openOrders.filter(o=> !bots.includes(o.bot!))
+        this.openOrders = this.openOrders.filter(o => !bots.includes(o.bot!))
         // }
 
 
@@ -576,7 +575,7 @@ export class CandleStick {
     children: CandleStick[] = [];
     sma; longSMA;
     lastChild = false
-    
+
     // get date() {
     //     return new Date(this.time)
     // }

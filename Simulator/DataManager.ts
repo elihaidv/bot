@@ -13,7 +13,7 @@ const crypto = require('crypto');
 export const SECONDS_IN_DAY = 24 * 60 * 60
 
 const UNIT_TIMES = ['1h', '15m', '5m', '1m', '15s', '5s', '1s']
-export const MIN_CHART_SIZE = 1 * SECONDS_IN_DAY
+export const MIN_CHART_SIZE = 5 * SECONDS_IN_DAY
 
 // readonly UNIT_HOUR_CANDLES = {
 //     '1h': 1,
@@ -204,7 +204,11 @@ export class DataManager {
         const files = await Promise.all(Object.values(promises));
 
         return files.reduce((a, b) => {
-            Object.keys(b).forEach(k => a[k] = a[k] ? a[k].concat(b[k]) : b[k])
+            Object.keys(b).forEach(k => {
+                a[k].at(-1)!.next = b[k].at(0)
+                a[k] = a[k].concat(b[k])
+            })
+            
             return a
         })
     }
@@ -339,7 +343,7 @@ export class DataManager {
         for (let unitIndex = 0; unitIndex < UNIT_TIMES.length; unitIndex++) {
             const unit = UNIT_TIMES[unitIndex]
 
-            for (let i = 0; i < charts[unit].length - 1; i++) {
+            for (let i = 0; i < charts[unit].length; i++) {
                 if (charts[unit][i + 1]) {
                     charts[unit][i].lastChild = unit != "1h" && (i + 1) % UNIT_NEXT_LEVEL[unit] == 0
                     charts[unit][i].next = charts[unit][i + 1]
@@ -363,8 +367,9 @@ export class DataManager {
 
         this.chart = charts["1s"]
         
-        this.historyCandles = this.historyCandles.concat(charts["5m"])
+        
         this.historyCandles = this.historyCandles.slice(Math.max(0, this.historyCandles.length - this.minHistoryCandles * 3))
+        this.historyCandles = this.historyCandles.concat(charts["5m"])
 
         this.calculateSmas()
     }
@@ -431,22 +436,6 @@ export class DataManager {
 
     }
 
-    findIndexBetween(time: number, chart: Array<CandleStick>) {
-        if (time < chart[0].time) {
-            return 0
-        }
-        for (let i = 0; i < chart.length - 1; i++) {
-            if (chart[i].time < time && chart[i + 1].time >= time) {
-                return i
-            }
-        }
-        if (time > chart[chart.length - 1].time) {
-            return chart.length - 1
-        }
-        return -1
-    }
-
-    candlesticks = () => new Promise(resolve => Binance().candlesticks(this.PAIR, "1m", (e, t, s) => resolve(t)));
 
     orderexecute(order: Order, t: CandleStick) {
         const bot = order.bot || this.bots[0]
@@ -540,11 +529,11 @@ export class DataManager {
 
     }
     averagePrice(pair, steps) {
-        return this.chart[this.currentCandle].parent?.parent?.parent?.parent?.sma[steps]
+        return this.chart[this.currentCandle].close;//parent?.parent?.parent?.parent?.sma[steps]
 
     }
     averagePriceQuarter(pair, steps) {
-        return this.chart[this.currentCandle].parent?.parent?.parent?.parent?.longSMA[steps * 3]
+        return this.chart[this.currentCandle].close//parent?.parent?.parent?.parent?.longSMA[steps * 3]
     }
     simulateState(bots: Bot[]) {
         // if (!this.bot.avoidCancel){

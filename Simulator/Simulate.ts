@@ -86,8 +86,9 @@ export async function run(simulationId: string, variation: string | number, star
         break;
       }
       await dataManager.fetchAllCharts(startChunk, endChunk)
-      dataManager.currentCandle = MIN_CHART_SIZE
+      dataManager.currentCandle = 0
       t = dataManager.chart[dataManager.currentCandle]
+      console.log("new chunk" + new Date(t.time))
       if (!t) {
         break;
       }

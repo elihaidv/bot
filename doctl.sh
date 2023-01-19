@@ -1,7 +1,7 @@
 
 droplets=(
     "331077483"
-    "331077484"
+    # "331077484"
     "331077486"
     "332969359"
     "332969434"
@@ -20,7 +20,7 @@ droplets=(
 
 for server in "${droplets[@]}"
 do echo $server
-    # doctl compute droplet-action shutdown $server
+    doctl compute droplet delete $server -f
     # doctl compute droplet-action resize $server --size s-1vcpu-1gb
-    doctl compute droplet-action $1 $server
+    # doctl compute droplet-action $1 $server
 done

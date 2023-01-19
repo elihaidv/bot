@@ -12,6 +12,35 @@ const crypto = require('crypto');
 
 export const SECONDS_IN_DAY = 24 * 60 * 60
 
+const UNIT_TIMES = ['1h', '15m', '5m', '1m', '15s', '5s', '1s']
+export const MIN_CHART_SIZE = 7 * SECONDS_IN_DAY
+// readonly UNIT_HOUR_CANDLES = {
+//     '1h': 1,
+//     '15m': 4,
+//     '5m': 12,
+//     '1m': 60,
+//     '1s': 60 * 60
+// }
+
+const UNIT_NEXT_LEVEL = {
+    '1s': 5,
+    '5s': 3,
+    '15s': 4,
+    '1m': 5,
+    '5m': 3,
+    '15m': 4,
+    '1h': 1
+}
+
+const SECOUNDS_IN_UNIT = {
+    '1s': 1,
+    '5s': 5,
+    '15s': 15,
+    '1m': 60,
+    '5m': 60 * 5,
+    '15m': 60 * 15,
+    '1h': 60 * 60
+}
 export class DataManager {
     hasMoney(t: CandleStick) {
 
@@ -34,35 +63,7 @@ export class DataManager {
     // offsetInHour = 0
     currentCandleStick: CandleStick | undefined
 
-    readonly UNIT_TIMES = ['1h', '15m', '5m', '1m', '15s', '5s', '1s']
-    readonly MIN_CHART_SIZE = 7 * SECONDS_IN_DAY
-    // readonly UNIT_HOUR_CANDLES = {
-    //     '1h': 1,
-    //     '15m': 4,
-    //     '5m': 12,
-    //     '1m': 60,
-    //     '1s': 60 * 60
-    // }
-
-    readonly UNIT_NEXT_LEVEL = {
-        '1s': 5,
-        '5s': 3,
-        '15s': 4,
-        '1m': 5,
-        '5m': 3,
-        '15m': 4,
-        '1h': 1
-    }
-
-    readonly SECOUNDS_IN_UNIT = {
-        '1s': 1,
-        '5s': 5,
-        '15s': 15,
-        '1m': 60,
-        '5m': 60 * 5,
-        '15m': 60 * 15,
-        '1h': 60 * 60
-    }
+   
 
 
 
@@ -108,10 +109,10 @@ export class DataManager {
         return order
     });
     makeid(length): string {
-        var result = '';
-        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for (var i = 0; i < length; i++) {
+        let result = '';
+        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let charactersLength = characters.length;
+        for (let i = 0; i < length; i++) {
             result += characters.charAt(Math.floor(Math.random() *
                 charactersLength));
         }
@@ -179,7 +180,6 @@ export class DataManager {
             date.setDate(date.getDate() + 1)
 
         }
-
         await Promise.all(Object.values(promises));
 
         while (this.failed.length > 0) {
@@ -204,33 +204,41 @@ export class DataManager {
         const highers = {}
         const lowers = {}
 
-        this.UNIT_TIMES.forEach(unit => {
+        UNIT_TIMES.forEach(unit => {
             this.charts[unit] ||= []
+            highers[unit] = 0
+            lowers[unit] = Infinity
         })
-        for (let i = 1; i < this.charts["1s"].length + 1; i++) {
-            for (let j = 0; j < this.UNIT_TIMES.length - 1; j++) {
-                const unit = this.UNIT_TIMES[j]
+        const length = this.charts["1s"].length + 1
+        for (let i = 1; i < length; i++) {
+            const candle = this.charts["1s"][i - 1]
+            for (let j = 0; j < UNIT_TIMES.length - 1; j++) {
+                const unit = UNIT_TIMES[j]
 
-                highers[unit] = Math.max(highers[unit] || 0, this.charts["1s"][i - 1].high)
-                lowers[unit] = Math.min(lowers[unit] || Infinity, this.charts["1s"][i - 1].low)
+                if (highers[unit] < candle.high){
+                    highers[unit] = candle.high
+                }
 
-                if (i && i % this.SECOUNDS_IN_UNIT[unit] == 0) {
+                if (lowers[unit] > candle.low){
+                    lowers[unit] = candle.low
+                }
+
+
+                if (i && i % SECOUNDS_IN_UNIT[unit] == 0) {
                     this.charts[unit].push(Object.assign(new CandleStick(), {
-                        time: this.charts["1s"][i - 1].time - this.SECOUNDS_IN_UNIT[unit] * 1000 + 1000,
+                        time: candle.time - SECOUNDS_IN_UNIT[unit] * 1000 + 1000,
                         high: highers[unit],
                         low: lowers[unit],
-                        close: this.charts["1s"][i - 1].close
+                        close: candle.close
                     }))
                     highers[unit] = 0
                     lowers[unit] = Infinity
                 }
             }
         }
+    
     }
-    async fetchAllCharts(start, end) {
-
-        await this.fetchNextChart(start, end, "1s")
-
+    paddEmptyCandles(start, end) {
         let diff = this.charts["1s"].at(0)?.time - new Date(new Date(start).toISOString().split("T")[0]).getTime()
         if (diff != 0) {
             const items = Array.from({ length: diff / 1000 }, (_, j) => {
@@ -266,51 +274,62 @@ export class DataManager {
                 debugger
             }
         }
+        const d = new Date()
         copiedChart.push(this.charts["1s"].at(-1)!)
+        return copiedChart
+    }
 
-        this.charts["1s"] = copiedChart
-
-        this.buildCharts()
-
-        this.chart = this.chart.slice(this.chart.length - this.MIN_CHART_SIZE)
-
-        this.chart = this.chart.concat(this.charts["1s"]);
-
+    calculateSmas() {
         let smas = Array.from(new Set(this.bots.map(bot => bot.SMA * 5 * 60)))
         let closeSum = Array(smas.length).fill(0)
         let longSMAs = Array.from(new Set(this.bots.map(bot => bot.longSMA * 15 * 60)))
         let closeSumLong = Array(longSMAs.length).fill(0)
+        const chart = this.chart
 
-        for (let i = 0; i < this.chart.length; i++) {
+        for (let i = 0; i < chart.length; i++) {
+            const candle = chart[i]
 
             for (let j = 0; j < smas.length; j++) {
-                if (i >= smas[j]) {
-                    closeSum[j] -= this.chart[i - smas[j]].close
+                const shortSma = smas[j]
+                const longSma = longSMAs[j]
+                if (i >= shortSma) {
+                    closeSum[j] -= chart[i - shortSma].close
                 }
 
-                if (i >= longSMAs[j]) {
-                    closeSumLong[j] -= this.chart[i - longSMAs[j]].close
+                if (i >= longSma) {
+                    closeSumLong[j] -= chart[i - longSma].close
                 }
 
-                closeSum[j] += this.chart[i].close
-                this.chart[i].sma[smas[j]] = closeSum[j] / Math.min(i + 1, smas[j])
+                closeSum[j] += candle.close
 
-                closeSumLong[j] += this.chart[i].close
-                this.chart[i].longSMA[longSMAs[j]] = closeSumLong[j] / Math.min(i + 1, longSMAs[j])
+                let count = shortSma
+                if (count > i + 1) {
+                    count = i + 1
+                }
+                candle.sma[shortSma] = closeSum[j] / count
+
+                closeSumLong[j] += candle.close
+
+                count = longSma
+                if (count > i + 1) {
+                    count = i + 1
+                }
+                candle.longSMA[longSma] = closeSumLong[j] / count
             }
         }
+    }
 
-
-        for (let unitIndex = 0; unitIndex < this.UNIT_TIMES.length; unitIndex++) {
-            const unit = this.UNIT_TIMES[unitIndex]
+    connectCharts(){
+        for (let unitIndex = 0; unitIndex < UNIT_TIMES.length; unitIndex++) {
+            const unit = UNIT_TIMES[unitIndex]
 
             for (let i = 0; i < this.charts[unit].length - 1; i++) {
                 if (this.charts[unit][i + 1] ) {
-                    this.charts[unit][i].lastChild = unit!="1h" && (i + 1) % this.UNIT_NEXT_LEVEL[unit] == 0
+                    this.charts[unit][i].lastChild = unit!="1h" && (i + 1) % UNIT_NEXT_LEVEL[unit] == 0
                     this.charts[unit][i].next = this.charts[unit][i + 1]
                 }
                 if (unitIndex > 0) {
-                    const parent = this.charts[this.UNIT_TIMES[unitIndex - 1]][Math.floor(i / this.UNIT_NEXT_LEVEL[unit])]
+                    const parent = this.charts[UNIT_TIMES[unitIndex - 1]][Math.floor(i / UNIT_NEXT_LEVEL[unit])]
                     this.charts[unit][i].parent = parent
                     if (!parent) {
                         debugger
@@ -320,8 +339,25 @@ export class DataManager {
                 }
             }
         }
+    }
+
+    async fetchAllCharts(start, end) {
+        await this.fetchNextChart(start, end, "1s")
+
+        this.charts["1s"] = this.paddEmptyCandles(start, end)
+
+        // this.buildCharts()
+
+        this.chart = this.chart.slice(this.chart.length - MIN_CHART_SIZE)
+
+        this.chart = this.chart.concat(this.charts["1s"]);
+
+    //    this.calculateSmas()
+
+      
         this.hoursChart = this.charts["1h"]
         this.charts = {}
+
     }
 
     checkOrder(orders: Array<Order>) {

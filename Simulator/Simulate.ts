@@ -4,7 +4,7 @@ import { FutureTrader } from "../Workers/FuturesTrader";
 import { Bot, BotStatus, Key, Order } from "../Models";
 import { WeightAvg } from "../Workers/WeightAvg";
 import { BasePlacer } from "../Workers/BasePlacer";
-import { CandleStick, DataManager, SECONDS_IN_DAY } from "./DataManager";
+import { CandleStick, DataManager, MIN_CHART_SIZE, SECONDS_IN_DAY } from "./DataManager";
 import { FutureDataManager } from "./FutureDataManager";
 import { env, exit } from "process";
 import { DAL } from "../DALSimulation";
@@ -60,7 +60,7 @@ export async function run(simulationId: string, variation: string | number, star
   const maxLongSMA = Math.max(...bots.map(b => b.longSMA))
   const start = new Date(startStr).getTime() - (maxLongSMA * 15 * 60 * 1000)
   const end = Math.min(new Date(endStr).getTime(), new Date().getTime() - SECONDS_IN_DAY * 1000 * 2)
-  let endChunk = Math.min(end, start + dataManager.MIN_CHART_SIZE * 1000)
+  let endChunk = Math.min(end, start + MIN_CHART_SIZE * 1000)
 
   await dataManager.fetchAllCharts(start, endChunk)
   dataManager.currentCandle = (maxLongSMA * 15 * 60) + (start / 1000) % SECONDS_IN_DAY
@@ -80,12 +80,12 @@ export async function run(simulationId: string, variation: string | number, star
     t = dataManager.chart[dataManager.currentCandle]
     if (!t) {
       let startChunk = dataManager.chart.at(-1)!.time + 1000
-      let endChunk = Math.min(end, startChunk + dataManager.MIN_CHART_SIZE * 1000)
+      let endChunk = Math.min(end, startChunk + MIN_CHART_SIZE * 1000)
       if (endChunk <= startChunk) {
         break;
       }
       await dataManager.fetchAllCharts(startChunk, endChunk)
-      dataManager.currentCandle = dataManager.MIN_CHART_SIZE
+      dataManager.currentCandle = MIN_CHART_SIZE
       t = dataManager.chart[dataManager.currentCandle]
       if (!t) {
         break;

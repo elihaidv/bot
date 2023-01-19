@@ -280,11 +280,11 @@ export class DataManager {
     }
 
     calculateSmas() {
-        let smas = Array.from(new Set(this.bots.map(bot => bot.SMA * 5 * 60)))
+        let smas = Array.from(new Set(this.bots.map(bot => bot.SMA)))
         let closeSum = Array(smas.length).fill(0)
-        let longSMAs = Array.from(new Set(this.bots.map(bot => bot.longSMA * 15 * 60)))
+        let longSMAs = Array.from(new Set(this.bots.map(bot => bot.longSMA * 3)))
         let closeSumLong = Array(longSMAs.length).fill(0)
-        const chart = this.chart
+        const chart = this.charts["5m"]
 
         for (let i = 0; i < chart.length; i++) {
             const candle = chart[i]
@@ -346,13 +346,13 @@ export class DataManager {
 
         this.charts["1s"] = this.paddEmptyCandles(start, end)
 
-        // this.buildCharts()
+        this.buildCharts()
 
-        this.chart = this.chart.slice(this.chart.length - MIN_CHART_SIZE)
+        this.connectCharts()
 
-        this.chart = this.chart.concat(this.charts["1s"]);
+        this.chart = this.charts["1s"];
 
-    //    this.calculateSmas()
+       this.calculateSmas()
 
       
         this.hoursChart = this.charts["1h"]
@@ -531,11 +531,11 @@ export class DataManager {
 
     }
     averagePrice(pair, steps) {
-        return this.chart[this.currentCandle].sma[steps * 5 * 60]
+        return this.chart[this.currentCandle].parent?.parent?.parent?.parent?.sma[steps]
 
     }
     averagePriceQuarter(pair, steps) {
-        return this.chart[this.currentCandle].longSMA[steps * 15 * 60]
+        return this.chart[this.currentCandle].parent?.parent?.parent?.parent?.longSMA[steps * 3]
     }
     simulateState(bots:Bot[]) {
         // if (!this.bot.avoidCancel){

@@ -60,8 +60,9 @@ export async function run(simulationId: string, variation: string | number, star
   const maxLongSMA = Math.max(...bots.map(b => b.longSMA))
   const start = new Date(startStr).getTime() - (maxLongSMA * 15 * 60 * 1000)
   const end = Math.min(new Date(endStr).getTime(), new Date().getTime() - SECONDS_IN_DAY * 1000 * 2)
-  let endChunk = Math.min(end, start + MIN_CHART_SIZE * 1000)
+  let endChunk = Math.max(Math.min(end, start + MIN_CHART_SIZE * 1000), start + maxLongSMA * 15 * 60 * 1000)
 
+  dataManager.minHistoryCandles = maxLongSMA
   await dataManager.fetchAllCharts(start, endChunk)
   dataManager.currentCandle = (maxLongSMA * 15 * 60) + (start / 1000) % SECONDS_IN_DAY
 

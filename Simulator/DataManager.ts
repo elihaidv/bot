@@ -13,7 +13,8 @@ const crypto = require('crypto');
 export const SECONDS_IN_DAY = 24 * 60 * 60
 
 const UNIT_TIMES = ['1h', '15m', '5m', '1m', '15s', '5s', '1s']
-export const MIN_CHART_SIZE = 7 * SECONDS_IN_DAY
+export const MIN_CHART_SIZE = 1 * SECONDS_IN_DAY
+
 // readonly UNIT_HOUR_CANDLES = {
 //     '1h': 1,
 //     '15m': 4,
@@ -50,6 +51,7 @@ export class DataManager {
     chart: Array<CandleStick> = [];
     charts: { [key: string]: Array<CandleStick>; } = {};
     hoursChart: Array<CandleStick> = []
+    historyCandles: Array<CandleStick> = []
 
     openOrders: Array<Order> = [];
     currentCandle = 0
@@ -58,6 +60,8 @@ export class DataManager {
     exchangeInfo: any
     filters: any
     dal = new DAL()
+
+    minHistoryCandles = 0
 
     // currentHour = 0
     // offsetInHour = 0
@@ -284,12 +288,15 @@ export class DataManager {
         let closeSum = Array(smas.length).fill(0)
         let longSMAs = Array.from(new Set(this.bots.map(bot => bot.longSMA * 3)))
         let closeSumLong = Array(longSMAs.length).fill(0)
-        const chart = this.charts["5m"]
+        const chart = this.historyCandles
 
         for (let i = 0; i < chart.length; i++) {
             const candle = chart[i]
+            candle.sma ||= {}
+            candle.longSMA ||= {}
 
             for (let j = 0; j < smas.length; j++) {
+
                 const shortSma = smas[j]
                 const longSma = longSMAs[j]
                 if (i >= shortSma) {
@@ -352,7 +359,10 @@ export class DataManager {
 
         this.chart = this.charts["1s"];
 
-       this.calculateSmas()
+        this.historyCandles = this.historyCandles.concat(this.charts["5m"])
+        this.historyCandles = this.historyCandles.slice(Math.max(0,this.historyCandles.length - this.minHistoryCandles * 3))
+
+        this.calculateSmas()
 
       
         this.hoursChart = this.charts["1h"]
@@ -564,12 +574,12 @@ export class CandleStick {
     next: CandleStick | undefined;
     parent: CandleStick | undefined;
     children: CandleStick[] = [];
-    sma = {}; longSMA = {};
+    sma; longSMA;
     lastChild = false
     
-    get date() {
-        return new Date(this.time)
-    }
+    // get date() {
+    //     return new Date(this.time)
+    // }
 }
 
 

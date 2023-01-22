@@ -79,7 +79,7 @@ export class DAL {
         const dalVariation = this.variations[bot.variation]
 
         const data = JSON.stringify({
-            profit: (bot.profitNum / 100).toPrecision(2) + "%",
+            profit: (bot.profitNum / 100).toFixed(2) + "%",
             maxPage: dalVariation.page - 1,
             progress: status == "finished" ? 100 : progress,
             status: status,

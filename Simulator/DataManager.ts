@@ -106,8 +106,8 @@ export class DataManager {
             type: 'OpenOrder', side: order.side, price: order.price, quantity: order.origQty, priority: 8,
             high: this.chart[this.currentCandle].high,
             low: this.chart[this.currentCandle].low,
-            sma: this.chart[this.currentCandle].sma,
-            longSMA: this.chart[this.currentCandle].longSMA,
+            sma: this.averagePrice(null,bot.SMA),
+            longSMA: this.averagePriceQuarter(null,bot.longSMA),
         }, bot)
         return order
     });
@@ -529,12 +529,29 @@ export class DataManager {
 
     }
     averagePrice(pair, steps) {
-        return this.chart[this.currentCandle].close;//parent?.parent?.parent?.parent?.sma[steps]
+        return this.chart[this.currentCandle].parent?.parent?.parent?.parent?.sma[steps]
 
     }
     averagePriceQuarter(pair, steps) {
-        return this.chart[this.currentCandle].close//parent?.parent?.parent?.parent?.longSMA[steps * 3]
+        return this.chart[this.currentCandle].parent?.parent?.parent?.parent?.longSMA[steps * 3]
     }
+    // averagePrice(pair, steps) {
+    //     const count = Math.min(this.currentCandle, (steps * 5 * 60))
+    //     const start = this.currentCandle - count
+    //     return this.chart
+    //         .map(x => x.close)
+    //         .slice(start, this.currentCandle)
+    //         .reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / count
+    // }
+
+    // averagePriceQuarter(pair,steps) {
+    //     const count = Math.min(this.currentCandle, (15 * steps * 60))
+    //     const start = this.currentCandle - count
+    //     return this.chart
+    //         .map(x => x.close)
+    //         .slice(start, this.currentCandle)
+    //         .reduce((a, b) => parseFloat(a) + parseFloat(b)) / count
+    // }
     simulateState(bots: Bot[]) {
         // if (!this.bot.avoidCancel){
 

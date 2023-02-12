@@ -1,6 +1,7 @@
-// import { MongoClient,ObjectId } from "mongodb";
+import pkg from 'mongodb';
+const { MongoClient } = pkg;
 import { Bot, Signaling } from "./Models";
-import DB from "./DB"
+import DB from "./DB.js"
 
 const uri = DB.USERNAME ?
     `mongodb://${DB.USERNAME}:${DB.PASSWORD}@${DB.ADDRESS}?writeConcern=majority` :
@@ -13,8 +14,8 @@ export class DAL {
     started
 
     async init() {
-        // let db = await MongoClient.connect(uri)
-        // this.dbo = db.db("trading_bot")
+        let db = await MongoClient.connect(uri)
+        this.dbo = db.db("trading_bot")
     }
 
     getBots() {

@@ -1,8 +1,6 @@
-import { env } from "node:process";
-import { DAL } from "../DALSimulation";
-import { Bot, Order } from "../Models";
-import { SocketsFutures } from "../Sockets/SocketsFuture";
-import { CandleStick, DataManager } from "./DataManager";
+import { Bot, Order } from "../Models.js";
+import { SocketsFutures } from "../Sockets/SocketsFuture.js";
+import { CandleStick, DataManager } from "./DataManager.js";
 
 export class FutureDataManager extends DataManager {
 

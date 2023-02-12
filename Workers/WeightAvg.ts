@@ -1,6 +1,6 @@
-import { BasePlacer } from "./BasePlacer"
-import { Bot, BotStatus, Order } from "../Models";
-import { BotLogger } from "../Logger";
+import { BasePlacer } from "./BasePlacer.js"
+import { Bot, BotStatus, Order } from "../Models.js";
+import { BotLogger } from "../Logger.js";
 
 
 export class WeightAvg extends BasePlacer {

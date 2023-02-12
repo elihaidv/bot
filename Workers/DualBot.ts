@@ -1,7 +1,7 @@
 
 
-import { FutureTrader } from './FuturesTrader';
-import { Account, Bot, BotStatus, Key, Order } from '../Models';
+import { FutureTrader } from './FuturesTrader.js';
+import { Account, Bot, BotStatus, Key, Order } from '../Models.js';
 
 export class DualBot extends FutureTrader {
     bigPosition: Order | undefined

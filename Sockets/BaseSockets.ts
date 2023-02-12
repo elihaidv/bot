@@ -1,4 +1,4 @@
-import { Account, Bot, Key, Order } from "../Models";
+import { Account, Bot, Key, Order } from "../Models.js";
 
 import Binance from 'node-binance-api';
 

@@ -1,10 +1,10 @@
 
 import { exec, spawn } from 'node:child_process';
 import * as fs from 'node:fs/promises'
-import { DAL } from "../DALSimulation";
-import { Account, Bot, BotStatus, Order } from "../Models";
-import { BaseSockets } from "../Sockets/BaseSockets";
-import { Sockets } from "../Sockets/Sockets";
+import { DAL } from "../DALSimulation.js";
+import { Account, Bot, BotStatus, Order } from "../Models.js";
+import { BaseSockets } from "../Sockets/BaseSockets.js";
+import { Sockets } from "../Sockets/Sockets.js";
 import fetch, { Response } from 'node-fetch';
 import admZip from 'adm-zip'
 

@@ -1,22 +1,22 @@
-import { DirectionTrader } from "../Workers/DirectionTrader";
-import { DualBot } from "../Workers/DualBot";
-import { FutureTrader } from "../Workers/FuturesTrader";
-import { Bot, BotStatus, Key, Order } from "../Models";
-import { WeightAvg } from "../Workers/WeightAvg";
-import { BasePlacer } from "../Workers/BasePlacer";
-import { CandleStick, DataManager, MIN_CHART_SIZE, SECONDS_IN_DAY } from "./DataManager";
-import { FutureDataManager } from "./FutureDataManager";
+import { DirectionTrader } from "../Workers/DirectionTrader.js";
+import { DualBot } from "../Workers/DualBot.js";
+import { FutureTrader } from "../Workers/FuturesTrader.js";
+import { Bot, BotStatus, Key, Order } from "../Models.js";
+import { WeightAvg } from "../Workers/WeightAvg.js";
+import { BasePlacer } from "../Workers/BasePlacer.js";
+import { CandleStick, DataManager, MIN_CHART_SIZE, SECONDS_IN_DAY } from "./DataManager.js";
+import { FutureDataManager } from "./FutureDataManager.js";
 import { env, exit } from "process";
-import { DAL } from "../DALSimulation";
-import { Periodically } from "../Workers/Periodically";
-import exchangeInfo from './exchangeInfo.json'
+import { DAL } from "../DALSimulation.js";
+import { Periodically } from "../Workers/Periodically.js";
+import exchangeInfo from './exchangeInfo.js'
 import fetch from "node-fetch";
-import { OneStep } from "../Workers/OneStep";
+import { OneStep } from "../Workers/OneStep.js";
 
 import Binance from 'node-binance-api';
 
 
-import { OrderPlacer } from "../Workers/PlaceOrders";
+import { OrderPlacer } from "../Workers/PlaceOrders.js";
 
 env.GOOGLE_APPLICATION_CREDENTIALS = "trading-cloud.json"
 env.TZ = "UTC"

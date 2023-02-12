@@ -1,8 +1,7 @@
 
-import { BotLogger } from '../Logger';
-import { Account, Bot, BotStatus, Key, Order } from '../Models';
-import { SocketsFutures } from '../Sockets/SocketsFuture';
-import { FutureTrader } from './FuturesTrader';
+import { BotLogger } from '../Logger.js';
+import { Account, Bot, BotStatus, Key, Order } from '../Models.js';
+import { FutureTrader } from './FuturesTrader.js';
 
 export class OneStep extends FutureTrader {
 

@@ -1,5 +1,5 @@
-import { Bot, Order } from "../Models";
-import { WeightAvg } from "./WeightAvg";
+import { Bot, Order } from "../Models.js";
+import { WeightAvg } from "./WeightAvg.js";
 
 
 export class Periodically extends WeightAvg {

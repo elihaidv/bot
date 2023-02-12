@@ -1,9 +1,8 @@
 
-import { throws } from 'assert';
-import { BasePlacer } from './BasePlacer'
-import { Account, Bot, BotStatus, Key, Order } from '../Models';
-import { SocketsFutures } from '../Sockets/SocketsFuture';
-import { BotLogger } from '../Logger';
+import { BasePlacer } from './BasePlacer.js'
+import { Account, Bot, BotStatus, Key, Order } from '../Models.js';
+import { SocketsFutures } from '../Sockets/SocketsFuture.js';
+import { BotLogger } from '../Logger.js';
 
 export class FutureTrader extends BasePlacer {
 

@@ -1,7 +1,6 @@
 
-import {BasePlacer} from './BasePlacer'
-import { Sockets } from '../Sockets/Sockets';
-import { Bot, BotStatus } from '../Models';
+import {BasePlacer} from './BasePlacer.js'
+import { Bot, BotStatus } from '../Models.js';
 
 export class OrderPlacer extends BasePlacer{
     

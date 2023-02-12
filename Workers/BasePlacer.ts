@@ -1,8 +1,8 @@
 
-import { DAL } from '../DAL'
-import { BotLogger } from '../Logger'
-import { Bot, BotStatus, Order } from '../Models'
-import { Sockets } from '../Sockets/Sockets'
+import { DAL } from '../DAL.js'
+import { BotLogger } from '../Logger.js'
+import { Bot, BotStatus, Order } from '../Models.js'
+import { Sockets } from '../Sockets/Sockets.js'
 
 
 

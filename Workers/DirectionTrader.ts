@@ -1,5 +1,5 @@
-import { FutureTrader } from './FuturesTrader';
-import { Bot, BotStatus } from '../Models';
+import { FutureTrader } from './FuturesTrader.js';
+import { Bot, BotStatus } from '../Models.js';
 
 export class DirectionTrader extends FutureTrader {
 

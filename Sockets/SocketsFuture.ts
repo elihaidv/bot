@@ -1,6 +1,6 @@
-import { BaseSockets } from "./BaseSockets";
-import { Account, Bot, Key, Order } from "../Models";
-import { BotLogger } from "../Logger";
+import { BaseSockets } from "./BaseSockets.js";
+import { Account, Bot, Key, Order } from "../Models.js";
+import { BotLogger } from "../Logger.js";
 
 export class SocketsFutures extends BaseSockets {
     futuresBookTickerStreams = new Array<Ticker>();

@@ -1,4 +1,4 @@
-import { run } from "./Simulate";
+import { run } from "./Simulate.js";
 import fetch from 'node-fetch';
 
 import amqp from 'amqplib/callback_api';

@@ -181,7 +181,7 @@ export class DataManager {
         const promises: Array<Promise<any>> = []
 
         while (t < end) {
-            promises.push(this.fetchRetry(`https://api.binance.com/api/v3/klines?symbol=${this.PAIR}&interval=1s&startTime=${t}&endTime=${end}&limit=1000`)
+            promises.push(this.fetchRetry(`https://api.binance.us/api/v3/klines?symbol=${this.PAIR}&interval=1s&startTime=${t}&endTime=${end}&limit=1000`)
                 .then(r => r.json()))
 
             t += 1000 * 1000

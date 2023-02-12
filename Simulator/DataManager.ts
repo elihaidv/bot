@@ -5,10 +5,11 @@ import { DAL } from "../DALSimulation";
 import { Account, Bot, BotStatus, Order } from "../Models";
 import { BaseSockets } from "../Sockets/BaseSockets";
 import { Sockets } from "../Sockets/Sockets";
-const fetch = require('node-fetch')
-const admZip = require('adm-zip')
-const Binance = require('node-binance-api');
-const crypto = require('crypto');
+import fetch, { Response } from 'node-fetch';
+import admZip from 'adm-zip'
+
+import Binance from 'node-binance-api';
+import crypto from 'crypto';
 
 export const SECONDS_IN_DAY = 24 * 60 * 60
 
@@ -106,8 +107,8 @@ export class DataManager {
             type: 'OpenOrder', side: order.side, price: order.price, quantity: order.origQty, priority: 8,
             high: this.chart[this.currentCandle].high,
             low: this.chart[this.currentCandle].low,
-            sma: this.averagePrice(null,bot.SMA),
-            longSMA: this.averagePriceQuarter(null,bot.longSMA),
+            sma: this.averagePrice(null, bot.SMA),
+            longSMA: this.averagePriceQuarter(null, bot.longSMA),
         }, bot)
         return order
     });
@@ -136,6 +137,9 @@ export class DataManager {
 
             const res = await this.dal.getHistoryFromBucket(this.PAIR, unit, dateString)
             if (res) {
+                if (dateString == new Date().toISOString().split('T')[0]) {
+                    return await this.fetchDayData(unit, dateString, res)
+                }
                 console.log("File exists in bucket", dateString, unit)
                 return res
             }
@@ -150,7 +154,7 @@ export class DataManager {
             if (checksum != fileChecksum) {
                 this.failed.push(dateString)
                 console.log("Error in:", dateString, unit)
-                return
+                throw new Error("Checksum not match")
             }
 
             const file = new admZip(bytes).getEntries()[0].getData().toString()
@@ -163,10 +167,36 @@ export class DataManager {
             console.log("downloded: ", dateString, unit);
             return r
         } catch (e) {
+            if (new Date(dateString).getTime() > new Date().getTime() - 1000 * 60 * 60 * 24 * 3) {
+                return await this.fetchDayData(unit, dateString)
+            }
             console.log("Error in:", dateString, unit, e)
             this.failed.push(dateString)
             return
         }
+    }
+    fetchDayData = async (unit, dateString, past:any = []) => {
+        let t = past.length == 0 ? new Date(dateString).getTime() : past.at(-1)[0] + 1000
+        const end = Math.min(new Date(dateString).getTime() + SECONDS_IN_DAY * 1000 - 1000, new Date().getTime())
+        const promises: Array<Promise<any>> = []
+
+        while (t < end) {
+            promises.push(this.fetchRetry(`https://api.binance.com/api/v3/klines?symbol=${this.PAIR}&interval=1s&startTime=${t}&endTime=${end}&limit=1000`)
+                .then(r => r.json()))
+
+            t += 1000 * 1000
+            if (promises.length % 10 == 0) {
+                await Promise.all(promises)
+            }
+        }
+        const res = await Promise.all(promises)
+
+        const resStr = past.map(l => {l.splice(1,0,0);return l})
+            .concat(res.flat())
+            .map(e => e.toString())
+            .join("\n")
+
+        return await this.dal.saveHistoryInBucket(resStr, this.PAIR, unit, dateString)
     }
 
     processFile = (unit, dateString, date,) => this.fetchFile(unit, dateString)
@@ -175,9 +205,9 @@ export class DataManager {
         .then(d => this.buildCharts(d, date))
         .then(d => this.connectCharts(d));
 
-    async fetchNextChart(start, end, unit): Promise<{ [k: string]: Array<CandleStick> } >  {
+    async fetchNextChart(start, end, unit): Promise<{ [k: string]: Array<CandleStick> }> {
 
-        let promises: { [k: string]: Promise<{ [k: string]: Array<CandleStick> } >} = {}
+        let promises: { [k: string]: Promise<{ [k: string]: Array<CandleStick> }> } = {}
 
         let date = new Date(start - start % (SECONDS_IN_DAY * 1000))
 
@@ -208,7 +238,7 @@ export class DataManager {
                 a[k].at(-1)!.next = b[k].at(0)
                 a[k] = a[k].concat(b[k])
             })
-            
+
             return a
         })
     }
@@ -339,7 +369,7 @@ export class DataManager {
         }
     }
 
-    connectCharts(charts: { [k: string]: Array<CandleStick> }) : { [k: string]: Array<CandleStick> }{
+    connectCharts(charts: { [k: string]: Array<CandleStick> }): { [k: string]: Array<CandleStick> } {
         for (let unitIndex = 0; unitIndex < UNIT_TIMES.length; unitIndex++) {
             const unit = UNIT_TIMES[unitIndex]
 
@@ -366,8 +396,8 @@ export class DataManager {
         const charts = await this.fetchNextChart(start, end, "1s")
 
         this.chart = charts["1s"]
-        
-        
+
+
         this.historyCandles = this.historyCandles.slice(Math.max(0, this.historyCandles.length - this.minHistoryCandles * 3))
         this.historyCandles = this.historyCandles.concat(charts["5m"])
 
@@ -497,7 +527,7 @@ export class DataManager {
     initData() {
 
         for (let bot of this.bots) {
-            bot.binance = new Account(Binance());
+            bot.binance = new Account(new Binance());
             bot.binance.balance = {}
             bot.binance.balance[bot.coin2] = bot.isFuture ? 10000 : {
                 available: 10000,
@@ -572,6 +602,27 @@ export class DataManager {
         t.bestAsk = this.chart[this.currentCandle].close
         return t
     }
+
+    async fetchRetry(url): Promise<Response> {
+        let retry = 3
+
+        while (retry > 0) {
+            try {
+                return await fetch(url)
+            } catch (e) {
+                retry = retry - 1
+                if (retry === 0) {
+                    throw e
+                }
+
+                console.log("pausing..");
+                await this.sockets.timeout(1000);
+                console.log("done pausing...");
+
+            }
+        }
+        throw new Error("fetchRetry failed")
+    };
 }
 
 export class CandleStick {

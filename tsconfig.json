@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "commonjs",
+    "module": "ESNext",
     "sourceMap": false,
     "noEmitOnError": true,
     "strict": true,
@@ -9,6 +9,12 @@
     "resolveJsonModule":true,
     "esModuleInterop":true,
     "outDir": "build",
-    "moduleResolution":"node",
+    "moduleResolution":"node"
+    
   },
+
+    "ts-node": {
+        "esm": true,
+        "experimentalSpecifierResolution": "node",
+    }
 }

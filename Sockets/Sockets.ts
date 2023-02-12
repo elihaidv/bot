@@ -2,8 +2,6 @@ import { BaseSockets } from "./BaseSockets";
 import { Account, Bot, Key, Order } from "../Models";
 import { BotLogger } from "../Logger";
 
-const Binance = require('node-binance-api');
-
 
 export class Sockets extends BaseSockets {
 

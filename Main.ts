@@ -1,4 +1,5 @@
-const Binance = require('node-binance-api');
+
+import Binance from 'node-binance-api';
 require('dotenv').config({ path: '../.env' })
 const cancelOrders = require('./CancelOrders');
 import { DirectionTrader } from './Workers/DirectionTrader';
@@ -12,11 +13,6 @@ import { WeightAvg } from './Workers/WeightAvg';
 import { DAL } from './DAL';
 import { Periodically } from './Workers/Periodically';
 import { SignaligProcessor, SignalingPlacer } from './Workers/SignaligProcessor';
-const express = require('express')
-var bodyParser = require('body-parser')
-var https = require('https');
-var http = require('http');
-var fs = require('fs');
 import { TelegramClient } from "telegram";
 import { StringSession } from "telegram/sessions";
 import { NewMessage } from "telegram/events";
@@ -34,8 +30,8 @@ let bots = new Array<Bot>();
 
 async function run() {
 
-  Binance().exchangeInfo().then(data => exchangeInfo = data)
-  Binance().futuresExchangeInfo().then(data => {
+  new Binance().exchangeInfo().then(data => exchangeInfo = data)
+  new Binance().futuresExchangeInfo().then(data => {
     futuresExchangeInfo = data
     SignaligProcessor.instance.futuresExchangeInfo = data
     console.log("futuresExchangeInfo loaded")

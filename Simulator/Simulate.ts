@@ -10,12 +10,12 @@ import { env, exit } from "process";
 import { DAL } from "../DALSimulation";
 import { Periodically } from "../Workers/Periodically";
 import exchangeInfo from './exchangeInfo.json'
-
-const fetch = require('node-fetch');
+import fetch from "node-fetch";
 import { OneStep } from "../Workers/OneStep";
 
+import Binance from 'node-binance-api';
 
-const Binance = require('node-binance-api');
+
 import { OrderPlacer } from "../Workers/PlaceOrders";
 
 env.GOOGLE_APPLICATION_CREDENTIALS = "trading-cloud.json"
@@ -25,7 +25,7 @@ env.IS_SIMULATION = "true"
 let dataManager: DataManager
 export async function run(simulationId: string, variation: string | number, startStr: string, endStr: string) {
 
-  const simulation = await fetch(`https://itamars.live/api/simulations/${simulationId}?vars=${variation}`, {
+  const simulation:any = await fetch(`https://itamars.live/api/simulations/${simulationId}?vars=${variation}`, {
     headers: {
       "API-KEY": "WkqrHeuts2mIOJHMcxoK",
       "Accept": "application/json"
@@ -52,14 +52,14 @@ export async function run(simulationId: string, variation: string | number, star
 
   dataManager.setExchangeInfo(bots[0].isFuture ?
     exchangeInfo :
-    await Binance({ 'family': 4 }).exchangeInfo())
+    await new Binance({ 'family': 4 }).exchangeInfo())
 
 
   dataManager.dal.init(dataManager, simulationId, startStr, endStr)
 
   const maxLongSMA = Math.max(...bots.map(b => b.longSMA))
   const start = new Date(startStr).getTime() - (maxLongSMA * 15 * 60 * 1000)
-  const end = Math.min(new Date(endStr).getTime(), new Date().getTime() - SECONDS_IN_DAY * 1000 * 2)
+  const end = new Date(endStr).getTime()
   let endChunk = Math.max(Math.min(end, start + MIN_CHART_SIZE * 1000), start + maxLongSMA * 15 * 60 * 1000)
 
   dataManager.minHistoryCandles = maxLongSMA
@@ -88,7 +88,6 @@ export async function run(simulationId: string, variation: string | number, star
       await dataManager.fetchAllCharts(startChunk, endChunk)
       dataManager.currentCandle = 0
       t = dataManager.chart[dataManager.currentCandle]
-      console.log("new chunk" + new Date(t.time))
       if (!t) {
         break;
       }

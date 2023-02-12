@@ -1,6 +1,6 @@
 import { Account, Bot, Key, Order } from "../Models";
 
-const Binance = require('node-binance-api');
+import Binance from 'node-binance-api';
 
 
 export abstract class BaseSockets {
@@ -12,7 +12,7 @@ export abstract class BaseSockets {
     pricesQuarter = {}
     accounts = new Map<string, Account>();
 
-    binance = Binance().options({})
+    binance = new Binance().options({})
 
 
 
@@ -59,7 +59,7 @@ export abstract class BaseSockets {
                 const keyFound = keys.find(kk => kk._id.toString() == k) as Key
 
                 this.accounts[k] = new Account(
-                    Binance().options({
+                    new Binance().options({
                         APIKEY: keyFound.public,
                         APISECRET: keyFound.secret
                     }))

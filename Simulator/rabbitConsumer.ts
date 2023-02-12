@@ -1,7 +1,7 @@
 import { run } from "./Simulate";
 import fetch from 'node-fetch';
 
-var amqp = require('amqplib/callback_api');
+import amqp from 'amqplib/callback_api';
 let lastSim: any = {}
 let extChannel: any
 

@@ -25,7 +25,7 @@ env.IS_SIMULATION = "true"
 let dataManager: DataManager
 export async function run(simulationId: string, variation: string | number, startStr: string, endStr: string) {
 
-  const simulation:any = await fetch(`https://itamars.live/api/simulations/${simulationId}?vars=${variation}`, {
+  const simulation: any = await fetch(`https://itamars.live/api/simulations/${simulationId}?vars=${variation}`, {
     headers: {
       "API-KEY": "WkqrHeuts2mIOJHMcxoK",
       "Accept": "application/json"
@@ -76,7 +76,8 @@ export async function run(simulationId: string, variation: string | number, star
 
     let botsToPlace: Bot[] = [];
 
-    const ordersToFill = dataManager.checkOrder(dataManager.openOrders)
+
+    let ordersToFill = dataManager.checkOrder(dataManager.openOrders)
 
     t = dataManager.chart[dataManager.currentCandle]
     if (!t) {
@@ -93,8 +94,16 @@ export async function run(simulationId: string, variation: string | number, star
       }
     }
 
-
     dataManager.hasMoney(t)
+
+    botsToPlace = bots.filter(b => {
+      if (b.lequided) {
+        b.lequided = false
+        ordersToFill = ordersToFill.filter(o => o.bot != b)
+        return true
+      }
+    })
+
 
     if (ordersToFill.length) {
       ordersToFill.forEach(o => {
@@ -129,8 +138,8 @@ export async function run(simulationId: string, variation: string | number, star
   if (!dataManager.chart[dataManager.currentCandle]) {
     dataManager.currentCandle = dataManager.chart.length - 1
   }
-  dataManager.closePosition();
-  bots.forEach(b =>  console.log("Profit: " + b.profitNum + " Variant: " + b.variation ))
+  bots.forEach(dataManager.closePosition);
+  bots.forEach(b => console.log("Profit: " + b.profitNum + " Variant: " + b.variation))
   // console.log("Profit: " + dataManager.profit)
   await bots.map(b => dataManager.dal.endTest(b))
 

@@ -510,7 +510,7 @@ export class DataManager {
 
     }
 
-    closePosition() {
+    closePosition(bot:Bot) {
         for (let i = 0; i < this.bots.length; i++) {
             const bot = this.bots[i];
             const price = this.chart[this.currentCandle].close

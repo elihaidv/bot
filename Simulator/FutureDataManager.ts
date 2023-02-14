@@ -81,10 +81,11 @@ export class FutureDataManager extends DataManager {
         this.openOrders = this.openOrders.filter(o => o.orderId != order.orderId)
     }
 
-    closePosition() {
+    closePosition(bot:Bot) {
         this.orderexecute(Object.assign(new Order(), {
+            bot: bot,
             closePosition: true,
-            price: this.chart[this.chart.length - 1].close,
+            price: this.chart[this.currentCandle].close,
             type: "STOP_MARKET",
         }), this.chart[this.chart.length - 1]);
 
@@ -94,10 +95,17 @@ export class FutureDataManager extends DataManager {
         for (const bot of this.bots) {
             const pos = bot.binance!.positions[this.PAIR + bot.positionSide()]
             const profit = (t.close - pos.positionEntry) * pos.positionAmount
-            if (-profit > bot.binance!.balance[bot.coin2]) {
+            bot.lequided = -profit > bot.binance!.balance[bot.coin2]
+            if (bot.lequided) {
                 this.dal.logStep({ "type": "😰Liquid", low: t.close, priority: 10 }, bot)
                 bot.binance!.balance[bot.coin2] = bot.binance!.balance.backup * (1 - bot.backupPrecent)
                 bot.binance!.balance.backup *= bot.backupPrecent
+
+                pos.positionAmount = 0
+                pos.positionEntry = 0
+                console.log("😰Liquid")
+                bot.binance!.orders[this.PAIR] = [new Order()]
+                this.openOrders = this.openOrders.filter(o => o.bot != bot)
             }
         }
 

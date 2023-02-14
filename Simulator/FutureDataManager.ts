@@ -34,6 +34,12 @@ export class FutureDataManager extends DataManager {
             console.log("Closing position with profit of: " + (gain / bot.binance!.balance[bot.coin2] * 100).toFixed() + "%")
             this.dal.logStep({ type: 'Close Position', priority: 5 }, bot)
             bot.binance!.orders[this.PAIR] = []
+
+            if (bot.backupPrecent > 0) {
+                bot.binance!.balance.backup += gain * bot.backupPrecent
+                gain *= (1 - bot.backupPrecent)
+            }
+
         } else if (qu * pos.positionAmount < 0) {
             gain = (pos.positionEntry - order.price) * order.executedQty * (order.side == "BUY" ? 1 : -1)
             pos.positionAmount += qu
@@ -52,8 +58,6 @@ export class FutureDataManager extends DataManager {
         console.log("Psition size: " + pos.positionAmount)
         console.log("Variation: " + bot.variation + " Profit: " + (bot.profitNum / 100).toFixed(2) + "% Date: " + new Date(parseInt(t.time)))
 
-
-
         this.dal.logStep({
             type: order.type == "STOP_MARKET" ? "StopLoose" : 'Execute',
             side: order.side,
@@ -66,7 +70,7 @@ export class FutureDataManager extends DataManager {
             profit: (bot.profitNum / 100).toFixed(0) + "%",
 
             balanceSecond: (bot.binance!.balance[bot.coin2]).toFixed(2),
-            balanceFirst: (bot.binance!.balance[bot.coin1]).toFixed(2),
+            balanceFirst: bot.binance!.balance.backup.toFixed(2),
             priority: 1
         }, bot)
 
@@ -94,6 +98,9 @@ export class FutureDataManager extends DataManager {
             if (bot.lequided) {
                 this.dal.logStep({ "type": "😰Liquid", low: t.close, priority: 10 }, bot)
             }
+            bot.binance!.balance[bot.coin2] = bot.binance!.balance.buckup * (1 - bot.backupPrecent)
+            bot.binance!.balance.buckup *= bot.backupPrecent
         }
+
     }
 }

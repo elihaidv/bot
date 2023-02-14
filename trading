@@ -1,5 +1,5 @@
-const Binance = require("binance-api-node")
-const fs = require('fs');
+import Binance from "node-binance-api";
+import fs from "fs";
 
 const binance = new Binance()
 

@@ -537,6 +537,7 @@ export class DataManager {
                 available: 0,
                 total: 0
             }
+            bot.binance.balance.backup = 0
 
             bot.binance.orders = [{}]
             bot.binance.positions = []

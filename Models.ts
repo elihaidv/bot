@@ -63,6 +63,7 @@ export class Bot {
   profitNum: number = 0
   lequided: boolean = false
   variation: number = 0
+  backupPrecent: number = 0
 
   id(): String { return this._id.toString() }
 

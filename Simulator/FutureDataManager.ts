@@ -97,9 +97,9 @@ export class FutureDataManager extends DataManager {
             bot.lequided = -profit > bot.binance!.balance[bot.coin2]
             if (bot.lequided) {
                 this.dal.logStep({ "type": "😰Liquid", low: t.close, priority: 10 }, bot)
+                bot.binance!.balance[bot.coin2] = bot.binance!.balance.buckup * (1 - bot.backupPrecent)
+                bot.binance!.balance.buckup *= bot.backupPrecent
             }
-            bot.binance!.balance[bot.coin2] = bot.binance!.balance.buckup * (1 - bot.backupPrecent)
-            bot.binance!.balance.buckup *= bot.backupPrecent
         }
 
     }

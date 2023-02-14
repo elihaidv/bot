@@ -94,11 +94,10 @@ export class FutureDataManager extends DataManager {
         for (const bot of this.bots) {
             const pos = bot.binance!.positions[this.PAIR + bot.positionSide()]
             const profit = (t.close - pos.positionEntry) * pos.positionAmount
-            bot.lequided = -profit > bot.binance!.balance[bot.coin2]
-            if (bot.lequided) {
+            if (-profit > bot.binance!.balance[bot.coin2]) {
                 this.dal.logStep({ "type": "😰Liquid", low: t.close, priority: 10 }, bot)
-                bot.binance!.balance[bot.coin2] = bot.binance!.balance.buckup * (1 - bot.backupPrecent)
-                bot.binance!.balance.buckup *= bot.backupPrecent
+                bot.binance!.balance[bot.coin2] = bot.binance!.balance.backup * (1 - bot.backupPrecent)
+                bot.binance!.balance.backup *= bot.backupPrecent
             }
         }
 

@@ -143,11 +143,11 @@ export class DataManager {
                 console.log("File exists in bucket", dateString, unit)
                 return res
             }
-            const bytes = await fetch(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip`)
+            const bytes = await this.fetchRetry(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip`)
                 .then(r => r.buffer())
             const fileChecksum = crypto.createHash('sha256').update(bytes).digest("hex")
 
-            const checksum = await fetch(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip.CHECKSUM`)
+            const checksum = await this.fetchRetry(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip.CHECKSUM`)
                 .then(res => res.text())
                 .then(text => text.split(" ")[0])
 

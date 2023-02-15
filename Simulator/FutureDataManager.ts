@@ -37,6 +37,7 @@ export class FutureDataManager extends DataManager {
 
             if (bot.backupPrecent > 0) {
                 bot.binance!.balance.backup += gain * bot.backupPrecent
+                bot.profitNum += gain * bot.backupPrecent
                 gain *= (1 - bot.backupPrecent)
             }
 
@@ -98,6 +99,7 @@ export class FutureDataManager extends DataManager {
             bot.lequided = -profit > bot.binance!.balance[bot.coin2]
             if (bot.lequided) {
                 this.dal.logStep({ "type": "😰Liquid", low: t.close, priority: 10 }, bot)
+                bot.profitNum = bot.binance!.balance.backup - 10000
                 bot.binance!.balance[bot.coin2] = bot.binance!.balance.backup * (1 - bot.backupPrecent)
                 bot.binance!.balance.backup *= bot.backupPrecent
 
@@ -106,6 +108,7 @@ export class FutureDataManager extends DataManager {
                 console.log("😰Liquid")
                 bot.binance!.orders[this.PAIR] = [new Order()]
                 this.openOrders = this.openOrders.filter(o => o.bot != bot)
+
             }
         }
 

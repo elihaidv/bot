@@ -200,8 +200,7 @@ export class DataManager {
     }
 
     processFile = (unit, dateString, date,) => this.fetchFile(unit, dateString)
-        .then(d => d.map(([time, high, low, close]) =>
-            (Object.assign(new CandleStick(), { time, high, low, close }))))
+        .then(d => d.map(([time, high, low, close]) => new CandleStick( time, high, low, close )))
         .then(d => this.buildCharts(d, date))
         .then(d => this.connectCharts(d));
 
@@ -270,12 +269,12 @@ export class DataManager {
 
 
                 if (i && i % SECOUNDS_IN_UNIT[unit] == 0) {
-                    charts[unit].push(Object.assign(new CandleStick(), {
-                        time: candle.time - SECOUNDS_IN_UNIT[unit] * 1000 + 1000,
-                        high: highers[unit],
-                        low: lowers[unit],
-                        close: candle.close
-                    }))
+                    charts[unit].push(new CandleStick(
+                        candle.time - SECOUNDS_IN_UNIT[unit] * 1000 + 1000,
+                        highers[unit],
+                        lowers[unit],
+                        candle.close
+                    ))
                     highers[unit] = 0
                     lowers[unit] = Infinity
                 }
@@ -633,6 +632,13 @@ export class CandleStick {
     children: CandleStick[] = [];
     sma; longSMA;
     lastChild = false
+
+    constructor(time?, high?, low?, close?) {
+        this.time = time;
+        this.high = high;
+        this.low = low;
+        this.close = close;
+    }
 
     // get date() {
     //     return new Date(this.time)

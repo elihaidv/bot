@@ -30,7 +30,7 @@ export class FutureTrader extends BasePlacer {
             bot,
         })
 
-        this.parseAllValues()
+        // this.parseAllValues()
 
         this.calculatePrice()
 

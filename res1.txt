@@ -1,0 +1,898 @@
+Statistical profiling result from build/isolate-0x6915390-370590-v8.log, (496691 ticks, 63 unaccounted, 0 excluded).
+
+ [Shared libraries]:
+   ticks  total  nonlib   name
+  394385   79.4%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+  21751    4.4%          /usr/lib/x86_64-linux-gnu/libc-2.31.so
+    522    0.1%          /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.28
+    241    0.0%          [vdso]
+
+ [JavaScript]:
+   ticks  total  nonlib   name
+   2504    0.5%    3.1%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:140:54
+   2429    0.5%    3.0%  LazyCompile: *buildCharts file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:200:16
+   2025    0.4%    2.5%  LazyCompile: *orderexecute file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/FutureDataManager.js:14:17
+   2024    0.4%    2.5%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:114:58
+   1905    0.4%    2.4%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:90:58
+   1805    0.4%    2.3%  LazyCompile: *connectCharts file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:310:18
+   1406    0.3%    1.8%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:37:58
+   1190    0.2%    1.5%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+   1117    0.2%    1.4%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:97:30
+   1083    0.2%    1.4%  LazyCompile: *buildHistory file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:78:17
+    779    0.2%    1.0%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:123:58
+    718    0.1%    0.9%  LazyCompile: *checkOrder file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:341:15
+    645    0.1%    0.8%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:65:26
+    640    0.1%    0.8%  LazyCompile: *makeid file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:110:11
+    622    0.1%    0.8%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:181:58
+    543    0.1%    0.7%  LazyCompile: *writeGeneric node:internal/stream_base_commons:151:22
+    509    0.1%    0.6%  LazyCompile: *inspect node:internal/util/inspect:286:17
+    486    0.1%    0.6%  LazyCompile: *formatWithOptionsInternal node:internal/util/inspect:1891:35
+    485    0.1%    0.6%  LazyCompile: *value node:internal/console/constructor:257:20
+    437    0.1%    0.5%  LazyCompile: *paddEmptyCandles file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:236:21
+    428    0.1%    0.5%  LazyCompile: *hasMoney file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/FutureDataManager.js:74:13
+    425    0.1%    0.5%  LazyCompile: *averagePrice file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:468:17
+    416    0.1%    0.5%  LazyCompile: *stylizeWithColor node:internal/util/inspect:521:26
+    401    0.1%    0.5%  LazyCompile: *__rest file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:10:48
+    380    0.1%    0.5%  LazyCompile: *Socket._write node:net:806:35
+    370    0.1%    0.5%  LazyCompile: *log node:internal/console/constructor:358:6
+    338    0.1%    0.4%  LazyCompile: *getColorDepth node:internal/tty:106:23
+    325    0.1%    0.4%  LazyCompile: *averagePriceQuarter file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:472:24
+    314    0.1%    0.4%  LazyCompile: *_write node:internal/streams/writable:284:16
+    304    0.1%    0.4%  LazyCompile: *update /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/@google-cloud+storage@6.9.3/node_modules/@google-cloud/storage/build/src/crc32c.js:112:11
+    292    0.1%    0.4%  LazyCompile: *formatRaw node:internal/util/inspect:796:19
+    265    0.1%    0.3%  LazyCompile: *get node:internal/console/constructor:202:14
+    260    0.1%    0.3%  LazyCompile: *Readable.on node:internal/streams/readable:898:33
+    242    0.0%    0.3%  LazyCompile: *formatWithOptions node:internal/util/inspect:1883:27
+    240    0.0%    0.3%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:21:68
+    213    0.0%    0.3%  LazyCompile: *Order file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Models.js:38:16
+    202    0.0%    0.3%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:3:46
+    184    0.0%    0.2%  LazyCompile: *get node:internal/bootstrap/pre_execution:314:8
+    182    0.0%    0.2%  LazyCompile: *fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:4:27
+    181    0.0%    0.2%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:3:46
+    157    0.0%    0.2%  LazyCompile: *ticker file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:503:11
+    148    0.0%    0.2%  LazyCompile: *Utils.crc32 /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/adm-zip@0.5.10/node_modules/adm-zip/util/utils.js:181:24
+    144    0.0%    0.2%  LazyCompile: *BasePlacer.roundPrice file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:24:27
+    118    0.0%    0.1%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:225:58
+    117    0.0%    0.1%  LazyCompile: *fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:4:27
+    109    0.0%    0.1%  LazyCompile: *isEmptyObject file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:237:18
+    108    0.0%    0.1%  LazyCompile: *fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:4:27
+    107    0.0%    0.1%  LazyCompile: *setDirection file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:98:17
+    105    0.0%    0.1%  LazyCompile: *placeSell file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:179:14
+     95    0.0%    0.1%  LazyCompile: *positionSide file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Models.js:33:17
+     89    0.0%    0.1%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+     86    0.0%    0.1%  LazyCompile: *writeOrBuffer node:internal/streams/writable:366:23
+     80    0.0%    0.1%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:27:26
+     78    0.0%    0.1%  LazyCompile: *get node:internal/util/inspect:409:8
+     64    0.0%    0.1%  LazyCompile: *onwrite node:internal/streams/writable:426:17
+     59    0.0%    0.1%  LazyCompile: *sub file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:108:8
+     55    0.0%    0.1%  LazyCompile: *__awaiter file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:1:54
+     54    0.0%    0.1%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:3:46
+     53    0.0%    0.1%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:40:26
+     36    0.0%    0.0%  LazyCompile: *__awaiter file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:1:54
+     35    0.0%    0.0%  LazyCompile: *<anonymous> node:internal/validators:236:42
+     33    0.0%    0.0%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:38:26
+     25    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+     24    0.0%    0.0%  LazyCompile: *processTicksAndRejections node:internal/process/task_queues:68:35
+     23    0.0%    0.0%  LazyCompile: *nextTick node:internal/process/task_queues:104:18
+     21    0.0%    0.0%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:46:56
+     21    0.0%    0.0%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:41:29
+     19    0.0%    0.0%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:3:46
+     17    0.0%    0.0%  LazyCompile: *resolve node:path:1091:10
+     17    0.0%    0.0%  LazyCompile: *Readable.read node:internal/streams/readable:402:35
+     16    0.0%    0.0%  LazyCompile: *step file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:6:22
+     16    0.0%    0.0%  LazyCompile: *emit node:events:340:44
+     15    0.0%    0.0%  LazyCompile: *<anonymous> node:internal/console/constructor:338:10
+     15    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:114:58
+     14    0.0%    0.0%  LazyCompile: *afterWrite node:internal/streams/writable:488:20
+     14    0.0%    0.0%  LazyCompile: *Order.isFirst file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Models.js:40:24
+     14    0.0%    0.0%  LazyCompile: *BasePlacer file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:15:16
+     14    0.0%    0.0%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:360:51
+     13    0.0%    0.0%  LazyCompile: *extend /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/extend@3.0.2/node_modules/extend/index.js:65:33
+     13    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:3:46
+     12    0.0%    0.0%  LazyCompile: *_unrefTimer node:net:417:52
+     11    0.0%    0.0%  LazyCompile: *get node:internal/streams/duplex:100:8
+     11    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:3:46
+     11    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:3:46
+     10    0.0%    0.0%  LazyCompile: *placeSellFromBuy file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:223:21
+     10    0.0%    0.0%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:356:37
+     10    0.0%    0.0%  Function: ^fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:4:27
+     10    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:3:46
+      9    0.0%    0.0%  LazyCompile: *place_order file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:113:16
+      9    0.0%    0.0%  LazyCompile: *parseAllValues file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:198:19
+      9    0.0%    0.0%  LazyCompile: *once node:events:528:44
+      9    0.0%    0.0%  LazyCompile: *addListener node:events:486:58
+      9    0.0%    0.0%  LazyCompile: *Readable.removeListener node:internal/streams/readable:928:45
+      9    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:225:58
+      8    0.0%    0.0%  LazyCompile: *noop node:internal/util/debuglog:47:14
+      8    0.0%    0.0%  LazyCompile: *get node:net:1706:6
+      8    0.0%    0.0%  Function: ^afterWriteDispatched node:internal/stream_base_commons:159:30
+      8    0.0%    0.0%  Function: ^Socket._writeGeneric node:net:769:42
+      7    0.0%    0.0%  LazyCompile: *calculateSmas file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:276:18
+      7    0.0%    0.0%  LazyCompile: *Socket._writeGeneric node:net:769:42
+      7    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:181:58
+      6    0.0%    0.0%  LazyCompile: *step file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:6:22
+      6    0.0%    0.0%  LazyCompile: *normalizeString node:path:66:25
+      6    0.0%    0.0%  LazyCompile: *addChunk node:internal/streams/readable:312:18
+      6    0.0%    0.0%  LazyCompile: *Writable.write node:internal/streams/writable:334:36
+      6    0.0%    0.0%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:58:46
+      6    0.0%    0.0%  Function: ^buildHistory file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:78:17
+      6    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:2:80
+      6    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:58:46
+      5    0.0%    0.0%  LazyCompile: *readableAddChunk node:internal/streams/readable:242:26
+      5    0.0%    0.0%  LazyCompile: *encodeStr node:internal/querystring:45:19
+      5    0.0%    0.0%  LazyCompile: *afterWriteTick node:internal/streams/writable:483:24
+      5    0.0%    0.0%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:2:80
+      5    0.0%    0.0%  Function: ^BasePlacer.countDecimals file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:29:39
+      5    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+      4    0.0%    0.0%  RegExp: [^\t\x20-\x7e\x80-\xff]
+      4    0.0%    0.0%  LazyCompile: *storeHeader node:_http_outgoing:517:21
+      4    0.0%    0.0%  LazyCompile: *log file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Logger.js:15:8
+      4    0.0%    0.0%  LazyCompile: *format node:url:610:39
+      4    0.0%    0.0%  LazyCompile: *_addListener node:events:418:22
+      4    0.0%    0.0%  LazyCompile: *Headers /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/node-fetch@2.6.7/node_modules/node-fetch/lib/index.js:714:13
+      4    0.0%    0.0%  LazyCompile: *FutureTrader file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:26:16
+      4    0.0%    0.0%  LazyCompile: *CandleStick file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:532:16
+      4    0.0%    0.0%  LazyCompile: *BasePlacer.countDecimals file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:29:39
+      4    0.0%    0.0%  Function: ^step file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:6:22
+      4    0.0%    0.0%  Function: ^checkOrder file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:341:15
+      4    0.0%    0.0%  Function: ^BasePlacer.roundPrice file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:24:27
+      3    0.0%    0.0%  RegExp: ^((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])$
+      3    0.0%    0.0%  RegExp: ^((?:(?:[0-9a-fA-F]{1,4}):){7}(?:(?:[0-9a-fA-F]{1,4})|:)|(?:(?:[0-9a-fA-F]{1,4}):){6}(?:((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|:(?:[0-9a-fA-F]{1,4})|:)|(?:(?:[0-9a-fA-F]{1,4}):){5}(?::((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|(:(?:[0-9a-fA-F]{1,4})){1,2}|:)|(?:(?:[0-9a-fA-F]{1,4}):){4}(?:(:(?:[0-9a-fA-F]{1,4})){0,1}:((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|(:(?:[0-9a-fA-F]{1,4})){1,3}|:)|(?:(?:[0-9a-fA-F]{1,4}):){3}(?:(:(?:[0-9a-fA-F]{1,4})){0,2}:((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|(:(?:[0-9a-fA-F]{1,4})){1,4}|:)|(?:(?:[0-9a-fA-F]{1,4}):){2}(?:(:(?:[0-9a-fA-F]{1,4})){0,3}:((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|(:(?:[0-9a-fA-F]{1,4})){1,5}|:)|(?:(?:[0-9a-fA-F]{1,4}):){1}(?:(:(?:[0-9a-fA-F]{1,4})){0,4}:((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|(:(?:[0-9a-fA-F]{1,4})){1,6}|:)|(?::((?::(?:[0-9a-fA-F]{1,4})){0,5}:((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])|(?::(?:[0-9a-fA-F]{1,4})){1,7}|:)))(%[0-9a-zA-Z-.:]{1,})?$
+      3    0.0%    0.0%  RegExp: [^\t\x20-\x7e\x80-\xff] {1}
+      3    0.0%    0.0%  LazyCompile: *weightAverage file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:109:18
+      3    0.0%    0.0%  LazyCompile: *step file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:6:22
+      3    0.0%    0.0%  LazyCompile: *remove node:internal/linkedlist:15:16
+      3    0.0%    0.0%  LazyCompile: *processPromiseRejections node:internal/process/promises:203:34
+      3    0.0%    0.0%  LazyCompile: *onceWrapper node:events:504:21
+      3    0.0%    0.0%  LazyCompile: *listenerCount node:events:722:23
+      3    0.0%    0.0%  LazyCompile: *getEncodingOps node:buffer:678:24
+      3    0.0%    0.0%  LazyCompile: *get isQuiet file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:152:16
+      3    0.0%    0.0%  LazyCompile: *createWriteWrap node:internal/stream_base_commons:113:25
+      3    0.0%    0.0%  LazyCompile: *createAsyncIterator node:internal/streams/readable:1111:36
+      3    0.0%    0.0%  LazyCompile: *checkListener node:events:127:23
+      3    0.0%    0.0%  LazyCompile: *checkInvalidHeaderChar node:_http_common:232:32
+      3    0.0%    0.0%  LazyCompile: *Transform._write node:internal/streams/transform:178:38
+      3    0.0%    0.0%  LazyCompile: *Socket.read node:net:639:33
+      3    0.0%    0.0%  LazyCompile: *Readable.push node:internal/streams/readable:233:35
+      3    0.0%    0.0%  LazyCompile: *Readable node:internal/streams/readable:186:18
+      3    0.0%    0.0%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/FutureDataManager.js:64:50
+      3    0.0%    0.0%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:43:95
+      3    0.0%    0.0%  Function: ^writeOrBuffer node:internal/streams/writable:366:23
+      3    0.0%    0.0%  Function: ^setDirection file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:98:17
+      3    0.0%    0.0%  Function: ^pipelineImpl node:internal/streams/pipeline:172:22
+      3    0.0%    0.0%  Function: ^parseAllValues file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:198:19
+      3    0.0%    0.0%  Function: ^onwrite node:internal/streams/writable:426:17
+      3    0.0%    0.0%  Function: ^isAbsolute node:path:1156:13
+      3    0.0%    0.0%  Function: ^Timeout node:internal/timers:167:17
+      3    0.0%    0.0%  Function: ^Socket.read node:net:639:33
+      3    0.0%    0.0%  Function: ^OutgoingMessage node:_http_outgoing:97:25
+      3    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:37:58
+      2    0.0%    0.0%  RegExp: ^[a-zA-Z][a-zA-Z\d+\-.]*:
+      2    0.0%    0.0%  RegExp: ^[\^_`a-zA-Z\-0-9!#$%&'*+.|~]+$
+      2    0.0%    0.0%  RegExp: [^\^_`a-zA-Z\-0-9!#$%&'*+.|~]
+      2    0.0%    0.0%  LazyCompile: *shift node:internal/streams/buffer_list:38:8
+      2    0.0%    0.0%  LazyCompile: *removeListener node:events:557:28
+      2    0.0%    0.0%  LazyCompile: *popAsyncContext node:internal/async_hooks:545:25
+      2    0.0%    0.0%  LazyCompile: *placeBuy file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:121:13
+      2    0.0%    0.0%  LazyCompile: *parserOnBody node:_http_common:131:22
+      2    0.0%    0.0%  LazyCompile: *parseParams node:internal/url:1078:21
+      2    0.0%    0.0%  LazyCompile: *parse node:url:183:37
+      2    0.0%    0.0%  LazyCompile: *onStreamRead node:internal/stream_base_commons:171:22
+      2    0.0%    0.0%  LazyCompile: *isUint8Array node:internal/util/types:13:22
+      2    0.0%    0.0%  LazyCompile: *insert node:internal/timers:350:16
+      2    0.0%    0.0%  LazyCompile: *initAsyncResource node:internal/timers:157:27
+      2    0.0%    0.0%  LazyCompile: *getDefaultTriggerAsyncId node:internal/async_hooks:433:34
+      2    0.0%    0.0%  LazyCompile: *emitReadable_ node:internal/streams/readable:597:23
+      2    0.0%    0.0%  LazyCompile: *emitBeforeScript node:internal/async_hooks:501:26
+      2    0.0%    0.0%  LazyCompile: *clearBuffer node:internal/streams/writable:530:21
+      2    0.0%    0.0%  LazyCompile: *arrayClone node:events:747:20
+      2    0.0%    0.0%  LazyCompile: *_writeRaw node:_http_outgoing:344:19
+      2    0.0%    0.0%  LazyCompile: *_getMaxListeners node:events:271:26
+      2    0.0%    0.0%  LazyCompile: *Writable node:internal/streams/writable:219:18
+      2    0.0%    0.0%  LazyCompile: *URLSearchParams node:internal/url:182:14
+      2    0.0%    0.0%  LazyCompile: *ReadableState node:internal/streams/readable:83:23
+      2    0.0%    0.0%  LazyCompile: *FastBuffer node:internal/buffer:958:14
+      2    0.0%    0.0%  LazyCompile: *BasePlacer.truncDigits file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:25:37
+      2    0.0%    0.0%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:39:26
+      2    0.0%    0.0%  Function: ^writeGeneric node:internal/stream_base_commons:151:22
+      2    0.0%    0.0%  Function: ^validateString node:internal/validators:118:24
+      2    0.0%    0.0%  Function: ^slice node:buffer:1115:40
+      2    0.0%    0.0%  Function: ^sign /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/jwa@2.0.0/node_modules/jwa/index.js:146:22
+      2    0.0%    0.0%  Function: ^setTimeout node:timers:140:20
+      2    0.0%    0.0%  Function: ^setPosition node:internal/timers:411:21
+      2    0.0%    0.0%  Function: ^placeSell file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:179:14
+      2    0.0%    0.0%  Function: ^place file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:35:10
+      2    0.0%    0.0%  Function: ^orderexecute file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/FutureDataManager.js:14:17
+      2    0.0%    0.0%  Function: ^onWriteComplete node:internal/stream_base_commons:80:25
+      2    0.0%    0.0%  Function: ^logStep file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:89:12
+      2    0.0%    0.0%  Function: ^log file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Logger.js:15:8
+      2    0.0%    0.0%  Function: ^handleWriteReq node:internal/stream_base_commons:45:24
+      2    0.0%    0.0%  Function: ^getAll node:internal/url:334:9
+      2    0.0%    0.0%  Function: ^get node:internal/bootstrap/pre_execution:326:8
+      2    0.0%    0.0%  Function: ^fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:4:27
+      2    0.0%    0.0%  Function: ^fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:4:27
+      2    0.0%    0.0%  Function: ^formatWithOptions node:internal/util/inspect:1883:27
+      2    0.0%    0.0%  Function: ^formatRaw node:internal/util/inspect:796:19
+      2    0.0%    0.0%  Function: ^endReadableNT node:internal/streams/readable:1333:23
+      2    0.0%    0.0%  Function: ^emitCloseNT node:internal/streams/destroy:133:21
+      2    0.0%    0.0%  Function: ^defaultTriggerAsyncIdScope node:internal/async_hooks:447:36
+      2    0.0%    0.0%  Function: ^consumeBody file:///home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/github.com+guillaume-fr+node-fetch@1bf62ab08dccf7f66f9df66e1819817fe991e60e/node_modules/node-fetch/src/body.js:194:27
+      2    0.0%    0.0%  Function: ^calculateDirection file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:82:23
+      2    0.0%    0.0%  Function: ^append node:internal/linkedlist:29:16
+      2    0.0%    0.0%  Function: ^TLSSocket._init node:_tls_wrap:667:37
+      2    0.0%    0.0%  Function: ^Socket.resume node:net:630:35
+      2    0.0%    0.0%  Function: ^Readable.on node:internal/streams/readable:898:33
+      2    0.0%    0.0%  Function: ^Readable.on /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/readable-stream@3.6.0/node_modules/readable-stream/lib/_stream_readable.js:804:34
+      2    0.0%    0.0%  Function: ^Headers file:///home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/github.com+guillaume-fr+node-fetch@1bf62ab08dccf7f66f9df66e1819817fe991e60e/node_modules/node-fetch/src/headers.js:51:13
+      2    0.0%    0.0%  Function: ^Bucket /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/@google-cloud+storage@6.9.3/node_modules/@google-cloud/storage/build/src/bucket.js:340:16
+      2    0.0%    0.0%  Function: ^BasePlacer.roundQu file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:23:24
+      2    0.0%    0.0%  Function: ^<anonymous> node:internal/url:686:12
+      2    0.0%    0.0%  Function: ^<anonymous> node:internal/event_target:509:20
+      2    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/github.com+guillaume-fr+node-fetch@1bf62ab08dccf7f66f9df66e1819817fe991e60e/node_modules/node-fetch/src/index.js:49:21
+      2    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:140:54
+      2    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:97:30
+      2    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:356:37
+      2    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:90:58
+      1    0.0%    0.0%  RegExp: ^v
+      1    0.0%    0.0%  RegExp: ^[a-z0-9.+-]+:
+      1    0.0%    0.0%  RegExp: ^(RS|PS|ES|HS)(256|384|512)$|^(none)$
+      1    0.0%    0.0%  RegExp: ^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$
+      1    0.0%    0.0%  RegExp: ^((?:@[^/\\%]+\/)?[^./\\%][^/\\%]*)(\/.*)?$
+      1    0.0%    0.0%  RegExp: [^\u0021-\u00ff]
+      1    0.0%    0.0%  RegExp: :[0-9]*$
+      1    0.0%    0.0%  LazyCompile: *step file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:6:22
+      1    0.0%    0.0%  LazyCompile: *spliceOne node:internal/util:394:19
+      1    0.0%    0.0%  LazyCompile: *sort node:internal/url:411:7
+      1    0.0%    0.0%  LazyCompile: *slice node:buffer:1115:40
+      1    0.0%    0.0%  LazyCompile: *realpathSync node:fs:2408:22
+      1    0.0%    0.0%  LazyCompile: *onDestroy node:internal/streams/destroy:80:21
+      1    0.0%    0.0%  LazyCompile: *matchKnownFields node:_http_incoming:234:26
+      1    0.0%    0.0%  LazyCompile: *logStep file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:89:12
+      1    0.0%    0.0%  LazyCompile: *listOnTimeout node:internal/timers:505:25
+      1    0.0%    0.0%  LazyCompile: *isWritableNodeStream node:internal/streams/utils:22:30
+      1    0.0%    0.0%  LazyCompile: *hasHooks node:internal/async_hooks:462:18
+      1    0.0%    0.0%  LazyCompile: *getName node:https:206:43
+      1    0.0%    0.0%  LazyCompile: *get node:internal/streams/writable:784:8
+      1    0.0%    0.0%  LazyCompile: *get node:internal/streams/readable:1163:8
+      1    0.0%    0.0%  LazyCompile: *flow node:internal/streams/readable:1032:14
+      1    0.0%    0.0%  LazyCompile: *find /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/node-fetch@2.6.7/node_modules/node-fetch/lib/index.js:696:14
+      1    0.0%    0.0%  LazyCompile: *eos node:internal/streams/end-of-stream:38:13
+      1    0.0%    0.0%  LazyCompile: *emitCloseNT node:internal/streams/destroy:133:21
+      1    0.0%    0.0%  LazyCompile: *destroy node:internal/streams/destroy:39:17
+      1    0.0%    0.0%  LazyCompile: *_onceWrap node:events:514:19
+      1    0.0%    0.0%  LazyCompile: *Utils.crc32update /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/adm-zip@0.5.10/node_modules/adm-zip/util/utils.js:177:30
+      1    0.0%    0.0%  LazyCompile: *TimersList node:internal/timers:241:20
+      1    0.0%    0.0%  LazyCompile: *Socket.resume node:net:630:35
+      1    0.0%    0.0%  LazyCompile: *Readable.resume node:internal/streams/readable:987:37
+      1    0.0%    0.0%  LazyCompile: *Readable.pipe node:internal/streams/readable:677:35
+      1    0.0%    0.0%  LazyCompile: *Readable.pause node:internal/streams/readable:1021:36
+      1    0.0%    0.0%  LazyCompile: *Module._nodeModulePaths node:internal/modules/cjs/loader:629:37
+      1    0.0%    0.0%  LazyCompile: *C node:internal/deps/cjs-module-lexer/dist/lexer:1:1152
+      1    0.0%    0.0%  LazyCompile: *<anonymous> node:internal/util:440:18
+      1    0.0%    0.0%  LazyCompile: *<anonymous> node:buffer:348:36
+      1    0.0%    0.0%  LazyCompile: *<anonymous> node:_http_outgoing:558:44
+      1    0.0%    0.0%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:82:39
+      1    0.0%    0.0%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:261:71
+      1    0.0%    0.0%  LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:66:26
+      1    0.0%    0.0%  LazyCompile: *<anonymous> /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/@google-cloud+storage@6.9.3/node_modules/@google-cloud/storage/build/src/acl.js:200:43
+      1    0.0%    0.0%  Function: wasm-function[22]
+      1    0.0%    0.0%  Function: wasm-function[15]
+      1    0.0%    0.0%  Function: ^writevGeneric node:internal/stream_base_commons:126:23
+      1    0.0%    0.0%  Function: ^value node:internal/console/constructor:257:20
+      1    0.0%    0.0%  Function: ^validate /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/google-auth-library@8.7.0/node_modules/google-auth-library/build/src/options.js:22:18
+      1    0.0%    0.0%  Function: ^tryFile node:internal/modules/cjs/loader:384:17
+      1    0.0%    0.0%  Function: ^timeout file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:176:17
+      1    0.0%    0.0%  Function: ^stringify node:querystring:228:19
+      1    0.0%    0.0%  Function: ^stringToFlags node:internal/fs/utils:555:23
+      1    0.0%    0.0%  Function: ^step file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:6:22
+      1    0.0%    0.0%  Function: ^step file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:6:22
+      1    0.0%    0.0%  Function: ^stat node:internal/modules/cjs/loader:151:14
+      1    0.0%    0.0%  Function: ^socketOnData node:_http_client:480:22
+      1    0.0%    0.0%  Function: ^shouldUseProxyForURI /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/teeny-request@8.0.2/node_modules/teeny-request/build/src/agents.js:31:30
+      1    0.0%    0.0%  Function: ^setImmediate node:timers:278:22
+      1    0.0%    0.0%  Function: ^setHeader node:_http_outgoing:574:57
+      1    0.0%    0.0%  Function: ^retryRequest /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/retry-request@5.0.2/node_modules/retry-request/index.js:62:22
+      1    0.0%    0.0%  Function: ^resume_ node:internal/streams/readable:1008:17
+      1    0.0%    0.0%  Function: ^resetBuffer node:internal/streams/writable:202:21
+      1    0.0%    0.0%  Function: ^request_ /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/@google-cloud+storage@6.9.3/node_modules/@google-cloud/storage/build/src/nodejs-common/service-object.js:237:13
+      1    0.0%    0.0%  Function: ^removeListener node:events:557:28
+      1    0.0%    0.0%  Function: ^processPromiseRejections node:internal/process/promises:203:34
+      1    0.0%    0.0%  Function: ^placeSellFromBuy file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:223:21
+      1    0.0%    0.0%  Function: ^pipeOnDrainFunctionResult node:internal/streams/readable:840:44
+      1    0.0%    0.0%  Function: ^pause node:internal/streams/readable:748:17
+      1    0.0%    0.0%  Function: ^parserOnIncomingClient node:_http_client:558:32
+      1    0.0%    0.0%  Function: ^parserOnHeadersComplete node:_http_common:77:33
+      1    0.0%    0.0%  Function: ^onend node:internal/streams/readable:714:17
+      1    0.0%    0.0%  Function: ^onend node:internal/streams/end-of-stream:93:17
+      1    0.0%    0.0%  Function: ^ondata node:internal/streams/readable:775:18
+      1    0.0%    0.0%  Function: ^onStreamRead node:internal/stream_base_commons:171:22
+      1    0.0%    0.0%  Function: ^onParseComplete node:internal/url:532:25
+      1    0.0%    0.0%  Function: ^onDestroy node:internal/streams/destroy:80:21
+      1    0.0%    0.0%  Function: ^onConnectSecure node:_tls_wrap:1516:25
+      1    0.0%    0.0%  Function: ^normalizeArgs node:net:217:23
+      1    0.0%    0.0%  Function: ^nop node:_http_outgoing:86:13
+      1    0.0%    0.0%  Function: ^noop node:internal/util/debuglog:47:14
+      1    0.0%    0.0%  Function: ^nextTick node:internal/process/task_queues:104:18
+      1    0.0%    0.0%  Function: ^next node:internal/streams/readable:1114:16
+      1    0.0%    0.0%  Function: ^makeCallback node:fs:185:22
+      1    0.0%    0.0%  Function: ^listenerCount node:events:722:23
+      1    0.0%    0.0%  Function: ^listOnTimeout node:internal/timers:505:25
+      1    0.0%    0.0%  Function: ^isWritableNodeStream node:internal/streams/utils:22:30
+      1    0.0%    0.0%  Function: ^isRequest /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/node-fetch@2.6.7/node_modules/node-fetch/lib/index.js:1179:19
+      1    0.0%    0.0%  Function: ^isReadable node:internal/streams/utils:113:20
+      1    0.0%    0.0%  Function: ^isIterable node:internal/streams/utils:52:20
+      1    0.0%    0.0%  Function: ^insert node:internal/timers:350:16
+      1    0.0%    0.0%  Function: ^initHooksExist node:internal/async_hooks:470:24
+      1    0.0%    0.0%  Function: ^initAsyncResource node:internal/timers:157:27
+      1    0.0%    0.0%  Function: ^getTotalBytes file:///home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/github.com+guillaume-fr+node-fetch@1bf62ab08dccf7f66f9df66e1819817fe991e60e/node_modules/node-fetch/src/body.js:355:30
+      1    0.0%    0.0%  Function: ^getStdout node:internal/bootstrap/switches/is_main_thread:121:19
+      1    0.0%    0.0%  Function: ^getOptions node:internal/fs/utils:314:20
+      1    0.0%    0.0%  Function: ^getOptionValue node:internal/options:39:24
+      1    0.0%    0.0%  Function: ^getNodeRequestOptions /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/node-fetch@2.6.7/node_modules/node-fetch/lib/index.js:1316:31
+      1    0.0%    0.0%  Function: ^getEncodingOps node:buffer:678:24
+      1    0.0%    0.0%  Function: ^getClient /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/google-auth-library@8.7.0/node_modules/google-auth-library/build/src/auth/googleauth.js:627:20
+      1    0.0%    0.0%  Function: ^get url file:///home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/github.com+guillaume-fr+node-fetch@1bf62ab08dccf7f66f9df66e1819817fe991e60e/node_modules/node-fetch/src/request.js:152:9
+      1    0.0%    0.0%  Function: ^get node:net:1706:6
+      1    0.0%    0.0%  Function: ^get node:internal/bootstrap/pre_execution:314:8
+      1    0.0%    0.0%  Function: ^get node:events:133:16
+      1    0.0%    0.0%  Function: ^get isSemulation file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Logger.js:26:21
+      1    0.0%    0.0%  Function: ^fromString node:buffer:431:20
+      1    0.0%    0.0%  Function: ^from node:buffer:295:28
+      1    0.0%    0.0%  Function: ^free node:internal/freelist:21:7
+      1    0.0%    0.0%  Function: ^format node:url:610:39
+      1    0.0%    0.0%  Function: ^finishMaybe node:internal/streams/writable:728:21
+      1    0.0%    0.0%  Function: ^finish node:internal/streams/writable:742:16
+      1    0.0%    0.0%  Function: ^findAndCacheProjectId /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/google-auth-library@8.7.0/node_modules/google-auth-library/build/src/auth/googleauth.js:111:32
+      1    0.0%    0.0%  Function: ^fileURLToPath node:internal/url:1465:23
+      1    0.0%    0.0%  Function: ^file /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/@google-cloud+storage@6.9.3/node_modules/@google-cloud/storage/build/src/bucket.js:1855:9
+      1    0.0%    0.0%  Function: ^f /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/once@1.4.0/node_modules/once/once.js:22:20
+      1    0.0%    0.0%  Function: ^eos /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/end-of-stream@1.4.4/node_modules/end-of-stream/index.js:13:19
+      1    0.0%    0.0%  Function: ^end node:_http_outgoing:833:45
+      1    0.0%    0.0%  Function: ^emitReadable_ node:internal/streams/readable:597:23
+      1    0.0%    0.0%  Function: ^emit node:events:340:44
+      1    0.0%    0.0%  Function: ^createSocket node:_http_agent:314:53
+      1    0.0%    0.0%  Function: ^createSecureContext node:_tls_common:98:29
+      1    0.0%    0.0%  Function: ^configSecureContext node:internal/tls/secure-context:120:29
+      1    0.0%    0.0%  Function: ^cleanup node:internal/streams/readable:722:19
+      1    0.0%    0.0%  Function: ^calculateSmas file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:276:18
+      1    0.0%    0.0%  Function: ^calculatePrice file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:68:19
+      1    0.0%    0.0%  Function: ^buildCharts file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:200:16
+      1    0.0%    0.0%  Function: ^averagePriceQuarter file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:472:24
+      1    0.0%    0.0%  Function: ^alignPool node:buffer:158:19
+      1    0.0%    0.0%  Function: ^adopt file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:2:19
+      1    0.0%    0.0%  Function: ^adopt file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:2:19
+      1    0.0%    0.0%  Function: ^addRequest node:_http_agent:242:49
+      1    0.0%    0.0%  Function: ^addListener node:events:486:58
+      1    0.0%    0.0%  Function: ^_send node:_http_outgoing:319:49
+      1    0.0%    0.0%  Function: ^_implicitHeader node:_http_client:342:67
+      1    0.0%    0.0%  Function: ^_flushOutput node:_http_outgoing:950:63
+      1    0.0%    0.0%  Function: ^_copyActual node:buffer:242:21
+      1    0.0%    0.0%  Function: ^_construct node:internal/fs/streams:42:20
+      1    0.0%    0.0%  Function: ^_assignAccessMethods /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/@google-cloud+storage@6.9.3/node_modules/@google-cloud/storage/build/src/acl.js:195:25
+      1    0.0%    0.0%  Function: ^__classPrivateFieldGet /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/@google-cloud+storage@6.9.3/node_modules/@google-cloud/storage/build/src/hash-stream-validator.js:21:80
+      1    0.0%    0.0%  Function: ^__awaiter file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:1:54
+      1    0.0%    0.0%  Function: ^__awaiter file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:1:54
+      1    0.0%    0.0%  Function: ^WritableState node:internal/streams/writable:77:23
+      1    0.0%    0.0%  Function: ^WritableState /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/readable-stream@3.6.0/node_modules/readable-stream/lib/_stream_writable.js:103:23
+      1    0.0%    0.0%  Function: ^Writable node:internal/streams/writable:219:18
+      1    0.0%    0.0%  Function: ^Writable /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/readable-stream@3.6.0/node_modules/readable-stream/lib/_stream_writable.js:229:18
+      1    0.0%    0.0%  Function: ^URLSearchParams node:internal/url:182:14
+      1    0.0%    0.0%  Function: ^TextDecoder node:internal/encoding:379:16
+      1    0.0%    0.0%  Function: ^TLSSocket._start node:_tls_wrap:947:38
+      1    0.0%    0.0%  Function: ^Socket.ref node:net:1091:32
+      1    0.0%    0.0%  Function: ^Socket._write node:net:806:35
+      1    0.0%    0.0%  Function: ^Sign node:internal/crypto/sig:54:14
+      1    0.0%    0.0%  Function: ^SecureContext node:_tls_common:74:23
+      1    0.0%    0.0%  Function: ^Response file:///home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/github.com+guillaume-fr+node-fetch@1bf62ab08dccf7f66f9df66e1819817fe991e60e/node_modules/node-fetch/src/response.js:23:13
+      1    0.0%    0.0%  Function: ^Request file:///home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/github.com+guillaume-fr+node-fetch@1bf62ab08dccf7f66f9df66e1819817fe991e60e/node_modules/node-fetch/src/request.js:48:13
+      1    0.0%    0.0%  Function: ^Readable.pipe node:internal/streams/readable:677:35
+      1    0.0%    0.0%  Function: ^Readable.pause node:internal/streams/readable:1021:36
+      1    0.0%    0.0%  Function: ^Readable node:internal/streams/readable:186:18
+      1    0.0%    0.0%  Function: ^GoogleToken /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/gtoken@6.1.2/node_modules/gtoken/build/src/index.js:36:16
+      1    0.0%    0.0%  Function: ^Event node:internal/event_target:90:14
+      1    0.0%    0.0%  Function: ^DataManager.openOrder file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:58:26
+      1    0.0%    0.0%  Function: ^ClientRequest node:_http_client:106:23
+      1    0.0%    0.0%  Function: ^CandleStick file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:532:16
+      1    0.0%    0.0%  Function: ^BasePlacer file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:15:16
+      1    0.0%    0.0%  Function: ^AclRoleAccessorMethods /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/@google-cloud+storage@6.9.3/node_modules/@google-cloud/storage/build/src/acl.js:34:16
+      1    0.0%    0.0%  Function: ^<anonymous> node:zlib:226:3
+      1    0.0%    0.0%  Function: ^<anonymous> node:internal/validators:84:3
+      1    0.0%    0.0%  Function: ^<anonymous> node:internal/validators:73:3
+      1    0.0%    0.0%  Function: ^<anonymous> node:internal/streams/transform:184:51
+      1    0.0%    0.0%  Function: ^<anonymous> node:internal/fs/utils:680:42
+      1    0.0%    0.0%  Function: ^<anonymous> node:internal/fs/streams:66:62
+      1    0.0%    0.0%  Function: ^<anonymous> node:internal/fs/promises:215:9
+      1    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:123:58
+      1    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:83:21
+      1    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:99:19
+      1    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:58:35
+      1    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:494:50
+      1    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:66:26
+      1    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:40:26
+      1    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:38:26
+      1    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:27:26
+      1    0.0%    0.0%  Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:18:86
+      1    0.0%    0.0%  Function: ^<anonymous> /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/node-fetch@2.6.7/node_modules/node-fetch/lib/index.js:404:28
+      1    0.0%    0.0%  Function: ^<anonymous> /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/node-fetch@2.6.7/node_modules/node-fetch/lib/index.js:1495:31
+      1    0.0%    0.0%  Function: ^<anonymous> /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/node-fetch@2.6.7/node_modules/node-fetch/lib/index.js:1437:36
+      1    0.0%    0.0%  Function: ^<anonymous> /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/google-auth-library@8.7.0/node_modules/google-auth-library/build/src/auth/googleauth.js:441:29
+      1    0.0%    0.0%  Function: ^<anonymous> /home/elihai/LaravelProjects/tradingBot/bot_core/node_modules/.pnpm/@google-cloud+storage@6.9.3/node_modules/@google-cloud/storage/build/src/acl.js:202:35
+
+ [C++]:
+   ticks  total  nonlib   name
+  20407    4.1%   25.6%  __libc_write
+   8331    1.7%   10.4%  __libc_malloc
+   5805    1.2%    7.3%  epoll_pwait
+   3727    0.8%    4.7%  __pthread_cond_wait
+   1997    0.4%    2.5%  cfree
+   1025    0.2%    1.3%  operator new(unsigned long)
+    794    0.2%    1.0%  __GI___pthread_mutex_unlock
+    722    0.1%    0.9%  __GI___pthread_mutex_lock
+    698    0.1%    0.9%  __write
+    574    0.1%    0.7%  __pthread_cond_signal
+    556    0.1%    0.7%  operator delete(void*)
+    375    0.1%    0.5%  _IO_default_xsputn
+    246    0.0%    0.3%  __lll_lock_wait
+    220    0.0%    0.3%  __mprotect
+    220    0.0%    0.3%  __mmap
+    172    0.0%    0.2%  __munmap
+    153    0.0%    0.2%  __vsnprintf
+    138    0.0%    0.2%  operator delete[](void*)
+    127    0.0%    0.2%  std::_Rb_tree_decrement(std::_Rb_tree_node_base const*)
+    126    0.0%    0.2%  __pthread_cond_broadcast
+    106    0.0%    0.1%  __pthread_enable_asynccancel
+    105    0.0%    0.1%  _IO_setb
+    100    0.0%    0.1%  operator new[](unsigned long)
+     66    0.0%    0.1%  std::_Rb_tree_increment(std::_Rb_tree_node_base*)
+     65    0.0%    0.1%  __libc_read
+     62    0.0%    0.1%  fwrite
+     52    0.0%    0.1%  std::__detail::_Prime_rehash_policy::_M_need_rehash(unsigned long, unsigned long, unsigned long) const
+     48    0.0%    0.1%  _IO_padn
+     47    0.0%    0.1%  __GI___pthread_rwlock_unlock
+     40    0.0%    0.1%  __pthread_disable_asynccancel
+     39    0.0%    0.0%  getrusage
+     36    0.0%    0.0%  __GI___pthread_rwlock_wrlock
+     26    0.0%    0.0%  __GI___pthread_getspecific
+     25    0.0%    0.0%  __madvise
+     21    0.0%    0.0%  std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)
+     16    0.0%    0.0%  _IO_file_xsputn
+     13    0.0%    0.0%  shutdown
+     11    0.0%    0.0%  writev
+     11    0.0%    0.0%  std::ostream::sentry::sentry(std::ostream&)
+     11    0.0%    0.0%  __clock_gettime
+      9    0.0%    0.0%  std::ostream& std::ostream::_M_insert<unsigned long>(unsigned long)
+      8    0.0%    0.0%  std::ostreambuf_iterator<char, std::char_traits<char> > std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::_M_insert_int<unsigned long>(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, unsigned long) const
+      8    0.0%    0.0%  std::ostream& std::ostream::_M_insert<long>(long)
+      8    0.0%    0.0%  std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::do_put(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, unsigned long) const
+      7    0.0%    0.0%  std::__detail::_Prime_rehash_policy::_M_next_bkt(unsigned long) const
+      7    0.0%    0.0%  brk
+      7    0.0%    0.0%  __GI___pthread_rwlock_rdlock
+      6    0.0%    0.0%  epoll_ctl
+      6    0.0%    0.0%  __errno_location
+      5    0.0%    0.0%  std::locale::id::_M_id() const
+      5    0.0%    0.0%  fputc
+      5    0.0%    0.0%  __pthread_mutex_unlock_usercnt
+      5    0.0%    0.0%  __GI___pthread_once
+      4    0.0%    0.0%  syscall
+      4    0.0%    0.0%  std::_Rb_tree_insert_and_rebalance(bool, std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::_Rb_tree_node_base&)
+      4    0.0%    0.0%  posix_memalign
+      3    0.0%    0.0%  std::ostreambuf_iterator<char, std::char_traits<char> > std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::_M_insert_int<long>(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const
+      3    0.0%    0.0%  fflush
+      3    0.0%    0.0%  __pthread_condattr_init
+      3    0.0%    0.0%  __GI___pthread_mutex_init
+      3    0.0%    0.0%  _IO_do_write
+      2    0.0%    0.0%  std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::do_put(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const
+      2    0.0%    0.0%  sigemptyset
+      2    0.0%    0.0%  sigaddset
+      2    0.0%    0.0%  __pthread_rwlock_tryrdlock
+      2    0.0%    0.0%  __printf_fp
+      2    0.0%    0.0%  __getpid
+      2    0.0%    0.0%  _IO_file_write
+      2    0.0%    0.0%  _IO_file_sync
+      1    0.0%    0.0%  std::ostream::put(char)
+      1    0.0%    0.0%  do_futex_wait.constprop.0
+      1    0.0%    0.0%  __pthread_cond_destroy
+      1    0.0%    0.0%  __pthread_attr_setstacksize
+      1    0.0%    0.0%  __libc_realloc
+
+ [Summary]:
+   ticks  total  nonlib   name
+  32282    6.5%   40.5%  JavaScript
+  47447    9.6%   59.5%  C++
+  164821   33.2%  206.6%  GC
+  416899   83.9%          Shared libraries
+     63    0.0%          Unaccounted
+
+ [C++ entry points]:
+   ticks    cpp   total   name
+  20358   59.0%    4.1%  __libc_write
+   7779   22.5%    1.6%  __libc_malloc
+   1902    5.5%    0.4%  cfree
+    970    2.8%    0.2%  operator new(unsigned long)
+    525    1.5%    0.1%  operator delete(void*)
+    496    1.4%    0.1%  __GI___pthread_mutex_lock
+    370    1.1%    0.1%  _IO_default_xsputn
+    289    0.8%    0.1%  __GI___pthread_mutex_unlock
+    230    0.7%    0.0%  __write
+    152    0.4%    0.0%  __vsnprintf
+    138    0.4%    0.0%  operator delete[](void*)
+    126    0.4%    0.0%  std::_Rb_tree_decrement(std::_Rb_tree_node_base const*)
+    124    0.4%    0.0%  __pthread_cond_broadcast
+    123    0.4%    0.0%  __mmap
+    105    0.3%    0.0%  __pthread_enable_asynccancel
+    103    0.3%    0.0%  _IO_setb
+    100    0.3%    0.0%  operator new[](unsigned long)
+     92    0.3%    0.0%  __munmap
+     72    0.2%    0.0%  __mprotect
+     66    0.2%    0.0%  std::_Rb_tree_increment(std::_Rb_tree_node_base*)
+     51    0.1%    0.0%  std::__detail::_Prime_rehash_policy::_M_need_rehash(unsigned long, unsigned long, unsigned long) const
+     48    0.1%    0.0%  _IO_padn
+     43    0.1%    0.0%  __lll_lock_wait
+     42    0.1%    0.0%  fwrite
+     39    0.1%    0.0%  __pthread_disable_asynccancel
+     28    0.1%    0.0%  __GI___pthread_rwlock_wrlock
+     25    0.1%    0.0%  __pthread_cond_signal
+     25    0.1%    0.0%  __GI___pthread_rwlock_unlock
+     24    0.1%    0.0%  __GI___pthread_getspecific
+     21    0.1%    0.0%  __madvise
+     12    0.0%    0.0%  std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)
+     11    0.0%    0.0%  _IO_file_xsputn
+      6    0.0%    0.0%  std::ostream& std::ostream::_M_insert<long>(long)
+      4    0.0%    0.0%  syscall
+      4    0.0%    0.0%  std::_Rb_tree_insert_and_rebalance(bool, std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::_Rb_tree_node_base&)
+      4    0.0%    0.0%  posix_memalign
+      3    0.0%    0.0%  std::__detail::_Prime_rehash_policy::_M_next_bkt(unsigned long) const
+      2    0.0%    0.0%  std::ostreambuf_iterator<char, std::char_traits<char> > std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::_M_insert_int<long>(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const
+      2    0.0%    0.0%  std::ostream::sentry::sentry(std::ostream&)
+      2    0.0%    0.0%  std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::do_put(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const
+      2    0.0%    0.0%  fputc
+      2    0.0%    0.0%  fflush
+      2    0.0%    0.0%  brk
+      2    0.0%    0.0%  __pthread_rwlock_tryrdlock
+      2    0.0%    0.0%  __clock_gettime
+      1    0.0%    0.0%  std::locale::id::_M_id() const
+      1    0.0%    0.0%  __GI___pthread_mutex_init
+      1    0.0%    0.0%  _IO_file_sync
+
+ [Bottom up (heavy) profile]:
+  Note: percentage shows a share of a particular caller in the total
+  amount of its parent calls.
+  Callers occupying less than 1.0% are not shown.
+
+   ticks parent  name
+  394385   79.4%  /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+  184463   46.8%    /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+  117276   63.6%      /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+  31344   26.7%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:114:58
+  31344  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+  27427   87.5%            LazyCompile: *fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:4:27
+   3685   11.8%            Function: ^fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:4:27
+  26206   22.3%        LazyCompile: *orderexecute file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/FutureDataManager.js:14:17
+  14041   53.6%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+  14041  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   9141   34.9%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+   8804   96.3%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    337    3.7%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   3024   11.5%          Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+   2859   94.5%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    165    5.5%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+  16349   13.9%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+  16349  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+  16344  100.0%            LazyCompile: *fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:4:27
+   9950    8.5%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:65:26
+   9950  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   9459   95.1%            Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:57:101
+    491    4.9%            LazyCompile: ~<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:57:101
+   9566    8.2%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+   9206   96.2%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+   9206  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    360    3.8%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    360  100.0%            Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+   7301    6.2%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:37:58
+   7301  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   6849   93.8%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:3:46
+    452    6.2%            Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:3:46
+   5513    4.7%        /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   4164   75.5%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:37:58
+   4164  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   1077   19.5%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    553   51.3%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    373   34.6%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+    131   12.2%            Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+     17    1.6%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:37:58
+    103    1.9%          LazyCompile: *parseAllValues file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:198:19
+    103  100.0%            Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:37:58
+     93    1.7%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+     93  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   3310    2.8%        Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+   3013   91.0%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+   3013  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    297    9.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    297  100.0%            Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+   1187    1.0%        LazyCompile: *BasePlacer.roundPrice file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:24:27
+   1166   98.2%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:114:58
+   1166  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   8981    4.9%      LazyCompile: *getColorDepth node:internal/tty:106:23
+   8975   99.9%        LazyCompile: *log node:internal/console/constructor:358:6
+   8975  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   4284   47.7%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:114:58
+   2977   33.2%            LazyCompile: *orderexecute file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/FutureDataManager.js:14:17
+    891    9.9%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    536    6.0%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+    169    1.9%            Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+     96    1.1%            Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:114:58
+   6458    3.5%      LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:37:58
+   5023   77.8%        /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   4657   92.7%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:3:46
+   4657  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    365    7.3%          Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:3:46
+    365  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   1344   20.8%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:3:46
+   1344  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   1344  100.0%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:140:54
+     91    1.4%        Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:3:46
+     91  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     89   97.8%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:140:54
+      2    2.2%            LazyCompile: *__awaiter file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:1:54
+   4419    2.4%      LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:114:58
+   3432   77.7%        /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   2092   61.0%          LazyCompile: *fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:4:27
+    883   25.7%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:3:46
+    883  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    325    9.5%          Function: ^fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:4:27
+    132    3.8%          Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:3:46
+    132  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    858   19.4%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:3:46
+    858  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    407   47.4%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:181:58
+    351   40.9%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:123:58
+     90   10.5%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:225:58
+      9    1.0%            LazyCompile: *place_order file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:113:16
+    129    2.9%        Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:3:46
+    129  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     57   44.2%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:181:58
+     55   42.6%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:123:58
+     13   10.1%            LazyCompile: *place_order file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:113:16
+      2    1.6%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:225:58
+      2    1.6%            Function: ^__awaiter file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:1:54
+   4262    2.3%      LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:3:46
+   4262  100.0%        /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   1805   42.4%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:140:54
+   1805  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    965   22.6%          LazyCompile: *placeSell file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:179:14
+    961   99.6%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:37:58
+    903   21.2%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:37:58
+    903  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    379    8.9%          LazyCompile: *__awaiter file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:1:54
+    324   85.5%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:37:58
+     23    6.1%            Function: ^placeBuy file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:121:13
+     17    4.5%            Function: ^placeSell file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:179:14
+     10    2.6%            Function: ^placeSellFromBuy file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:223:21
+      5    1.3%            Function: ^place file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:35:10
+    178    4.2%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:181:58
+    178  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   3156    1.7%      LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:90:58
+   2409   76.3%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:3:46
+   2409  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   1720   71.4%            LazyCompile: *orderexecute file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/FutureDataManager.js:14:17
+    353   14.7%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:114:58
+    324   13.4%            LazyCompile: *__awaiter file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:1:54
+    492   15.6%        /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    442   89.8%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:3:46
+    442  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     50   10.2%          Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:3:46
+     50  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    255    8.1%        Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:3:46
+    255  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    178   69.8%            LazyCompile: *orderexecute file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/FutureDataManager.js:14:17
+     37   14.5%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:114:58
+     32   12.5%            LazyCompile: *__awaiter file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:1:54
+      4    1.6%            Function: ^__awaiter file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:1:54
+   2751    1.5%      LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:3:46
+   2751  100.0%        /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   1937   70.4%          LazyCompile: *orderexecute file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/FutureDataManager.js:14:17
+   1041   53.7%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    772   39.9%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+    124    6.4%            Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+    432   15.7%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:114:58
+    432  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    367   13.3%          LazyCompile: *__awaiter file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:1:54
+    359   97.8%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:114:58
+      7    1.9%            Function: ^DAL.saveInBucket file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:18:29
+   2647    1.4%      LazyCompile: *orderexecute file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/FutureDataManager.js:14:17
+   1401   52.9%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+   1401  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   1401  100.0%            LazyCompile: *fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:4:27
+    931   35.2%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+    900   96.7%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    900  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     31    3.3%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     31  100.0%            Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    315   11.9%        Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+    296   94.0%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    296  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     19    6.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     19  100.0%            Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+   2206    1.2%      LazyCompile: *paddEmptyCandles file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:236:21
+   2203   99.9%        LazyCompile: *buildCharts file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:200:16
+   2198   99.8%          Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:98:19
+   1877    1.0%      LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:140:54
+   1629   86.8%        /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    855   52.5%          Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:3:46
+    855  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    593   36.4%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:3:46
+    593  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    180   11.0%          LazyCompile: *fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:4:27
+    132    7.0%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:3:46
+    132  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    131   99.2%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    116    6.2%        Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:3:46
+    116  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    115   99.1%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+   1850    1.0%      LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:97:30
+   1850  100.0%        /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   1778   96.1%          Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:97:19
+     72    3.9%          LazyCompile: ~<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:97:19
+   9381    2.4%    LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:37:58
+   9379  100.0%      /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   8731   93.1%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:3:46
+   8731  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   8731  100.0%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:140:54
+    645    6.9%        Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:3:46
+    645  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    631   97.8%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:140:54
+     12    1.9%            LazyCompile: *__awaiter file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:1:54
+
+  21751    4.4%  /usr/lib/x86_64-linux-gnu/libc-2.31.so
+  20183   92.8%    /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+  19086   94.6%      /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   7981   41.8%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:114:58
+   7981  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   6784   85.0%            LazyCompile: *fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:4:27
+   1132   14.2%            Function: ^fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:4:27
+   4710   24.7%        LazyCompile: *orderexecute file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/FutureDataManager.js:14:17
+   2600   55.2%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+   2600  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   1523   32.3%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+   1472   96.7%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+     51    3.3%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    587   12.5%          Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+    546   93.0%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+     41    7.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   2173   11.4%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+   2173  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   2172  100.0%            LazyCompile: *fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:4:27
+   1241    6.5%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+   1212   97.7%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+   1212  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     29    2.3%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     29  100.0%            Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    844    4.4%        /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    572   67.8%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    298   52.1%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    200   35.0%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+     72   12.6%            Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+    260   30.8%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:37:58
+    260  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    520    2.7%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:65:26
+    520  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    507   97.5%            Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:57:101
+     13    2.5%            LazyCompile: ~<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/DALSimulation.js:57:101
+    466    2.4%        Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+    432   92.7%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    432  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     34    7.3%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     34  100.0%            Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    202    1.1%        Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:114:58
+    202  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    133   65.8%            Function: ^fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:4:27
+     64   31.7%            LazyCompile: *fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:4:27
+      5    2.5%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:3:46
+    199    1.0%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:37:58
+    199  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    185   93.0%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:3:46
+     14    7.0%            Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/FuturesTrader.js:3:46
+    218    1.1%      LazyCompile: *paddEmptyCandles file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:236:21
+    217   99.5%        LazyCompile: *buildCharts file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:200:16
+    216   99.5%          Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/DataManager.js:98:19
+
+  20407    4.1%  __libc_write
+  11478   56.2%    LazyCompile: *writeGeneric node:internal/stream_base_commons:151:22
+  11222   97.8%      LazyCompile: *Socket._write node:net:806:35
+   8329   74.2%        LazyCompile: *_write node:internal/streams/writable:284:16
+   8329  100.0%          LazyCompile: *value node:internal/console/constructor:257:20
+   8329  100.0%            LazyCompile: *log node:internal/console/constructor:358:6
+   2892   25.8%        LazyCompile: *writeOrBuffer node:internal/streams/writable:366:23
+   2892  100.0%          LazyCompile: *value node:internal/console/constructor:257:20
+   2892  100.0%            LazyCompile: *log node:internal/console/constructor:358:6
+    159    1.4%      Function: ^Socket._writeGeneric node:net:769:42
+    159  100.0%        Function: ^Socket._write node:net:806:35
+    141   88.7%          LazyCompile: *_write node:internal/streams/writable:284:16
+    141  100.0%            LazyCompile: *value node:internal/console/constructor:257:20
+      8    5.0%          LazyCompile: *writeOrBuffer node:internal/streams/writable:366:23
+      8  100.0%            LazyCompile: *value node:internal/console/constructor:257:20
+      8    5.0%          Function: ^writeOrBuffer node:internal/streams/writable:366:23
+      4   50.0%            LazyCompile: *value node:internal/console/constructor:257:20
+      4   50.0%            Function: ^_write node:internal/streams/writable:284:16
+      2    1.3%          LazyCompile: *Writable.write node:internal/streams/writable:334:36
+      2  100.0%            Function: ^value node:internal/console/constructor:257:20
+   7551   37.0%    /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   7550  100.0%      /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   3863   51.2%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:114:58
+   3863  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   3357   86.9%            LazyCompile: *fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:4:27
+    499   12.9%            Function: ^fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:4:27
+   2225   29.5%        LazyCompile: *orderexecute file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/FutureDataManager.js:14:17
+   1144   51.4%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+   1144  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    795   35.7%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+    780   98.1%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+     15    1.9%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    286   12.9%          Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+    268   93.7%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+     18    6.3%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    663    8.8%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    663  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    663  100.0%            LazyCompile: *fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:4:27
+    447    5.9%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+    429   96.0%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    429  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     18    4.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     18  100.0%            Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    168    2.2%        Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+    158   94.0%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    158  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     10    6.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     10  100.0%            Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    153    2.0%        Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:114:58
+    153  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    134   87.6%            Function: ^fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:4:27
+     19   12.4%            LazyCompile: *fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:4:27
+   1142    5.6%    LazyCompile: *Socket._write node:net:806:35
+   1142  100.0%      LazyCompile: *_write node:internal/streams/writable:284:16
+   1142  100.0%        LazyCompile: *value node:internal/console/constructor:257:20
+   1142  100.0%          LazyCompile: *log node:internal/console/constructor:358:6
+   1142  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+
+   8331    1.7%  __libc_malloc
+   7708   92.5%    /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   7543   97.9%      /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   3307   43.8%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:114:58
+   3307  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   2862   86.5%            LazyCompile: *fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:4:27
+    414   12.5%            Function: ^fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Workers/BasePlacer.js:4:27
+   2208   29.3%        LazyCompile: *orderexecute file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/FutureDataManager.js:14:17
+   1242   56.3%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+   1242  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    736   33.3%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+    710   96.5%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+     26    3.5%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+    230   10.4%          Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+    208   90.4%            LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+     22    9.6%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   1010   13.4%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+   1010  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+   1010  100.0%            LazyCompile: *fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:4:27
+    635    8.4%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+    610   96.1%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    610  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     25    3.9%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     25  100.0%            Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    209    2.8%        Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+    197   94.3%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    197  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     12    5.7%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     12  100.0%            Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+    115    1.5%      LazyCompile: *orderexecute file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/FutureDataManager.js:14:17
+     70   60.9%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+     70  100.0%          /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     70  100.0%            LazyCompile: *fulfilled file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:4:27
+     29   25.2%        LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+     29  100.0%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+     29  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+     16   13.9%        Function: ^<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:90:38
+     16  100.0%          LazyCompile: *<anonymous> file:///home/elihai/LaravelProjects/tradingBot/bot_core/build/Simulator/Simulate.js:29:54
+     16  100.0%            /home/elihai/.nvm/versions/node/v17.1.0/bin/node
+
+   5805    1.2%  epoll_pwait
+

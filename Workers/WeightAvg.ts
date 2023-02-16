@@ -4,7 +4,6 @@ import { BotLogger } from "../Logger.js";
 
 
 export class WeightAvg extends BasePlacer {
-    myLastBuyAvg;
     myLastBuyCount = 0;
 
     async place() {

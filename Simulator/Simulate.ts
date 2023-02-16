@@ -138,7 +138,7 @@ export async function run(simulationId: string, variation: string | number, star
   if (!dataManager.chart[dataManager.currentCandle]) {
     dataManager.currentCandle = dataManager.chart.length - 1
   }
-  bots.forEach(dataManager.closePosition);
+  bots.forEach((b) => dataManager.closePosition(b));
   bots.forEach(b => console.log("Profit: " + b.profitNum + " Variant: " + b.variation))
   // console.log("Profit: " + dataManager.profit)
   await bots.map(b => dataManager.dal.endTest(b))

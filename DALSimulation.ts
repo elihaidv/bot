@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import { Storage } from "@google-cloud/storage";
 import { env, exit } from "process";
 import { ExecOptions } from "child_process";
-import { promises } from "fs" 
+import { promises } from "fs"
 import { Bot } from "./Models";
 
 
@@ -12,7 +12,7 @@ const PAGE_SIZE = 2000
 export class DAL {
     started
     dataManager
-    variations:{[n:number]:DALVariation} = {}
+    variations: { [n: number]: DALVariation } = {}
     simulationId
     awaiter = false
     start
@@ -27,7 +27,7 @@ export class DAL {
         // setTimeout(() => this.updateProgress("timeout"), 3400000)
     }
 
-    async logStep(step, bot:Bot) {
+    async logStep(step, bot: Bot) {
         if (this.isQuiet) return
 
         if (!this.variations[bot.variation]) {
@@ -37,19 +37,19 @@ export class DAL {
 
         step.time = this.dataManager.chart[this.dataManager.currentCandle].time
         const stepArr = [step.time,
-            step.type,
-            step.side, step.price,
-            step.quantity,
-            step.low,
-            step.high,
-            step.balanceSecond,
-            step.positionSize,
-            step.positionPnl,
-            step.profit,
-            step.balanceFirst,
-            step.priority,
-            step.sma && step.sma,
-            step.longSMA && step.longSMA,
+        step.type,
+        step.side, step.price,
+        step.quantity,
+        step.low,
+        step.high,
+        step.balanceSecond,
+        step.positionSize,
+        step.positionPnl,
+        step.profit,
+        step.balanceFirst,
+        step.priority,
+        step.sma && step.sma,
+        step.longSMA && step.longSMA,
         ]
 
         dalVariation.steps.push(stepArr)
@@ -69,7 +69,7 @@ export class DAL {
 
     }
 
-    updateProgress(status, t:CandleStick|null = null,  bot:Bot) {
+    updateProgress(status, t: CandleStick | null = null, bot: Bot) {
 
         const start = new Date(this.start).getTime()
         const end = new Date(this.end).getTime()
@@ -104,7 +104,7 @@ export class DAL {
         return process.argv.join("").includes('quiet')
     }
 
-    async endTest(bot:Bot) {
+    async endTest(bot: Bot) {
 
         if (this.isQuiet) return
 
@@ -135,16 +135,20 @@ export class DAL {
 
     saveHistoryInBucket = async (history, pair, unit, date) => {
         try {
-
-            const historyArray = history.split("\n")
-                .filter(r => r)
-                .map(x => x.split(",")
-                    .map(y => parseFloat(y)))
-                .map(([time, open, high, low, close]) => [ time, high, low, close])
-                .filter(([time, high, low, close]) => time && high && low && close)
+            let historyArray
+            if (typeof history == "string") {
+                historyArray = history.split("\n")
+                    .filter(r => r)
+                    .map(x => x.split(",")
+                        .map(y => parseFloat(y)))
+                    .map(([time, open, high, low, close]) => [time, high, low, close])
+                    .filter(([time, high, low, close]) => time && high && low && close)
+            } else {
+                historyArray = history
+            }
 
             await promises.mkdir(`spot/${pair}/${unit}`, { recursive: true })
-            await promises.writeFile(`spot/${pair}/${unit}/${date}.csv`, historyArray.map(e => e.join(',')).join('\n'), { })
+            await promises.writeFile(`spot/${pair}/${unit}/${date}.csv`, historyArray.map(e => e.join(',')).join('\n'), {})
             // await new Storage()
             //     .bucket('crypto-history')
             //     .file(`spot/${pair}/${unit}/${date}.csv`)
@@ -159,15 +163,13 @@ export class DAL {
         }
     }
 
-    getHistoryFromBucket = async (pair, unit, date) => {
+    getHistoryFromLocal = async (pair, unit, date) => {
         try {
-            const file = await promises.readFile(`spot/${pair}/${unit}/${date}.csv`)
-            // const file = await new Storage()
-            //     .bucket('crypto-history')
-            //     .file(`spot/${pair}/${unit}/${date}.csv`)
-            //     .download()
 
-            const res =  file.toString().split("\n")
+            const file = await promises.readFile(`spot/${pair}/${unit}/${date}.csv`)
+
+
+            const res = file.toString().split("\n")
                 .map(x => x.split(",")
                     .map(y => parseFloat(y)))
 
@@ -181,8 +183,34 @@ export class DAL {
             }
             return null
 
+
         }
     }
+    getHistoryFromBucket = async (pair, unit, date) => {
+        try {
+
+            const file = await new Storage()
+                .bucket('crypto-history')
+                .file(`futures/${pair}/${unit}/${date}.csv`)
+                .download()
+
+
+            const res = file.toString().split("\n")
+                .map(x => x.split(",")
+                    .map(y => parseFloat(y)))
+
+            if (res.length < 86000) {
+                console.error("history too short", res.length, pair, unit, date)
+            }
+            return res
+        } catch (e: any) {
+            if (!e.message.includes("no such file")) {
+                console.error(e.message)
+            }
+            return null
+        }
+    }
+
 
 }
 

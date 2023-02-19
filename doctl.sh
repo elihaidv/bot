@@ -21,6 +21,6 @@ droplets=(
 for server in "${droplets[@]}"
 do echo $server
     doctl compute droplet delete $server -f
-    # doctl compute droplet-action resize $server --size s-1vcpu-1gb
+    doctl compute droplet-action resize $server --size s-1vcpu-1gb
     # doctl compute droplet-action $1 $server
 done

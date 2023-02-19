@@ -135,14 +135,22 @@ export class DataManager {
     async fetchFile(unit, dateString) {
         try {
 
-            const res = await this.dal.getHistoryFromBucket(this.PAIR, unit, dateString)
+            const res = await this.dal.getHistoryFromLocal(this.PAIR, unit, dateString)
             if (res) {
                 if (dateString == new Date().toISOString().split('T')[0]) {
                     return await this.fetchDayData(unit, dateString, res)
                 }
-                console.log("File exists in bucket", dateString, unit)
+                console.log("File exists in local", dateString, unit)
                 return res
             }
+
+            const res1 = await this.dal.getHistoryFromBucket(this.PAIR, unit, dateString)
+            if (res1) {
+                const r = await this.dal.saveHistoryInBucket(res1, this.PAIR, unit, dateString)
+                console.log("File exists in bucket", dateString, unit)
+                return r
+            }
+
             const bytes = await this.fetchRetry(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip`)
                 .then(r => r.buffer())
             const fileChecksum = crypto.createHash('sha256').update(bytes).digest("hex")
@@ -191,12 +199,12 @@ export class DataManager {
         }
         const res = await Promise.all(promises)
 
-        const resStr = past.map(l => {l.splice(1,0,0);return l})
-            .concat(res.flat())
-            .map(e => e.toString())
-            .join("\n")
+        // const resStr = past.map(l => {l.splice(1,0,0);return l})
+        //     .concat(res.flat())
+        //     .map(e => e.toString())
+        //     .join("\n")
 
-        return await this.dal.saveHistoryInBucket(resStr, this.PAIR, unit, dateString)
+        return await this.dal.saveHistoryInBucket(past, this.PAIR, unit, dateString)
     }
 
     processFile = (unit, dateString, date,) => this.fetchFile(unit, dateString)

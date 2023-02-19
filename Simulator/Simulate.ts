@@ -59,7 +59,7 @@ export async function run(simulationId: string, variation: string | number, star
 
   const maxLongSMA = Math.max(...bots.map(b => b.longSMA))
   const start = new Date(startStr).getTime() - (maxLongSMA * 15 * 60 * 1000)
-  const end = new Date(endStr).getTime()
+  const end = Math.min(new Date(endStr).getTime(), new Date().getTime())
   let endChunk = Math.max(Math.min(end, start + MIN_CHART_SIZE * 1000), start + maxLongSMA * 15 * 60 * 1000)
 
   dataManager.minHistoryCandles = maxLongSMA

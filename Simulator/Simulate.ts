@@ -23,6 +23,7 @@ env.TZ = "UTC"
 env.IS_SIMULATION = "true"
 
 let dataManager: DataManager
+
 export async function run(simulationId: string, variation: string | number, startStr: string, endStr: string) {
 
   const simulation: any = await fetch(`https://itamars.live/api/simulations/${simulationId}?vars=${variation}`, {

@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 
 import amqp from 'amqplib/callback_api.js';
 
-console.log = () => { };
+// console.log = () => { };
 let lastSim: any = {}
 let extChannel: any
 

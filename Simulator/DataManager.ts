@@ -208,7 +208,7 @@ export class DataManager {
     }
 
     processFile = (unit, dateString, date,) => this.fetchFile(unit, dateString)
-        .then(d => d.map(([time, high, low, close]) => ({ time, high, low, close })))
+        .then(d => d.map(([time, high, low, close]) => ({ time, high, low, close, children: [] })))
         .then(d => this.buildCharts(d, date))
         .then(d => this.connectCharts(d));
 

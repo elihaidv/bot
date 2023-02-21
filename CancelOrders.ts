@@ -1,8 +1,8 @@
 import { Severity } from "coralogix-logger";
-import { BotLogger } from "./Logger";
+import { BotLogger } from "./Logger.js";
 import { Bot } from "./Models";
 
-async function cancelOrders(bot: Bot, pair?) {
+export default async function cancelOrders(bot: Bot, pair?) {
     const PAIR = pair ? pair : (bot.coin1 + bot.coin2)
     if (bot.binance && bot.binance!.orders[PAIR]) {
         const openOrders = bot.binance!.orders[PAIR]
@@ -26,5 +26,3 @@ async function cancelOrders(bot: Bot, pair?) {
         }
     }
 }
-
-module.exports = cancelOrders

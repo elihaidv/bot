@@ -1,24 +1,25 @@
 
 import Binance from 'node-binance-api';
-require('dotenv').config({ path: '../.env' })
-const cancelOrders = require('./CancelOrders');
-import { DirectionTrader } from './Workers/DirectionTrader';
-import { DualBot } from './Workers/DualBot';
-import { FutureTrader } from './Workers/FuturesTrader';
-import { Bot, BotStatus, Key } from './Models'
-// import { OrderPlacer } from './PlaceOrders';
-import { Sockets } from './Sockets/Sockets';
-import { SocketsFutures } from './Sockets/SocketsFuture';
-import { WeightAvg } from './Workers/WeightAvg';
-import { DAL } from './DAL';
-import { Periodically } from './Workers/Periodically';
-import { SignaligProcessor, SignalingPlacer } from './Workers/SignaligProcessor';
+import dotenv from 'dotenv'
+dotenv.config({ path: '../.env' });
+import cancelOrders from './CancelOrders.js';
+import { DirectionTrader } from './Workers/DirectionTrader.js';
+import { DualBot } from './Workers/DualBot.js';
+import { FutureTrader } from './Workers/FuturesTrader.js';
+import { Bot, BotStatus, Key } from './Models.js'
+// import { OrderPlacer } from './PlaceOrders.js';
+import { Sockets } from './Sockets/Sockets.js';
+import { SocketsFutures } from './Sockets/SocketsFuture.js';
+import { WeightAvg } from './Workers/WeightAvg.js';
+import { DAL } from './DAL.js';
+import { Periodically } from './Workers/Periodically.js';
+import { SignaligProcessor, SignalingPlacer } from './Workers/SignaligProcessor.js';
 import { TelegramClient } from "telegram";
-import { StringSession } from "telegram/sessions";
-import { NewMessage } from "telegram/events";
-import { OneStep } from './Workers/OneStep';
-import { OrderPlacer } from './Workers/PlaceOrders';
-import { BotLogger } from './Logger';
+import { StringSession } from "telegram/sessions/index.js";
+import { NewMessage } from "telegram/events/index.js";
+import { OneStep } from './Workers/OneStep.js';
+import { OrderPlacer } from './Workers/PlaceOrders.js';
+import { BotLogger } from './Logger.js';
 import { Severity } from 'coralogix-logger';
 
 

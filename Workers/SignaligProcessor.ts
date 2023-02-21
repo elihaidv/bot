@@ -1,9 +1,8 @@
-import { ObjectId } from "mongodb";
-import { DAL } from "../DAL";
-import { average, Bot,  BotStatus, Signaling, SignalingType } from "../Models";
-import { BasePlacer } from "./BasePlacer";
-import { FutureTrader } from "./FuturesTrader";
-const cancelOrders = require('../CancelOrders');
+import mongodb from "mongodb";
+import { DAL } from "../DAL.js";
+import { Bot, BotStatus, Signaling, SignalingType } from "../Models.js";
+import { FutureTrader } from "./FuturesTrader.js";
+import cancelOrders  from '../CancelOrders.js';
 
 const SIGNALING_TYPES = [
   // new SignalingType('⚡️⚡️ #(.*)\/(.*) ⚡️⚡️\nExchanges: Binance (.*)\nSignal Type: Regular \\((.*)\\)\nLeverage: Cross \\((.*)X\\)\n+Deposit only (.*)\%\n\nEntry Targets:\n((?:\\d\\).*\n)+)\nTake-Profit Targets:\n((?:\\d\\).*\n)+)\nStop Targets:\n((?:\\d\\).*\n)+)', new Map([]),
@@ -28,7 +27,7 @@ export class SignaligProcessor {
       const match = message?.replace(/\s/g, '').match(type.regex)
       if (match) {
         const s = new Signaling()
-        s._id = new ObjectId();
+        s._id = new mongodb.ObjectId();
         s.coin1 = match[type.coin1]
         s.coin2 = type.coin1 == type.coin2 ? "" : match[type.coin2]
         s.lervrage = match[type.leverage]

@@ -1,7 +1,6 @@
 # tsc --outDir build -p tsconfig.json 
 cp package.json trading-cloud.json ecosystem.config.js build
 sed -i 's/debugger;/console.error("debugger");/g' build/**/*.js
-git add . && git commit -m "A" && git push
 
 servers=(
     # "137.184.124.50"
@@ -51,3 +50,5 @@ do echo "Deploying to $server"
     # ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && pm2 reload Simulator/rabbitConsumer.js --node-args=\"--max-old-space-size=4096\""
 
 done
+
+git add . && git commit -m "A" && git push

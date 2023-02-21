@@ -146,9 +146,11 @@ export class DataManager {
 
             const res1 = await this.dal.getHistoryFromBucket(this.PAIR, unit, dateString)
             if (res1) {
-                const r = await this.dal.saveHistoryInBucket(res1, this.PAIR, unit, dateString)
+                if (new Date().getTime() - new Date(dateString).getTime() > SECONDS_IN_DAY * 1000) {
+                    await this.dal.saveHistoryInBucket(res1, this.PAIR, unit, dateString)
+                }
                 console.log("File exists in bucket", dateString, unit)
-                return r
+                return res1
             }
 
             const bytes = await this.fetchRetry(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip`)

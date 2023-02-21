@@ -107,21 +107,21 @@ export abstract class BasePlacer {
             if (order.side == this.buySide()) {
                 this.lastBuy ||= order
 
-                if (!sellOrders.join("").includes(order.orderId)){
+                if (!sellOrders.join("").includes(order.orderId)) {
                     this.standingBuy ||= order
                     this.oldestStandingBuy = order
                     buys.push(order)
                 }
             } else {
                 this.lastSell ||= order
-                if (order.clientOrderId.includes("SELLbig") && !this.myLastStandingBuy) {  
+                if (order.clientOrderId.includes("SELLbig") && !this.myLastStandingBuy) {
                     this.myLastStandingBuy = this.orders.find(x => x.orderId == order.clientOrderId.split("SELLbig")[1])
                 }
                 sellOrders.push(order.clientOrderId);
             }
 
             this.currentPnl += order.pnl - (order.avgPrice * order.executedQty * 0.0002)
-            
+
             if (order.isFirst()) {
                 break
             }
@@ -129,14 +129,16 @@ export abstract class BasePlacer {
 
         if (this.bot.binance!.needTransfer.includes(this.PAIR)) {
             this.bot.binance!.needTransfer = this.bot.binance!.needTransfer.filter(x => x != this.PAIR)
-            this.binance.transferFuturesToMain(this.SECOND,this.currentPnl, r=>{
-                console.log(r.body)
-            })
+            if (this.currentPnl > 0) {
+                this.binance.transferFuturesToMain(this.SECOND, this.currentPnl, r => console.log(r.body))
+            } else {
+                this.binance.transferMainToFutures(this.SECOND, Math.abs(this.currentPnl), r => console.log(r.body))
+            }
         }
 
         this.myLastBuyAvg = this.weightAverage(buys)
     }
-    
+
 
     weightAverage(arr) {
         const overallQu = arr.reduce((a, b) => a + parseFloat(b.executedQty), 0.0)
@@ -149,7 +151,7 @@ export abstract class BasePlacer {
     abstract getAction(type: boolean): Function
 
     async place_order(coin, qu, price, type: boolean, params?, increaseToMinimum = false) {
-        let minNotional = this.filters.MIN_NOTIONAL.minNotional ||this.filters.MIN_NOTIONAL.notional || this.bot.minNotional
+        let minNotional = this.filters.MIN_NOTIONAL.minNotional || this.filters.MIN_NOTIONAL.notional || this.bot.minNotional
 
 
         if (coin == "BNB") {
@@ -166,7 +168,7 @@ export abstract class BasePlacer {
 
         this.bot.lastOrder = new Date().getTime()
 
-        if (price){
+        if (price) {
             price = this.roundPrice(price)
             if ((qu * price) < minNotional && !params?.closePosition && !params?.reduceOnly) {
                 if (increaseToMinimum) {
@@ -175,10 +177,10 @@ export abstract class BasePlacer {
                     BotLogger.instance.log({
                         type: "QuantitiyTooLow",
                         bot_id: this.bot._id,
-                        qu,price,params, minNotional
-                        
+                        qu, price, params, minNotional
+
                     })
-                    console.log("quantity is to small" , qu , price , this.bot.id())
+                    console.log("quantity is to small", qu, price, this.bot.id())
                     return
                 }
             }
@@ -186,7 +188,7 @@ export abstract class BasePlacer {
 
         this.bot.lastOrder = new Date().getTime()
 
-        
+
         params ||= {}
         params.positionSide = this.bot.positionSide()
 
@@ -194,8 +196,8 @@ export abstract class BasePlacer {
 
             let res = await action(this.PAIR, qu, price, params)
             if (res.msg) {
-                console.log(res.msg, this.PAIR,  price || params.stopPrice || params.activationPrice, qu, this.bot.id())
-                const error =  {
+                console.log(res.msg, this.PAIR, price || params.stopPrice || params.activationPrice, qu, this.bot.id())
+                const error = {
                     type: "PlaceOrderError",
                     bot_id: this.bot._id,
                     user_id: this.bot.user_id,
@@ -218,7 +220,7 @@ export abstract class BasePlacer {
                     type: "PlaceOrder",
                     bot_id: this.bot._id,
                     res
-                    
+
                 })
                 if (res.status == "EXPIRED") {
                     return res.status
@@ -226,8 +228,8 @@ export abstract class BasePlacer {
             }
         } catch (e: any) {
             this.error = true
-                
-            const error =  {
+
+            const error = {
                 type: "PlaceOrderError",
                 bot_id: this.bot._id,
                 user_id: this.bot.user_id,
@@ -277,5 +279,5 @@ export abstract class BasePlacer {
     get isSemulation() {
         return process.argv.join("").includes("Simulate")
     }
-        
+
 }

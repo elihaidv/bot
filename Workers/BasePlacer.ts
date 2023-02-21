@@ -129,10 +129,11 @@ export abstract class BasePlacer {
 
         if (this.bot.binance!.needTransfer.includes(this.PAIR)) {
             this.bot.binance!.needTransfer = this.bot.binance!.needTransfer.filter(x => x != this.PAIR)
+            const amount = Math.abs(this.currentPnl * this.bot.backupPrecent)
             if (this.currentPnl > 0) {
-                this.binance.transferFuturesToMain(this.SECOND, this.currentPnl, r => console.log(r.body))
+                this.binance.transferFuturesToMain(this.SECOND, amount, r => console.log(r.body))
             } else {
-                this.binance.transferMainToFutures(this.SECOND, Math.abs(this.currentPnl), r => console.log(r.body))
+                this.binance.transferMainToFutures(this.SECOND, amount, r => console.log(r.body))
             }
         }
 

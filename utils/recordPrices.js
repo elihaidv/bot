@@ -1,11 +1,17 @@
-const Binance = require("node-binance-api")
-const fs = require('fs');
+// const Binance = require("node-binance-api")
+// const fs = require('fs');
 
-// import Binance from "node-binance-api";
-// import fs from "fs";
+import Binance from "node-binance-api";
+import fs from "fs";
 
 const binance = Binance()
+    
+// binance.futuresChart(["BNBUSDT"], "5m", (symbol, interval, chart) =>
+//  console.log(new Date(parseInt(Object.keys(chart)[499])), chart[Object.keys(chart)[499]].open))
 
+// setInterval(() => {
+    
+// }, 1000);
 const symbols = [
     "MATICUSDT",
     "ETHUSDT",
@@ -41,4 +47,6 @@ symbols.forEach(symbol => {
         const price = parseFloat(data.markPrice)
         stream.write(`${data.eventTime},${price}\n`);
     });
+
+
 })

@@ -1,5 +1,5 @@
 # tsc --outDir build -p tsconfig.json 
-cp package.json DB.js trading-cloud.json ecosystem.config.js build
+cp package.json trading-cloud.json ecosystem.config.js build
 sed -i 's/debugger;/console.error("debugger");/g' build/**/*.js
 git add . && git commit -m "A" && git push
 

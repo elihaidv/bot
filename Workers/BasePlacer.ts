@@ -130,7 +130,7 @@ export abstract class BasePlacer {
         if (this.bot.binance!.needTransfer.includes(this.PAIR)) {
             this.bot.binance!.needTransfer = this.bot.binance!.needTransfer.filter(x => x != this.PAIR)
             this.binance.transferFuturesToMain(this.SECOND,this.currentPnl, r=>{
-                console.log(r)
+                console.log(r.body)
             })
         }
 

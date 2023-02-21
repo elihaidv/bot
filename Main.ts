@@ -57,7 +57,7 @@ async function execute() {
     initBots(botsResults)
     
     Sockets.getInstance().updateSockets(Array.from(bots.filter(b => !b.isFuture)), keys)
-    // SocketsFutures.getFInstance().updateSockets(Array.from(bots.filter(b => b.isFuture)), keys)
+    SocketsFutures.getFInstance().updateSockets(Array.from(bots.filter(b => b.isFuture)), keys)
 
     SignaligProcessor.instance.setBots(Array.from(bots.filter(b => b.bot_type_id == "7")))
 
@@ -122,13 +122,13 @@ function filterOutdated(bots: Array<Bot>): Array<Bot> {
   return bots.filter(b => {
 
     const PAIR = b.coin1 + b.coin2 + b.positionSide()
-    if (b.binance && b.binance!.orders && b.binance!.orders.changed.includes(PAIR) ) {
-      b.binance!.orders.changed = b.binance!.orders.changed.filter(p => p != PAIR)
+    if (b.binance && b.binance!.orders && b.binance!.changed.includes(PAIR) ) {
+      b.binance!.changed = b.binance!.changed.filter(p => p != PAIR)
       return true
     }
     if (b.signalings && b.binance && b.binance!.orders && b.status != BotStatus.ERROR) {
       for (let s of b.signalings) {
-        if (b.binance!.orders.changed.includes(s.coin1 + s.coin2 + b.positionSide())) {
+        if (b.binance!.changed.includes(s.coin1 + s.coin2 + b.positionSide())) {
           return true
         }
       }

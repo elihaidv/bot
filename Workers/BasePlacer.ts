@@ -1,4 +1,5 @@
 
+import Binance from 'node-binance-api'
 import { DAL } from '../DAL.js'
 import { BotLogger } from '../Logger.js'
 import { Bot, BotStatus, Order } from '../Models.js'
@@ -15,7 +16,7 @@ export abstract class BasePlacer {
     SECOND: string
     PAIR: string
 
-    binance: any
+    binance: Binance
     balance: Map<String, any>
     orders: Array<Order>
 
@@ -46,7 +47,7 @@ export abstract class BasePlacer {
         this.SECOND = _bot.coin2
         this.PAIR = _bot.coin1 + _bot.coin2
 
-        this.binance = _bot.binance?.binance
+        this.binance = _bot.binance!.binance
         this.balance = _bot.binance?.balance
         this.orders = _bot.binance?.orders[this.PAIR]
 
@@ -126,6 +127,13 @@ export abstract class BasePlacer {
             }
         }
 
+        if (this.bot.binance!.needTransfer.includes(this.PAIR)) {
+            this.bot.binance!.needTransfer = this.bot.binance!.needTransfer.filter(x => x != this.PAIR)
+            this.binance.transferFuturesToMain(this.SECOND,this.currentPnl, r=>{
+                console.log(r)
+            })
+        }
+
         this.myLastBuyAvg = this.weightAverage(buys)
     }
     
@@ -170,7 +178,7 @@ export abstract class BasePlacer {
                         qu,price,params, minNotional
                         
                     })
-                    console.log("quantity is to small" , qu , price , this.bot._id)
+                    console.log("quantity is to small" , qu , price , this.bot.id())
                     return
                 }
             }

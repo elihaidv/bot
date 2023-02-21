@@ -20,18 +20,18 @@ export class Sockets extends BaseSockets {
 
     averagePrice = (pair, steps) => this.prices[pair].slice(0, steps).reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / steps;
 
-    balance_update = (key, orders) => (data) => {
+    balance_update = (account:Account) => (data) => {
         if (data.e == "outboundAccountPosition") {
             for (let obj of data.B) {
-                key[obj.a] = {
+                account.balance[obj.a] = {
                     available: obj.f,
                     onOrder: obj.l,
                     total: parseFloat(obj.f) + parseFloat(obj.l)
                 }
             }
         } else if (data.e == "executionReport") {
-            if (!orders[data.s]) orders[data.s] = []
-            let order = orders[data.s].find(o => o.orderId == data.i) as Order
+            if (!account.orders[data.s]) account.orders[data.s] = []
+            let order = account.orders[data.s].find(o => o.orderId == data.i) as Order
 
             let newOrder = new Order(
                 data.S,
@@ -48,11 +48,11 @@ export class Sockets extends BaseSockets {
             if (order) {
                 Object.assign(order, newOrder)
             } else {
-                orders[data.s].push(newOrder)
+                account.orders[data.s].push(newOrder)
             }
 
             if (data.x == 'TRADE') {
-                orders.changed.push(data.s);
+                account.changed.push(data.s);
                 console.log(data.S, data.s)
 
                 BotLogger.instance.log({
@@ -63,15 +63,15 @@ export class Sockets extends BaseSockets {
         }
     }
 
-    execution_update = (orders) => (data) => {
+    execution_update = (account:Account) => (data) => {
         console.log(data)
 
         BotLogger.instance.log({
             type: "TradeEvent1",
             message: JSON.stringify(data)
         })
-        if (!orders[data.s]) orders[data.s] = []
-        let order = orders[data.s].find(o => o.orderId == data.i) as Order
+        if (!account.orders[data.s]) account.orders[data.s] = []
+        let order = account.orders[data.s].find(o => o.orderId == data.i) as Order
 
         let newOrder = new Order(
             data.S,
@@ -87,11 +87,11 @@ export class Sockets extends BaseSockets {
         if (order) {
             Object.assign(order, newOrder)
         } else {
-            orders[data.s].push(newOrder)
+            account.orders[data.s].push(newOrder)
         }
 
         if (newOrder.status == 'FILLED') {
-            orders.changed.push(data.s);
+            account.changed.push(data.s);
             // console.log(data.S, data.s)
         }
 
@@ -131,8 +131,8 @@ export class Sockets extends BaseSockets {
 
         try {
             acc.socket = acc.binance.websockets.userData(
-                this.balance_update(acc.balance, acc.orders),
-                this.execution_update(acc.orders))
+                this.balance_update(acc),
+                this.execution_update(acc))
         } catch (e: any) {
             console.error("UserSokcet", e.message)
             BotLogger.instance.error({

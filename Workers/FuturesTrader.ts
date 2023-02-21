@@ -197,13 +197,15 @@ export class FutureTrader extends BasePlacer {
             await this.place_order(this.PAIR, amount, 0, this.bot.direction, {
                 type: "TRAILING_STOP_MARKET",
                 activationPrice: this.roundPrice(this.maxFunc(price, maxBuyPrice)),
-                callbackRate: this.bot.callbackRate
+                callbackRate: this.bot.callbackRate,
+                newClientOrderId: "LAST-SL-" + this.PAIR,
             })
         } else {
             await this.place_order(this.PAIR, 0, 0, this.bot.direction, {
                 type: "TAKE_PROFIT_MARKET",
                 stopPrice: this.roundPrice(this.maxFunc(price, maxBuyPrice)),
-                closePosition: true
+                closePosition: true,
+                newClientOrderId: "LAST-TP-" + this.PAIR,
             })
         }
 

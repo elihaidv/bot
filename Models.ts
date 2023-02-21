@@ -1,5 +1,6 @@
 
 import { ObjectId } from "mongodb";
+import Binance from "node-binance-api";
 
 export enum BotStatus {
   WORK,
@@ -130,15 +131,16 @@ export class Order {
 export class Account {
 
   orders: any
-  balance: any = {}
-  binance: any
+  balance:any =  {};
+  binance: Binance
   socket: any
   positions: any = {};
+  changed:Array<String> =  []
+  needTransfer: Array<String> = []
 
-  constructor(binance) {
+  constructor(binance: Binance) {
     this.binance = binance
     this.orders = {
-      changed: [],
       orderFilled: {}
     }
   }

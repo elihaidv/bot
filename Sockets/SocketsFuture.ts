@@ -13,16 +13,16 @@ export class SocketsFutures extends BaseSockets {
         return SocketsFutures.finstance;
     }
 
-    account_update = (balance, positions, orders) => (data) => {
+    account_update = (account:Account) => (data) => {
 
         if (data.eventType == "ACCOUNT_UPDATE") {
 
             for (let obj of data.updateData.balances) {
-                balance[obj.asset] = obj.walletBalance
+                account.balance[obj.asset] = obj.walletBalance
             }
 
             for (let obj of data.updateData.positions) {
-                positions[obj.symbol + obj.positionSide] = obj
+                account.positions[obj.symbol + obj.positionSide] = obj
             }
 
         } else if (data.eventType == "ORDER_TRADE_UPDATE") {
@@ -31,9 +31,9 @@ export class SocketsFutures extends BaseSockets {
 
             // console.log(orderUpdate)
 
-            orders[orderUpdate.symbol] ||= []
+            account.orders[orderUpdate.symbol] ||= []
 
-            let order = orders[orderUpdate.symbol].find(o => o.orderId.toString() == orderUpdate.orderId.toString()) as Order
+            let order = account.orders[orderUpdate.symbol].find(o => o.orderId.toString() == orderUpdate.orderId.toString()) as Order
 
             let newOrder = new Order(
                 orderUpdate.side,
@@ -56,17 +56,20 @@ export class SocketsFutures extends BaseSockets {
 
             } else {
                 newOrder.pnl = parseFloat(orderUpdate.realizedProfit)
-                orders[orderUpdate.symbol].push(newOrder)
+                account.orders[orderUpdate.symbol].push(newOrder)
             }
 
             if (orderUpdate.orderStatus == 'FILLED' ||
                 (orderUpdate.orderStatus == 'EXPIRED' && orderUpdate.orderType == "LIMIT" && orderUpdate.originalOrderType != "TAKE_PROFIT")) {
                 if (!orderUpdate.clientOrderId.includes("BigPosition")) {
-                    orders.changed.push(orderUpdate.symbol + orderUpdate.positionSide);
+                    account.changed.push(orderUpdate.symbol + orderUpdate.positionSide);
                     BotLogger.instance.log({
                         type: "OrderFilled - Futures",
                         orderUpdate
                     })
+                }
+                if (orderUpdate.clientOrderId.includes("LAST")) {
+                    account.needTransfer.push(orderUpdate.symbol)
                 }
             }
 
@@ -96,8 +99,8 @@ export class SocketsFutures extends BaseSockets {
 
         acc.binance.websockets.userFutureData(
             console.log,
-            this.account_update(acc.balance, acc.positions, acc.orders),
-            this.account_update(acc.balance, acc.positions, acc.orders),
+            this.account_update(acc),
+            this.account_update(acc),
             s => acc.socket = s)
     }
 

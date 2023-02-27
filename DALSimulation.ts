@@ -141,7 +141,7 @@ export class DAL {
                     .filter(r => r)
                     .map(x => x.split(",")
                         .map(y => parseFloat(y)))
-                    .map(([time, open, high, low, close]) => [time, high, low, close])
+                    .map(([time, open, high, low, close]) => [time, high, low, close]) 
                     .filter(([time, high, low, close]) => time && high && low && close)
             } else {
                 historyArray = history

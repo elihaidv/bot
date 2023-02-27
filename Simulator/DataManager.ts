@@ -566,6 +566,14 @@ export class DataManager {
                 positionAmount: 0,
                 positionEntry: 0
             }
+
+
+            for (let k in bot) {
+                if (parseFloat(bot[k]) == bot[k]) {
+                    bot[k] = parseFloat(bot[k])
+                }
+
+            }
         }
 
     }
@@ -648,12 +656,4 @@ export class CandleStick {
     // get date() {
     //     return new Date(this.time)
     // }
-}
-
-
-class Ticker {
-    pair: String | undefined;
-    stream: String | undefined;
-    bestAsk: String | undefined;
-    bestBid: String | undefined;
 }

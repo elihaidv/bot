@@ -9,10 +9,6 @@ export class FutureDataManager extends DataManager {
         this.sockets = SocketsFutures.getFInstance()
         this.sockets.averagePrice = this.averagePrice.bind(this)
         this.sockets.averagePriceQuarter = this.averagePriceQuarter.bind(this)
-
-        if (this.sockets instanceof SocketsFutures) {
-            this.sockets.ticker = this.ticker.bind(this)
-        }
     }
 
 
@@ -112,5 +108,10 @@ export class FutureDataManager extends DataManager {
             }
         }
 
+    }
+
+    simulateState(bots: Bot[]) {
+        super.simulateState(bots);
+        (this.sockets as SocketsFutures).markPrices[this.PAIR] = this.chart[this.currentCandle].close
     }
 }

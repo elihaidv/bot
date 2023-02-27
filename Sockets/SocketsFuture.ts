@@ -3,7 +3,8 @@ import { Account, Bot, Key, Order } from "../Models.js";
 import { BotLogger } from "../Logger.js";
 
 export class SocketsFutures extends BaseSockets {
-    futuresBookTickerStreams = new Array<Ticker>();
+    
+    markPrices : {[pair:string]:number} = {}
 
     private static finstance: SocketsFutures;
     public static getFInstance(): SocketsFutures {
@@ -105,24 +106,12 @@ export class SocketsFutures extends BaseSockets {
     }
 
     async updateBookTickerStream() {
-
-        this.futuresBookTickerStreams.forEach(t => this.binance.websockets.terminate(t.pair));
-        this.futuresBookTickerStreams = []
-
         for (const p of this.pairs) {
-            const ticker = new Ticker();
-            ticker.pair = p
-            ticker.stream = this.binance.futuresBookTickerStream(p, ({ bestAsk, bestBid }) => {
-                ticker.bestAsk = bestAsk
-                ticker.bestBid = bestBid
+        if (!this.markPrices[p])
+            this.binance.futuresMarkPriceStream(p, data => {
+                this.markPrices[p] = data.markPrice
             })
-            this.futuresBookTickerStreams.push(ticker)
-            await this.timeout(500);
         }
-    }
-
-    ticker(pair) {
-        return this.futuresBookTickerStreams.find(t => t.pair == pair)
     }
 
     fetchOrdersBySymbol = async (acc: Account, PAIR: string) => {
@@ -209,11 +198,4 @@ export class SocketsFutures extends BaseSockets {
 
 
 
-}
-
-class Ticker {
-    pair: String | undefined;
-    stream: String | undefined;
-    bestAsk: String | undefined;
-    bestBid: String | undefined;
 }

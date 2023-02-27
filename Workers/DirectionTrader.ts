@@ -43,7 +43,9 @@ export class DirectionTrader extends FutureTrader {
 
 
     async placeBuy() {
-        let buyPrice, buyQu, maxBuyPrice = this.futureSockets.ticker(this.PAIR)?.bestBid as unknown as number
+        let buyPrice, buyQu
+        
+                const markPrice = this.futureSockets.markPrices[this.PAIR]
         let balanceLeveraged = this.balance[this.SECOND] * this.bot.leverage;
 
         
@@ -51,24 +53,24 @@ export class DirectionTrader extends FutureTrader {
         if (this.myLastOrder){
             buyPrice = this.myLastOrder.orderPrice() * this.add(1, this.bot.last_distance)
         } else {
-            buyPrice = maxBuyPrice * this.add(1, this.bot.buy_percent)
+            buyPrice = markPrice * this.add(1, this.bot.buy_percent)
         }
         buyQu = balanceLeveraged * this.bot.amount_percent
 
         await this.place_order(this.SECOND, Math.abs(buyQu), 0, !this.bot.direction, {
             type: "STOP_MARKET",
-            stopPrice: this.roundPrice(this.maxFunc(buyPrice, maxBuyPrice)),
+            stopPrice: this.roundPrice(this.maxFunc(buyPrice, markPrice)),
         })
     }
 
     async placeSell() {
-        let maxBuyPrice = this.futureSockets.ticker(this.PAIR)?.bestBid as unknown as number
+                const markPrice = this.futureSockets.markPrices[this.PAIR]
 
         let price = this.positionEntry * this.add(1,  this.bot.callbackRate / 100)
 
         await this.place_order(this.PAIR, this.positionAmount * 2, 0, this.bot.direction, {
             type: "TRAILING_STOP_MARKET",
-            activationPrice: this.roundPrice(this.maxFunc(price, maxBuyPrice)),
+            activationPrice: this.roundPrice(this.maxFunc(price, markPrice)),
             callbackRate: this.bot.callbackRate
         })
 
@@ -83,7 +85,7 @@ export class DirectionTrader extends FutureTrader {
             price = this.positionEntry * this.sub(1, this.bot.stop_loose)
             await this.place_order(this.PAIR, 0, 0, this.bot.direction, {
                 type: "STOP_MARKET",
-                stopPrice: this.roundPrice(this.minFunc(price, maxBuyPrice)),
+                stopPrice: this.roundPrice(this.minFunc(price, markPrice)),
                 closePosition: true
             })
         }

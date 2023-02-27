@@ -8,11 +8,11 @@ export class DualBot extends FutureTrader {
   
 
     async placeBuy() {
-        let maxBuyPrice = this.futureSockets.ticker(this.PAIR)?.bestBid as unknown as number
+                const markPrice = this.futureSockets.markPrices[this.PAIR]
         let balanceLeveraged = this.balance[this.SECOND] * this.bot.leverage;
         
         if (!this.positionAmount) {
-            await this.place_order(this.PAIR, (balanceLeveraged / maxBuyPrice) * this.bot.bigPosition, 0, !this.bot.direction, {
+            await this.place_order(this.PAIR, (balanceLeveraged / markPrice) * this.bot.bigPosition, 0, !this.bot.direction, {
                 type: "MARKET",
                 positionSide: this.bot.positionSide(),
                 newClientOrderId: 'BigPosition' + this.bot.positionSide(),
@@ -67,7 +67,7 @@ export class DualBot extends FutureTrader {
 
     async placeSell() {
 
-        let maxBuyPrice = this.futureSockets.ticker(this.PAIR)?.bestBid as unknown as number
+                const markPrice = this.futureSockets.markPrices[this.PAIR]
 
         this.seekBigPosition()
         
@@ -88,7 +88,7 @@ export class DualBot extends FutureTrader {
         
         await this.place_order(this.PAIR, 0, 0, this.bot.direction, {
             type: "TAKE_PROFIT_MARKET",
-            stopPrice: this.roundPrice(this.maxFunc(price, maxBuyPrice)),
+            stopPrice: this.roundPrice(this.maxFunc(price, markPrice)),
             closePosition: true,
             positionSide: this.bot.direction ? 'SHORT': 'LONG'
         })
@@ -97,7 +97,7 @@ export class DualBot extends FutureTrader {
 
         await this.place_order(this.PAIR, 0, 0, this.bot.direction, {
             type: "STOP_MARKET",
-            stopPrice: this.roundPrice(this.minFunc(price, maxBuyPrice)),
+            stopPrice: this.roundPrice(this.minFunc(price, markPrice)),
             closePosition: true,
             positionSide: this.bot.direction ? 'SHORT': 'LONG'
         })

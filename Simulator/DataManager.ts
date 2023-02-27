@@ -351,15 +351,6 @@ export class DataManager {
 
                 const shortSma = smas[j]
                 const longSma = longSMAs[j]
-                if (i >= shortSma) {
-                    closeSum[j] -= chart[i - shortSma].close
-                }
-
-                if (i >= longSma) {
-                    closeSumLong[j] -= chart[i - longSma].close
-                }
-
-                closeSum[j] += candle.close
 
                 let count = shortSma
                 if (count > i + 1) {
@@ -367,13 +358,23 @@ export class DataManager {
                 }
                 candle.sma[shortSma] = closeSum[j] / count
 
-                closeSumLong[j] += candle.close
 
                 count = longSma
                 if (count > i + 1) {
                     count = i + 1
                 }
                 candle.longSMA[longSma] = closeSumLong[j] / count
+
+                closeSum[j] += candle.close
+                closeSumLong[j] += candle.close
+
+                if (i >= shortSma) {
+                    closeSum[j] -= chart[i - shortSma].close
+                }
+
+                if (i >= longSma) {
+                    closeSumLong[j] -= chart[i - longSma].close
+                }
             }
         }
     }
@@ -605,12 +606,6 @@ export class DataManager {
         }
         this.sockets.orderBooks[this.PAIR].asks[this.chart[this.currentCandle].high] = 1
         this.sockets.orderBooks[this.PAIR].bids[this.chart[this.currentCandle].low] = 1
-    }
-    ticker(p): Ticker {
-        let t = new Ticker();
-        t.bestBid = this.chart[this.currentCandle].close
-        t.bestAsk = this.chart[this.currentCandle].close
-        return t
     }
 
     async fetchRetry(url): Promise<Response> {

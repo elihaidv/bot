@@ -9,12 +9,13 @@ export class OneStep extends FutureTrader {
         if (!this.positionAmount) {
             // await this.cancelOrders()
 
-            const ticker = this.futureSockets.ticker(this.PAIR)
-            let buyQu, fbuyPrice, buyPrice, average, maxBuyPrice = ticker?.bestBid as unknown as number
+            
+                const markPrice = this.futureSockets.markPrices[this.PAIR]
+            let buyQu, fbuyPrice, buyPrice, average
             let balanceLeveraged = this.balance[this.SECOND] * this.bot.leverage;
 
 
-            fbuyPrice = maxBuyPrice * this.sub(1, this.bot.buy_percent)
+            fbuyPrice = markPrice * this.sub(1, this.bot.buy_percent)
 
             average = this.futureSockets.averagePrice(this.PAIR, this.bot.SMA)
 
@@ -25,8 +26,8 @@ export class OneStep extends FutureTrader {
             BotLogger.instance.log({
                 type: "BeforeBuy - OneStep",
                 bot_id: this.bot._id,
-                fbuyPrice, buyPrice, buyQu,average,ticker,
-                maxBuyPrice,balance:this.balance[this.SECOND],
+                fbuyPrice, buyPrice, buyQu,average,
+                markPrice,balance:this.balance[this.SECOND],
                 positionAmount: this.positionAmount,
                 positionEntry: this.positionEntry, 
                 lastOrder: this.myLastOrder,
@@ -42,13 +43,12 @@ export class OneStep extends FutureTrader {
 
     async placeSell() {
 
-        let ticker = this.futureSockets.ticker(this.PAIR)
-        let minSell = (this.bot.direction ? ticker?.bestAsk : ticker?.bestBid) as unknown as number
+                const markPrice = this.futureSockets.markPrices[this.PAIR]
 
         BotLogger.instance.log({
             type: "BeforeSell - OneStep",
             bot_id: this.bot._id,
-            minSell, ticker,balance:this.balance[this.SECOND],
+            markPrice, balance:this.balance[this.SECOND],
             positionAmount: this.positionAmount,
             positionEntry: this.positionEntry, 
             lastOrder: this.myLastOrder,
@@ -58,14 +58,14 @@ export class OneStep extends FutureTrader {
         await this.place_order(this.PAIR, 0,0,
             this.bot.direction, {
             type: "TAKE_PROFIT_MARKET",
-            stopPrice: this.roundPrice(this.maxFunc(this.positionEntry * this.add(1, this.bot.take_profit), minSell)),
+            stopPrice: this.roundPrice(this.maxFunc(this.positionEntry * this.add(1, this.bot.take_profit), markPrice)),
             closePosition: true
         })
 
         await this.place_order(this.PAIR, 0,0,
             this.bot.direction, {
             type: "STOP_MARKET",
-            stopPrice: this.roundPrice(this.minFunc(this.positionEntry * this.sub(1, this.bot.stop_loose), minSell)),
+            stopPrice: this.roundPrice(this.minFunc(this.positionEntry * this.sub(1, this.bot.stop_loose), markPrice)),
             closePosition: true
         })
         if (!this.error) {

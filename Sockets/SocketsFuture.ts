@@ -109,7 +109,7 @@ export class SocketsFutures extends BaseSockets {
         for (const p of this.pairs) {
         if (!this.markPrices[p])
             this.binance.futuresMarkPriceStream(p, data => {
-                this.markPrices[p] = data.markPrice
+                this.markPrices[p] = parseFloat(data.markPrice)
             })
         }
     }

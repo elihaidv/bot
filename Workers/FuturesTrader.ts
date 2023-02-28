@@ -23,7 +23,7 @@ export class FutureTrader extends BasePlacer {
         // await this.binance.futuresLeverage( this.PAIR, this.bot.leverage )
         // await this.binance.futuresMarginType( this.PAIR, 'ISOLATED' )
 
-        const {binance, ...bot} = this.bot
+        const { binance, ...bot } = this.bot
         BotLogger.instance.log({
             type: "BotStart - Future",
             bot_id: this.bot._id,
@@ -122,7 +122,7 @@ export class FutureTrader extends BasePlacer {
     }
 
     async placeBuy() {
-        let buyPrice, fbuyPrice, buyQu,fbuyQu
+        let buyPrice, fbuyPrice, buyQu, fbuyQu
         const markPrice = this.futureSockets.markPrices[this.PAIR]
         let balanceLeveraged = this.balance[this.SECOND] * this.bot.leverage;
         let params: any = {};
@@ -133,7 +133,7 @@ export class FutureTrader extends BasePlacer {
         } else if (this.myLastOrder?.side == this.sellSide()) {
             fbuyPrice = this.myLastOrder?.avgPrice * this.sub(1, this.bot.take_profit)
         } else {
-            if (this.bot.amount_percent > 0.9){
+            if (this.bot.amount_percent > 0.9) {
                 return
             }
             fbuyPrice = this.myLastOrder?.avgPrice * this.sub(1, this.bot.last_distance ?? 0)
@@ -166,11 +166,11 @@ export class FutureTrader extends BasePlacer {
         BotLogger.instance.log({
             type: "BeforeBuy - Future",
             bot_id: this.bot._id,
-            fbuyPrice, buyPrice,fbuyQu, buyQu,
-            markPrice,balance:this.balance[this.SECOND],
+            fbuyPrice, buyPrice, fbuyQu, buyQu,
+            markPrice, balance: this.balance[this.SECOND],
             positionAmount: this.positionAmount,
-            positionEntry: this.positionEntry, 
-            params, balanceLeveraged, 
+            positionEntry: this.positionEntry,
+            params, balanceLeveraged,
             lastOrder: this.myLastOrder,
             direction: this.bot.direction,
             standingBuy: this.standingBuy,
@@ -180,18 +180,34 @@ export class FutureTrader extends BasePlacer {
 
     async placeSell() {
 
-                const markPrice = this.futureSockets.markPrices[this.PAIR]
+        const markPrice = this.futureSockets.markPrices[this.PAIR]
+        const SLprice = this.sub(this.positionEntry, ((((this.balance[this.SECOND] * this.bot.stop_loose)) / (this.positionAmount * this.positionEntry)) * this.positionEntry))
 
-        let price, amount = this.positionAmount
+        let fsellPrice, amount = this.positionAmount
 
         if (this.standingBuy) {
-            price = this.positionEntry * this.add(1, this.bot.take_profit_position || this.bot.take_profit)
+            fsellPrice = this.positionEntry * this.add(1, this.bot.take_profit_position || this.bot.take_profit)
         } else {
-            price = this.positionEntry * this.add(1, this.bot.take_profit)
+            fsellPrice = this.positionEntry * this.add(1, this.bot.take_profit)
         }
 
-        price = this.sub(price, this.currentPnl / amount)
-        
+        const price = this.sub(fsellPrice, this.currentPnl / amount)
+
+        BotLogger.instance.log({
+            type: "BeforeSell - Future",
+            bot_id: this.bot._id,
+            currentPnl: this.currentPnl,
+            fsellPrice, price, amount,
+            SLprice,
+            markPrice, balance: this.balance[this.SECOND],
+            positionAmount: this.positionAmount,
+            positionEntry: this.positionEntry,
+            lastOrder: this.myLastOrder,
+            direction: this.bot.direction,
+            standingBuy: this.standingBuy,
+            sellAdded: this.bot.sellAdded,
+        })
+
         if (this.standingBuy && this.bot.sellAdded && this.standingBuy.executedQty < this.positionAmount) {
             amount = await this.placeSellFromBuy(this.standingBuy, price)
         }
@@ -214,8 +230,7 @@ export class FutureTrader extends BasePlacer {
 
 
         if (this.bot.stop_loose) {
-            const SLprice = this.sub(this.positionEntry, ((((this.balance[this.SECOND] * this.bot.stop_loose))/(this.positionAmount* this.positionEntry)) * this.positionEntry))
-          
+
             if (SLprice > 0) {
                 await this.place_order(this.PAIR, 0, 0, this.bot.direction, {
                     type: "STOP_MARKET",
@@ -231,11 +246,26 @@ export class FutureTrader extends BasePlacer {
     }
 
     async placeSellFromBuy(order: Order, closePrice) {
-                const markPrice = this.futureSockets.markPrices[this.PAIR]
+        const markPrice = this.futureSockets.markPrices[this.PAIR]
 
         const price = this.maxFunc(order.price * this.add(1, this.bot.take_profit), markPrice * 1.001)
 
         if (this.biggerThan(closePrice, price) && (/*this instanceof DualBot ||*/ !order.isFirst())) {
+
+            BotLogger.instance.log({
+                type: "PlaceSellFromBuy - Future",
+                bot_id: this.bot._id,
+                currentPnl: this.currentPnl,
+                order, price, closePrice,
+                markPrice, balance: this.balance[this.SECOND],
+                positionAmount: this.positionAmount,
+                positionEntry: this.positionEntry,
+                lastOrder: this.myLastOrder,
+                direction: this.bot.direction,
+                standingBuy: this.standingBuy,
+                sellAdded: this.bot.sellAdded,
+            })
+    
 
             await this.place_order(this.PAIR, order.executedQty, price, this.bot.direction, {
                 newClientOrderId: "SELL" + order.orderId

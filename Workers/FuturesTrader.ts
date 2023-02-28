@@ -139,7 +139,8 @@ export class FutureTrader extends BasePlacer {
             fbuyPrice = this.myLastOrder?.avgPrice * this.sub(1, this.bot.last_distance ?? 0)
         }
 
-        buyPrice = this.minFunc(fbuyPrice, this.futureSockets.averagePrice(this.PAIR, this.bot.SMA), markPrice)
+        const averagePrice = this.futureSockets.averagePrice(this.PAIR, this.bot.SMA)
+        buyPrice = this.minFunc(fbuyPrice, averagePrice, markPrice)
 
         balanceLeveraged -= this.positionAmount * this.positionEntry
 
@@ -166,7 +167,7 @@ export class FutureTrader extends BasePlacer {
         BotLogger.instance.log({
             type: "BeforeBuy - Future",
             bot_id: this.bot._id,
-            fbuyPrice, buyPrice, fbuyQu, buyQu,
+            fbuyPrice, buyPrice, fbuyQu, buyQu,averagePrice,
             markPrice, balance: this.balance[this.SECOND],
             positionAmount: this.positionAmount,
             positionEntry: this.positionEntry,

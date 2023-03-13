@@ -5,11 +5,11 @@ import { DAL } from "../DALSimulation.js";
 import { Account, Bot, BotStatus, Order } from "../Models.js";
 import { BaseSockets } from "../Sockets/BaseSockets.js";
 import { Sockets } from "../Sockets/Sockets.js";
-import fetch, { Response } from 'node-fetch';
 import admZip from 'adm-zip'
 
 import Binance from 'node-binance-api';
 import crypto from 'crypto';
+import fetchRetry from './FetchRetry.js';
 
 export const SECONDS_IN_DAY = 24 * 60 * 60
 
@@ -144,20 +144,22 @@ export class DataManager {
                 return res
             }
 
-            const res1 = await this.dal.getHistoryFromBucket(this.PAIR, unit, dateString)
-            if (res1) {
-                if (new Date().getTime() - new Date(dateString).getTime() > SECONDS_IN_DAY * 1000) {
-                    await this.dal.saveHistoryInBucket(res1, this.PAIR, unit, dateString)
+            if (new Date("2023-02-20").getTime() <= new Date(dateString).getTime()){
+                const res1 = await this.dal.getHistoryFromBucket(this.PAIR, unit, dateString)
+                if (res1) {
+                    if (new Date().getTime() - new Date(dateString).getTime() > SECONDS_IN_DAY * 1000) {
+                        await this.dal.saveHistoryInBucket(res1, this.PAIR, unit, dateString)
+                    }
+                    console.log("File exists in bucket", dateString, unit)
+                    return res1
                 }
-                console.log("File exists in bucket", dateString, unit)
-                return res1
             }
 
-            const bytes = await this.fetchRetry(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip`)
+            const bytes = await fetchRetry(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip`)
                 .then(r => r.buffer())
             const fileChecksum = crypto.createHash('sha256').update(bytes).digest("hex")
 
-            const checksum = await this.fetchRetry(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip.CHECKSUM`)
+            const checksum = await fetchRetry(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip.CHECKSUM`)
                 .then(res => res.text())
                 .then(text => text.split(" ")[0])
 
@@ -191,7 +193,7 @@ export class DataManager {
         const promises: Array<Promise<any>> = []
 
         while (t < end) {
-            promises.push(this.fetchRetry(`https://api.binance.us/api/v3/klines?symbol=${this.PAIR}&interval=1s&startTime=${t}&endTime=${end}&limit=1000`)
+            promises.push(fetchRetry(`https://api.binance.us/api/v3/klines?symbol=${this.PAIR}&interval=1s&startTime=${t}&endTime=${end}&limit=1000`)
                 .then(r => r.json()))
 
             t += 1000 * 1000
@@ -616,26 +618,7 @@ export class DataManager {
         this.sockets.orderBooks[this.PAIR].bids[this.chart[this.currentCandle].low] = 1
     }
 
-    async fetchRetry(url): Promise<Response> {
-        let retry = 3
-
-        while (retry > 0) {
-            try {
-                return await fetch(url)
-            } catch (e) {
-                retry = retry - 1
-                if (retry === 0) {
-                    throw e
-                }
-
-                console.log("pausing..");
-                await this.sockets.timeout(1000);
-                console.log("done pausing...");
-
-            }
-        }
-        throw new Error("fetchRetry failed")
-    };
+    
 }
 
 export class CandleStick {

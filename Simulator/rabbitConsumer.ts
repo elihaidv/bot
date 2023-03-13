@@ -2,6 +2,7 @@ import { run } from "./Simulate.js";
 import fetch from 'node-fetch';
 
 import amqp from 'amqplib/callback_api.js';
+import fetchRetry from "./FetchRetry.js";
 
 // console.log = () => { };
 let lastSim: any = {}
@@ -33,13 +34,13 @@ amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', {
       try {
         const args = JSON.parse(msg.content.toString());
         lastSim = args
-        console.log("Simulating: ", args.simulationId, args.variation, args.start, args.end)
+        console.warn("Simulating: ", args.simulationId, args.variation, args.start, args.end)
         await run(args.simulationId, args.variation, args.start, args.end)
         channel.ack(msg);
-        console.error("success");
+        console.warn("success");
       } catch (e) {
         console.error(e);
-        channel.ack(msg);
+        channel.reject(msg);
         sendError(e)
       }
 
@@ -52,11 +53,11 @@ amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', {
 process.on('uncaughtException', function (err) {
   console.error(err);
   sendError(err)
-  extChannel.ack(lastSim)
+  extChannel.reject(lastSim)
 });
 
 function sendError(err) {
-  return fetch("https://itamars.live/api/simulations/" + lastSim.simulationId, {
+  return fetchRetry("https://itamars.live/api/simulations/" + lastSim.simulationId, {
     method: 'PUT',
     body: JSON.stringify({
       status: "error",

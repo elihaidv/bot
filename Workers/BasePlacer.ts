@@ -127,13 +127,19 @@ export abstract class BasePlacer {
             }
         }
 
+        const afterTransfer = (...args) => 
+            BotLogger.instance.log({ "type": "afterTransfer", "args": args, "bot_id": this.bot.id })
+        
+
+        
+
         if (this.bot.binance!.needTransfer.includes(this.PAIR)) {
             this.bot.binance!.needTransfer = this.bot.binance!.needTransfer.filter(x => x != this.PAIR)
             const amount = Math.abs(this.currentPnl * this.bot.backupPrecent)
             if (this.currentPnl > 0) {
-                this.binance.transferFuturesToMain(this.SECOND, amount, r => console.log(r.body))
+                this.binance.transferFuturesToMain(this.SECOND, amount, afterTransfer)
             } else {
-                this.binance.transferMainToFutures(this.SECOND, amount, r => console.log(r.body))
+                this.binance.transferMainToFutures(this.SECOND, amount, afterTransfer)
             }
         }
 

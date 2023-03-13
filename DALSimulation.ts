@@ -1,10 +1,10 @@
 import { CandleStick, DataManager } from "./Simulator/DataManager";
-import fetch from 'node-fetch';
 import { Storage } from "@google-cloud/storage";
 import { env, exit } from "process";
 import { ExecOptions } from "child_process";
 import { promises } from "fs"
 import { Bot } from "./Models";
+import fetchRetry from "./Simulator/FetchRetry";
 
 
 
@@ -86,7 +86,7 @@ export class DAL {
         })
         console.log(data)
 
-        return fetch("https://itamars.live/api/simulations/" + this.simulationId, {
+        return fetchRetry("https://itamars.live/api/simulations/" + this.simulationId, {
             method: 'PUT',
             body: data,
             headers: {

@@ -10,10 +10,9 @@ export default async function cancelOrders(bot: Bot, pair?) {
             .filter(x => x.positionSide == bot.positionSide())
 
         try {
-            await Promise.all(openOrders.map(o =>
-                bot.isFuture ?
-                    bot.binance!.binance.futuresCancel(PAIR, { orderId: o.orderId.toString() }) :
-                    bot.binance!.binance.cancel(PAIR, o.orderId)));
+            await (bot.isFuture ?  bot.binance!.binance.futuresCancelAll(PAIR):
+                    Promise.all(openOrders.map(o =>
+                        bot.binance!.binance.cancel(PAIR, o.orderId))));
 
         } catch (e: any) {
             console.error("Cancel Error" + e.body)

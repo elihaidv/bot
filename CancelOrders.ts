@@ -21,7 +21,8 @@ export default async function cancelOrders(bot: Bot, pair?) {
                 type: "CancelError",
                 bot_id: bot._id,
                 coin: PAIR,
-                message: e.body
+                message: e.body,
+                ids: openOrders.map(o => o.orderId),
             })
         }
     }

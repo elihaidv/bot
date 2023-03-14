@@ -1,10 +1,10 @@
-import { CandleStick, DataManager } from "./Simulator/DataManager";
+import { CandleStick, DataManager } from "./Simulator/DataManager.js";
 import { Storage } from "@google-cloud/storage";
 import { env, exit } from "process";
 import { ExecOptions } from "child_process";
 import { promises } from "fs"
 import { Bot } from "./Models";
-import fetchRetry from "./Simulator/FetchRetry";
+import fetchRetry from "./Simulator/FetchRetry.js";
 
 
 

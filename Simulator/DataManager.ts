@@ -164,7 +164,6 @@ export class DataManager {
                 .then(text => text.split(" ")[0])
 
             if (checksum != fileChecksum) {
-                this.failed.push(dateString)
                 console.log("Error in:", dateString, unit)
                 throw new Error("Checksum not match")
             }
@@ -208,7 +207,7 @@ export class DataManager {
         //     .map(e => e.toString())
         //     .join("\n")
 
-        return await this.dal.saveHistoryInBucket(past, this.PAIR, unit, dateString)
+        return res.flat().map(l => l.map(e => parseFloat(e)))
     }
 
     processFile = (unit, dateString, date,) => this.fetchFile(unit, dateString)
@@ -256,7 +255,7 @@ export class DataManager {
     buildCharts(seconds: CandleStick[], start): { [k: string]: Array<CandleStick> } {
         const highers = {}
         const lowers = {}
-        const charts: { [k: string]: Array<CandleStick> } = {}
+        const charts: { [k: string]: Array<any> } = {}
 
         seconds = this.paddEmptyCandles(seconds, start)
 
@@ -281,12 +280,13 @@ export class DataManager {
 
 
                 if (i && i % SECOUNDS_IN_UNIT[unit] == 0) {
-                    charts[unit].push(new CandleStick(
-                        candle.time - SECOUNDS_IN_UNIT[unit] * 1000 + 1000,
-                        highers[unit],
-                        lowers[unit],
-                        candle.close
-                    ))
+                    charts[unit].push({
+                        time:candle.time - SECOUNDS_IN_UNIT[unit] * 1000 + 1000,
+                        high:highers[unit],
+                        low:lowers[unit],
+                        close:candle.close,
+                        children:[]
+                    })
                     highers[unit] = 0
                     lowers[unit] = Infinity
                 }

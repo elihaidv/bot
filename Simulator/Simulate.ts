@@ -34,6 +34,8 @@ export async function run(simulationId: string, variation: string | number, star
     }
   }).then(r => r.json()).catch(console.error)
 
+  // console.error(simulation)
+
   const bots: Bot[] = []
 
   if (typeof variation === "number" || !variation.includes("-")) {

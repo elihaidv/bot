@@ -10,6 +10,7 @@ export default async function fetchRetry(url, init?: RequestInit): Promise<Respo
         } catch (e) {
             retry = retry - 1
             if (retry === 0) {
+                console.error(e)
                 throw e
             }
 

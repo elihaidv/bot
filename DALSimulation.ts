@@ -122,12 +122,14 @@ export class DAL {
             const dalVariation = this.variations[variation]
             const cloneSteps = dalVariation.steps.slice().sort((a, b) => a[0] - b[0] || a[12] - b[12])
             dalVariation.steps = []
-            await new Storage()
-                .bucket('simulations-tradingbot')
-                .file(`simulation${this.simulationId}-${variation}/${dalVariation.page}.csv`)
-                .save(cloneSteps
+            try {
+                await promises.mkdir(`simulations-outputs/simulation${this.simulationId}-${variation}`)
+            }catch(e){}
+            
+            await promises.writeFile(`simulations-outputs/simulation${this.simulationId}-${variation}/${dalVariation.page}.csv`,
+                cloneSteps
                     .map(s => s.join(','))
-                    .join('\n'), { resumable: false });
+                    .join('\n'))
         } catch (e) {
             console.error(e)
         }

@@ -65,6 +65,7 @@ export class Bot {
   lequided: boolean = false
   variation: number = 0
   backupPrecent: number = 0
+  quiet:boolean = true
 
   id(): String { return this._id.toString() }
 

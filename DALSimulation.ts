@@ -17,13 +17,17 @@ export class DAL {
     awaiter = false
     start
     end
+    isQuiet = false
+    saveLogs = false
 
-    async init(dataManager: DataManager | null, simulationId, start, end) {
+    async init(dataManager: DataManager | null, simulationId, start, end, saveLogs = false) {
         this.dataManager = dataManager
         this.simulationId = simulationId
         this.start = start
         this.end = end
 
+        this.isQuiet = process.argv.join("").includes('quiet')
+        this.saveLogs = saveLogs
         // setTimeout(() => this.updateProgress("timeout"), 3400000)
     }
 
@@ -100,10 +104,6 @@ export class DAL {
             .catch(console.error)
     }
 
-    get isQuiet() {
-        return process.argv.join("").includes('quiet')
-    }
-
     async endTest(bot: Bot) {
 
         if (this.isQuiet) return
@@ -118,6 +118,7 @@ export class DAL {
     }
 
     saveInBucket = async (variation) => {
+        if (!this.saveLogs) return
         try {
             const dalVariation = this.variations[variation]
             const cloneSteps = dalVariation.steps.slice().sort((a, b) => a[0] - b[0] || a[12] - b[12])

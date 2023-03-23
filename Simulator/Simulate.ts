@@ -12,12 +12,14 @@ import { Periodically } from "../Workers/Periodically.js";
 import exchangeInfo from './exchangeInfo.js'
 import fetch from "node-fetch";
 import { OneStep } from "../Workers/OneStep.js";
+import { parse } from 'node-html-parser';
 
 import Binance from 'node-binance-api';
 
 
 import { OrderPlacer } from "../Workers/PlaceOrders.js";
 import fetchRetry from "./FetchRetry.js";
+import { promises as fs } from "fs";
 
 env.GOOGLE_APPLICATION_CREDENTIALS = "trading-cloud.json"
 env.TZ = "UTC"
@@ -58,9 +60,11 @@ export async function run(simulationId: string, variation: string | number, star
 
 
   dataManager.dal.init(dataManager, simulationId, startStr, endStr)
+  const oldest = await fetchOldestHistory(dataManager.PAIR)
 
   const maxLongSMA = Math.max(...bots.map(b => b.longSMA))
-  const start = new Date(startStr).getTime() - (maxLongSMA * 15 * 60 * 1000)
+  let start = new Date(startStr).getTime() - (maxLongSMA * 15 * 60 * 1000)
+  start = Math.max(start, new Date(oldest).getTime())
   const end = Math.min(new Date(endStr).getTime(), new Date().getTime())
   let endChunk = Math.max(Math.min(end, start + MIN_CHART_SIZE * 1000), start + maxLongSMA * 15 * 60 * 1000)
 
@@ -208,3 +212,22 @@ async function place(bots: Bot[]) {
 function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+const fetchOldestHistory = async (symbol) => {
+  try {
+    const oldest = await fs.readFile(`spot/${symbol}/oldest`)
+    return oldest.toString()
+  } catch (e) {
+    const response = await fetch(`https://s3-ap-northeast-1.amazonaws.com/data.binance.vision?delimiter=/&prefix=data/spot/daily/klines/${symbol}/1s/`).then(res => res.text());
+
+    const root = parse(response);
+
+    const arr = root.childNodes[1].childNodes
+
+    const oldest = arr[7].childNodes[0].textContent.split("-1s-")[1].split(".")[0]
+
+    fs.writeFile(`spot/${symbol}/oldest`, oldest)
+    return oldest
+  }
+
+};

@@ -69,6 +69,7 @@ export abstract class BaseSockets {
                 await this.timeout(500)
             }
         }
+        
 
         for (let b of Object.values(bots)) {
             if (!b.binance) {

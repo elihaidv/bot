@@ -26,6 +26,7 @@
     "node-binance-api": "^0.13.1",
     "node-fetch": "guillaume-fr/node-fetch",
     "node-fetch-cache": "^3.0.5",
+    "node-html-parser": "^6.1.5",
     "on-change": "^3.0.2",
     "telegram": "^2.12.8",
     "telegram-mtproto": "^2.2.2"

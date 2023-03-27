@@ -178,7 +178,7 @@ export class DataManager {
             console.log("downloded: ", dateString, unit);
             return r
         } catch (e) {
-            if (new Date(dateString).getTime() > new Date().getTime() - 1000 * 60 * 60 * 24 * 3) {
+            if (new Date(dateString).getTime() > new Date().getTime() - 1000 * 60 * 60 * 24 * 5) {
                 return await this.fetchDayData(unit, dateString)
             }
             console.log("Error in:", dateString, unit, e)
@@ -202,10 +202,15 @@ export class DataManager {
         }
         const res = await Promise.all(promises)
 
-        // const resStr = past.map(l => {l.splice(1,0,0);return l})
-        //     .concat(res.flat())
-        //     .map(e => e.toString())
-        //     .join("\n")
+        
+        if (new Date().getTime() - new Date(dateString).getTime() > SECONDS_IN_DAY) {
+            const resStr = past.map(l => {l.splice(1,0,0);return l})
+                .concat(res.flat())
+                .map(e => e.toString())
+                .join("\n")
+
+            this.dal.saveHistoryInBucket(resStr, this.PAIR, "1s", dateString)
+        }
 
         return res.flat().map(l => l.map(e => parseFloat(e)))
     }
@@ -394,7 +399,7 @@ export class DataManager {
                     const parent = charts[UNIT_TIMES[unitIndex - 1]][Math.floor(i / UNIT_NEXT_LEVEL[unit])]
                     charts[unit][i].parent = parent
                     if (!parent) {
-                        debugger
+                        // debugger
                     } else {
                         parent.children.push(charts[unit][i])
                     }

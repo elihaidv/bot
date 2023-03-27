@@ -36,6 +36,12 @@ export async function run(simulationId: string, variation: string | number, star
     }
   }).then(r => r.json()).catch(console.error)
 
+  if (simulation.exception == "Symfony\\Component\\HttpKernel\\Exception\\NotFoundHttpException"){
+    return
+  }
+
+  // console.error(simulation)
+
   const bots: Bot[] = []
 
   if (typeof variation === "number" || !variation.includes("-")) {
@@ -89,12 +95,11 @@ export async function run(simulationId: string, variation: string | number, star
     if (!t) {
       let startChunk = dataManager.chart.at(-1)!.time + 1000
       let endChunk = Math.min(end, startChunk + MIN_CHART_SIZE * 1000)
-      if (endChunk <= startChunk) {
-        break;
+      if (endChunk > startChunk) {
+        await dataManager.fetchAllCharts(startChunk, endChunk)
+        dataManager.currentCandle = 0
+        t = dataManager.chart[dataManager.currentCandle]
       }
-      await dataManager.fetchAllCharts(startChunk, endChunk)
-      dataManager.currentCandle = 0
-      t = dataManager.chart[dataManager.currentCandle]
       if (!t) {
         break;
       }
@@ -214,6 +219,12 @@ function timeout(ms) {
 }
 
 const fetchOldestHistory = async (symbol) => {
+
+  try {
+    await fs.mkdir(`spot/${symbol}/1s`, { recursive: true });
+  } catch (e) { }
+
+
   try {
     const oldest = await fs.readFile(`spot/${symbol}/oldest`)
     return oldest.toString()

@@ -41,19 +41,19 @@ export class DAL {
 
         step.time = this.dataManager.chart[this.dataManager.currentCandle].time
         const stepArr = [step.time,
-        step.type,
-        step.side, step.price,
-        step.quantity,
-        step.low,
-        step.high,
-        step.balanceSecond,
-        step.positionSize,
-        step.positionPnl,
-        step.profit,
-        step.balanceFirst,
-        step.priority,
-        step.sma && step.sma,
-        step.longSMA && step.longSMA,
+            step.type,
+            step.side, step.price,
+            step.quantity,
+            step.low,
+            step.high,
+            step.balanceSecond,
+            step.positionSize,
+            step.positionPnl,
+            step.profit,
+            step.balanceFirst,
+            step.priority,
+            step.sma && step.sma,
+            step.longSMA && step.longSMA,
         ]
 
         dalVariation.steps.push(stepArr)

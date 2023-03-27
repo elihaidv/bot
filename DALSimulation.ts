@@ -19,6 +19,7 @@ export class DAL {
     end
     isQuiet = false
     saveLogs = false
+    saveLocals = true
 
     async init(dataManager: DataManager | null, simulationId, start, end, saveLogs = false) {
         this.dataManager = dataManager
@@ -27,6 +28,7 @@ export class DAL {
         this.end = end
 
         this.isQuiet = process.argv.join("").includes('quiet')
+        this.saveLocals = process.argv.join("").includes('local')
         this.saveLogs = saveLogs
         // setTimeout(() => this.updateProgress("timeout"), 3400000)
     }
@@ -40,23 +42,25 @@ export class DAL {
         const dalVariation = this.variations[bot.variation]
 
         step.time = this.dataManager.chart[this.dataManager.currentCandle].time
-        const stepArr = [step.time,
-        step.type,
-        step.side, step.price,
-        step.quantity,
-        step.low,
-        step.high,
-        step.balanceSecond,
-        step.positionSize,
-        step.positionPnl,
-        step.profit,
-        step.balanceFirst,
-        step.priority,
-        step.sma && step.sma,
-        step.longSMA && step.longSMA,
-        ]
+        if (this.saveLogs){
+            const stepArr = [step.time,
+                step.type,
+                step.side, step.price,
+                step.quantity,
+                step.low,
+                step.high,
+                step.balanceSecond,
+                step.positionSize,
+                step.positionPnl,
+                step.profit,
+                step.balanceFirst,
+                step.priority,
+                step.sma && step.sma,
+                step.longSMA && step.longSMA,
+            ]
 
-        dalVariation.steps.push(stepArr)
+            dalVariation.steps.push(stepArr)
+        }
         dalVariation.stepsCounts++
 
 
@@ -122,15 +126,26 @@ export class DAL {
         try {
             const dalVariation = this.variations[variation]
             const cloneSteps = dalVariation.steps.slice().sort((a, b) => a[0] - b[0] || a[12] - b[12])
+                .map(s => s.join(','))
+                .join('\n')
             dalVariation.steps = []
-            try {
-                await promises.mkdir(`simulations-outputs/simulation${this.simulationId}-${variation}`)
-            }catch(e){}
-            
-            await promises.writeFile(`simulations-outputs/simulation${this.simulationId}-${variation}/${dalVariation.page}.csv`,
-                cloneSteps
-                    .map(s => s.join(','))
-                    .join('\n'))
+
+            if (this.saveLocals) {
+
+                try {
+                    await promises.mkdir(`simulations-outputs/simulation${this.simulationId}-${variation}`)
+                } catch (e) { }
+
+                await promises.writeFile(`simulations-outputs/simulation${this.simulationId}-${variation}/${dalVariation.page}.csv`,
+                    cloneSteps)
+            } else {
+                await new Storage()
+                    .bucket('simulations-tradingbot')
+                    .file(`simulation${this.simulationId}-${variation}/${dalVariation.page}.csv`)
+                    .save(cloneSteps, { resumable: false });
+
+            }
+
         } catch (e) {
             console.error(e)
         }
@@ -144,13 +159,13 @@ export class DAL {
                     .filter(r => r)
                     .map(x => x.split(",")
                         .map(y => parseFloat(y)))
-                    .map(([time, open, high, low, close]) => [time, high, low, close]) 
+                    .map(([time, open, high, low, close]) => [time, high, low, close])
                     .filter(([time, high, low, close]) => time && high && low && close)
             } else {
                 historyArray = history
             }
 
-            await promises.mkdir(`spot/${pair}/${unit}`, { recursive: true })
+
             await promises.writeFile(`spot/${pair}/${unit}/${date}.csv`, historyArray.map(e => e.join(',')).join('\n'), {})
             // await new Storage()
             //     .bucket('crypto-history')

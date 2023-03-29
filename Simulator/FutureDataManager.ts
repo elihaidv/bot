@@ -79,10 +79,11 @@ export class FutureDataManager extends DataManager {
     }
 
     closePosition(bot:Bot) {
+        const price = this.chart[this.currentCandle].close || this.chart[this.currentCandle - 1].close
         this.orderexecute(Object.assign(new Order(), {
             bot: bot,
             closePosition: true,
-            price: this.chart[this.currentCandle].close,
+            price: price,
             type: "STOP_MARKET",
         }), this.chart[this.chart.length - 1]);
 

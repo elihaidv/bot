@@ -144,7 +144,7 @@ export class DataManager {
                 return res
             }
 
-            if (new Date("2023-02-20").getTime() <= new Date(dateString).getTime()){
+            if (new Date("2023-02-20").getTime() <= new Date(dateString).getTime()) {
                 const res1 = await this.dal.getHistoryFromBucket(this.PAIR, unit, dateString)
                 if (res1) {
                     if (new Date().getTime() - new Date(dateString).getTime() > SECONDS_IN_DAY * 1000) {
@@ -186,7 +186,7 @@ export class DataManager {
             return
         }
     }
-    fetchDayData = async (unit, dateString, past:any = []) => {
+    fetchDayData = async (unit, dateString, past: any = []) => {
         let t = past.length == 0 ? new Date(dateString).getTime() : past.at(-1)[0] + 1000
         const end = Math.min(new Date(dateString).getTime() + SECONDS_IN_DAY * 1000 - 1000, new Date().getTime())
         const promises: Array<Promise<any>> = []
@@ -202,9 +202,9 @@ export class DataManager {
         }
         const res = await Promise.all(promises)
 
-        
+
         if (new Date().getTime() - new Date(dateString).getTime() > SECONDS_IN_DAY) {
-            const resStr = past.map(l => {l.splice(1,0,0);return l})
+            const resStr = past.map(l => { l.splice(1, 0, 0); return l })
                 .concat(res.flat())
                 .map(e => e.toString())
                 .join("\n")
@@ -286,11 +286,11 @@ export class DataManager {
 
                 if (i && i % SECOUNDS_IN_UNIT[unit] == 0) {
                     charts[unit].push({
-                        time:candle.time - SECOUNDS_IN_UNIT[unit] * 1000 + 1000,
-                        high:highers[unit],
-                        low:lowers[unit],
-                        close:candle.close,
-                        children:[]
+                        time: candle.time - SECOUNDS_IN_UNIT[unit] * 1000 + 1000,
+                        high: highers[unit],
+                        low: lowers[unit],
+                        close: candle.close,
+                        children: []
                     })
                     highers[unit] = 0
                     lowers[unit] = Infinity
@@ -423,6 +423,17 @@ export class DataManager {
 
     checkOrder(orders: Array<Order>) {
 
+        for (let bot of this.bots) {
+            const pos = bot.binance!.positions[this.PAIR + bot.positionSide()]
+            if (pos.positionAmount == 0) continue
+            const liquidationPrice = -(bot.binance!.balance[bot.coin2] / pos.positionAmount) + pos.positionEntry
+            const o = new Order(pos.positionAmount > 0 ? "SELL" : "BUY", "NEW", liquidationPrice,
+                this.makeid(10), pos.positionAmount, pos.positionAmount, this.chart[this.currentCandle].time, "STOP_MARKET", "",
+                bot.positionSide(), liquidationPrice)
+            o.bot = bot
+            orders.push(o)
+        }
+
 
         if (!this.chart[this.currentCandle]) {
             // debugger
@@ -527,7 +538,7 @@ export class DataManager {
 
     }
 
-    closePosition(bot:Bot) {
+    closePosition(bot: Bot) {
         for (let i = 0; i < this.bots.length; i++) {
             const bot = this.bots[i];
             const price = this.chart[this.currentCandle].close
@@ -623,7 +634,7 @@ export class DataManager {
         this.sockets.orderBooks[this.PAIR].bids[this.chart[this.currentCandle].low] = 1
     }
 
-    
+
 }
 
 export class CandleStick {

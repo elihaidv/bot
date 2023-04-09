@@ -421,7 +421,10 @@ export class DataManager {
         this.calculateSmas()
     }
 
-    checkOrder(orders: Array<Order>) {
+    checkOrder(orgorders: Array<Order>) {
+
+        let orders: Array<Order> = []
+        orders = orders.concat(orgorders)
 
         for (let bot of this.bots) {
             const pos = bot.binance!.positions[this.PAIR + bot.positionSide()]

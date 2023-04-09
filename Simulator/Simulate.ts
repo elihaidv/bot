@@ -100,6 +100,7 @@ export async function run(simulationId: string, variation: string | number, star
         dataManager.currentCandle = 0
         t = dataManager.chart[dataManager.currentCandle]
       }
+      
       if (!t) {
         break;
       }
@@ -113,6 +114,11 @@ export async function run(simulationId: string, variation: string | number, star
         ordersToFill = ordersToFill.filter(o => o.bot != b)
         return true
       }
+
+      if (b.profitNum < -9000){
+        dataManager.openOrders = dataManager.openOrders.filter(o => o.bot != b);
+        return false
+    }
     })
 
 
@@ -139,6 +145,10 @@ export async function run(simulationId: string, variation: string | number, star
       console.log("awaiter")
       dataManager.dal.awaiter = false
       await timeout(100)
+    }
+
+    if (bots.every(b=>b.profitNum < -9000)){
+      break
     }
 
     await place(botsToPlace)

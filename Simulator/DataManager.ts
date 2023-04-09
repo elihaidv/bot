@@ -421,7 +421,10 @@ export class DataManager {
         this.calculateSmas()
     }
 
-    checkOrder(orders: Array<Order>) {
+    checkOrder(orgorders: Array<Order>) {
+
+        let orders: Array<Order> = []
+        orders = orders.concat(orgorders)
 
         if (!this.chart[this.currentCandle]) {
             // debugger

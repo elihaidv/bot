@@ -423,6 +423,11 @@ export class DataManager {
 
     checkOrder(orders: Array<Order>) {
 
+        if (!this.chart[this.currentCandle]) {
+            // debugger
+            return []
+        }
+        
         for (let bot of this.bots) {
             const pos = bot.binance!.positions[this.PAIR + bot.positionSide()]
             if (pos.positionAmount == 0) continue
@@ -435,10 +440,6 @@ export class DataManager {
         }
 
 
-        if (!this.chart[this.currentCandle]) {
-            // debugger
-            return []
-        }
 
         if (!this.currentCandleStick) {
             this.currentCandleStick = this.chart[this.currentCandle]

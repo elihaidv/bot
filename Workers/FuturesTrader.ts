@@ -182,7 +182,7 @@ export class FutureTrader extends BasePlacer {
     async placeSell() {
 
         const markPrice = this.futureSockets.markPrices[this.PAIR]
-        const SLprice = this.sub(this.positionEntry, ((((this.balance[this.SECOND] * this.bot.stop_loose)) / (this.positionAmount * this.positionEntry)) * this.positionEntry))
+        const SLprice = this.positionEntry * this.sub(1, this.bot.stop_loose)
 
         let fsellPrice, amount = this.positionAmount
 

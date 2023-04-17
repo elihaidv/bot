@@ -164,7 +164,7 @@ export class DataManager {
                 .then(text => text.split(" ")[0])
 
             if (checksum != fileChecksum) {
-                console.log("Error in:", dateString, unit)
+                console.error("Error in:", dateString, unit)
                 throw new Error("Checksum not match")
             }
 

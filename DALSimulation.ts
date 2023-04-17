@@ -222,7 +222,7 @@ export class DAL {
             }
             return res
         } catch (e: any) {
-            if (!e.message.includes("no such file")) {
+            if (!e.message.includes("No such object")) {
                 console.error(e.message)
             }
             return null

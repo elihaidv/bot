@@ -32,9 +32,17 @@ export class FutureDataManager extends DataManager {
             bot.binance!.orders[this.PAIR] = []
 
             if (bot.backupPrecent > 0) {
-                bot.binance!.balance.backup += gain * bot.backupPrecent
-                bot.profitNum += gain * bot.backupPrecent
-                gain *= (1 - bot.backupPrecent)
+                if (-bot.binance!.balance.backup > gain * bot.backupPrecent){
+                    gain += bot.binance!.balance.backup
+                    bot.profitNum -= bot.binance!.balance.backup
+                    bot.binance!.balance.backup = 0
+
+                } else {
+                    bot.binance!.balance.backup += gain * bot.backupPrecent
+                    bot.profitNum += gain * bot.backupPrecent
+                    gain *= (1 - bot.backupPrecent)
+                }
+
             }
 
         } else if (qu * pos.positionAmount < 0) {

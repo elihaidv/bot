@@ -147,7 +147,7 @@ export async function run(simulationId: string, variation: string | number, star
       await timeout(100)
     }
 
-    if (bots.every(b=>b.profitNum < -9000)){
+    if (bots.every(b=>b.profitNum < -9900)){
       break
     }
 

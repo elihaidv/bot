@@ -497,7 +497,8 @@ export class DataManager {
                         }
                         if (!res[order.bot!.id()]) {
                             res[order.bot!.id()] = order;
-                        }else if(order.type == "STOP_MARKET"){
+                        }
+                        if(order.type == "STOP_MARKET"){
                             res[order.bot!.id()] = order;
                         }
                     }

@@ -436,7 +436,7 @@ export class DataManager {
             if (pos.positionAmount == 0) continue
             const liquidationPrice = -(bot.binance!.balance[bot.coin2] / pos.positionAmount) + pos.positionEntry
             const o = new Order(pos.positionAmount > 0 ? "SELL" : "BUY", "NEW", liquidationPrice,
-                this.makeid(10), pos.positionAmount, pos.positionAmount, this.chart[this.currentCandle].time, "STOP_MARKET", "",
+                "liquid", pos.positionAmount, pos.positionAmount, this.chart[this.currentCandle].time, "STOP_MARKET", "",
                 bot.positionSide(), liquidationPrice)
             o.bot = bot
             orders.push(o)
@@ -490,7 +490,19 @@ export class DataManager {
                 } else {
                     this.currentCandleStick = candle
                     this.currentCandle = (candle.time - this.chart[0].time) / 1000
-                    return ordersInInreval
+                    const res  = <{key:[String],Order}>{}
+                    for (let order of ordersInInreval) {
+                        if (order.orderId == "liquid") {
+                            continue
+                        }
+                        if (!res[order.bot!.id()]) {
+                            res[order.bot!.id()] = order;
+                        }else if(order.type == "STOP_MARKET"){
+                            res[order.bot!.id()] = order;
+                        }
+                    }
+
+                    return Object.values(res)
                 }
             }
         }

@@ -24,6 +24,7 @@ import { promises as fs } from "fs";
 env.GOOGLE_APPLICATION_CREDENTIALS = "trading-cloud.json"
 env.TZ = "UTC"
 env.IS_SIMULATION = "true"
+const MAX_LOOSE = -9900
 
 let dataManager: DataManager
 
@@ -115,7 +116,7 @@ export async function run(simulationId: string, variation: string | number, star
         return true
       }
 
-      if (b.profitNum < -9000){
+      if (b.profitNum < MAX_LOOSE){
         dataManager.openOrders = dataManager.openOrders.filter(o => o.bot != b);
         return false
     }
@@ -147,7 +148,7 @@ export async function run(simulationId: string, variation: string | number, star
       await timeout(100)
     }
 
-    if (bots.every(b=>b.profitNum < -9900)){
+    if (bots.every(b=>b.profitNum < MAX_LOOSE)){
       break
     }
 

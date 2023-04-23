@@ -67,7 +67,7 @@ export class Bot {
   backupPrecent: number = 0
   quiet:boolean = true
 
-  id(): String { return this._id.toString() }
+  id(): string { return this._id.toString() }
 
   positionSide(): String {
     return this.isFuture ? (this.mode ? (this.direction ? 'SHORT' : 'LONG') : 'BOTH') : ''

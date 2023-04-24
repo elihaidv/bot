@@ -45,15 +45,11 @@ export class FutureTrader extends BasePlacer {
         this.positionAmount != 0 && await this.placeSell()
     }
     minFunc(...values: number[]) {
-        // if (this.isSemulation){
-        //     values.pop()
-        // }
+        values = values.filter(v => v)
         return this.bot.direction ? Math.max(...values) : Math.min(...values)
     }
     maxFunc(...values: number[]) {
-        // if (this.isSemulation){
-        //     values.pop()
-        // }
+        values = values.filter(v => v)
         return this.bot.direction ? Math.min(...values) : Math.max(...values)
     }
     calculatePrice() {

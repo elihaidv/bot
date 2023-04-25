@@ -4,5 +4,10 @@ inotifywait -m simulations-outputs -e create -e moved_to |
         gsutil -m rsync -r -i simulations-outputs-back/$file gs://simulations-tradingbot/$file; 
         rm -rf simulations-outputs-back/$file
         sleep 60
-    done    
-    
+    done   
+
+# mv simulations-outputs/* simulations-outputs-back
+# for f in simulations-outputs-back/simulation*;
+#  do /home/clap/Downloads/google-cloud-sdk/bin/gsutil -m rsync -r -i $f gs://simulations-tradingbot/$(basename "$f"); 
+#  rm -rf $f
+# done;

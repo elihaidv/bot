@@ -16,6 +16,7 @@ import { parse } from 'node-html-parser';
 
 import Binance from 'node-binance-api';
 
+import os from "os";
 
 import { OrderPlacer } from "../Workers/PlaceOrders.js";
 import fetchRetry from "./FetchRetry.js";
@@ -30,7 +31,9 @@ let dataManager: DataManager
 
 export async function run(simulationId: string, variation: string | number, startStr: string, endStr: string) {
 
-  const simulation: any = await fetchRetry(`https://itamars.live/api/simulations/${simulationId}?vars=${variation}`, {
+  const simulation: any = await fetchRetry(`https://itamars.live/api/simulations/${simulationId}?
+                                            vars=${variation}&
+                                            device=${os.hostname()}`, {
     headers: {
       "API-KEY": "WkqrHeuts2mIOJHMcxoK",
       "Accept": "application/json"

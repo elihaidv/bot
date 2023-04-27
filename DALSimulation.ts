@@ -5,7 +5,6 @@ import { ExecOptions } from "child_process";
 import { promises } from "fs"
 import { Bot } from "./Models";
 import fetchRetry from "./Simulator/FetchRetry.js";
-import os from "os";
 
 
 const PAGE_SIZE = 2000
@@ -90,8 +89,7 @@ export class DAL {
             maxPage: dalVariation.page - 1,
             progress: status == "finished" ? 100 : progress,
             status: status,
-            variation: bot.variation,
-            device: os.hostname()
+            variation: bot.variation
         })
         console.log(data)
 

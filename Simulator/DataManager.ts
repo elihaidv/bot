@@ -495,11 +495,11 @@ export class DataManager {
                         if (order.orderId == "liquid") {
                             continue
                         }
-                        if (!res[order.bot!.id()]) {
-                            res[order.bot!.id()] = order;
+                        if (!res[order.bot!.variation]) {
+                            res[order.bot!.variation] = order;
                         }
                         if(order.type == "STOP_MARKET"){
-                            res[order.bot!.id()] = order;
+                            res[order.bot!.variation] = order;
                         }
                     }
 

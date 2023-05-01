@@ -43,7 +43,7 @@ function compareFiles(bucketName, sourceFile, destinationFile) {
     }).catch(console.error);
 }
 
-compareDirectories('simulations-tradingbot', 'simulation640b2e2e9fc9c9302911b877-0', 'simulation640b2379faf00f61d67f18a2-0').then((results) => {
+compareDirectories('simulations-tradingbot', 'simulation' + process.argv[2], 'simulation' + process.argv[3]).then((results) => {
     const differentFiles = results.filter((result) => result);
     console.log(differentFiles);
 });

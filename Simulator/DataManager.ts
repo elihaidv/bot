@@ -467,7 +467,7 @@ export class DataManager {
 
 
             if (!ordersInInreval.length && (!candle.endTime || candle.endTime < maxTime)) {
-                if (candle.time > maxTime) {
+                if (candle.time >= maxTime) {
                     this.currentCandle = (maxTime - this.chart[0].time) / 1000
                     this.currentCandleStick = this.chart[this.currentCandle]
                     if (!this.chart[this.currentCandle]) {

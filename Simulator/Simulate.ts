@@ -104,7 +104,8 @@ export async function run(simulationId: string, variation: string | number, star
         dataManager.currentCandle = 0
         t = dataManager.chart[dataManager.currentCandle]
       }
-      
+      ordersToFill = dataManager.checkOrder(dataManager.openOrders)
+      t = dataManager.chart[dataManager.currentCandle]
       if (!t) {
         break;
       }

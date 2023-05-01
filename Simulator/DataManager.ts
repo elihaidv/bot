@@ -394,6 +394,8 @@ export class DataManager {
                 if (charts[unit][i + 1]) {
                     charts[unit][i].lastChild = unit != "1h" && (i + 1) % UNIT_NEXT_LEVEL[unit] == 0
                     charts[unit][i].next = charts[unit][i + 1]
+                } else {
+                    charts[unit][i].endTime = charts[unit][i].time + SECOUNDS_IN_UNIT[unit] * 1000
                 }
                 if (unitIndex > 0) {
                     const parent = charts[UNIT_TIMES[unitIndex - 1]][Math.floor(i / UNIT_NEXT_LEVEL[unit])]
@@ -464,7 +466,7 @@ export class DataManager {
 
 
 
-            if (!ordersInInreval.length) {
+            if (!ordersInInreval.length && (!candle.endTime || candle.endTime < maxTime)) {
                 if (candle.time > maxTime) {
                     this.currentCandle = (maxTime - this.chart[0].time) / 1000
                     this.currentCandleStick = this.chart[this.currentCandle]
@@ -661,6 +663,7 @@ export class CandleStick {
     children: CandleStick[] = [];
     sma; longSMA;
     lastChild = false
+    endTime;
 
     constructor(time?, high?, low?, close?) {
         this.time = time;

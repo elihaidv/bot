@@ -203,7 +203,7 @@ export abstract class BasePlacer {
 
             let res = await action(this.PAIR, qu, price, params)
             if (res.msg) {
-                console.log(res.msg, this.PAIR, price || params.stopPrice || params.activationPrice, qu, this.bot.id())
+                // console.log(res.msg, this.PAIR, price || params.stopPrice || params.activationPrice, qu, this.bot.id())
                 const error = {
                     type: "PlaceOrderError",
                     bot_id: this.bot._id,
@@ -222,7 +222,7 @@ export abstract class BasePlacer {
                 return res
             } else {
 
-                console.log(res.symbol, res.side, res.price || params.stopPrice || params.activationPrice, res.origQty, res.status)
+                // console.log(res.symbol, res.side, res.price || params.stopPrice || params.activationPrice, res.origQty, res.status)
                 BotLogger.instance.log({
                     type: "PlaceOrder",
                     bot_id: this.bot._id,

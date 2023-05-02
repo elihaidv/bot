@@ -110,6 +110,8 @@ export class DataManager {
             sma: this.averagePrice(null, bot.SMA),
             longSMA: this.averagePriceQuarter(null, bot.longSMA),
         }, bot)
+
+        console.log(new Date(this.chart[this.currentCandle].time))
         return order
     });
     makeid(length): string {
@@ -313,13 +315,16 @@ export class DataManager {
         }
 
         diff = start + SECONDS_IN_DAY * 1000 - chart.at(-1)?.time
-        if (diff != 1000) {
+        if (diff > 1000) {
             const items = Array.from({ length: diff / 1000 - 1 }, (_, j) => {
                 const newCandle = Object.assign(new CandleStick(), chart.at(-1))
                 newCandle.time += 1000 * (j + 1)
                 return newCandle
             })
             chart = chart.concat(items)
+        }
+        if (diff < 1000) {
+            chart = chart.slice(0, -1)
         }
 
         let copiedChart: CandleStick[] = []
@@ -333,7 +338,7 @@ export class DataManager {
                     return newCandle
                 })
                 copiedChart = copiedChart.concat(items)
-            } else if (diff < 0) {
+            } else if (diff < 1000) {
                 debugger
             }
         }

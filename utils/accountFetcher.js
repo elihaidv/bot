@@ -17,5 +17,5 @@ const ordersFetcher = async () => {
 };
 
 Promise.all([accountFetcher(), ordersFetcher()]).then(() => {
-    console.log(res);
+    console.log(JSON.stringify(res));
 }).catch(console.error);

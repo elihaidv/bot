@@ -28,7 +28,7 @@ export class DAL {
 
         this.isQuiet = process.argv.join("").includes('quiet')
         this.saveLocals = process.argv.join("").includes('local')
-        this.saveLogs = saveLogs
+        this.saveLogs = saveLogs 
         // setTimeout(() => this.updateProgress("timeout"), 3400000)
     }
 

@@ -40,7 +40,7 @@ export async function run(simulationId: string, variation: string | number, star
     }
   }).then(r => r.json()).catch(console.error)
 
-  if (simulation.exception == "Symfony\\Component\\HttpKernel\\Exception\\NotFoundHttpException"){
+  if (simulation.exception == "Symfony\\Component\\HttpKernel\\Exception\\NotFoundHttpException") {
     return
   }
 
@@ -68,8 +68,9 @@ export async function run(simulationId: string, variation: string | number, star
     exchangeInfo :
     await new Binance({ 'family': 4 }).exchangeInfo())
 
-
-  dataManager.dal.init(dataManager, simulationId, startStr, endStr, simulation.quiet)
+  const smallvariants = !simulation.variations || simulation.variations.length < 20
+  dataManager.dal.init(dataManager, simulationId, startStr, endStr,
+    simulation.quiet && smallvariants)
   const oldest = await fetchOldestHistory(dataManager.PAIR)
 
   const maxLongSMA = Math.max(...bots.map(b => b.longSMA))
@@ -120,10 +121,10 @@ export async function run(simulationId: string, variation: string | number, star
         return true
       }
 
-      if (b.profitNum < MAX_LOOSE){
+      if (b.profitNum < MAX_LOOSE) {
         dataManager.openOrders = dataManager.openOrders.filter(o => o.bot != b);
         return false
-    }
+      }
     })
 
 
@@ -152,7 +153,7 @@ export async function run(simulationId: string, variation: string | number, star
       await timeout(100)
     }
 
-    if (bots.every(b=>b.profitNum < MAX_LOOSE)){
+    if (bots.every(b => b.profitNum < MAX_LOOSE)) {
       break
     }
 

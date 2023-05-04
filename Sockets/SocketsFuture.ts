@@ -98,11 +98,17 @@ export class SocketsFutures extends BaseSockets {
         });
 
 
+        try {
+
         acc.binance.websockets.userFutureData(
             console.log,
             this.account_update(acc),
             this.account_update(acc),
             s => acc.socket = s)
+        } catch (e) {
+            console.error("Socket error")
+            console.error(e)
+        }
     }
 
     async updateBookTickerStream() {

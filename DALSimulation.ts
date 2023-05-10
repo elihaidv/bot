@@ -213,6 +213,7 @@ export class DAL {
 
 
             const res = file.toString().split("\n")
+                .filter(y => y)
                 .map(x => x.split(",")
                     .map(y => parseFloat(y)))
 

@@ -111,7 +111,6 @@ export class DataManager {
             longSMA: this.averagePriceQuarter(null, bot.longSMA),
         }, bot)
 
-        console.log(new Date(this.chart[this.currentCandle].time))
         return order
     });
     makeid(length): string {

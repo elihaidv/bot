@@ -87,13 +87,13 @@ export class FutureDataManager extends DataManager {
     }
 
     closePosition(bot:Bot) {
-        const price = this.chart[this.currentCandle].close || this.chart[this.currentCandle - 1].close
+        const candle = this.chart[this.currentCandle] || this.chart[this.currentCandle - 1]
         this.orderexecute(Object.assign(new Order(), {
             bot: bot,
             closePosition: true,
-            price: price,
+            price: candle.close,
             type: "STOP_MARKET",
-        }), this.chart[this.chart.length - 1]);
+        }), candle);
 
     }
 

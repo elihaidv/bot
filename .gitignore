@@ -9,3 +9,4 @@ build
 DB.js
 simulations-outputs
 simulations-outputs-back
+sync-gs.sh

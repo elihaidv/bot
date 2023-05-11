@@ -158,16 +158,16 @@ export class DataManager {
 
             const bytes = await fetchRetry(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip`)
                 .then(r => r.buffer())
-            const fileChecksum = crypto.createHash('sha256').update(bytes).digest("hex")
+            // const fileChecksum = crypto.createHash('sha256').update(bytes).digest("hex")
 
-            const checksum = await fetchRetry(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip.CHECKSUM`)
-                .then(res => res.text())
-                .then(text => text.split(" ")[0])
+            // const checksum = await fetchRetry(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip.CHECKSUM`)
+            //     .then(res => res.text())
+            //     .then(text => text.split(" ")[0])
 
-            if (checksum != fileChecksum) {
-                console.error("Error in:", dateString, unit)
-                throw new Error("Checksum not match")
-            }
+            // if (checksum != fileChecksum) {
+            //     console.error("Error in:", dateString, unit)
+            //     throw new Error("Checksum not match")
+            // }
 
             const file = new admZip(bytes).getEntries()[0].getData().toString()
 

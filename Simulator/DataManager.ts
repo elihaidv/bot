@@ -145,16 +145,16 @@ export class DataManager {
                 return res
             }
 
-            if (new Date("2023-02-20").getTime() <= new Date(dateString).getTime()) {
-                const res1 = await this.dal.getHistoryFromBucket(this.PAIR, unit, dateString)
-                if (res1) {
-                    if (new Date().getTime() - new Date(dateString).getTime() > SECONDS_IN_DAY * 1000) {
-                        await this.dal.saveHistoryInBucket(res1, this.PAIR, unit, dateString)
-                    }
-                    console.log("File exists in bucket", dateString, unit)
-                    return res1
-                }
-            }
+            // if (new Date("2023-02-20").getTime() <= new Date(dateString).getTime()) {
+            //     const res1 = await this.dal.getHistoryFromBucket(this.PAIR, unit, dateString)
+            //     if (res1) {
+            //         if (new Date().getTime() - new Date(dateString).getTime() > SECONDS_IN_DAY * 1000) {
+            //             await this.dal.saveHistoryInBucket(res1, this.PAIR, unit, dateString)
+            //         }
+            //         console.log("File exists in bucket", dateString, unit)
+            //         return res1
+            //     }
+            // }
 
             const bytes = await fetchRetry(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip`)
                 .then(r => r.buffer())
@@ -182,7 +182,7 @@ export class DataManager {
             if (new Date(dateString).getTime() > new Date().getTime() - 1000 * 60 * 60 * 24 * 5) {
                 return await this.fetchDayData(unit, dateString)
             }
-            console.log("Error in:", dateString, unit, e)
+            console.error("Error in:", dateString, unit, e)
             this.failed.push(dateString)
             return
         }

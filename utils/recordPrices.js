@@ -10,8 +10,7 @@ const binance = Binance()
 //  console.log(new Date(parseInt(Object.keys(chart)[499])), chart[Object.keys(chart)[499]].open))
 
 // setInterval(() => {
-    
-// }, 1000);
+    // }, 1000);
 const symbols = [
     "MATICUSDT",
     "ETHUSDT",
@@ -29,6 +28,8 @@ const symbols = [
     "XRPBUSD",
     "DOTBUSD",
     "DOGEBUSD",
+    "BTCUSDT",
+    "BTCBUSD"
 ]
 const SECONDS_IN_DAY = 24 * 60 * 60 * 1000
 symbols.forEach(symbol => {
@@ -36,13 +37,13 @@ symbols.forEach(symbol => {
     let time = new Date().getTime() 
     let date = time - (time % SECONDS_IN_DAY)
 
-    var stream = fs.createWriteStream(`future/${symbol}/${new Date(date).toISOString().split("T")[0]}.csv`, {flags:'a'});
+    var stream = fs.createWriteStream(__dirname + `/future/${symbol}/${new Date(date).toISOString().split("T")[0]}.csv`, {flags:'a'});
 
     binance.futuresMarkPriceStream(symbol, data => {
         if (data.eventTime > date + SECONDS_IN_DAY) {
             date += SECONDS_IN_DAY
             stream.end()
-            stream = fs.createWriteStream(`future/${symbol}/${new Date(date).toISOString().split("T")}.csv`, {flags:'a'});
+            stream = fs.createWriteStream(__dirname + `future/${symbol}/${new Date(date).toISOString().split("T")[0]}.csv`, {flags:'a'});
         }
         const price = parseFloat(data.markPrice)
         stream.write(`${data.eventTime},${price}\n`);

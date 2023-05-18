@@ -135,6 +135,7 @@ export class FutureTrader extends BasePlacer {
             fbuyPrice = this.myLastOrder?.avgPrice * this.sub(1, this.bot.last_distance ?? 0)
         }
 
+        BotLogger.instance.log(this.futureSockets.prices[this.PAIR])
         const averagePrice = this.futureSockets.averagePrice(this.PAIR, this.bot.SMA)
         buyPrice = this.minFunc(fbuyPrice, averagePrice, markPrice)
 

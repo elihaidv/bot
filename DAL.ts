@@ -15,7 +15,7 @@ export class DAL {
 
     async init() {
         let db = await MongoClient.connect(uri)
-        this.dbo = db.db("trading_bot")
+        this.dbo = db.db("trading")
     }
 
     getBots() {

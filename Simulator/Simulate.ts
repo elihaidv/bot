@@ -167,7 +167,7 @@ export async function run(simulationId: string, variation: string | number, star
     }
 
     dataManager.simulateState(botsToPlace)
-    botsToPlace.forEach(b => b.placer!.place())
+    await Promise.all(botsToPlace.map(b => b.placer!.place()))
     dataManager.currentCandle++;
   }
 

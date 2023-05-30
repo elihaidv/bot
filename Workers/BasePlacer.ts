@@ -235,7 +235,7 @@ export abstract class BasePlacer {
             }
         } catch (e: any) {
             this.error = true
-
+            console.error( e.body || e)
             const error = {
                 type: "PlaceOrderError",
                 bot_id: this.bot._id,

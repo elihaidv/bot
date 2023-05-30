@@ -215,7 +215,7 @@ export abstract class BasePlacer {
                     message: res.msg,
                     created_at: new Date()
                 }
-                DAL.instance.logError(error)
+                !this.isSemulation && DAL.instance.logError(error)
                 BotLogger.instance.error(error)
 
                 this.error = true

@@ -1,6 +1,8 @@
 
 import { ObjectId } from "mongodb";
 import Binance from "node-binance-api";
+import { BasePlacer } from "./Workers/BasePlacer";
+import { type } from "node:os";
 
 export enum BotStatus {
   WORK,
@@ -67,6 +69,11 @@ export class Bot {
   backupPrecent: number = 0
   quiet:boolean = true
 
+  levelsSeconds: string = ""
+  levelsRaise: string = ""
+
+  placer:BasePlacer | undefined
+
   id(): string { return this._id.toString() }
 
   positionSide(): String {
@@ -74,7 +81,20 @@ export class Bot {
   }
 }
 
+export class LevelRaise {
+  seconds: number = 0
+  raise: number = 0
+  constructor(seconds: number, raise: number) {
+    this.seconds = seconds
+    this.raise = raise
+  }
+}
 
+export const BUY = true
+export const SELL = false
+
+export const LONG = 0
+export const SHORT = 1
 
 export class Order {
   side: string
@@ -91,6 +111,11 @@ export class Order {
   avgPrice: any;
   closePosition: any;
   bot: Bot | undefined
+  activationPrice: number = 0
+  callbackRate: number = 0
+
+  active = false
+  lastPrice = 0
 
 
   constructor(
@@ -115,7 +140,7 @@ export class Order {
     this.time = time
     this.type = type
     this.clientOrderId = clientOrderId,
-      this.positionSide = positionSide
+    this.positionSide = positionSide
     this.avgPrice = avgPrice
   }
 

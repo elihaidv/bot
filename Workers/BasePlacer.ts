@@ -287,4 +287,7 @@ export abstract class BasePlacer {
         return process.argv.join("").includes("Simulator")
     }
 
+    getCurrentTime() {
+        return new Date().getTime()
+    }
 }

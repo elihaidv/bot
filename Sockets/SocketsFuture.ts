@@ -5,6 +5,7 @@ import { BotLogger } from "../Logger.js";
 export class SocketsFutures extends BaseSockets {
     
     markPrices : {[pair:string]:number} = {}
+    realtimePrices = {}
 
     private static finstance: SocketsFutures;
     public static getFInstance(): SocketsFutures {
@@ -192,6 +193,21 @@ export class SocketsFutures extends BaseSockets {
         }
 
 
+    }
+
+    addRealtimePrices(symbol){
+        if (this.realtimePrices[symbol]) return
+        this.realtimePrices[symbol] = []
+        this.binance.futuresMarkPriceStream(symbol, (data) => {
+            this.realtimePrices[data.symbol].splice(0, 0, data.markPrice)
+            if (this.realtimePrices[data.symbol].length > 10000)
+                this.realtimePrices[data.symbol].shift(1)
+        })
+    }
+
+    getRealtimePrices(symbol){
+        if (!this.realtimePrices[symbol]) return []
+        return this.realtimePrices[symbol]
     }
 
     public async updateSockets(bots: Array<Bot>, keys: Array<Key>) {

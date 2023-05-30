@@ -21,6 +21,7 @@ import os from "os";
 import { OrderPlacer } from "../Workers/PlaceOrders.js";
 import fetchRetry from "./FetchRetry.js";
 import { promises as fs } from "fs";
+import { AviAlgo } from "../Workers/AviAlgo.js";
 
 env.GOOGLE_APPLICATION_CREDENTIALS = "trading-cloud.json"
 env.TZ = "UTC"
@@ -30,7 +31,6 @@ const MAX_LOOSE = -9900
 let dataManager: DataManager
 
 export async function run(simulationId: string, variation: string | number, startStr: string, endStr: string) {
-
   const simulation: any = await fetchRetry(`https://itamars.live/api/simulations/${simulationId}?
                                             vars=${variation}&
                                             device=${os.hostname()}`, {
@@ -85,16 +85,22 @@ export async function run(simulationId: string, variation: string | number, star
 
   dataManager.initData()
 
-  await place(bots)
+  createPlacer(bots)
+  dataManager.simulateState(bots)
+  bots.forEach(b => b.placer!.place())
 
   let t = dataManager.chart[dataManager.currentCandle]
 
   while (t && t.time <= end) {
 
     let botsToPlace: Bot[] = [];
+    let ordersToFill: Order[] = []
 
-
-    let ordersToFill = dataManager.checkOrder(dataManager.openOrders)
+    if (dataManager.openOrders.length) {
+      ordersToFill = dataManager.checkOrder(dataManager.openOrders)
+    } else {
+      dataManager.currentCandle++
+    }
 
     t = dataManager.chart[dataManager.currentCandle]
     if (!t) {
@@ -105,8 +111,10 @@ export async function run(simulationId: string, variation: string | number, star
         dataManager.currentCandle = 0
         t = dataManager.chart[dataManager.currentCandle]
       }
-      ordersToFill = dataManager.checkOrder(dataManager.openOrders)
-      t = dataManager.chart[dataManager.currentCandle]
+      if (dataManager.openOrders.length) {
+        ordersToFill = dataManager.checkOrder(dataManager.openOrders)
+        t = dataManager.chart[dataManager.currentCandle]
+      }
       if (!t) {
         break;
       }
@@ -137,14 +145,15 @@ export async function run(simulationId: string, variation: string | number, star
         }
       });
 
-    } else if (dataManager.openOrders.length) {
-      for (let o of dataManager.openOrders) {
+    }
+    for (let b of bots) {
 
-        if ((t.time - o.time) * 1000 >= o.bot!.secound &&
-          o.bot!.status != BotStatus.STABLE) {
-          botsToPlace.push(o.bot!)
-        }
+      if (b.lastOrder >= b.secound &&
+        b.status != BotStatus.STABLE &&
+        !botsToPlace.includes(b)) {
+        botsToPlace.push(b)
       }
+
     }
 
     if (dataManager.dal.awaiter) {
@@ -157,7 +166,8 @@ export async function run(simulationId: string, variation: string | number, star
       break
     }
 
-    await place(botsToPlace)
+    dataManager.simulateState(botsToPlace)
+    botsToPlace.forEach(b => b.placer!.place())
     dataManager.currentCandle++;
   }
 
@@ -191,43 +201,41 @@ export async function run(simulationId: string, variation: string | number, star
 //   return false
 // }
 
-async function place(bots: Bot[]) {
-  dataManager.simulateState(bots)
+function createPlacer(bots: Bot[]) {
   // trailing = null;
 
   for (const bot of bots) {
-    let worker: BasePlacer
     switch (bot.bot_type_id.toString()) {
       case "1":
-        worker = new OrderPlacer(bot, dataManager.exchangeInfo);
+        bot.placer = new OrderPlacer(bot, dataManager.exchangeInfo);
         break
       case "2":
-        worker = new WeightAvg(bot, dataManager.exchangeInfo)
+        bot.placer = new WeightAvg(bot, dataManager.exchangeInfo)
         break
       case "3":
-        worker = new FutureTrader(bot, dataManager.exchangeInfo)
+        bot.placer = new FutureTrader(bot, dataManager.exchangeInfo)
         break
       case "4":
-        worker = new DualBot(bot, dataManager.exchangeInfo)
+        bot.placer = new DualBot(bot, dataManager.exchangeInfo)
         break
       case "5":
-        worker = new DirectionTrader(bot, dataManager.exchangeInfo)
+        bot.placer = new DirectionTrader(bot, dataManager.exchangeInfo)
         break
       case "6":
-        worker = new Periodically(bot, dataManager.exchangeInfo)
+        bot.placer = new Periodically(bot, dataManager.exchangeInfo)
         break
-      case "7":
-      default: {
-
-        worker = new OneStep(bot, dataManager.exchangeInfo);
-
-        // (worker as OneStep).cancelOrders = async () => {dataManager.openOrders = []}
+      case "8":
+        bot.placer = new OneStep(bot, dataManager.exchangeInfo);
+        // (bot.placer as OneStep).cancelOrders = async () => {dataManager.openOrders = []}
         break
+      case "9":
+        bot.placer = new AviAlgo(bot, dataManager.exchangeInfo);
+        break
+      default:
+        throw new Error("Bot type not found")
 
-      }
     }
-    worker.getAction = dataManager.openOrder(bot)
-    await worker.place();
+    bot.placer.getAction = dataManager.openOrder(bot)
   }
 }
 function timeout(ms) {

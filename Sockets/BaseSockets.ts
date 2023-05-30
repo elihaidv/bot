@@ -15,7 +15,6 @@ export abstract class BaseSockets {
     binance = new Binance().options({})
 
 
-
     compare = (arr1, arr2) =>
         !arr1.filter(i => arr2.indexOf(i) == -1).length && !arr2.filter(i => arr1.indexOf(i) == -1).length
 

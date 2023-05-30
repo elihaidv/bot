@@ -1,4 +1,4 @@
-import { Bot, Order } from "../Models.js";
+import { Bot, BotStatus, Order } from "../Models.js";
 import { SocketsFutures } from "../Sockets/SocketsFuture.js";
 import { CandleStick, DataManager } from "./DataManager.js";
 
@@ -8,7 +8,9 @@ export class FutureDataManager extends DataManager {
         super(bots);
         this.sockets = SocketsFutures.getFInstance()
         this.sockets.averagePrice = this.averagePrice.bind(this)
-        this.sockets.averagePriceQuarter = this.averagePriceQuarter.bind(this)
+        this.sockets.averagePriceQuarter = this.averagePriceQuarter.bind(this);
+        (this.sockets as SocketsFutures).addRealtimePrices = this.addRealtimePrices.bind(this);
+        (this.sockets as SocketsFutures).getRealtimePrices = this.getRealtimePrices.bind(this)
     }
 
 
@@ -23,7 +25,7 @@ export class FutureDataManager extends DataManager {
 
         if (order.closePosition) {
             console.log("SLprice1: ", ((pos.positionEntry - order.price) / pos.positionEntry) * pos.positionAmount)
-             order.executedQty = Math.abs(pos.positionAmount)
+            order.executedQty = Math.abs(pos.positionAmount)
             gain = (order.price - pos.positionEntry) * pos.positionAmount
             pos.positionAmount = 0
             pos.positionEntry = 0
@@ -32,7 +34,7 @@ export class FutureDataManager extends DataManager {
             bot.binance!.orders[this.PAIR] = []
 
             if (bot.backupPrecent > 0) {
-                if (-bot.binance!.balance.backup > gain * bot.backupPrecent){
+                if (-bot.binance!.balance.backup > gain * bot.backupPrecent) {
                     gain += bot.binance!.balance.backup
                     bot.profitNum -= bot.binance!.balance.backup
                     bot.binance!.balance.backup = 0
@@ -59,6 +61,7 @@ export class FutureDataManager extends DataManager {
         gain -= (order.avgPrice * order.executedQty * 0.0002)
         bot.binance!.balance[bot.coin2] += gain
         bot.profitNum += gain
+        bot.status = BotStatus.WORK
 
         console.log("Psition size: " + pos.positionAmount)
         console.log("Variation: " + bot.variation + " Profit: " + (bot.profitNum / 100).toFixed(2) + "% Date: " + new Date(parseInt(t.time)))
@@ -86,7 +89,7 @@ export class FutureDataManager extends DataManager {
         this.openOrders = this.openOrders.filter(o => o.orderId != order.orderId)
     }
 
-    closePosition(bot:Bot) {
+    closePosition(bot: Bot) {
         const candle = this.chart[this.currentCandle] || this.chart[this.currentCandle - 1]
         this.orderexecute(Object.assign(new Order(), {
             bot: bot,
@@ -122,5 +125,26 @@ export class FutureDataManager extends DataManager {
     simulateState(bots: Bot[]) {
         super.simulateState(bots);
         (this.sockets as SocketsFutures).markPrices[this.PAIR] = this.chart[this.currentCandle].close
+    }
+
+    addRealtimePrices(t: CandleStick) {
+    }
+    realtimePricesCache: number[] = []
+    lastCandle: number = 0
+    getRealtimePrices(s) {
+        let diff = this.currentCandle - this.lastCandle
+        if (!this.realtimePricesCache.length) {
+            this.realtimePricesCache = this.chart.slice(this.currentCandle - 10000, this.currentCandle).map(c => c.close).reverse()
+
+        } else {
+            if (diff > 0){
+            
+            const lastCandles = this.chart.slice(this.lastCandle, this.currentCandle).map(c => c.close).reverse()
+            this.realtimePricesCache = lastCandles.concat(this.realtimePricesCache.slice(0,-diff))
+            }
+        }
+
+        this.lastCandle = this.currentCandle
+        return this.realtimePricesCache
     }
 }

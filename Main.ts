@@ -21,6 +21,7 @@ import { OneStep } from './Workers/OneStep.js';
 import { OrderPlacer } from './Workers/PlaceOrders.js';
 import { BotLogger } from './Logger.js';
 import { Severity } from 'coralogix-logger';
+import { AviAlgo } from './Workers/AviAlgo.js';
 
 
 let exchangeInfo, futuresExchangeInfo, first = true
@@ -39,7 +40,7 @@ async function run() {
   })
 
   await DAL.instance.init()
-  execute()
+  setInterval(execute, 3000)
 
   createServer()
 }
@@ -55,7 +56,7 @@ async function execute() {
     let keys: Array<Key> = await DAL.instance.getKeys()
 
     initBots(botsResults)
-    
+
     Sockets.getInstance().updateSockets(Array.from(bots.filter(b => !b.isFuture)), keys)
     SocketsFutures.getFInstance().updateSockets(Array.from(bots.filter(b => b.isFuture)), keys)
 
@@ -66,11 +67,7 @@ async function execute() {
     if (exchangeInfo && futuresExchangeInfo) {
 
       if (first) {
-        bots.filter(b => b.bot_type_id == "7").forEach(b =>
-          b.signalings.forEach(s =>
-            b.binance?.orders.changed.push(s.coin1 + s.coin2 + b.positionSide())
-          )
-        );
+        initPlacer(bots)
         first = false
       }
 
@@ -79,42 +76,57 @@ async function execute() {
 
       await Sockets.getInstance().timeout(1000)
 
-      await Promise.all(outdatedBots.map((b) => {
-
-        switch (b.bot_type_id) {
-          case "1":
-            return new OrderPlacer(b, exchangeInfo).place();
-          case "2":
-            return new WeightAvg(b, exchangeInfo).place();
-          case "3":
-            return new FutureTrader(b, futuresExchangeInfo).place();
-          case "4":
-            return new DualBot(b, futuresExchangeInfo).place()
-          case "5":
-            return new DirectionTrader(b, futuresExchangeInfo).place()
-          case "6":
-            return new Periodically(b, exchangeInfo).place()
-          case "7":
-            return new SignalingPlacer(b, futuresExchangeInfo).place()
-          case "8":
-            return new OneStep(b, futuresExchangeInfo).place()
-
-
-        }
-      }))
+      await Promise.all(outdatedBots.map((b) => b.placer?.place()))
     }
-
-    
-
-
   } catch (e: any) {
     console.error(e)
     BotLogger.instance.log({
       type: "GeneralError",
       message: e?.message || e,
-    },Severity.error)
+    }, Severity.error)
   }
-  setTimeout(execute, 3000)
+}
+
+function initPlacer(bots: Array<Bot>) {
+  bots.filter(b => b.bot_type_id == "7").forEach(b =>
+    b.signalings.forEach(s =>
+      b.binance?.orders.changed.push(s.coin1 + s.coin2 + b.positionSide())
+    )
+  );
+
+  bots.forEach(b => {
+    switch (b.bot_type_id) {
+      case "1":
+        b.placer = new OrderPlacer(b, exchangeInfo);
+        break;
+      case "2":
+        b.placer = new WeightAvg(b, exchangeInfo);
+        break;
+      case "3":
+        b.placer = new FutureTrader(b, futuresExchangeInfo);
+        break;
+      case "4":
+        b.placer = new DualBot(b, futuresExchangeInfo);
+        break;
+      case "5":
+        b.placer = new DirectionTrader(b, futuresExchangeInfo);
+        break;
+      case "6":
+        b.placer = new Periodically(b, exchangeInfo);
+        break;
+      case "7":
+        b.placer = new SignalingPlacer(b, futuresExchangeInfo);
+        break;
+      case "8":
+        b.placer = new OneStep(b, futuresExchangeInfo);
+        break;
+      case "9":
+        b.placer = new AviAlgo(b, futuresExchangeInfo);
+        break;
+        
+    }
+
+  });
 }
 
 
@@ -122,7 +134,7 @@ function filterOutdated(bots: Array<Bot>): Array<Bot> {
   return bots.filter(b => {
 
     const PAIR = b.coin1 + b.coin2 + b.positionSide()
-    if (b.binance && b.binance!.orders && b.binance!.changed.includes(PAIR) ) {
+    if (b.binance && b.binance!.orders && b.binance!.changed.includes(PAIR)) {
       b.binance!.changed = b.binance!.changed.filter(p => p != PAIR)
       return true
     }

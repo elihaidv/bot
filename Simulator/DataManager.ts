@@ -100,6 +100,7 @@ export class DataManager {
             bot.positionSide(), p)
         order.bot = bot
         order.closePosition = params.closePosition
+        order.callbackRate = params.callbackRate
 
         this.openOrders.push(order)
 
@@ -436,17 +437,17 @@ export class DataManager {
             // debugger
             return []
         }
-        
-        for (let bot of this.bots) {
-            const pos = bot.binance!.positions[this.PAIR + bot.positionSide()]
-            if (pos.positionAmount == 0) continue
-            const liquidationPrice = -(bot.binance!.balance[bot.coin2] / pos.positionAmount) + pos.positionEntry
-            const o = new Order(pos.positionAmount > 0 ? "SELL" : "BUY", "NEW", liquidationPrice,
-                "liquid", pos.positionAmount, pos.positionAmount, this.chart[this.currentCandle].time, "STOP_MARKET", "",
-                bot.positionSide(), liquidationPrice)
-            o.bot = bot
-            orders.push(o)
-        }
+
+        // for (let bot of this.bots) {
+        //     const pos = bot.binance!.positions[this.PAIR + bot.positionSide()]
+        //     if (pos.positionAmount == 0) continue
+        //     const liquidationPrice = -(bot.binance!.balance[bot.coin2] / pos.positionAmount) + pos.positionEntry
+        //     const o = new Order(pos.positionAmount > 0 ? "SELL" : "BUY", "NEW", liquidationPrice,
+        //         "liquid", pos.positionAmount, pos.positionAmount, this.chart[this.currentCandle].time, "STOP_MARKET", "",
+        //         bot.positionSide(), liquidationPrice)
+        //     o.bot = bot
+        //     orders.push(o)
+        // }
 
 
 
@@ -465,9 +466,27 @@ export class DataManager {
 
         while (true) {
             const ordersInInreval = orders.filter(o =>
-                ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "BUY" || o.type == "STOP_MARKET" && o.side == "SELL") && o.price > candle.low ||
-                ("LIMIT|TAKE_PROFIT_MARKET".includes(o.type) && o.side == "SELL" || o.type == "STOP_MARKET" && o.side == "BUY") && o.price < candle.high)
+                ((["LIMIT","TAKE_PROFIT_MARKET","TRAILING_STOP_MARKET"].includes(o.type) && o.side == "BUY" ||
+                    o.type == "STOP_MARKET" && o.side == "SELL") && o.price > candle.low ||
+                (["LIMIT","TAKE_PROFIT_MARKET","TRAILING_STOP_MARKET"].includes(o.type) && o.side == "SELL" ||
+                    o.type == "STOP_MARKET" && o.side == "BUY") && o.price < candle.high) && !o.active)
 
+            const trailingOrders = orders.filter(o => o.type == "TRAILING_STOP_MARKET" && o.active)
+            const doneTrailings: Order[] = []
+
+            for (let o of trailingOrders) {
+                o.lastPrice = o.side == "SELL" ? Math.max(o.lastPrice, candle.high) : Math.min(o.lastPrice, candle.low)
+                if (o.lastPrice > candle.low * (1 + o.callbackRate) && o.side == "SELL" ||
+                    o.lastPrice < candle.high * (1 - o.callbackRate) && o.side == "BUY") {
+                    o.price = candle.close
+                    doneTrailings.push(o);
+                }
+            }
+            if (doneTrailings.length) {
+                this.currentCandleStick = candle
+                this.currentCandle = (candle.time - this.chart[0].time) / 1000
+                return doneTrailings
+            }
 
 
             if (!ordersInInreval.length && (!candle.endTime || candle.endTime < maxTime)) {
@@ -483,7 +502,11 @@ export class DataManager {
                     candle = candle.next
                 } else {
                     if (candle.parent && candle.parent.next) {
-                        candle = candle.parent.next
+                        if (trailingOrders.length) {
+                            candle = candle.parent.next.children[0]
+                        } else {
+                            candle = candle.parent.next
+                        }
                     } else {
                         this.currentCandle = -1
                         this.currentCandleStick = undefined
@@ -496,7 +519,7 @@ export class DataManager {
                 } else {
                     this.currentCandleStick = candle
                     this.currentCandle = (candle.time - this.chart[0].time) / 1000
-                    const res  = <{key:[String],Order}>{}
+                    const res = <{ key: [String], Order }>{}
                     for (let order of ordersInInreval) {
                         if (order.orderId == "liquid") {
                             continue
@@ -504,12 +527,26 @@ export class DataManager {
                         if (!res[order.bot!.variation]) {
                             res[order.bot!.variation] = order;
                         }
-                        if(order.type == "STOP_MARKET"){
+                        if (order.type == "STOP_MARKET") {
                             res[order.bot!.variation] = order;
                         }
                     }
+                    const orders = Object.values(res)
 
-                    return Object.values(res)
+                    orders.filter(o => o.type == "TRAILING_STOP_MARKET")
+                        .forEach(o => {o.lastPrice ||= candle.close; o.active = true})
+
+                    if (orders.every(o => o.type == "TRAILING_STOP_MARKET")) {
+                        if (candle.next) {
+                            candle = candle.next
+                        } else {
+                            this.currentCandle = -1
+                            this.currentCandleStick = undefined
+                            return []
+                        }
+                    } else {
+                        return orders.filter(o => o.type != "TRAILING_STOP_MARKET")
+                    }
                 }
             }
         }

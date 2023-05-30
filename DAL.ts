@@ -26,7 +26,7 @@ export class DAL {
     }
 
     logError(error) {
-        this.dbo.collection('error').insertOne(error)
+        // this.dbo.collection('error').insertOne(error)
     }
 
 

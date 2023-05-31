@@ -97,6 +97,11 @@ export abstract class BasePlacer {
         const buys = Array<Order>()
         const sellOrders: Array<string> = []
         this.myLastOrder = undefined
+        this.myLastStandingBuy = undefined
+        this.lastBuy = undefined
+        this.lastSell = undefined
+        this.currentPnl = 0
+        this.standingBuy = undefined
 
         for (let order of this.orders
             .filter(x => x.status.includes('FILLED'))

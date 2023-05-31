@@ -19,11 +19,13 @@ export class FutureTrader extends BasePlacer {
 
     async place() {
 
+        this.orders = this.bot.binance?.orders[this.PAIR]
         if (!this.binance || !this.balance[this.SECOND] || !this.futureSockets.prices[this.PAIR] || !this.orders || !this.orders.length || !this.futureSockets.markPrices[this.PAIR]) return
         // await this.binance.futuresLeverage( this.PAIR, this.bot.leverage )
         // await this.binance.futuresMarginType( this.PAIR, 'ISOLATED' )
 
         const { binance, ...bot } = this.bot
+        this.error = false
         BotLogger.instance.log({
             type: "BotStart - Future",
             bot_id: this.bot._id,

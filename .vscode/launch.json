@@ -35,8 +35,8 @@
             "runtimeExecutable": "ts-node",
             "args": [
                 "Simulator/local.ts",
-                "64743629ab098973a777bcb3",
-                "0-0",
+                "647b77b933a56b05812ffdc2",
+                "0-6",
                 "2022-05-29 05:20:39",
                 "2023-05-30 11:00:00",
                 "local",

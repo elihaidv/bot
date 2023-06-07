@@ -40,10 +40,10 @@ export abstract class BaseSockets {
         if (this.chartsSocket) this.binance.futuresTerminate(this.chartsSocket);
 
         this.chartsSocket = this.binance.futuresChart(this.pairs, "5m", (symbol, interval, chart) =>
-            this.prices[symbol] = Object.values(chart).map(c => (c as any).open).reverse())
+            this.prices[symbol] = Object.values(chart).map(c => (c as any).open).reverse(), 1000)
 
         this.chartsSocket = this.binance.futuresChart(this.pairs, "15m", (symbol, interval, chart) =>
-            this.pricesQuarter[symbol] = Object.values(chart).map(c => (c as any).open).reverse())
+            this.pricesQuarter[symbol] = Object.values(chart).map(c => (c as any).open).reverse(), 1000)
     }
 
     abstract addUserDataSockets(acc: Account);

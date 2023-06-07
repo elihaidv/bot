@@ -5,7 +5,7 @@ import DB from "./DB.js"
 
 const uri = DB.USERNAME ?
     `mongodb://${DB.USERNAME}:${DB.PASSWORD}@${DB.ADDRESS}?writeConcern=majority` :
-    `mongodb://127.0.0.1:27017/trading_bot?writeConcern=majority`;
+    `mongodb://127.0.0.1:27017/trading?writeConcern=majority`;
 
 export class DAL {
     static instance = new DAL()

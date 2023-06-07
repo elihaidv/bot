@@ -8,7 +8,8 @@
             "name": "Main",
             "type": "node",
             "request": "launch",
-            "runtimeExecutable": "ts-node",
+            "runtimeVersion": "17.1.0",
+            "runtimeExecutable": "/home/elihai/.nvm/versions/node/v17.1.0/bin/ts-node",
             "args": [
                 "Main.ts"
             ],

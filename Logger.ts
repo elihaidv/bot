@@ -1,5 +1,6 @@
 import { CoralogixLogger, Log, LoggerConfig, Severity } from "coralogix-logger";
 import { env } from "node:process";
+import DB from "./DB.js"
 
 export class BotLogger {
     static instance: BotLogger = new BotLogger();
@@ -18,7 +19,7 @@ export class BotLogger {
     }
 
     log(message: any, severity: Severity = Severity.info) {
-        if (!this.isSemulation) {
+        if (!this.isSemulation && DB.ENVIROMENT != "LOCAL") {
             this.logger.addLog(new Log({
                 severity: severity,
                 text: JSON.stringify(message, (k, v)=> v === undefined ? null : v)

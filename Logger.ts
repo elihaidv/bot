@@ -13,7 +13,7 @@ export class BotLogger {
     logger: CoralogixLogger = new CoralogixLogger("Bot")
 
     constructor() {
-        if (!this.isSemulation) {
+        if (!this.isSemulation && DB.ENVIROMENT != "LOCAL") {
             CoralogixLogger.configure(this.config);
         }
     }

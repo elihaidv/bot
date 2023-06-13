@@ -43,7 +43,7 @@ symbols.forEach(symbol => {
         if (data.eventTime > date + SECONDS_IN_DAY) {
             date += SECONDS_IN_DAY
             stream.end()
-            stream = fs.createWriteStream(`/var/www/bot/uture/${symbol}/${new Date(date).toISOString().split("T")[0]}.csv`, {flags:'a'});
+            stream = fs.createWriteStream(`/var/www/bot/future/${symbol}/${new Date(date).toISOString().split("T")[0]}.csv`, {flags:'a'});
         }
         const price = parseFloat(data.markPrice)
         stream.write(`${data.eventTime},${price}\n`);

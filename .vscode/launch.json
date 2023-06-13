@@ -33,15 +33,15 @@
             "name": "Simulate",
             "type": "node",
             "request": "launch",
-            "runtimeExecutable": "ts-node",
+            "runtimeVersion": "17.1.0",
+            "runtimeExecutable": "/home/elihai/.nvm/versions/node/v17.1.0/bin/ts-node",
             "args": [
                 "Simulator/local.ts",
-                "647b77b933a56b05812ffdc2",
-                "0-6",
-                "2022-05-29 05:20:39",
-                "2023-05-30 11:00:00",
+                "64822da8944c4727133c0422",
+                0,
+                "2023-06-11 07:04:59",
+                "2023-07-30 11:00:00",
                 "local",
-
             ],
             "cwd": "${workspaceRoot}",
             "internalConsoleOptions": "openOnSessionStart",
@@ -51,18 +51,19 @@
             ],
             "env": {
                 "GOOGLE_APPLICATION_CREDENTIALS": "trading-cloud.json",
-                "TZ":"UTC"
+                "TZ": "UTC"
             }
         },
         {
             "name": "fetch history",
-            "program": "${workspaceFolder}/Simulator/historicalChartsFetcher.js",
+            "program": "${workspaceFolder}/utils/futuresDataCrawler.js",
             "request": "launch",
+            "runtimeVersion": "17.1.0",
             "skipFiles": [
                 "<node_internals>/**"
             ],
             "args": [
-                "MATICBUSD", "2021-08-28 15:32:19"
+                "MATICBUSD"
             ],
             "type": "node"
         },

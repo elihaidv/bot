@@ -69,8 +69,7 @@ export async function run(simulationId: string, variation: string | number, star
     await new Binance({ 'family': 4 }).exchangeInfo())
 
   const smallvariants = !simulation.variations || simulation.variations.length < 20
-  dataManager.dal.init(dataManager, simulationId, startStr, endStr,
-    simulation.quiet && smallvariants)
+  dataManager.dal.init(dataManager, simulationId, startStr, endStr,true)
   const oldest = await fetchOldestHistory(dataManager.PAIR)
 
   const maxLongSMA = Math.max(...bots.map(b => b.longSMA))

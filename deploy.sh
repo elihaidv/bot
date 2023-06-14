@@ -3,7 +3,7 @@ cp package.json trading-cloud.json ecosystem.config.js build
 sed -i 's/debugger;/console.error("debugger");/g' build/**/*.js
 
 servers=(
-    "146.190.116.103" 
+    # "146.190.116.103" 
     "137.184.188.73"
 )
 

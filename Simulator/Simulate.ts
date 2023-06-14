@@ -102,9 +102,14 @@ export async function run(simulationId: string, variation: string | number, star
     }
 
     t = dataManager.chart[dataManager.currentCandle]
-    if (!t) {
+    while (!t) {
       let startChunk = dataManager.chart.at(-1)!.time + 1000
       let endChunk = Math.min(end, startChunk + MIN_CHART_SIZE * 1000)
+
+      if (startChunk > end) {
+        break
+      }
+      
       if (endChunk > startChunk) {
         await dataManager.fetchAllCharts(startChunk, endChunk)
         dataManager.currentCandle = 0
@@ -114,10 +119,8 @@ export async function run(simulationId: string, variation: string | number, star
         ordersToFill = dataManager.checkOrder(dataManager.openOrders)
         t = dataManager.chart[dataManager.currentCandle]
       }
-      if (!t) {
-        break;
-      }
     }
+    if (!t) break
 
     dataManager.hasMoney(t)
 

@@ -150,7 +150,7 @@ export class DAL {
         }
     }
 
-    saveHistoryInBucket = async (history, pair, unit, date) => {
+    saveHistoryInLocal = async (history, pair, unit, date, market) => {
         try {
             let historyArray
             if (typeof history == "string") {
@@ -165,7 +165,7 @@ export class DAL {
             }
 
 
-            await promises.writeFile(`spot/${pair}/${unit}/${date}.csv`, historyArray.map(e => e.join(',')).join('\n'), {})
+            await promises.writeFile(`${market}/${pair}/${unit}/${date}.csv`, historyArray.map(e => e.join(',')).join('\n'), {})
             // await new Storage()
             //     .bucket('crypto-history')
             //     .file(`spot/${pair}/${unit}/${date}.csv`)
@@ -180,10 +180,10 @@ export class DAL {
         }
     }
 
-    getHistoryFromLocal = async (pair, unit, date) => {
+    getHistoryFromLocal = async (pair, unit, date, market) => {
         try {
 
-            const file = await promises.readFile(`spot/${pair}/${unit}/${date}.csv`)
+            const file = await promises.readFile(`${market}/${pair}/${unit}/${date}.csv`)
 
 
             const res = file.toString().split("\n")
@@ -216,6 +216,7 @@ export class DAL {
                 .filter(y => y)
                 .map(x => x.split(",")
                     .map(y => parseFloat(y)))
+                .filter(y=>y[0])
 
             if (res.length < 86000) {
                 console.error("history too short", res.length, pair, unit, date)

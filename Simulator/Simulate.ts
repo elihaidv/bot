@@ -68,6 +68,7 @@ export async function run(simulationId: string, variation: string | number, star
     exchangeInfo :
     await new Binance({ 'family': 4 }).exchangeInfo())
 
+
   const smallvariants = !simulation.variations || simulation.variations.length < 20
   dataManager.dal.init(dataManager, simulationId, startStr, endStr,true)
   const oldest = await fetchOldestHistory(dataManager.PAIR)
@@ -77,6 +78,8 @@ export async function run(simulationId: string, variation: string | number, star
   start = Math.max(start, new Date(oldest).getTime())
   const end = Math.min(new Date(endStr).getTime(), new Date().getTime())
   let endChunk = Math.max(Math.min(end, start + MIN_CHART_SIZE * 1000), start + maxLongSMA * 15 * 60 * 1000)
+
+  dataManager.futureHistory =  new Date(endStr).getTime() >= new Date("2023-06-14").getTime()
 
   dataManager.minHistoryCandles = maxLongSMA
   await dataManager.fetchAllCharts(start, endChunk)
@@ -248,6 +251,7 @@ const fetchOldestHistory = async (symbol) => {
 
   try {
     await fs.mkdir(`spot/${symbol}/1s`, { recursive: true });
+    await fs.mkdir(`future/${symbol}/1s`, { recursive: true });
   } catch (e) { }
 
 

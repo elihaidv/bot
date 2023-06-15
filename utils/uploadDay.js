@@ -9,7 +9,7 @@ import fs from "fs";
 import { env } from "process";
 
 
-env.GOOGLE_APPLICATION_CREDENTIALS = "/home/elihai/LaravelProjects/tradingBot/bot_core/trading-cloud.json"
+env.GOOGLE_APPLICATION_CREDENTIALS = "trading-cloud.json"
 
 const SECONDS_IN_DAY = 24 * 60 * 60 * 1000
 

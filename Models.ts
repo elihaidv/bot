@@ -67,7 +67,6 @@ export class Bot {
   lequided: boolean = false
   variation: number = 0
   backupPrecent: number = 0
-  quiet:boolean = true
 
   levelsSeconds: string = ""
   levelsRaise: string = ""

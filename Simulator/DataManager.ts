@@ -62,6 +62,7 @@ export class DataManager {
     dal = new DAL()
 
     minHistoryCandles = 0
+    futureHistory = false
 
     // currentHour = 0
     // offsetInHour = 0
@@ -137,25 +138,25 @@ export class DataManager {
     async fetchFile(unit, dateString) {
         try {
 
-            const res = await this.dal.getHistoryFromLocal(this.PAIR, unit, dateString)
+            const res = await this.dal.getHistoryFromLocal(this.PAIR, unit, dateString, this.futureHistory && dateString >= "2023-06-14" ? "future" : "spot")
             if (res) {
-                if (dateString == new Date().toISOString().split('T')[0]) {
+                if (dateString == new Date().toISOString().split('T')[0] && !this.futureHistory) {
                     return await this.fetchDayData(unit, dateString, res)
                 }
                 console.log("File exists in local", dateString, unit)
                 return res
             }
 
-            // if (new Date("2023-02-20").getTime() <= new Date(dateString).getTime()) {
-            //     const res1 = await this.dal.getHistoryFromBucket(this.PAIR, unit, dateString)
-            //     if (res1) {
-            //         if (new Date().getTime() - new Date(dateString).getTime() > SECONDS_IN_DAY * 1000) {
-            //             await this.dal.saveHistoryInBucket(res1, this.PAIR, unit, dateString)
-            //         }
-            //         console.log("File exists in bucket", dateString, unit)
-            //         return res1
-            //     }
-            // }
+            if (this.futureHistory ) { 
+                const res1 = await this.dal.getHistoryFromBucket(this.PAIR, unit, dateString)
+                if (res1) {
+                    if (new Date().getTime() - new Date(dateString).getTime() > SECONDS_IN_DAY * 1000) {
+                        await this.dal.saveHistoryInLocal(res1, this.PAIR, unit, dateString, "future")
+                    }
+                    console.log("File exists in bucket", dateString, unit)
+                    return res1
+                }
+            }
 
             const bytes = await fetchRetry(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip`)
                 .then(r => r.buffer())
@@ -176,7 +177,7 @@ export class DataManager {
                 console.error("Length is Zero.", dateString, unit)
             }
 
-            const r = await this.dal.saveHistoryInBucket(file, this.PAIR, unit, dateString)
+            const r = await this.dal.saveHistoryInLocal(file, this.PAIR, unit, dateString, "spot")
             console.log("downloded: ", dateString, unit);
             return r
         } catch (e) {
@@ -211,7 +212,7 @@ export class DataManager {
                 .map(e => e.toString())
                 .join("\n")
 
-            this.dal.saveHistoryInBucket(resStr, this.PAIR, "1s", dateString)
+            this.dal.saveHistoryInLocal(resStr, this.PAIR, "1s", dateString, "spot")
         }
 
         return res.flat().map(l => l.map(e => parseFloat(e)))

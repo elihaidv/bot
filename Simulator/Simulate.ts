@@ -26,7 +26,7 @@ import { AviAlgo } from "../Workers/AviAlgo.js";
 env.GOOGLE_APPLICATION_CREDENTIALS = "trading-cloud.json"
 env.TZ = "UTC"
 env.IS_SIMULATION = "true"
-const MAX_LOOSE = -9900
+const MAX_LOOSE = -9700
 
 let dataManager: DataManager
 

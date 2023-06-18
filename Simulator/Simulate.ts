@@ -128,16 +128,16 @@ export async function run(simulationId: string, variation: string | number, star
     dataManager.hasMoney(t)
 
     botsToPlace = bots.filter(b => {
+      if (b.profitNum < MAX_LOOSE) {
+        dataManager.openOrders = dataManager.openOrders.filter(o => o.bot != b);
+        return false
+      }
       if (b.lequided) {
         b.lequided = false
         ordersToFill = ordersToFill.filter(o => o.bot != b)
         return true
       }
 
-      if (b.profitNum < MAX_LOOSE) {
-        dataManager.openOrders = dataManager.openOrders.filter(o => o.bot != b);
-        return false
-      }
     })
 
 

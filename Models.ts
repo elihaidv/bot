@@ -71,6 +71,8 @@ export class Bot {
   levelsSeconds: string = ""
   levelsRaise: string = ""
 
+  closed: boolean = false
+
   placer:BasePlacer | undefined
 
   id(): string { return this._id.toString() }

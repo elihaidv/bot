@@ -187,6 +187,7 @@ export async function run(simulationId: string, variation: string | number, star
       }
       
     }
+    dataManager.currentCandle++
   }
 
   dataManager.currentCandle--

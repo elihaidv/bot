@@ -66,7 +66,7 @@ export class DataManager {
 
     // currentHour = 0
     // offsetInHour = 0
-    currentCandleStick: CandleStick | undefined
+    // currentCandleStick: CandleStick | undefined
 
 
 
@@ -100,6 +100,7 @@ export class DataManager {
             this.makeid(10), qu, qu, this.chart[this.currentCandle].time, params.type || "LIMIT", params.newClientOrderId,
             bot.positionSide(), p)
         order.bot = bot
+        bot.lastOrder = this.chart[this.currentCandle].time
         order.closePosition = params.closePosition
         order.callbackRate = params.callbackRate
 
@@ -439,31 +440,23 @@ export class DataManager {
             return []
         }
 
-        // for (let bot of this.bots) {
-        //     const pos = bot.binance!.positions[this.PAIR + bot.positionSide()]
-        //     if (pos.positionAmount == 0) continue
-        //     const liquidationPrice = -(bot.binance!.balance[bot.coin2] / pos.positionAmount) + pos.positionEntry
-        //     const o = new Order(pos.positionAmount > 0 ? "SELL" : "BUY", "NEW", liquidationPrice,
-        //         "liquid", pos.positionAmount, pos.positionAmount, this.chart[this.currentCandle].time, "STOP_MARKET", "",
-        //         bot.positionSide(), liquidationPrice)
-        //     o.bot = bot
-        //     orders.push(o)
-        // }
-
-
-
-        if (!this.currentCandleStick) {
-            this.currentCandleStick = this.chart[this.currentCandle]
-        } else {
-            this.currentCandleStick = this.currentCandleStick?.next ?? this.currentCandleStick?.parent?.next
-            if (!this.currentCandleStick) {
-                return []
-            }
+        for (let bot of this.bots) {
+            const pos = bot.binance!.positions[this.PAIR + bot.positionSide()]
+            if (pos.positionAmount == 0) continue
+            const liquidationPrice = -(bot.binance!.balance[bot.coin2] / pos.positionAmount) + pos.positionEntry
+            const o = new Order(pos.positionAmount > 0 ? "SELL" : "BUY", "NEW", liquidationPrice,
+                "liquid", pos.positionAmount, pos.positionAmount, this.chart[this.currentCandle].time, "STOP_MARKET", "",
+                bot.positionSide(), liquidationPrice)
+            o.bot = bot
+            orders.push(o)
         }
+
+
+        
 
         let maxTime = orders.filter(o => o.bot!.status != BotStatus.STABLE)
             .reduce((a, o) => Math.min(a, o.time + o.bot!.secound * 1000), Number.MAX_SAFE_INTEGER)
-        let candle = this.currentCandleStick
+        let candle = this.chart[this.currentCandle]
 
         while (true) {
             const ordersInInreval = orders.filter(o =>
@@ -484,7 +477,6 @@ export class DataManager {
                 }
             }
             if (doneTrailings.length) {
-                this.currentCandleStick = candle
                 this.currentCandle = (candle.time - this.chart[0].time) / 1000
                 return doneTrailings
             }
@@ -493,7 +485,6 @@ export class DataManager {
             if (!ordersInInreval.length && (!candle.endTime || candle.endTime < maxTime)) {
                 if (candle.time >= maxTime) {
                     this.currentCandle = Math.max((maxTime - this.chart[0].time) / 1000, 0)
-                    this.currentCandleStick = this.chart[this.currentCandle]
                     if (!this.chart[this.currentCandle]) {
                         debugger
                     }
@@ -510,7 +501,6 @@ export class DataManager {
                         }
                     } else {
                         this.currentCandle = -1
-                        this.currentCandleStick = undefined
                         return []
                     }
                 }
@@ -518,8 +508,7 @@ export class DataManager {
                 if (candle.children.length) {
                     candle = candle.children[0]
                 } else {
-                    this.currentCandleStick = candle
-                    this.currentCandle = (candle.time - this.chart[0].time) / 1000
+                    this.currentCandle = Math.max((candle.time - this.chart[0].time) / 1000, 0)
                     const res = <{ key: [String], Order }>{}
                     for (let order of ordersInInreval) {
                         if (order.orderId == "liquid") {
@@ -542,7 +531,6 @@ export class DataManager {
                             candle = candle.next
                         } else {
                             this.currentCandle = -1
-                            this.currentCandleStick = undefined
                             return []
                         }
                     } else {

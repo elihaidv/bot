@@ -18,7 +18,7 @@ export class DAL {
     end
     isQuiet = false
     saveLogs = false
-    saveLocals = true
+    saveLocals = false
 
     async init(dataManager: DataManager | null, simulationId, start, end, saveLogs = false) {
         this.dataManager = dataManager
@@ -27,7 +27,7 @@ export class DAL {
         this.end = end
 
         this.isQuiet = process.argv.join("").includes('quiet')
-        this.saveLocals = process.argv.join("").includes('local')
+        // this.saveLocals = process.argv.join("").includes('local')
         this.saveLogs = saveLogs 
         // setTimeout(() => this.updateProgress("timeout"), 3400000)
     }

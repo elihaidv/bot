@@ -8,7 +8,7 @@ export enum BotStatus {
   WORK,
   STABLE,
   ERROR,
-  
+  PAUSE,
 }
 
 export class Bot {
@@ -67,6 +67,7 @@ export class Bot {
   lequided: boolean = false
   variation: number = 0
   backupPrecent: number = 0
+  pause:number = 86400
 
   levelsSeconds: string = ""
   levelsRaise: string = ""

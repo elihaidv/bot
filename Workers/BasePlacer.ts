@@ -198,7 +198,6 @@ export abstract class BasePlacer {
             }
         }
 
-        this.bot.lastOrder = new Date().getTime()
 
 
         params ||= {}

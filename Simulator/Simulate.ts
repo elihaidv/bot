@@ -70,7 +70,7 @@ export async function run(simulationId: string, variation: string | number, star
 
 
   const smallvariants = !simulation.variations || simulation.variations.length < 20
-  dataManager.dal.init(dataManager, simulationId, startStr, endStr,true)
+  dataManager.dal.init(dataManager, simulationId, startStr, endStr, true)
   const oldest = await fetchOldestHistory(dataManager.PAIR)
 
   const maxLongSMA = Math.max(...bots.map(b => b.longSMA))
@@ -79,7 +79,7 @@ export async function run(simulationId: string, variation: string | number, star
   const end = Math.min(new Date(endStr).getTime(), new Date().getTime())
   let endChunk = Math.max(Math.min(end, start + MIN_CHART_SIZE * 1000), start + maxLongSMA * 15 * 60 * 1000)
 
-  dataManager.futureHistory =  new Date(endStr).getTime() >= new Date("2023-06-14").getTime()
+  dataManager.futureHistory = new Date(endStr).getTime() >= new Date("2023-06-14").getTime()
 
   dataManager.minHistoryCandles = maxLongSMA
   await dataManager.fetchAllCharts(start, endChunk)
@@ -112,7 +112,7 @@ export async function run(simulationId: string, variation: string | number, star
       if (startChunk > end) {
         break
       }
-      
+
       if (endChunk > startChunk) {
         await dataManager.fetchAllCharts(startChunk, endChunk)
         dataManager.currentCandle = 0
@@ -131,7 +131,7 @@ export async function run(simulationId: string, variation: string | number, star
       if (b.profitNum < MAX_LOOSE) {
         dataManager.openOrders = dataManager.openOrders.filter(o => o.bot != b);
         ordersToFill = ordersToFill.filter(o => o.bot != b);
-        if (!b.closed){
+        if (!b.closed) {
           dataManager.closePosition(b)
           b.closed = true
         }
@@ -150,17 +150,18 @@ export async function run(simulationId: string, variation: string | number, star
       ordersToFill.forEach(o => {
         console.log(`Execute ${o.side}: ${t.high} ~ ${t.low}`, new Date(parseFloat(t.time)))
         dataManager.orderexecute(o, t)
-        if (!botsToPlace.includes(o.bot!)) {
+        if (!botsToPlace.includes(o.bot!) && o.bot!.status != BotStatus.PAUSE) {
           botsToPlace.push(o.bot!)
         }
       });
-
     }
+    dataManager.openOrders = dataManager.openOrders.filter(o => o.bot!.status != BotStatus.PAUSE)
     for (let b of bots) {
 
-      if (b.lastOrder >= b.secound &&
+      if ( t.time- b.lastOrder >= b.secound * 1000 &&
         b.status != BotStatus.STABLE &&
         !botsToPlace.includes(b)) {
+        b.status = BotStatus.WORK
         botsToPlace.push(b)
       }
 
@@ -178,7 +179,14 @@ export async function run(simulationId: string, variation: string | number, star
 
     dataManager.simulateState(botsToPlace)
     await Promise.all(botsToPlace.map(b => b.placer!.place()))
-    dataManager.currentCandle++;
+
+    if (!dataManager.openOrders.length) {
+      const diff = bots.reduce((a, b) => Math.max(a, b.lastOrder), 0) - t.time - 1000
+      if (diff > 0) {
+        dataManager.currentCandle += diff / 1000
+      }
+      
+    }
   }
 
   dataManager.currentCandle--

@@ -16,6 +16,8 @@ export class FutureDataManager extends DataManager {
 
     orderexecute(order: Order, t: CandleStick) {
         const bot = order.bot || this.bots[0]
+        bot.status = BotStatus.WORK
+
         let qu = (order.side == "BUY" ? 1 : -1) * order.executedQty
 
         let gain = 0
@@ -47,6 +49,11 @@ export class FutureDataManager extends DataManager {
 
             }
 
+            if (order.type == "STOP_MARKET") {
+                bot.status = BotStatus.PAUSE
+                bot.lastOrder = t.time + bot.pause * 1000
+            }
+
         } else if (qu * pos.positionAmount < 0) {
             gain = (pos.positionEntry - order.price) * order.executedQty * (order.side == "BUY" ? 1 : -1)
             pos.positionAmount += qu
@@ -61,7 +68,7 @@ export class FutureDataManager extends DataManager {
         gain -= (order.avgPrice * order.executedQty * 0.0002)
         bot.binance!.balance[bot.coin2] += gain
         bot.profitNum += gain
-        bot.status = BotStatus.WORK
+        
 
         console.log("Psition size: " + pos.positionAmount)
         console.log("Variation: " + bot.variation + " Profit: " + (bot.profitNum / 100).toFixed(2) + "% Date: " + new Date(parseInt(t.time)))

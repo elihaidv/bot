@@ -130,6 +130,7 @@ export async function run(simulationId: string, variation: string | number, star
     botsToPlace = bots.filter(b => {
       if (b.profitNum < MAX_LOOSE) {
         dataManager.openOrders = dataManager.openOrders.filter(o => o.bot != b);
+        ordersToFill = ordersToFill.filter(o => o.bot != b);
         if (!b.closed){
           dataManager.closePosition(b)
           b.closed = true

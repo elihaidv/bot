@@ -3,13 +3,15 @@ import fetch from 'node-fetch';
 
 import amqp from 'amqplib/callback_api.js';
 import fetchRetry from "./FetchRetry.js";
+import withAutoRecovery from 'amqplib-auto-recovery';
 
 console.log = () => { };
 let lastSim: any = {}
 let extChannel: any
 
-amqp.connect('amqp://simulator:sim1234@itamars.live/simulator', {
-  heartbeat: 120
+withAutoRecovery(amqp)
+  .connect('amqp://simulator:sim1234@itamars.live/simulator', {
+  heartbeat: 3600
 }, function (error0, connection) {
   if (error0) {
     throw error0;

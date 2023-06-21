@@ -15,6 +15,7 @@
     "adm-zip": "^0.5.9",
     "amqp": "^0.2.7",
     "amqplib": "^0.10.3",
+    "amqplib-auto-recovery": "^0.2.0",
     "body-parser": "^1.20.0",
     "coralogix-logger": "^1.1.28",
     "dotenv": "^10.0.0",

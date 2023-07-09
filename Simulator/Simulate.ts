@@ -61,14 +61,14 @@ export async function run(simulationId: string, variation: string | number, star
       bots[i - startIndex].variation = i
     }
   }
-  if (bots.every(b => b.try >= 10)) {
-    bots.forEach(b => dataManager.dal.updateProgress("failed",null, b));
-    return
-  }
 
 
   dataManager = bots[0].isFuture ? new FutureDataManager(bots) : new DataManager(bots);
 
+  if (bots.every(b => b.try >= 10)) {
+    bots.forEach(b => dataManager.dal.updateProgress("failed",null, b));
+    return
+  }
   dataManager.setExchangeInfo(bots[0].isFuture ?
     exchangeInfo :
     await new Binance({ 'family': 4 }).exchangeInfo())

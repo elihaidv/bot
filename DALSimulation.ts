@@ -77,7 +77,7 @@ export class DAL {
     }
 
     updateProgress(status, t: CandleStick | null = null, bot: Bot) {
-        let progress = 0
+        let progress = 0, dalVariation
         const start = new Date(this.start).getTime()
         const end = new Date(this.end).getTime()
         if (status == "failed") {
@@ -85,12 +85,12 @@ export class DAL {
         } else {
             const time = t?.time ?? this.dataManager?.chart[this.dataManager.currentCandle]?.time
             progress = Math.round((time - start) / (end - start) * 100)
+            dalVariation = this.variations[bot.variation]
         }
-        const dalVariation = this.variations[bot.variation]
 
         const data = JSON.stringify({
             profit: (bot.profitNum / 100).toFixed(2) + "%",
-            maxPage: dalVariation.page - 1,
+            maxPage: (dalVariation?.page - 1) ?? 0,
             progress: status == "finished" ? 100 : progress,
             status: status,
             variation: bot.variation

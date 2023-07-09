@@ -44,6 +44,7 @@ export async function run(simulationId: string, variation: string | number, star
     return
   }
 
+  
   // console.error(simulation)
 
   const bots: Bot[] = []
@@ -59,6 +60,10 @@ export async function run(simulationId: string, variation: string | number, star
       Object.assign(bots[i - startIndex], simulation.variations[i]);
       bots[i - startIndex].variation = i
     }
+  }
+  if (bots.every(b => b.try >= 10)) {
+    bots.forEach(b => dataManager.dal.updateProgress("failed",null, b));
+    return
   }
 
 

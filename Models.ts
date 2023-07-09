@@ -76,6 +76,8 @@ export class Bot {
 
   placer:BasePlacer | undefined
 
+  try: number = 0
+
   id(): string { return this._id.toString() }
 
   positionSide(): String {

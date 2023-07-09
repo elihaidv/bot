@@ -77,11 +77,15 @@ export class DAL {
     }
 
     updateProgress(status, t: CandleStick | null = null, bot: Bot) {
-
+        let progress = 0
         const start = new Date(this.start).getTime()
         const end = new Date(this.end).getTime()
-        const time = t?.time ?? this.dataManager.chart[this.dataManager.currentCandle].time
-        const progress = Math.round((time - start) / (end - start) * 100)
+        if (status == "failed") {
+            progress = 100;
+        } else {
+            const time = t?.time ?? this.dataManager?.chart[this.dataManager.currentCandle]?.time
+            progress = Math.round((time - start) / (end - start) * 100)
+        }
         const dalVariation = this.variations[bot.variation]
 
         const data = JSON.stringify({

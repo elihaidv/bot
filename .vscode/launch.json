@@ -37,9 +37,9 @@
             "runtimeExecutable": "/home/elihai/.nvm/versions/node/v17.1.0/bin/ts-node",
             "args": [
                 "Simulator/local.ts",
-                "649af58fe0bd5d1cb51c2823",
-                "1-1",
-                "2023-03-22 06:57:31",
+                "64ad862532c2973d726c9165",
+                0,
+                "2022-07-07 16:29:27",
                 "2023-06-21 06:57:31"
             ],
             "cwd": "${workspaceRoot}",

@@ -61,7 +61,7 @@ export abstract class BaseSockets {
                     new Binance().options({
                         APIKEY: keyFound.public,
                         APISECRET: keyFound.secret
-                    }))
+                    }), keyFound._id)
 
                 const acc = this.accounts[k] as Account
                 this.addUserDataSockets(acc)

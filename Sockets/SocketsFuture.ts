@@ -73,7 +73,8 @@ export class SocketsFutures extends BaseSockets {
             }
             BotLogger.instance.log({
                 type: "OrderFilled - Futures",
-                accountId: account
+                orderUpdate,
+                
             })
 
             if (orderUpdate.orderStatus == 'EXPIRED') {

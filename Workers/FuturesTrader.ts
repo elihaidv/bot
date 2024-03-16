@@ -206,6 +206,8 @@ export class FutureTrader extends BasePlacer {
             direction: this.bot.direction,
             standingBuy: this.standingBuy,
             sellAdded: this.bot.sellAdded,
+            dynamicDirection: this.bot.dynamicDirection,
+            positionDirection: this.positionDirection,
         })
 
         if (this.standingBuy && this.bot.sellAdded && this.standingBuy.executedQty < this.positionAmount) {

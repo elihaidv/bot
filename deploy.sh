@@ -28,7 +28,7 @@ do echo "Deploying to $server"
     # ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && pm2 reload Simulator/rabbitConsumer.js --node-args=\"--max-old-space-size=4096\""
 
     # ssh root@$server -i $HOME/.ssh/simulator "cd /root/bot && ./countfiles.sh > countfiles.log"
-    rsync -rzvPu  -r  -e "ssh simulator" --exclude spot build/* root@$server:/root/bot
+    rsync -rzvPu  -r  -e "ssh simulator" --exclude spot build/* simulator:/root/bot
     #ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && pm2 reload Simulator/rabbitConsumer.js --node-args=\"--max-old-space-size=4096\""
     ssh simulator "supervisorctl restart all"
     # ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && pm2 start ecosystem.config.js --node-args=\"--max-old-space-size=4096\""

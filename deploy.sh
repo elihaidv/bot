@@ -4,7 +4,7 @@ sed -i 's/debugger;/console.error("debugger");/g' build/**/*.js
 
 servers=(
     # "146.190.116.103" 
-    "137.184.188.73"
+    "143.198.49.61"
 )
 
 for server in "${servers[@]}"
@@ -28,9 +28,9 @@ do echo "Deploying to $server"
     # ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && pm2 reload Simulator/rabbitConsumer.js --node-args=\"--max-old-space-size=4096\""
 
     # ssh root@$server -i $HOME/.ssh/simulator "cd /root/bot && ./countfiles.sh > countfiles.log"
-    rsync -rzvPu  -r  -e "ssh simulator" --exclude spot build/* simulator:/root/bot
+    rsync -rzvPu  -r  -e "ssh -i $HOME/.ssh/simulator" --exclude spot build/* root@$server:/root/bot
     #ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && pm2 reload Simulator/rabbitConsumer.js --node-args=\"--max-old-space-size=4096\""
-    ssh simulator "supervisorctl restart all"
+    ssh root@$server -i $HOME/.ssh/simulator "supervisorctl restart all"
     # ssh root@$server -i $HOME/.ssh/simulator "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && pm2 start ecosystem.config.js --node-args=\"--max-old-space-size=4096\""
 
     # scp -i $HOME/.ssh/simulator root@$server:/root/bot/countfiles.log logs/$server-countfiles.log

@@ -10,7 +10,7 @@ let lastSim: any = {}
 let extChannel: any
 
 withAutoRecovery(amqp)
-  .connect('amqp://simulator:sim1234@itamars.live/simulator', {
+  .connect('amqp://simulator:sim1234@itamar.today/simulator', {
   heartbeat: 3600
 }, function (error0, connection) {
   if (error0) {
@@ -59,7 +59,7 @@ process.on('uncaughtException', function (err) {
 });
 
 function sendError(err) {
-  return fetchRetry("https://itamars.live/api/simulations/" + lastSim.simulationId, {
+  return fetchRetry("https://itamar.today/api/simulations/" + lastSim.simulationId, {
     method: 'PUT',
     body: JSON.stringify({
       status: "error",

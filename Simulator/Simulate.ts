@@ -31,7 +31,7 @@ const MAX_LOOSE = -9700
 let dataManager: DataManager
 
 export async function run(simulationId: string, variation: string | number, startStr: string, endStr: string) {
-  const simulation: any = await fetchRetry(`https://itamars.live/api/simulations/${simulationId}?
+  const simulation: any = await fetchRetry(`https://itamar.today/api/simulations/${simulationId}?
                                             vars=${variation}&
                                             device=${os.hostname()}`, {
     headers: {

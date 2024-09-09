@@ -202,6 +202,7 @@ export abstract class BasePlacer {
 
         params ||= {}
         params.positionSide = this.bot.positionSide()
+        params.timeInForce = "GTC"
 
         try {
 

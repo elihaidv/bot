@@ -97,7 +97,7 @@ export class DAL {
         })
         console.log(data)
 
-        return fetchRetry("https://itamar.today/api/simulations/" + this.simulationId, {
+        return fetchRetry("https://itamar.online/api/simulations/" + this.simulationId, {
             method: 'PUT',
             body: data,
             headers: {

@@ -17,36 +17,36 @@ function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// fs.readdir(`future`, (err, dirs) => {
-//     for (let d of dirs) {
-//         const SYMBOL = d.split('.')[0]
-//         fs.readdir(`future/${d}`, (err, files) => {
-//             for (let f of files) {
-//                 const date = f.split(".")[0]
-//                 fs.readFile(`future/${d}/${f}`, 'utf8', (err, data) => {
-//                     if (err) {
-//                         console.error(err)
-//                         return
-//                     }
-//                     const lines = data.split("\n")
-//                         .map(l => l.split(","))
-//                         .map(l => [(parseInt(l[0] / 1000)) * 1000, l[1], l[1], l[1]])
+fs.readdir(`future`, (err, dirs) => {
+    for (let d of dirs) {
+        const SYMBOL = d.split('.')[0]
+        fs.readdir(`future/${d}`, (err, files) => {
+            for (let f of files) {
+                const date = f.split(".")[0]
+                fs.readFile(`future/${d}/${f}`, 'utf8', (err, data) => {
+                    if (err) {
+                        console.error(err)
+                        return
+                    }
+                    const lines = data.split("\n")
+                        .map(l => l.split(","))
+                        .map(l => [(parseInt(l[0] / 1000)) * 1000, l[1], l[1], l[1]])
 
 
-//                     new Storage()
-//                         .bucket('crypto-history')
-//                         .file(`futures/${SYMBOL}/1s/${date}.csv`)
-//                         .save(lines.map(l => l.join(',')).join('\n'), { resumable: false })
-//                         .then(console.log)
-//                         .catch(console.log);
-//                 })
-//                 if (new Date().getTime() - new Date(date).getTime() > SECONDS_IN_DAY) {
-//                     exec(`rm future/${d}/${f}`)
-//                 }
-//             }
-//         })
-//     }
-// })
+                    new Storage()
+                        .bucket('crypto-history')
+                        .file(`futures/${SYMBOL}/1s/${date}.csv`)
+                        .save(lines.map(l => l.join(',')).join('\n'), { resumable: false })
+                        .then(console.log)
+                        .catch(console.log);
+                })
+                if (new Date().getTime() - new Date(date).getTime() > SECONDS_IN_DAY) {
+                    exec(`rm future/${d}/${f}`)
+                }
+            }
+        })
+    }
+})
 
 fs.readdir(`logs`, (err, files) => {
     for (let f of files) {

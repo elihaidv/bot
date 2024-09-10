@@ -42,7 +42,7 @@ async function run() {
   await DAL.instance.init()
   setInterval(execute, 3000)
 
-  createServer()
+  // createServer()
 }
 run()
 

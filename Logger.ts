@@ -35,7 +35,7 @@ export class BotLogger {
     }
 
     saveLogFile(fileName: string) {
-        fs.writeFile(this.localLogsPath + fileName, JSON.stringify(this.localLogs[fileName]))
+        fs.writeFile(this.localLogsPath + fileName, this.localLogs[fileName])
     }
 
     log(message: any, severity: Severity = Severity.info) {
@@ -51,7 +51,7 @@ export class BotLogger {
 
             this.localLogs[logKey].push(logEntry)
             this.saveLogFile(logKey)
-            
+
             this.logger.addLog(logEntry);
         }
     }

@@ -51,6 +51,7 @@ export class BotLogger {
       this.localLogs[logKey] ||= [];
 
       this.localLogs[logKey].push({
+        datetime: new Date().toISOString(),
         severity: severity,
         text: message,
       });

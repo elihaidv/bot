@@ -133,7 +133,7 @@ export abstract class BasePlacer {
         }
 
         const afterTransfer = (...args) => 
-            BotLogger.instance.log({ "type": "afterTransfer", "args": args, "bot_id": this.bot.id })
+            BotLogger.instance.log({ "type": "afterTransfer", "args": args, "bot_id": this.bot.id() })
         
 
         

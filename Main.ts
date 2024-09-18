@@ -146,7 +146,6 @@ function filterOutdated(bots: Array<Bot>): Array<Bot> {
     //     }
     //   }
     // }
-    console.log("BotStatus: " + b.botStatus + " bot id: " + b.id())
     if (b.botStatus == BotStatus.STABLE) return false
     return !b.lastOrder || new Date().getTime() - b.lastOrder >= b.secound * 1000
   })

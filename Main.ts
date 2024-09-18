@@ -157,16 +157,15 @@ async function initBots(botsResults) {
   let newBots = new Array<Bot>()
 
   for (let bot of botsResults) {
-    console.log("BotStatus1: " + bot.botStatus)
 
     const oldBot = bots.find(b => b.id() == bot._id.toString())
     if (oldBot) {
       newBots.push(Object.assign(oldBot, bot))
+      console.log("BotStatus2: " + oldBot.botStatus)
     } else {
       newBots.push(Object.assign(new Bot(), bot))
 
     }
-    console.log("BotStatus2: " + bot.botStatus)
   }
 
   bots = newBots

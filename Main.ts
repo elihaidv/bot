@@ -136,15 +136,16 @@ function filterOutdated(bots: Array<Bot>): Array<Bot> {
     const PAIR = b.coin1 + b.coin2 + b.positionSide()
     if (b.binance && b.binance!.orders && b.binance!.changed.includes(PAIR)) {
       b.binance!.changed = b.binance!.changed.filter(p => p != PAIR)
+      BotLogger.instance.log({ "type": "changed", "bot_id": b.id(), "pair": PAIR })
       return true
     }
-    if (b.signalings && b.binance && b.binance!.orders && b.status != BotStatus.ERROR) {
-      for (let s of b.signalings) {
-        if (b.binance!.changed.includes(s.coin1 + s.coin2 + b.positionSide())) {
-          return true
-        }
-      }
-    }
+    // if (b.signalings && b.binance && b.binance!.orders && b.status != BotStatus.ERROR) {
+    //   for (let s of b.signalings) {
+    //     if (b.binance!.changed.includes(s.coin1 + s.coin2 + b.positionSide())) {
+    //       return true
+    //     }
+    //   }
+    // }
     if (b.status == BotStatus.STABLE) return false
     return !b.lastOrder || new Date().getTime() - b.lastOrder >= b.secound * 1000
   })
@@ -162,6 +163,7 @@ async function initBots(botsResults) {
       newBots.push(Object.assign(new Bot(), bot))
 
     }
+    console.log("BorStatus: " + bot.status)
   }
 
   bots = newBots

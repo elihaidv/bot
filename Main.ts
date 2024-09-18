@@ -146,6 +146,7 @@ function filterOutdated(bots: Array<Bot>): Array<Bot> {
     //     }
     //   }
     // }
+    console.log("BotStatus: " + b.botStatus)
     if (b.botStatus == BotStatus.STABLE) return false
     return !b.lastOrder || new Date().getTime() - b.lastOrder >= b.secound * 1000
   })
@@ -156,6 +157,8 @@ async function initBots(botsResults) {
   let newBots = new Array<Bot>()
 
   for (let bot of botsResults) {
+    console.log("BotStatus1: " + bot.botStatus)
+
     const oldBot = bots.find(b => b.id() == bot._id.toString())
     if (oldBot) {
       newBots.push(Object.assign(oldBot, bot))
@@ -163,7 +166,7 @@ async function initBots(botsResults) {
       newBots.push(Object.assign(new Bot(), bot))
 
     }
-    console.log("BotStatus: " + bot.botStatus)
+    console.log("BotStatus2: " + bot.botStatus)
   }
 
   bots = newBots

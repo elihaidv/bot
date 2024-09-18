@@ -253,7 +253,7 @@ export class FutureTrader extends BasePlacer {
         } else {
             BotLogger.instance.error({
                 type: "Bot iteration error - Future",
-                bot_id: this.bot._id()
+                bot_id: this.bot.id()
             })
         }
     }

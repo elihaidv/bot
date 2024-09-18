@@ -161,7 +161,7 @@ export class WeightAvg extends BasePlacer {
 
 
         if (!this.error) {
-            this.bot.status = BotStatus.STABLE
+            this.bot.botStatus = BotStatus.STABLE
         }
     }
 

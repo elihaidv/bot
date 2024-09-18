@@ -61,7 +61,7 @@ export class Bot {
   user_id: any;
   signalings: Array<Signaling> = [];
   avoidCancel: boolean = false;
-  status: BotStatus = BotStatus.WORK;
+  botStatus: BotStatus = BotStatus.WORK;
   longSMA: number = 500;
   profitNum: number = 0
   lequided: boolean = false

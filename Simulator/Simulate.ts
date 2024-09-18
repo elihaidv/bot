@@ -155,18 +155,18 @@ export async function run(simulationId: string, variation: string | number, star
       ordersToFill.forEach(o => {
         console.log(`Execute ${o.side}: ${t.high} ~ ${t.low}`, new Date(parseFloat(t.time)))
         dataManager.orderexecute(o, t)
-        if (!botsToPlace.includes(o.bot!) && o.bot!.status != BotStatus.PAUSE) {
+        if (!botsToPlace.includes(o.bot!) && o.bot!.botStatus != BotStatus.PAUSE) {
           botsToPlace.push(o.bot!)
         }
       });
     }
-    dataManager.openOrders = dataManager.openOrders.filter(o => o.bot!.status != BotStatus.PAUSE)
+    dataManager.openOrders = dataManager.openOrders.filter(o => o.bot!.botStatus != BotStatus.PAUSE)
     for (let b of bots) {
 
       if ( t.time- b.lastOrder >= b.secound * 1000 &&
-        b.status != BotStatus.STABLE &&
+        b.botStatus != BotStatus.STABLE &&
         !botsToPlace.includes(b)) {
-        b.status = BotStatus.WORK
+        b.botStatus = BotStatus.WORK
         botsToPlace.push(b)
       }
 

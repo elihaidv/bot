@@ -115,7 +115,7 @@ export class SignalingPlacer extends FutureTrader {
       await this.closePosition(this.myLastOrder.clientOrderId.split("_")[1])
     } else if (this.myLastOrder?.clientOrderId.includes("LAST")) {
       DAL.instance.removeSignaling(this.bot, signaling._id)
-      this.bot.status = BotStatus.STABLE
+      this.bot.botStatus = BotStatus.STABLE
       return
     }
 
@@ -128,7 +128,7 @@ export class SignalingPlacer extends FutureTrader {
 
       if ( this.biggerThan(this.futureSockets.prices[this.PAIR][0], signaling.takeProfits[0])){
         this.bot.binance!.orders.changed.push(this.PAIR + this.bot.positionSide())
-        this.bot.status = BotStatus.ERROR
+        this.bot.botStatus = BotStatus.ERROR
         return
       }
 
@@ -222,10 +222,10 @@ export class SignalingPlacer extends FutureTrader {
     
     if (this.error) {
       this.bot.binance!.orders.changed.push(this.PAIR + this.bot.positionSide())
-      this.bot.status = BotStatus.ERROR
+      this.bot.botStatus = BotStatus.ERROR
 
     } else {
-      this.bot.status = BotStatus.STABLE
+      this.bot.botStatus = BotStatus.STABLE
     }
   }
 }

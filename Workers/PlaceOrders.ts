@@ -22,8 +22,8 @@ export class OrderPlacer extends BasePlacer{
         await this.split(this.bot.divide_sell, this.SECOND, calculations.sellPrice, calculations.sellQu, false, this.bot.diffrent_sell)
 
         if (!this.error){
-            
-            this.bot.status = BotStatus.STABLE
+
+            this.bot.botStatus = BotStatus.STABLE
         }
     }
     

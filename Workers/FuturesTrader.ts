@@ -245,7 +245,7 @@ export class FutureTrader extends BasePlacer {
         }
 
         if (!this.error) {
-            this.bot.status = BotStatus.STABLE
+            this.bot.botStatus = BotStatus.STABLE
             BotLogger.instance.log({
                 type: "BotEnd - Future",
                 bot_id: this.bot.id(),

@@ -56,7 +56,7 @@ export abstract class BasePlacer {
         this.filters = this.exchangeInfo.filters.reduce((a, b) => { a[b.filterType] = b; return a }, {})
 
         this.bot = _bot
-        this.bot.status = BotStatus.WORK
+        this.bot.botStatus = BotStatus.WORK
     }
 
     async buyBNB() {

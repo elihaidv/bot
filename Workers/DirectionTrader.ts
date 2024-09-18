@@ -35,7 +35,7 @@ export class DirectionTrader extends FutureTrader {
         }
 
         if (!this.error) {
-            this.bot.status = BotStatus.STABLE
+            this.bot.botStatus = BotStatus.STABLE
         }
     }
 

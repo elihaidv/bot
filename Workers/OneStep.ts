@@ -69,7 +69,7 @@ export class OneStep extends FutureTrader {
             closePosition: true
         })
         if (!this.error) {
-            this.bot.status = BotStatus.STABLE
+            this.bot.botStatus = BotStatus.STABLE
         }
     }
 

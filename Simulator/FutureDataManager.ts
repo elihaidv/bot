@@ -16,7 +16,7 @@ export class FutureDataManager extends DataManager {
 
     orderexecute(order: Order, t: CandleStick) {
         const bot = order.bot || this.bots[0]
-        bot.status = BotStatus.WORK
+        bot.botStatus = BotStatus.WORK
 
         let qu = (order.side == "BUY" ? 1 : -1) * order.executedQty
 
@@ -50,7 +50,7 @@ export class FutureDataManager extends DataManager {
             }
 
             if (order.type == "STOP_MARKET") {
-                bot.status = BotStatus.PAUSE
+                bot.botStatus = BotStatus.PAUSE
                 bot.lastOrder = t.time + bot.pause * 1000
             }
 

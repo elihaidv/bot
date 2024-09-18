@@ -466,7 +466,7 @@ export class DataManager {
 
         
 
-        let maxTime = orders.filter(o => o.bot!.status != BotStatus.STABLE)
+        let maxTime = orders.filter(o => o.bot!.botStatus != BotStatus.STABLE)
             .reduce((a, o) => Math.min(a, o.bot!.lastOrder + o.bot!.secound * 1000), Number.MAX_SAFE_INTEGER)
         let candle = this.chart[this.currentCandle]
 

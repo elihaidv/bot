@@ -22,7 +22,7 @@ export class AviAlgo extends FutureTrader {
         const prices = this.futureSockets.getRealtimePrices(this.PAIR)
 
         if (!prices || prices.length < secondsSum + this.lastLevel!.seconds ||
-             this.bot.status == BotStatus.STABLE) return
+             this.bot.botStatus == BotStatus.STABLE) return
 
         for (let level of this.levels) {
             const startCandle:any = prices[secondsSum - secondsCount]
@@ -88,7 +88,7 @@ export class AviAlgo extends FutureTrader {
         const markPrice = this.futureSockets.markPrices[this.PAIR]
 
 
-        this.bot.status = BotStatus.STABLE
+        this.bot.botStatus = BotStatus.STABLE
         await this.place_order(this.PAIR, this.positionAmount, 0, this.bot.direction, {
             type: "TRAILING_STOP_MARKET",
             activationPrice: this.roundPrice(markPrice),

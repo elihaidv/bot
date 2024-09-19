@@ -106,8 +106,8 @@ export class FutureTrader extends BasePlacer {
 
     sub(operand1, operand2) {
         console.log("sub", operand1, operand2)
-        console.log("direction", parseInt(this.bot.direction))
-        console.log("result", this.bot.direction ?
+        console.log("direction", this.bot.direction)
+        console.log("result", parseInt(this.bot.direction) ?
             parseFloat(operand1) + parseFloat(operand2) :
             parseFloat(operand1) - parseFloat(operand2))
         return parseInt(this.bot.direction) ?

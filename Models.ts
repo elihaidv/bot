@@ -46,7 +46,7 @@ export class Bot {
   leverage: any;
   isFuture: boolean = false;
   closer: any;
-  direction: any;
+  direction: number = 0;
   increase_first: number = 1;
   far_speed: number = 1;
   callbackRate: any;

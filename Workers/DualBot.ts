@@ -86,7 +86,7 @@ export class DualBot extends FutureTrader {
             }
         }
         
-        await this.place_order(this.PAIR, 0, 0, this.bot.direction, {
+        await this.place_order(this.PAIR, 0, 0, !!this.bot.direction, {
             type: "TAKE_PROFIT_MARKET",
             stopPrice: this.roundPrice(this.maxFunc(price, markPrice)),
             closePosition: true,
@@ -95,7 +95,7 @@ export class DualBot extends FutureTrader {
 
         price = this.bigPosition!.avgPrice * this.sub(1, this.bot.take_profit_position)
 
-        await this.place_order(this.PAIR, 0, 0, this.bot.direction, {
+        await this.place_order(this.PAIR, 0, 0, !!this.bot.direction, {
             type: "STOP_MARKET",
             stopPrice: this.roundPrice(this.minFunc(price, markPrice)),
             closePosition: true,

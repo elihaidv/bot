@@ -56,14 +56,14 @@ export class OneStep extends FutureTrader {
         })
 
         await this.place_order(this.PAIR, 0,0,
-            this.bot.direction, {
+            !!this.bot.direction, {
             type: "TAKE_PROFIT_MARKET",
             stopPrice: this.roundPrice(this.maxFunc(this.positionEntry * this.add(1, this.bot.take_profit), markPrice)),
             closePosition: true
         })
 
         await this.place_order(this.PAIR, 0,0,
-            this.bot.direction, {
+            !!this.bot.direction, {
             type: "STOP_MARKET",
             stopPrice: this.roundPrice(this.minFunc(this.positionEntry * this.sub(1, this.bot.stop_loose), markPrice)),
             closePosition: true

@@ -47,15 +47,13 @@ export class FutureTrader extends BasePlacer {
 
         this.positionAmount != 0 && await this.placeSell()
     }
-
-    
     minFunc(...values: number[]) {
         values = values.filter(v => v)
-        return parseInt(this.bot.direction) ? Math.max(...values) : Math.min(...values)
+        return this.bot.direction ? Math.max(...values) : Math.min(...values)
     }
     maxFunc(...values: number[]) {
         values = values.filter(v => v)
-        return parseInt(this.bot.direction) ? Math.min(...values) : Math.max(...values)
+        return this.bot.direction ? Math.min(...values) : Math.max(...values)
     }
     calculatePrice() {
 
@@ -99,25 +97,26 @@ export class FutureTrader extends BasePlacer {
     }
 
     add(operand1, operand2) {
-        return parseInt(this.bot.direction) ?
+        return this.bot.direction ?
             parseFloat(operand1) - parseFloat(operand2) :
             parseFloat(operand1) + parseFloat(operand2)
     }
 
     sub(operand1, operand2) {
         console.log("sub", operand1, operand2)
-        console.log("direction", this.bot.direction)
-        console.log("result", parseInt(this.bot.direction) ?
+        console.log("result", this.bot.direction ?
             parseFloat(operand1) + parseFloat(operand2) :
             parseFloat(operand1) - parseFloat(operand2))
-        return parseInt(this.bot.direction) ?
+            console.log("direction", this.bot.direction, typeof this.bot.direction)
+
+        return this.bot.direction ?
             parseFloat(operand1) + parseFloat(operand2) :
             parseFloat(operand1) - parseFloat(operand2)
 
     }
 
     biggerThan(operand1, operand2) {
-        return parseInt(this.bot.direction) ?
+        return this.bot.direction ?
             operand1 < operand2 :
             operand1 > operand2
 
@@ -225,14 +224,14 @@ export class FutureTrader extends BasePlacer {
         }
 
         if (this.bot.callbackRate) {
-            await this.place_order(this.PAIR, amount, 0, this.bot.direction, {
+            await this.place_order(this.PAIR, amount, 0, !!this.bot.direction, {
                 type: "TRAILING_STOP_MARKET",
                 activationPrice: this.roundPrice(this.maxFunc(price, markPrice)),
                 callbackRate: this.bot.callbackRate,
                 newClientOrderId: "LAST-SL-" + this.PAIR,
             })
         } else {
-            await this.place_order(this.PAIR, 0, 0, this.bot.direction, {
+            await this.place_order(this.PAIR, 0, 0, !!this.bot.direction, {
                 type: "TAKE_PROFIT_MARKET",
                 stopPrice: this.roundPrice(this.maxFunc(price, markPrice)),
                 closePosition: true,
@@ -244,7 +243,7 @@ export class FutureTrader extends BasePlacer {
         if (this.bot.stop_loose) {
 
             if (SLprice > 0) {
-                await this.place_order(this.PAIR, 0, 0, this.bot.direction, {
+                await this.place_order(this.PAIR, 0, 0, !!this.bot.direction, {
                     type: "STOP_MARKET",
                     stopPrice: this.roundPrice(this.minFunc(SLprice, markPrice)),
                     closePosition: true
@@ -288,7 +287,7 @@ export class FutureTrader extends BasePlacer {
             })
     
 
-            await this.place_order(this.PAIR, order.executedQty, price, this.bot.direction, {
+            await this.place_order(this.PAIR, order.executedQty, price, !!this.bot.direction, {
                 newClientOrderId: "SELL" + order.orderId
             })
             return this.positionAmount - order.executedQty

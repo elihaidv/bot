@@ -89,7 +89,7 @@ export class AviAlgo extends FutureTrader {
 
 
         this.bot.botStatus = BotStatus.STABLE
-        await this.place_order(this.PAIR, this.positionAmount, 0, this.bot.direction, {
+        await this.place_order(this.PAIR, this.positionAmount, 0, !!this.bot.direction, {
             type: "TRAILING_STOP_MARKET",
             activationPrice: this.roundPrice(markPrice),
             callbackRate: this.bot.callbackRate,

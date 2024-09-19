@@ -74,7 +74,7 @@ export class SignalingPlacer extends FutureTrader {
 
       this.bot.binance!.orders.changed = this.bot.binance!.orders.changed.filter(x => x != this.PAIR + this.bot.positionSide())
 
-      this.bot.direction = signaling.direction != "LONG"
+      this.bot.direction = signaling.direction != "LONG" ? 0 : 1
       this.orders = this.bot.binance?.orders[this.PAIR] ?? []
 
       this.exchangeInfo = this.allExchangeInfo.symbols.find(s => s.symbol == this.PAIR)
@@ -99,7 +99,7 @@ export class SignalingPlacer extends FutureTrader {
     if (this.positionAmount != 0) {
       await this.place_order(
         this.PAIR, 0, 0,
-        this.bot.direction,
+        !!this.bot.direction,
         {
           stopPrice: this.roundPrice(this.futureSockets.prices[this.PAIR][0] * (this.bot.direction ? 1.001 : 0.999)),
           type: "STOP_MARKET",
@@ -194,7 +194,7 @@ export class SignalingPlacer extends FutureTrader {
           const qu = this.positionAmount / 2
 
           await this.place_order(
-            this.PAIR, qu, price, this.bot.direction, {
+            this.PAIR, qu, price, !!this.bot.direction, {
             newClientOrderId: `EXIT${exitNum + 1}_${signaling._id}`,
             reduceOnly: true
           })
@@ -204,7 +204,7 @@ export class SignalingPlacer extends FutureTrader {
 
       await this.place_order(
         this.PAIR, 0, 0,
-        this.bot.direction, {
+        !!this.bot.direction, {
         type: "TAKE_PROFIT_MARKET",
         closePosition: true,
         stopPrice: signaling.takeProfits[exitNum + 1],
@@ -213,7 +213,7 @@ export class SignalingPlacer extends FutureTrader {
 
       await this.place_order(
         this.PAIR, 0, 0,
-        this.bot.direction, {
+        !!this.bot.direction, {
         type: "STOP_MARKET",
         closePosition: true,
         stopPrice: stoploose,

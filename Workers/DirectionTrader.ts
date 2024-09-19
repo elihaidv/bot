@@ -68,7 +68,7 @@ export class DirectionTrader extends FutureTrader {
 
         let price = this.positionEntry * this.add(1,  this.bot.callbackRate / 100)
 
-        await this.place_order(this.PAIR, this.positionAmount * 2, 0, this.bot.direction, {
+        await this.place_order(this.PAIR, this.positionAmount * 2, 0, !!this.bot.direction, {
             type: "TRAILING_STOP_MARKET",
             activationPrice: this.roundPrice(this.maxFunc(price, markPrice)),
             callbackRate: this.bot.callbackRate
@@ -76,14 +76,14 @@ export class DirectionTrader extends FutureTrader {
 
         price = this.positionEntry * this.add(1,  this.bot.take_profit)
 
-        await this.place_order(this.PAIR, this.positionAmount * 2,0, this.bot.direction, {
+        await this.place_order(this.PAIR, this.positionAmount * 2,0, !!this.bot.direction, {
             type: "STOP_MARKET",
             stopPrice: this.roundPrice(price)
         })
 
         if (this.error) { 
             price = this.positionEntry * this.sub(1, this.bot.stop_loose)
-            await this.place_order(this.PAIR, 0, 0, this.bot.direction, {
+            await this.place_order(this.PAIR, 0, 0, !!this.bot.direction, {
                 type: "STOP_MARKET",
                 stopPrice: this.roundPrice(this.minFunc(price, markPrice)),
                 closePosition: true

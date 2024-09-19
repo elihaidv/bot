@@ -3,6 +3,7 @@ import { BasePlacer } from './BasePlacer.js'
 import { Account, Bot, BotStatus, Key, Order } from '../Models.js';
 import { SocketsFutures } from '../Sockets/SocketsFuture.js';
 import { BotLogger } from '../Logger.js';
+import { Severity } from 'coralogix-logger';
 
 export class FutureTrader extends BasePlacer {
 
@@ -30,7 +31,7 @@ export class FutureTrader extends BasePlacer {
             type: "BotStart - Future",
             bot_id: this.bot._id,
             bot,
-        })
+        }, Severity.info)
 
         if (!this.isSemulation) {
             this.parseAllValues()
@@ -102,6 +103,11 @@ export class FutureTrader extends BasePlacer {
     }
 
     sub(operand1, operand2) {
+        console.log("sub", operand1, operand2)
+        console.log("direction", this.bot.direction)
+        console.log("result", this.bot.direction ?
+            parseFloat(operand1) + parseFloat(operand2) :
+            parseFloat(operand1) - parseFloat(operand2))
         return this.bot.direction ?
             parseFloat(operand1) + parseFloat(operand2) :
             parseFloat(operand1) - parseFloat(operand2)

@@ -47,13 +47,15 @@ export class FutureTrader extends BasePlacer {
 
         this.positionAmount != 0 && await this.placeSell()
     }
+
+    
     minFunc(...values: number[]) {
         values = values.filter(v => v)
-        return this.bot.direction ? Math.max(...values) : Math.min(...values)
+        return parseInt(this.bot.direction) ? Math.max(...values) : Math.min(...values)
     }
     maxFunc(...values: number[]) {
         values = values.filter(v => v)
-        return this.bot.direction ? Math.min(...values) : Math.max(...values)
+        return parseInt(this.bot.direction) ? Math.min(...values) : Math.max(...values)
     }
     calculatePrice() {
 
@@ -97,25 +99,25 @@ export class FutureTrader extends BasePlacer {
     }
 
     add(operand1, operand2) {
-        return this.bot.direction ?
+        return parseInt(this.bot.direction) ?
             parseFloat(operand1) - parseFloat(operand2) :
             parseFloat(operand1) + parseFloat(operand2)
     }
 
     sub(operand1, operand2) {
         console.log("sub", operand1, operand2)
-        console.log("direction", this.bot.direction)
+        console.log("direction", parseInt(this.bot.direction))
         console.log("result", this.bot.direction ?
             parseFloat(operand1) + parseFloat(operand2) :
             parseFloat(operand1) - parseFloat(operand2))
-        return this.bot.direction ?
+        return parseInt(this.bot.direction) ?
             parseFloat(operand1) + parseFloat(operand2) :
             parseFloat(operand1) - parseFloat(operand2)
 
     }
 
     biggerThan(operand1, operand2) {
-        return this.bot.direction ?
+        return parseInt(this.bot.direction) ?
             operand1 < operand2 :
             operand1 > operand2
 

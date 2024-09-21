@@ -75,6 +75,13 @@ export class FutureTrader extends BasePlacer {
     }
 
     calculateDirection() {
+
+        if (typeof this.bot.direction == "string") {
+            console.log("direction1", typeof this.bot.direction)
+            this.bot.direction = isNaN(parseInt(this.bot.direction)) ? this.bot.direction : parseInt(this.bot.direction)
+            console.log("direction1", typeof this.bot.direction)
+        }
+        
         if (this.bot.direction > 1) {
             this.bot.dynamicDirection = this.bot.direction
         }
@@ -87,11 +94,6 @@ export class FutureTrader extends BasePlacer {
             } else {
                 this.setDirection(this.positionDirection)
             }
-        }
-        if (typeof this.bot.direction == "string") {
-            console.log("direction1", typeof this.bot.direction)
-            this.bot.direction = isNaN(parseInt(this.bot.direction)) ? this.bot.direction : parseInt(this.bot.direction)
-            console.log("direction1", typeof this.bot.direction)
         }
     }
 

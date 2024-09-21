@@ -43,6 +43,13 @@ export class FutureTrader extends BasePlacer {
 
         this.buildHistory()
 
+
+        if (typeof this.bot.direction == "string") {
+            console.log("direction1", typeof this.bot.direction)
+            this.bot.direction = isNaN(parseInt(this.bot.direction)) ? this.bot.direction : parseInt(this.bot.direction)
+            console.log("direction1", typeof this.bot.direction)
+        }
+
         await this.placeBuy()
 
         this.positionAmount != 0 && await this.placeSell()
@@ -76,12 +83,7 @@ export class FutureTrader extends BasePlacer {
 
     calculateDirection() {
 
-        if (typeof this.bot.direction == "string") {
-            console.log("direction1", typeof this.bot.direction)
-            this.bot.direction = isNaN(parseInt(this.bot.direction)) ? this.bot.direction : parseInt(this.bot.direction)
-            console.log("direction1", typeof this.bot.direction)
-        }
-        
+
         if (this.bot.direction > 1) {
             this.bot.dynamicDirection = this.bot.direction
         }

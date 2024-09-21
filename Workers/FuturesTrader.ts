@@ -129,7 +129,17 @@ export class FutureTrader extends BasePlacer {
         return !this.positionAmount
     }
 
+    fixDirection() {
+        console.log("direction1", typeof this.bot.direction)
+        if (typeof this.bot.direction == "string") {
+            console.log("direction2", typeof this.bot.direction)
+            this.bot.direction = isNaN(parseInt(this.bot.direction)) ? this.bot.direction : parseInt(this.bot.direction)
+            console.log("direction3", typeof this.bot.direction)
+        }
+    }
+
     async placeBuy() {
+        this.fixDirection()
         let buyPrice, fbuyPrice, buyQu, fbuyQu
         const markPrice = this.futureSockets.markPrices[this.PAIR]
         let balanceLeveraged = this.balance[this.SECOND] * this.bot.leverage;
@@ -193,14 +203,9 @@ export class FutureTrader extends BasePlacer {
     }
 
     async placeSell() {
-
-        console.log("direction1", typeof this.bot.direction)
-        if (typeof this.bot.direction == "string") {
-            console.log("direction2", typeof this.bot.direction)
-            this.bot.direction = isNaN(parseInt(this.bot.direction)) ? this.bot.direction : parseInt(this.bot.direction)
-            console.log("direction3", typeof this.bot.direction)
-        }
-        const markPrice = this.futureSockets.markPrices[this.PAIR]
+        this.fixDirection()
+       
+        const markPrice = this.add(1.001, this.futureSockets.markPrices[this.PAIR])
         const SLprice = this.positionEntry * this.sub(1, this.bot.stop_loose)
 
         let fsellPrice, amount = this.positionAmount

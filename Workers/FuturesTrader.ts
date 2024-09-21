@@ -88,6 +88,9 @@ export class FutureTrader extends BasePlacer {
                 this.setDirection(this.positionDirection)
             }
         }
+        if (typeof this.bot.direction == "string") {
+            this.setDirection(isNaN(parseInt(this.bot.direction)) ? this.bot.direction : parseInt(this.bot.direction))
+        }
     }
 
     setDirection(direction) {

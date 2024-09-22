@@ -81,10 +81,13 @@ export async function run(simulationId: string, variation: string | number, star
   const maxLongSMA = Math.max(...bots.map(b => b.longSMA))
   let start = new Date(startStr).getTime() - (maxLongSMA * 15 * 60 * 1000)
   start = Math.max(start, new Date(oldest).getTime())
-  const end = Math.min(new Date(endStr).getTime(), new Date().getTime())
+  let end = Math.min(new Date(endStr).getTime(), new Date().getTime())
   let endChunk = Math.max(Math.min(end, start + MIN_CHART_SIZE * 1000), start + maxLongSMA * 15 * 60 * 1000)
 
   dataManager.futureHistory = new Date(startStr).getTime() >= new Date("2023-06-14").getTime()
+  if (dataManager.futureHistory) {
+    end = Math.min(end, new Date().getTime() - 1000 * 60 * 60 * 48)
+  }
 
   dataManager.minHistoryCandles = maxLongSMA
   await dataManager.fetchAllCharts(start, endChunk)

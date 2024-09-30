@@ -616,7 +616,7 @@ export class DataManager {
     initData() {
 
         for (let bot of this.bots) {
-            bot.binance = new Account(new Binance());
+            bot.binance = new Account(new Binance(),"k");
             bot.binance.balance = {}
             bot.binance.balance[bot.coin2] = bot.isFuture ? 10000 : {
                 available: 10000,

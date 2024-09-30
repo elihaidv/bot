@@ -160,6 +160,7 @@ export class Order {
 
 export class Account {
 
+  keyName: string;
   orders: any
   balance:any =  {};
   binance: Binance
@@ -168,11 +169,12 @@ export class Account {
   changed:Array<String> =  []
   needTransfer: Array<String> = []
 
-  constructor(binance: Binance) {
+  constructor(binance: Binance, keyName: string) {
     this.binance = binance
     this.orders = {
       orderFilled: {}
     }
+    this.keyName = keyName
   }
 
 }

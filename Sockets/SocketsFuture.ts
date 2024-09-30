@@ -65,15 +65,17 @@ export class SocketsFutures extends BaseSockets {
                 (orderUpdate.orderStatus == 'EXPIRED' && orderUpdate.orderType == "LIMIT" && orderUpdate.originalOrderType != "TAKE_PROFIT")) {
                 if (!orderUpdate.clientOrderId.includes("BigPosition")) {
                     account.changed.push(orderUpdate.symbol + orderUpdate.positionSide);
-                    BotLogger.instance.log({
-                        type: "OrderFilled - Futures",
-                        orderUpdate
-                    })
+                    
                 }
                 if (orderUpdate.clientOrderId.includes("LAST")) {
                     account.needTransfer.push(orderUpdate.symbol)
                 }
             }
+            BotLogger.instance.log({
+                type: "OrderUpdate- Futures",
+                orderUpdate,
+                account: account.keyName
+            })
 
             if (orderUpdate.orderStatus == 'EXPIRED') {
                 console.log('EXPIRED:', orderUpdate.symbol, orderUpdate.side, orderUpdate.originalPrice, orderUpdate.orderTradeTime)

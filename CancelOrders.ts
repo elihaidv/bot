@@ -10,6 +10,13 @@ export default async function cancelOrders(bot: Bot, pair?) {
             .filter(x => x.positionSide == bot.positionSide())
 
         try {
+            BotLogger.instance.log({
+                type: "CancelOrders",
+                bot_id: bot._id,
+                coin: PAIR,
+                message: `Cancelling ${openOrders.length} orders`,
+                ids: openOrders.map(o => o.orderId),
+            })
             await (bot.isFuture ?  bot.binance!.binance.futuresCancelAll(PAIR):
                     Promise.all(openOrders.map(o =>
                         bot.binance!.binance.cancel(PAIR, o.orderId))));

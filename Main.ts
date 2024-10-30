@@ -137,6 +137,7 @@ function filterOutdated(bots: Array<Bot>): Array<Bot> {
     if (b.binance && b.binance!.orders && b.binance!.changed.includes(PAIR)) {
       b.binance!.changed = b.binance!.changed.filter(p => p != PAIR)
       BotLogger.instance.log({ "type": "changed", "bot_id": b.id(), "pair": PAIR })
+      b.botStatus = BotStatus.WORK
       return true
     }
     // if (b.signalings && b.binance && b.binance!.orders && b.status != BotStatus.ERROR) {

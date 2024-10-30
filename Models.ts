@@ -3,7 +3,7 @@ import { ObjectId } from "mongodb";
 import Binance from "node-binance-api";
 import { BasePlacer } from "./Workers/BasePlacer";
 import { type } from "node:os";
-import { BotLogger } from "./Logger";
+import { BotLogger } from "./Logger.js";
 
 export enum BotStatus {
   WORK,

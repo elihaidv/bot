@@ -90,7 +90,7 @@ export class Bot {
   }
 
   set botStatus(status: BotStatus) {
-    BotLogger.instance.log({ "type": "StatusChange", "bot_id": this.id(), "status": BotStatus.WORK, oldStatus: this.botStatus })
+    BotLogger.instance.log({ "type": "StatusChange", "bot_id": this.id(), status, oldStatus: this.botStatus })
 
     this._botStatus = status
   }

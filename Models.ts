@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb";
 import Binance from "node-binance-api";
 import { BasePlacer } from "./Workers/BasePlacer";
 import { type } from "node:os";
+import { BotLogger } from "./Logger";
 
 export enum BotStatus {
   WORK,
@@ -61,7 +62,7 @@ export class Bot {
   user_id: any;
   signalings: Array<Signaling> = [];
   avoidCancel: boolean = false;
-  botStatus: BotStatus = BotStatus.WORK;
+  _botStatus: BotStatus = BotStatus.WORK;
   longSMA: number = 500;
   profitNum: number = 0
   lequided: boolean = false
@@ -82,6 +83,16 @@ export class Bot {
 
   positionSide(): String {
     return this.isFuture ? (this.mode ? (this.direction ? 'SHORT' : 'LONG') : 'BOTH') : ''
+  }
+
+  get botStatus(): BotStatus {
+    return this._botStatus
+  }
+
+  set botStatus(status: BotStatus) {
+    BotLogger.instance.log({ "type": "StatusChange", "bot_id": this.id(), "status": BotStatus.WORK, oldStatus: this.botStatus })
+
+    this._botStatus = status
   }
 }
 

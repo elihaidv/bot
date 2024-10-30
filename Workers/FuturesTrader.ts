@@ -106,12 +106,6 @@ export class FutureTrader extends BasePlacer {
     }
 
     sub(operand1, operand2) {
-        // console.log("sub", operand1, operand2)
-        // console.log("result", this.bot.direction ?
-        //     parseFloat(operand1) + parseFloat(operand2) :
-        //     parseFloat(operand1) - parseFloat(operand2))
-        //     console.log("direction", this.bot.direction, typeof this.bot.direction)
-
         return this.bot.direction ?
             parseFloat(operand1) + parseFloat(operand2) :
             parseFloat(operand1) - parseFloat(operand2)
@@ -130,11 +124,8 @@ export class FutureTrader extends BasePlacer {
     }
 
     fixDirection() {
-        console.log("direction1", typeof this.bot.direction)
         if (typeof this.bot.direction == "string") {
-            console.log("direction2", typeof this.bot.direction)
             this.bot.direction = isNaN(parseInt(this.bot.direction)) ? this.bot.direction : parseInt(this.bot.direction)
-            console.log("direction3", typeof this.bot.direction)
         }
     }
 

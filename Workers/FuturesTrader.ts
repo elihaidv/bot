@@ -43,6 +43,11 @@ export class FutureTrader extends BasePlacer {
 
         this.buildHistory()
 
+        this.checkForPause()
+
+        if (this.bot.botStatus == BotStatus.PAUSE) {
+            return
+        }
 
         await this.placeBuy()
 
@@ -91,6 +96,21 @@ export class FutureTrader extends BasePlacer {
                 this.setDirection(this.positionDirection)
             }
         }
+    }
+
+    checkForPause() {
+        if (this.myLastOrder?.clientOrderId.includes("LAST-SL")){
+            if (this.bot.pause && this.myLastOrder?.time > Date.now() - this.bot.pause * 1000) {
+                this.bot.lastOrder = this.myLastOrder?.time + this.bot.pause * 1000
+                this.bot.botStatus = BotStatus.PAUSE
+                BotLogger.instance.log({
+                    type: "BotPause - Future",
+                    bot_id: this.bot.id(),
+                    pause: this.bot.pause,
+                    lastOrder: this.myLastOrder,
+                })
+            }
+        } 
     }
 
     setDirection(direction) {
@@ -253,6 +273,7 @@ export class FutureTrader extends BasePlacer {
                 await this.place_order(this.PAIR, 0, 0, !!this.bot.direction, {
                     type: "STOP_MARKET",
                     stopPrice: this.roundPrice(this.minFunc(SLprice, markPrice)),
+                    newClientOrderId: "LAST-SL-" + this.PAIR,
                     closePosition: true
                 })
             }

@@ -27,6 +27,7 @@ export class FutureTrader extends BasePlacer {
 
         const { binance, placer, ...bot } = this.bot
         this.error = false
+        this.bot.botStatus = BotStatus.WORK
         BotLogger.instance.log({
             type: "BotStart - Future",
             bot_id: this.bot._id,

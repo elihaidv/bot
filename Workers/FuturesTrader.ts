@@ -25,9 +25,9 @@ export class FutureTrader extends BasePlacer {
         // await this.binance.futuresLeverage( this.PAIR, this.bot.leverage )
         // await this.binance.futuresMarginType( this.PAIR, 'ISOLATED' )
 
-        const { binance, placer, ...bot } = this.bot
         this.error = false
         this.bot.botStatus = BotStatus.WORK
+        const { binance, placer, ...bot } = this.bot
         BotLogger.instance.log({
             type: "BotStart - Future",
             bot_id: this.bot._id,

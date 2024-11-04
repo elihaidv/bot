@@ -46,7 +46,7 @@ export class FutureTrader extends BasePlacer {
 
         this.checkForPause()
 
-        if (this.bot.botStatus == BotStatus.PAUSE) {
+        if (this.bot.botStatus === BotStatus.PAUSE as BotStatus) {
             return
         }
 

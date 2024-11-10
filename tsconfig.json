@@ -10,7 +10,8 @@
     "esModuleInterop":true,
     "outDir": "build",
     "moduleResolution":"node" ,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    
     
   },
 

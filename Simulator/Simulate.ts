@@ -46,7 +46,7 @@ export async function run(simulationId: string, variation: string | number, star
 
 
   
-  console.error(simulation)
+  // console.error(simulation)
 
   const bots: Bot[] = []
 
@@ -190,7 +190,7 @@ export async function run(simulationId: string, variation: string | number, star
     await Promise.all(botsToPlace.map(b => b.placer!.place()))
 
     if (!dataManager.openOrders.length) {
-      const diff = bots.reduce((a, b) => Math.max(a, b.lastOrder), 0) - t.time - 1000
+      const diff = bots.reduce((a, b) => Math.min(a, b.lastOrder), 0) - t.time - 1000
       if (diff > 0) {
         dataManager.currentCandle += diff / 1000
       }

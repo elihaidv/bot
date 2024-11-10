@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@types/node": "^16.11.43",
-    "cli-interact": "^0.1.9"
+    "cli-interact": "^0.1.9",
+    "tsx": "^4.19.2"
   }
 }

@@ -66,7 +66,7 @@ export async function run(simulationId: string, variation: string | number, star
   dataManager = bots[0].isFuture ? new FutureDataManager(bots) : new DataManager(bots);
 
   if (bots.every(b => b.try >= 10)) {
-    bots.forEach(b => dataManager.dal.updateProgress("failed",null, b));
+    await Promise.all(bots.map(b => dataManager.dal.updateProgress("failed",null, b)))
     return
   }
   dataManager.setExchangeInfo(bots[0].isFuture ?

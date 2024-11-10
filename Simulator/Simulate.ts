@@ -44,8 +44,9 @@ export async function run(simulationId: string, variation: string | number, star
     return
   }
 
+
   
-  // console.error(simulation)
+  console.error(simulation)
 
   const bots: Bot[] = []
 

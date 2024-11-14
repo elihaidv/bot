@@ -10,6 +10,7 @@ import { env, exit } from "process";
 import { DAL } from "../DALSimulation.js";
 import { Periodically } from "../Workers/Periodically.js";
 import exchangeInfo from './exchangeInfo.js'
+import exchangeInfoS from './exchangeInfoS.js'
 import fetch from "node-fetch";
 import { OneStep } from "../Workers/OneStep.js";
 import { parse } from 'node-html-parser';
@@ -72,7 +73,7 @@ export async function run(simulationId: string, variation: string | number, star
   }
   dataManager.setExchangeInfo(bots[0].isFuture ?
     exchangeInfo :
-    await new Binance({ 'family': 4 }).exchangeInfo())
+    exchangeInfoS)
 
 
   const smallvariants = !simulation.variations || simulation.variations.length < 20

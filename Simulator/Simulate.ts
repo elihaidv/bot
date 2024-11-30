@@ -31,7 +31,7 @@ const MAX_LOOSE = -9700
 
 let dataManager: DataManager
 
-export async function run(simulationId: string, variation: string | number, startStr: string, endStr: string) {
+export async function run(simulationId: string, variation: string | number, startStr: string, endStr: string, force = false) {
   const simulation: any = await fetchRetry(`https://itamar.online/api/simulations/${simulationId}?
                                             vars=${variation}&
                                             device=${os.hostname()}`, {
@@ -67,7 +67,7 @@ export async function run(simulationId: string, variation: string | number, star
 
   dataManager = bots[0].isFuture ? new FutureDataManager(bots) : new DataManager(bots);
 
-  if (bots.every(b => b.try >= 10)) {
+  if (bots.every(b => b.try >= 10) && !force) {
     await Promise.all(bots.map(b => dataManager.dal.updateProgress("failed",null, b)))
     return
   }

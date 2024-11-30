@@ -332,7 +332,7 @@ export class DataManager {
 
         let copiedChart: CandleStick[] = []
         copiedChart.push(chart[0])
-        for (let i = 1; i < chart.length - 1; i++) {
+        for (let i = 1; i < chart.length; i++) {
             const diff = chart[i].time - copiedChart.at(-1)!.time
             if (diff >= 1000) {
                 copiedChart.push(chart[i])

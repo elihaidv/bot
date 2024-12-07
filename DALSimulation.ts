@@ -145,7 +145,8 @@ export class DAL {
                 await new Storage()
                     .bucket('simulations-tradingbot')
                     .file(`simulation${this.simulationId}-${variation}/${dalVariation.page}.csv`)
-                    .save(cloneSteps, { resumable: false });
+                    .save(cloneSteps, { resumable: false })
+                    .catch(console.error);
 
             }
 

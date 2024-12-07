@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@google-cloud/storage": "^6.4.1",
+    "@types/amqp": "^0.2.8",
     "adm-zip": "^0.5.9",
     "amqp": "^0.2.7",
     "amqplib": "^0.10.3",

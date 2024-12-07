@@ -7,6 +7,7 @@ import withAutoRecovery from 'amqplib-auto-recovery';
 
 console.log = () => { };
 let lastSim: any = {}
+let lastMessage: any = {}
 let extChannel: any
 
 withAutoRecovery(amqp)
@@ -34,6 +35,7 @@ withAutoRecovery(amqp)
 
     channel.consume(queue, async function (msg) {
       try {
+        lastMessage = msg
         const args = JSON.parse(msg.content.toString());
         lastSim = args
         console.warn("Simulating: ", args.simulationId, args.variation, args.start, args.end)
@@ -55,7 +57,7 @@ withAutoRecovery(amqp)
 process.on('uncaughtException', function (err) {
   console.error(err);
   sendError(err)
-  extChannel.reject(lastSim)
+  extChannel.reject(lastMessage)
 });
 
 function sendError(err) {

@@ -35,13 +35,11 @@ const fetchWithTimeout = async (
   ): Promise<Response> => {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
-    const agent = new (fetch as any).Agent({ keepAlive: true });
 
     try {
       const response = await fetch(url, {
         ...init,
-        signal: controller.signal,
-        agent
+        signal: controller.signal
       });
       return response;
     } catch (error) {

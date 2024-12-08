@@ -67,7 +67,7 @@ export async function run(simulationId: string, variation: string | number, star
 
   dataManager = bots[0].isFuture ? new FutureDataManager(bots) : new DataManager(bots);
 
-  if (bots.every(b => b.try >= 10) && !force) {
+  if (bots.every(b => b.try >= 3) && !force) {
     await Promise.all(bots.map(b => dataManager.dal.updateProgress("failed",null, b)))
     return
   }
@@ -180,7 +180,7 @@ export async function run(simulationId: string, variation: string | number, star
     if (dataManager.dal.awaiter) {
       console.log("awaiter")
       dataManager.dal.awaiter = false
-      await timeout(500)
+      await timeout(200)
     }
 
     if (bots.every(b => b.profitNum < MAX_LOOSE)) {

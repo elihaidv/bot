@@ -180,7 +180,7 @@ export async function run(simulationId: string, variation: string | number, star
     if (dataManager.dal.awaiter) {
       console.log("awaiter")
       dataManager.dal.awaiter = false
-      await timeout(200)
+      await timeout(300)
     }
 
     if (bots.every(b => b.profitNum < MAX_LOOSE)) {

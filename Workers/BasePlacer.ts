@@ -100,7 +100,7 @@ export abstract class BasePlacer {
   sellSide = () => (this.bot.direction ? "BUY" : "SELL");
 
   buildHistory() {
-    const buys = Array<Order>();
+    // const buys = Array<Order>();
     const sellOrders: Array<string> = [];
     this.myLastOrder = undefined;
     this.myLastStandingBuy = undefined;
@@ -109,29 +109,42 @@ export abstract class BasePlacer {
     this.currentPnl = 0;
     this.standingBuy = undefined;
 
-    for (let order of this.orders
-      .filter((x) => x.status.includes("FILLED"))
-      .filter((x) => x.positionSide == this.bot.positionSide())
-      .reverse()) {
+    // for (let order of this.orders
+    //   .filter((x) => x.status.includes("FILLED"))
+    //   .filter((x) => x.positionSide == this.bot.positionSide())
+    //   .reverse()) {
+    for (let i = this.orders.length - 1; i > 0; i--){
+      if (this.standingBuy && this.lastSell){
+        break;
+      }
+
+
+      const order = this.orders[i];
+      if (!order.status.includes('FILLED') ||
+        order.positionSide != this.bot.positionSide()){
+          continue;
+      }
       this.myLastOrder ||= order;
       if (order.side == this.buySide()) {
         this.lastBuy ||= order;
 
         if (!sellOrders.join("").includes(order.orderId)) {
           this.standingBuy ||= order;
-          this.oldestStandingBuy = order;
-          buys.push(order);
+          // Spot only
+          // this.oldestStandingBuy = order;
+          // buys.push(order);
         }
       } else {
         this.lastSell ||= order;
-        if (
-          order.clientOrderId.includes("SELLbig") &&
-          !this.myLastStandingBuy
-        ) {
-          this.myLastStandingBuy = this.orders.find(
-            (x) => x.orderId == order.clientOrderId.split("SELLbig")[1]
-          );
-        }
+        // Spot only
+        // if (
+        //   order.clientOrderId.includes("SELLbig") &&
+        //   !this.myLastStandingBuy
+        // ) {
+        //   this.myLastStandingBuy = this.orders.find(
+        //     (x) => x.orderId == order.clientOrderId.split("SELLbig")[1]
+        //   );
+        // }
         sellOrders.push(order.clientOrderId);
       }
 
@@ -180,7 +193,7 @@ export abstract class BasePlacer {
       }
     }
 
-    this.myLastBuyAvg = this.weightAverage(buys);
+    // this.myLastBuyAvg = this.weightAverage(buys);
   }
 
   weightAverage(arr) {

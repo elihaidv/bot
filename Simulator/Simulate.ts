@@ -27,7 +27,7 @@ import { AviAlgo } from "../Workers/AviAlgo.js";
 env.GOOGLE_APPLICATION_CREDENTIALS = "trading-cloud.json"
 env.TZ = "UTC"
 env.IS_SIMULATION = "true"
-const MAX_LOOSE = -9700
+const MAX_LOOSE = -8000
 
 let dataManager: DataManager
 
@@ -180,7 +180,7 @@ export async function run(simulationId: string, variation: string | number, star
     if (dataManager.dal.awaiter) {
       console.log("awaiter")
       dataManager.dal.awaiter = false
-      await timeout(300)
+      await timeout(100)
     }
 
     if (bots.every(b => b.profitNum < MAX_LOOSE)) {

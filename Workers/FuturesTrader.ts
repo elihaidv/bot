@@ -229,14 +229,17 @@ export class FutureTrader extends BasePlacer {
         }
 
         let currentPnl, price = fsellPrice
-            currentPnl = this.calculatePNL()
-            price = this.sub(fsellPrice, currentPnl / amount)
+            
         
 
     
         let done = false
         if (this.standingBuy && this.bot.sellAdded && this.standingBuy.executedQty < this.positionAmount) {
-            [amount, done] = await this.placeSellFromBuy(this.standingBuy, fsellPrice)
+            [amount, done] = await this.placeSellFromBuy(this.standingBuy, price)
+        }
+        if (!done){
+            currentPnl = this.calculatePNL()
+            price = this.sub(fsellPrice, currentPnl / amount)
         }
         BotLogger.instance.log({
             type: "BeforeSell - Future",

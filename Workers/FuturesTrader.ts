@@ -228,14 +228,22 @@ export class FutureTrader extends BasePlacer {
             fsellPrice = this.positionEntry * this.add(1, this.bot.take_profit)
         }
 
-        const price = this.sub(fsellPrice, this.currentPnl / amount)
+        let currentPnl, price = fsellPrice
+            currentPnl = this.calculatePNL()
+            price = this.sub(fsellPrice, currentPnl / amount)
+        
 
+    
+        let done = false
+        if (this.standingBuy && this.bot.sellAdded && this.standingBuy.executedQty < this.positionAmount) {
+            [amount, done] = await this.placeSellFromBuy(this.standingBuy, fsellPrice)
+        }
         BotLogger.instance.log({
             type: "BeforeSell - Future",
             bot_id: this.bot._id,
-            currentPnl: this.currentPnl,
+            currentPnl: currentPnl,
             fsellPrice, price, amount,
-            SLprice,
+            SLprice,done,
             markPrice, balance: this.balance[this.SECOND],
             positionAmount: this.positionAmount,
             positionEntry: this.positionEntry,
@@ -246,10 +254,6 @@ export class FutureTrader extends BasePlacer {
             dynamicDirection: this.bot.dynamicDirection,
             positionDirection: this.positionDirection,
         })
-
-        if (this.standingBuy && this.bot.sellAdded && this.standingBuy.executedQty < this.positionAmount) {
-            amount = await this.placeSellFromBuy(this.standingBuy, price)
-        }
 
         if (this.bot.callbackRate) {
             await this.place_order(this.PAIR, amount, 0, !!this.bot.direction, {
@@ -294,7 +298,7 @@ export class FutureTrader extends BasePlacer {
         }
     }
 
-    async placeSellFromBuy(order: Order, closePrice) {
+    async placeSellFromBuy(order: Order, closePrice) : Promise<[number,boolean]> {
         const markPrice = this.futureSockets.markPrices[this.PAIR]
 
         const price = this.maxFunc(order.price * this.add(1, this.bot.take_profit), markPrice * 1.001)
@@ -319,9 +323,9 @@ export class FutureTrader extends BasePlacer {
             await this.place_order(this.PAIR, order.executedQty, price, !!this.bot.direction, {
                 newClientOrderId: "SELL" + order.orderId
             })
-            return this.positionAmount - order.executedQty
+            return [this.positionAmount - order.executedQty,true]
         }
-        return this.positionAmount
+        return [this.positionAmount,false]
     }
 
     isEmptyObject(obj) {

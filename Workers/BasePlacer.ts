@@ -22,7 +22,6 @@ export abstract class BasePlacer {
   myLastOrder: Order | undefined;
   myLastStandingBuy: Order | undefined;
   myLastBuyAvg;
-  currentPnl = 0;
   standingBuy: Order | undefined;
   oldestStandingBuy: Order | undefined;
 
@@ -113,16 +112,17 @@ export abstract class BasePlacer {
     //   .filter((x) => x.status.includes("FILLED"))
     //   .filter((x) => x.positionSide == this.bot.positionSide())
     //   .reverse()) {
-    for (let i = this.orders.length - 1; i > 0; i--){
-      if (this.standingBuy && this.lastSell){
+    for (let i = this.orders.length - 1; i > 0; i--) {
+      if (this.standingBuy && this.lastSell) {
         break;
       }
 
-
       const order = this.orders[i];
-      if (!order.status.includes('FILLED') ||
-        order.positionSide != this.bot.positionSide()){
-          continue;
+      if (
+        !order.status.includes("FILLED") ||
+        order.positionSide != this.bot.positionSide()
+      ) {
+        continue;
       }
       this.myLastOrder ||= order;
       if (order.side == this.buySide()) {
@@ -148,13 +148,23 @@ export abstract class BasePlacer {
         sellOrders.push(order.clientOrderId);
       }
 
-      this.currentPnl +=
-        order.pnl - order.avgPrice * order.executedQty * 0.0002;
-
       if (order.isFirst()) {
         break;
       }
     }
+  }
+  calculatePNL(): number {
+    let currentPnl = 0
+    for  (let i = 0; i < this.orders.length; i++) {
+      const order = this.orders[i];
+      if (
+        order.positionSide == this.bot.positionSide() &&
+        order.status.includes("FILLED")
+      ) {
+        currentPnl += order.pnl - order.avgPrice * order.executedQty * 0.0002;
+      }
+    }
+   
 
     const afterTransfer =
       (args1) =>
@@ -170,15 +180,15 @@ export abstract class BasePlacer {
       this.bot.binance!.needTransfer = this.bot.binance!.needTransfer.filter(
         (x) => x != this.PAIR
       );
-      const amount = Math.abs(this.currentPnl * this.bot.backupPrecent);
+      const amount = Math.abs(currentPnl * this.bot.backupPrecent);
       const args = {
         amount,
-        currentPnl: this.currentPnl,
+        currentPnl: currentPnl,
         backupPrecent: this.bot.backupPrecent,
-        direction: this.currentPnl > 0 ? "FuturesToMain" : "MainToFutures",
+        direction: currentPnl > 0 ? "FuturesToMain" : "MainToFutures",
       };
 
-      if (this.currentPnl > 0) {
+      if (currentPnl > 0) {
         this.binance.transferFuturesToMain(
           this.SECOND,
           amount,
@@ -192,7 +202,7 @@ export abstract class BasePlacer {
         );
       }
     }
-
+    return currentPnl;
     // this.myLastBuyAvg = this.weightAverage(buys);
   }
 

@@ -105,7 +105,7 @@ export abstract class BasePlacer {
     this.myLastStandingBuy = undefined;
     this.lastBuy = undefined;
     this.lastSell = undefined;
-    this.currentPnl = 0;
+    // this.currentPnl = 0;
     this.standingBuy = undefined;
 
     // for (let order of this.orders

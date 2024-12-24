@@ -311,7 +311,7 @@ export class FutureTrader extends BasePlacer {
             BotLogger.instance.log({
                 type: "PlaceSellFromBuy - Future",
                 bot_id: this.bot._id,
-                currentPnl: this.currentPnl,
+                // currentPnl: this.currentPnl,
                 order, price, closePrice,
                 markPrice, balance: this.balance[this.SECOND],
                 positionAmount: this.positionAmount,

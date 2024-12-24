@@ -155,7 +155,7 @@ export abstract class BasePlacer {
   }
   calculatePNL(): number {
     let currentPnl = 0
-    for  (let i = 0; i < this.orders.length; i++) {
+    for  (let i = 1; i < this.orders.length; i++) {
       const order = this.orders[i];
       if (
         order.positionSide == this.bot.positionSide() &&

@@ -33,21 +33,7 @@ export class FutureDataManager extends DataManager {
             pos.positionEntry = 0
             console.log("Closing position with profit of: " + (gain / bot.binance!.balance[bot.coin2] * 100).toFixed() + "%")
             this.dal.logStep({ type: 'Close Position', priority: 5 }, bot)
-            bot.binance!.orders[this.PAIR] = []
-
-            if (bot.backupPrecent > 0) {
-                if (-bot.binance!.balance.backup > gain * bot.backupPrecent) {
-                    gain += bot.binance!.balance.backup
-                    bot.profitNum -= bot.binance!.balance.backup
-                    bot.binance!.balance.backup = 0
-
-                } else {
-                    bot.binance!.balance.backup += gain * bot.backupPrecent
-                    bot.profitNum += gain * bot.backupPrecent
-                    gain *= (1 - bot.backupPrecent)
-                }
-
-            }
+            
 
             if (order.type == "STOP_MARKET") {
                 bot.botStatus = BotStatus.PAUSE
@@ -63,11 +49,27 @@ export class FutureDataManager extends DataManager {
             pos.positionAmount += qu;
         }
 
-        order.pnl = gain
 
+        order.pnl = gain
         gain -= (order.avgPrice * order.executedQty * 0.0002)
         bot.binance!.balance[bot.coin2] += gain
         bot.profitNum += gain
+
+        if (bot.backupPrecent > 0 && order.closePosition) {
+            if (-bot.binance!.balance.backup > gain * bot.backupPrecent) {
+                gain += bot.binance!.balance.backup
+                bot.profitNum -= bot.binance!.balance.backup
+                bot.binance!.balance.backup = 0
+
+            } else {
+                const positionProfit = (bot.binance!.balance[bot.coin2] - (bot.binance?.balanceOnOpen[bot.coin2] || 10000))
+                bot.binance!.balance.backup += positionProfit * bot.backupPrecent
+                bot.profitNum -= positionProfit * bot.backupPrecent
+                bot.binance!.balance[bot.coin2] -= positionProfit * bot.backupPrecent
+                bot.binance!.balanceOnOpen[bot.coin2] = bot.binance!.balance[bot.coin2]
+            }
+
+        }
         
 
         console.log("Psition size: " + pos.positionAmount)

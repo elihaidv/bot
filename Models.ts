@@ -179,6 +179,7 @@ export class Account {
   positions: any = {};
   changed:Array<String> =  []
   needTransfer: Array<String> = []
+  balanceOnOpen: any = {}
 
   constructor(binance: Binance, keyName: string) {
     this.binance = binance

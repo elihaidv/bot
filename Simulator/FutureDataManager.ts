@@ -39,6 +39,8 @@ export class FutureDataManager extends DataManager {
                 bot.botStatus = BotStatus.PAUSE
                 bot.lastOrder = t.time + bot.pause * 1000
             }
+            bot.binance!.orders[this.PAIR] = []
+
 
         } else if (qu * pos.positionAmount < 0) {
             gain = (pos.positionEntry - order.price) * order.executedQty * (order.side == "BUY" ? 1 : -1)

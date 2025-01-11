@@ -58,19 +58,12 @@ export class FutureDataManager extends DataManager {
         bot.profitNum += gain
 
         if (bot.backupPrecent > 0 && order.closePosition) {
-            if (-bot.binance!.balance.backup > gain * bot.backupPrecent) {
-                gain += bot.binance!.balance.backup
-                bot.profitNum -= bot.binance!.balance.backup
-                bot.binance!.balance.backup = 0
-
-            } else {
-                const positionProfit = (bot.binance!.balance[bot.coin2] - (bot.binance?.balanceOnOpen[bot.coin2] || 10000))
-                bot.binance!.balance.backup += positionProfit * bot.backupPrecent
-                bot.profitNum -= positionProfit * bot.backupPrecent
-                bot.binance!.balance[bot.coin2] -= positionProfit * bot.backupPrecent
-                bot.binance!.balanceOnOpen[bot.coin2] = bot.binance!.balance[bot.coin2]
-            }
-
+            let positionProfit = (bot.binance!.balance[bot.coin2] - (bot.binance?.balanceOnOpen[bot.coin2] || 10000))
+            positionProfit = Math.max(positionProfit, -bot.binance!.balance.backup)
+            bot.binance!.balance.backup += positionProfit * bot.backupPrecent
+            bot.profitNum -= positionProfit * bot.backupPrecent
+            bot.binance!.balance[bot.coin2] -= positionProfit * bot.backupPrecent
+            bot.binance!.balanceOnOpen[bot.coin2] = bot.binance!.balance[bot.coin2]
         }
         
 

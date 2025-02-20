@@ -95,7 +95,7 @@ export class DAL {
             status: status,
             variation: bot.variation
         })
-        console.log(data)
+        console.error(data)
 
         return fetchRetry("https://itamar.online/api/simulations/" + this.simulationId, {
             method: 'PUT',

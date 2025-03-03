@@ -63,12 +63,12 @@ export class FutureDataManager extends DataManager {
     order.pnl = gain;
     gain -= order.avgPrice * order.executedQty * 0.0002;
     bot.binance!.balance[bot.coin2] += gain;
-    bot.profitNum += gain;
 
     if (bot.backupPrecent > 0 && order.closePosition) {
       this.adjustBackup(bot);
     }
 
+    bot.profitNum = (bot.binance!.balance[bot.coin2] + bot.binance!.balance.backup) - 10000;
     console.log("Psition size: " + pos.positionAmount);
     console.log(
       "Variation: " +
@@ -110,7 +110,6 @@ export class FutureDataManager extends DataManager {
       (bot.binance?.balanceOnOpen[bot.coin2] || 10000);
     positionProfit = Math.max(positionProfit, -bot.binance!.balance.backup);
     bot.binance!.balance.backup += positionProfit * bot.backupPrecent;
-    bot.profitNum -= positionProfit * bot.backupPrecent;
     bot.binance!.balance[bot.coin2] -= positionProfit * bot.backupPrecent;
     bot.binance!.balanceOnOpen[bot.coin2] = bot.binance!.balance[bot.coin2];
   }

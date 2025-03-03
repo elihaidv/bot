@@ -152,7 +152,7 @@ export class DataManager {
                 const res1 = await this.dal.getHistoryFromBucket(this.PAIR, unit, dateString)
                 if (res1) {
                     if (new Date().getTime() - new Date(dateString).getTime() > SECONDS_IN_DAY * 1000) {
-                        await this.dal.saveHistoryInLocal(res1, this.PAIR, unit, dateString, "future")
+                        await this.dal.saveHistoryInLocal(res1, this.PAIR, unit, dateString, "future",1)
                     }
                     console.log("File exists in bucket", dateString, unit)
                     return res1
@@ -177,8 +177,9 @@ export class DataManager {
             if (file.length == 0) {
                 console.error("Length is Zero.", dateString, unit)
             }
-
-            const r = await this.dal.saveHistoryInLocal(file, this.PAIR, unit, dateString, "spot")
+            
+            const divider = dateString.split("-")[0] == "2025" ? 1000 : 1
+            const r = await this.dal.saveHistoryInLocal(file, this.PAIR, unit, dateString, "spot",divider)
             console.log("downloded: ", dateString, unit);
             return r
         } catch (e) {
@@ -213,7 +214,7 @@ export class DataManager {
                 .map(e => e.toString())
                 .join("\n")
 
-            this.dal.saveHistoryInLocal(resStr, this.PAIR, "1s", dateString, "spot")
+            this.dal.saveHistoryInLocal(resStr, this.PAIR, "1s", dateString, "spot",1)
         }
 
         return res.flat().map(l => l.map(e => parseFloat(e)))
@@ -314,6 +315,10 @@ export class DataManager {
                 return newCandle
             })
             chart = items.concat(chart)
+        }
+
+        if (!chart.at(-1)?.high){
+            chart = chart.slice(0, -1)
         }
 
         diff = start + SECONDS_IN_DAY * 1000 - chart.at(-1)?.time

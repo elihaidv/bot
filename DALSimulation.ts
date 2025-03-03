@@ -155,7 +155,7 @@ export class DAL {
         }
     }
 
-    saveHistoryInLocal = async (history, pair, unit, date, market) => {
+    saveHistoryInLocal = async (history, pair, unit, date, market,divider) => {
         try {
             let historyArray
             if (typeof history == "string") {
@@ -163,7 +163,7 @@ export class DAL {
                     .filter(r => r)
                     .map(x => x.split(",")
                         .map(y => parseFloat(y)))
-                    .map(([time, open, high, low, close]) => [time, high, low, close])
+                    .map(([time, open, high, low, close]) => [time/divider, high, low, close])
                     .filter(([time, high, low, close]) => time && high && low && close)
             } else {
                 historyArray = history

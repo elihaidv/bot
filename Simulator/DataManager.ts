@@ -538,12 +538,12 @@ export class DataManager {
                             res[order.bot!.variation] = order;
                         }
                     }
-                    const orders = Object.values(res)
+                    const _orders = Object.values(res)
 
-                    orders.filter(o => o.type == "TRAILING_STOP_MARKET")
+                    _orders.filter(o => o.type == "TRAILING_STOP_MARKET")
                         .forEach(o => {o.lastPrice ||= candle.close; o.active = true})
 
-                    if (orders.every(o => o.type == "TRAILING_STOP_MARKET")) {
+                    if (_orders.length && _orders.every(o => o.type == "TRAILING_STOP_MARKET")) {
                         if (candle.next) {
                             candle = candle.next
                         } else {
@@ -551,7 +551,7 @@ export class DataManager {
                             return []
                         }
                     } else {
-                        return orders.filter(o => o.type != "TRAILING_STOP_MARKET")
+                        return _orders.filter(o => o.type != "TRAILING_STOP_MARKET")
                     }
                 }
             }

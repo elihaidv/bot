@@ -69,6 +69,7 @@ export class Bot {
   variation: number = 0
   backupPrecent: number = 0
   pause:number = 0
+  initialPart: number = 1
 
   levelsSeconds: string = ""
   levelsRaise: string = ""

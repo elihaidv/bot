@@ -623,15 +623,20 @@ export class DataManager {
         for (let bot of this.bots) {
             bot.binance = new Account(new Binance(),"k");
             bot.binance.balance = {}
-            bot.binance.balance[bot.coin2] = bot.isFuture ? 10000 : {
-                available: 10000,
-                total: 10000
+            const initialAmount = bot.initialPart > 0 ? 10000 * bot.initialPart : 10000
+            const initialBackup = bot.initialPart > 0 ? 10000 * (1 - bot.initialPart) : 0
+            bot.binance.balance[bot.coin2] = bot.isFuture ? initialAmount : {
+                available: initialAmount,
+                total: initialAmount
             }
             bot.binance.balance[bot.coin1] = bot.isFuture ? 0 : {
                 available: 0,
                 total: 0
             }
-            bot.binance.balance.backup = 0
+            bot.binance.balance.backup = initialBackup
+            bot.binance.balanceOnOpen = {
+                [bot.coin2]: initialAmount
+            }
 
             bot.binance.orders = [{}]
             bot.binance.positions = []

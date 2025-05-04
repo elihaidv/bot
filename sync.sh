@@ -1,7 +1,7 @@
 cd ~/Downloads
-ssh trading 'mongodump -d trading -c key'
-ssh trading 'mongodump -d trading -c bot'
+ssh trading 'mongoexport -d trading -c key > dump/key.json'
+ssh trading 'mongoexport -d trading -c bot > dump/bot.json'
 # ssh trading 'mongodump -u elihai --authenticationDatabase admin --password eldv1993 -d trading_bot -c tests'
 scp -r trading:dump .
-mongorestore --drop
-mongosh trading_bot --eval 'db.bot.updateMany({}, {"$set":{"run":"0", "enviroment":"LOCAL"}})'
+# mongorestore --drop
+# mongosh trading_bot --eval 'db.bot.updateMany({}, {"$set":{"run":"0", "enviroment":"LOCAL"}})'

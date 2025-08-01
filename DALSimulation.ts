@@ -5,6 +5,7 @@ import { ExecOptions } from "child_process";
 import { promises } from "fs"
 import { Bot } from "./Models";
 import fetchRetry from "./Simulator/FetchRetry.js";
+import { dbPromise } from "./firebase.js";
 
 
 const PAGE_SIZE = 2000
@@ -76,7 +77,7 @@ export class DAL {
 
     }
 
-    updateProgress(status, t: CandleStick | null = null, bot: Bot) {
+    async updateProgress(status, t: CandleStick | null = null, bot: Bot) {
         let progress = 0, dalVariation
         const start = new Date(this.start).getTime()
         const end = new Date(this.end).getTime()
@@ -88,27 +89,25 @@ export class DAL {
             dalVariation = this.variations[bot.variation]
         }
 
-        const data = JSON.stringify({
+        const data = {
             profit: (bot.profitNum / 100).toFixed(2) + "%",
             maxPage: dalVariation?.page - 1,
             progress: status == "finished" ? 100 : progress,
             status: status,
             variation: bot.variation
-        })
-        console.error(data)
+        }
+        console.error(JSON.stringify(data))
 
-        return fetchRetry("https://itamar.online/api/simulations/" + this.simulationId, {
-            method: 'PUT',
-            body: data,
-            headers: {
-                "API-KEY": "WkqrHeuts2mIOJHMcxoK",
-                "Accept": "application/json",
-                'Content-Type': 'application/json',
-            }
-
-        }).then(r => r.text())
-            // .then(console.log)
-            .catch(console.error)
+        try {
+            const db = await dbPromise;
+            await db.collection('simulations')
+                .doc(this.simulationId)
+                .collection('variations')
+                .doc(String(bot.variation))
+                .set(data, { merge: true });
+        } catch (error) {
+            console.error('Error updating simulation progress:', error);
+        }
     }
 
     async endTest(bot: Bot) {

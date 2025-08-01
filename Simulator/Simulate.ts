@@ -14,15 +14,13 @@ import exchangeInfoS from './exchangeInfoS.js'
 import fetch from "node-fetch";
 import { OneStep } from "../Workers/OneStep.js";
 import { parse } from 'node-html-parser';
-
 import Binance from 'node-binance-api';
-
 import os from "os";
-
 import { OrderPlacer } from "../Workers/PlaceOrders.js";
 import fetchRetry from "./FetchRetry.js";
 import { promises as fs } from "fs";
 import { AviAlgo } from "../Workers/AviAlgo.js";
+import { dbPromise } from "../firebase.js";
 
 env.GOOGLE_APPLICATION_CREDENTIALS = "trading-cloud.json"
 env.TZ = "UTC"
@@ -32,38 +30,35 @@ const MAX_LOOSE = -8000
 let dataManager: DataManager
 
 export async function run(simulationId: string, variation: string | number, startStr: string, endStr: string, force = false) {
-  const simulation: any = await fetchRetry(`https://itamar.online/api/simulations/${simulationId}?
-                                            vars=${variation}&
-                                            device=${os.hostname()}`, {
-    headers: {
-      "API-KEY": "WkqrHeuts2mIOJHMcxoK",
-      "Accept": "application/json"
-    }
-  }).then(r => r.json()).catch(console.error)
-
-  if (simulation.exception == "Symfony\\Component\\HttpKernel\\Exception\\NotFoundHttpException") {
-    return
+  // Wait for the database to be initialized
+  const db = await dbPromise;
+  
+  const simulationDoc = await db.collection('simulations').doc(simulationId).get();
+  if (!simulationDoc.exists) {
+    console.error('Simulation not found');
+    return;
   }
 
+  const simulation = simulationDoc.data();
+  if (!simulation) {
+    console.error('Simulation data is empty');
+    return;
+  }
 
-  
-  // console.error(simulation)
-
-  const bots: Bot[] = []
+  const bots: Bot[] = [];
 
   if (typeof variation === "number" || !variation.includes("-")) {
     bots.push(Object.assign(new Bot(), simulation));
   } else {
-    const startIndex = parseInt(variation.split("-")[0])
-    const endIndex = parseInt(variation.split("-")[1])
+    const startIndex = parseInt(variation.split("-")[0]);
+    const endIndex = parseInt(variation.split("-")[1]);
 
     for (let i = startIndex; i <= endIndex; i++) {
       bots.push(Object.assign(new Bot(), simulation));
       Object.assign(bots[i - startIndex], simulation.variations[i]);
-      bots[i - startIndex].variation = i
+      bots[i - startIndex].variation = i;
     }
   }
-
 
   dataManager = bots[0].isFuture ? new FutureDataManager(bots) : new DataManager(bots);
 
@@ -74,7 +69,6 @@ export async function run(simulationId: string, variation: string | number, star
   dataManager.setExchangeInfo(bots[0].isFuture ?
     exchangeInfo :
     exchangeInfoS)
-
 
   const smallvariants = !simulation.variations || simulation.variations.length < 20
   dataManager.dal.init(dataManager, simulationId, startStr, endStr, true)

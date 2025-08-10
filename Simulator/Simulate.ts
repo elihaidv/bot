@@ -44,6 +44,17 @@ export async function run(simulationId: string, variation: string | number, star
     console.error('Simulation data is empty');
     return;
   }
+  simulation._id = simulationDoc.id
+
+  // Fetch variations subcollection
+  const variationsSnapshot = await db.collection('simulations').doc(simulationId).collection('variations').get();
+  const variations: { [key: number]: any } = {};
+  
+  variationsSnapshot.forEach(doc => {
+    const variationData = doc.data();
+    const variationIndex = parseInt(doc.id);
+    variations[variationIndex] = variationData;
+  });
 
   const bots: Bot[] = [];
 
@@ -53,9 +64,30 @@ export async function run(simulationId: string, variation: string | number, star
     const startIndex = parseInt(variation.split("-")[0]);
     const endIndex = parseInt(variation.split("-")[1]);
 
+    // Fetch only required variations from subcollection
+    const variations: { [key: number]: any } = {};
+    const variationPromises: Promise<any>[] = [];
+    
+    for (let i = startIndex; i <= endIndex; i++) {
+      variationPromises.push(
+        db.collection('simulations').doc(simulationId).collection('variations').doc(i.toString()).get()
+      );
+    }
+    
+    const variationDocs = await Promise.all(variationPromises);
+    
+    variationDocs.forEach((doc, index) => {
+      if (doc.exists) {
+        const variationIndex = startIndex + index;
+        variations[variationIndex] = doc.data();
+      }
+    });
+
     for (let i = startIndex; i <= endIndex; i++) {
       bots.push(Object.assign(new Bot(), simulation));
-      Object.assign(bots[i - startIndex], simulation.variations[i]);
+      if (variations[i]) {
+        Object.assign(bots[i - startIndex], variations[i]);
+      }
       bots[i - startIndex].variation = i;
     }
   }
@@ -70,7 +102,7 @@ export async function run(simulationId: string, variation: string | number, star
     exchangeInfo :
     exchangeInfoS)
 
-  const smallvariants = !simulation.variations || simulation.variations.length < 20
+  const smallvariants = Object.keys(variations).length < 20
   dataManager.dal.init(dataManager, simulationId, startStr, endStr, true)
   const oldest = await fetchOldestHistory(dataManager.PAIR)
 

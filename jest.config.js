@@ -5,7 +5,10 @@ export default {
   testMatch: ['**/__tests__/**/*.test.ts'],
   collectCoverageFrom: [
     'Workers/**/*.ts',
+    'Simulator/**/*.ts',
     '!Workers/**/*.d.ts',
+    '!Simulator/**/*.d.ts',
+    '!Simulator/exchangeInfo*.js',
     '!**/node_modules/**'
   ],
   coverageDirectory: 'coverage',

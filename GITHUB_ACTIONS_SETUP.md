@@ -6,7 +6,7 @@ This project has been converted from Bitbucket Pipelines to GitHub Actions. The 
 
 You need to configure the following secrets in your GitHub repository:
 
-1. **SSH_PRIVATE_KEY**: Your SSH private key for connecting to the deployment server
+1. **SSH_PRIVATE_KEY_BASE64**: Your SSH private key encoded in base64 for connecting to the deployment server
 2. **DEPLOY_USER**: Username for SSH connection to the deployment server
 3. **DEPLOY_HOST**: Hostname or IP address of the deployment server
 4. **DEPLOY_PATH**: Path on the deployment server where the application should be deployed
@@ -31,7 +31,10 @@ You need to configure the following secrets in your GitHub repository:
    ssh-copy-id -i ~/.ssh/id_rsa.pub user@your-server
    ```
 
-3. Copy the private key content and add it as the `SSH_PRIVATE_KEY` secret in GitHub
+3. Encode the private key in base64 and add it as the `SSH_PRIVATE_KEY_BASE64` secret in GitHub:
+   ```bash
+   cat ~/.ssh/id_rsa | base64 -w 0
+   ```
 
 ## Workflow Details
 

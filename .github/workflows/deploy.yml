@@ -41,9 +41,11 @@ jobs:
           # Use provided secrets or fallback to demo values for testing
           if [ -n "${{ secrets.DEPLOY_HOST }}" ]; then
             echo "DEPLOY_HOST=${{ secrets.DEPLOY_HOST }}" >> $GITHUB_OUTPUT
+            echo "IS_DEMO=false" >> $GITHUB_OUTPUT
             echo "✅ Using configured DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}"
           else
             echo "DEPLOY_HOST=demo.example.com" >> $GITHUB_OUTPUT
+            echo "IS_DEMO=true" >> $GITHUB_OUTPUT
             echo "⚠️ Using demo DEPLOY_HOST: demo.example.com"
           fi
           
@@ -89,7 +91,7 @@ jobs:
           echo "🔒 Adding server to known hosts..."
           mkdir -p ~/.ssh
           # For demo hosts, skip host key verification; for real hosts, add them properly
-          if [[ "${{ steps.deploy_config.outputs.DEPLOY_HOST }}" == *"demo"* || "${{ steps.deploy_config.outputs.DEPLOY_HOST }}" == *"example"* ]]; then
+          if [ "${{ steps.deploy_config.outputs.IS_DEMO }}" = "true" ]; then
             echo "⚠️ Demo mode: Skipping host key verification for demo host"
           else
             ssh-keyscan -H ${{ steps.deploy_config.outputs.DEPLOY_HOST }} >> ~/.ssh/known_hosts
@@ -100,7 +102,7 @@ jobs:
         run: |
           echo "🔌 Testing SSH connection to ${{ steps.deploy_config.outputs.DEPLOY_USER }}@${{ steps.deploy_config.outputs.DEPLOY_HOST }}"
           
-          if [[ "${{ steps.deploy_config.outputs.DEPLOY_HOST }}" == *"demo"* || "${{ steps.deploy_config.outputs.DEPLOY_HOST }}" == *"example"* ]]; then
+          if [ "${{ steps.deploy_config.outputs.IS_DEMO }}" = "true" ]; then
             echo "⚠️ Demo mode detected - simulating SSH connection test"
             echo "✅ [SIMULATED] SSH connection successful"
             echo "✅ [SIMULATED] Server info: Linux demo-server 5.4.0-generic"
@@ -116,7 +118,7 @@ jobs:
         run: |
           echo "📁 Creating deployment directory: ${{ steps.deploy_config.outputs.DEPLOY_PATH }}"
           
-          if [[ "${{ steps.deploy_config.outputs.DEPLOY_HOST }}" == *"demo"* || "${{ steps.deploy_config.outputs.DEPLOY_HOST }}" == *"example"* ]]; then
+          if [ "${{ steps.deploy_config.outputs.IS_DEMO }}" = "true" ]; then
             echo "⚠️ Demo mode - simulating directory creation"
             echo "✅ [SIMULATED] Deploy directory created/verified: ${{ steps.deploy_config.outputs.DEPLOY_PATH }}"
           else
@@ -128,7 +130,7 @@ jobs:
         run: |
           echo "🚀 Deploying files to ${{ steps.deploy_config.outputs.DEPLOY_USER }}@${{ steps.deploy_config.outputs.DEPLOY_HOST }}:${{ steps.deploy_config.outputs.DEPLOY_PATH }}"
           
-          if [[ "${{ steps.deploy_config.outputs.DEPLOY_HOST }}" == *"demo"* || "${{ steps.deploy_config.outputs.DEPLOY_HOST }}" == *"example"* ]]; then
+          if [ "${{ steps.deploy_config.outputs.IS_DEMO }}" = "true" ]; then
             echo "⚠️ Demo mode - simulating file deployment"
             echo "Simulating rsync command:"
             echo "rsync -avz --progress --stats \\"
@@ -155,7 +157,7 @@ jobs:
         run: |
           echo "📦 Installing dependencies on server..."
           
-          if [[ "${{ steps.deploy_config.outputs.DEPLOY_HOST }}" == *"demo"* || "${{ steps.deploy_config.outputs.DEPLOY_HOST }}" == *"example"* ]]; then
+          if [ "${{ steps.deploy_config.outputs.IS_DEMO }}" = "true" ]; then
             echo "⚠️ Demo mode - simulating dependency installation"
             echo "Simulating: cd ${{ steps.deploy_config.outputs.DEPLOY_PATH }} && npm install --production --silent"
             echo "✅ [SIMULATED] Dependencies installed successfully"
@@ -168,7 +170,7 @@ jobs:
         run: |
           echo "⚙️ Managing PM2 process for rabbitConsumer..."
           
-          if [[ "${{ steps.deploy_config.outputs.DEPLOY_HOST }}" == *"demo"* || "${{ steps.deploy_config.outputs.DEPLOY_HOST }}" == *"example"* ]]; then
+          if [ "${{ steps.deploy_config.outputs.IS_DEMO }}" = "true" ]; then
             echo "⚠️ Demo mode - simulating PM2 process management"
             echo "Simulating PM2 commands:"
             echo "  npx pm2 list"
@@ -199,7 +201,7 @@ jobs:
         run: |
           echo "✅ Verifying deployment..."
           
-          if [[ "${{ steps.deploy_config.outputs.DEPLOY_HOST }}" == *"demo"* || "${{ steps.deploy_config.outputs.DEPLOY_HOST }}" == *"example"* ]]; then
+          if [ "${{ steps.deploy_config.outputs.IS_DEMO }}" = "true" ]; then
             echo "⚠️ Demo mode - simulating deployment verification"
             echo "Simulating verification checks:"
             echo "✅ [SIMULATED] package.json found"
@@ -227,7 +229,7 @@ jobs:
           echo "🎉 DEPLOYMENT COMPLETED SUCCESSFULLY!"
           echo "============================================"
           
-          if [[ "${{ steps.deploy_config.outputs.DEPLOY_HOST }}" == *"demo"* || "${{ steps.deploy_config.outputs.DEPLOY_HOST }}" == *"example"* ]]; then
+          if [ "${{ steps.deploy_config.outputs.IS_DEMO }}" = "true" ]; then
             echo "⚠️ DEMO MODE DEPLOYMENT"
             echo "✅ Code validated and compiled"
             echo "✅ SSH key validated"

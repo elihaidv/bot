@@ -34,7 +34,7 @@ jobs:
         
       - name: Setup SSH
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/ssh_key
+          echo "${{ secrets.SSH_PRIVATE_KEY_BASE64 }}" | base64 -d > /tmp/ssh_key
           chmod 600 /tmp/ssh_key
           eval $(ssh-agent -s)
           ssh-add /tmp/ssh_key

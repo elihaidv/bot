@@ -1,12 +1,12 @@
 # GitHub Actions Setup
 
-This project has been converted from Bitbucket Pipelines to GitHub Actions. The workflow will automatically deploy to production on every push to the `master` branch.
+This project has been converted from Bitbucket Pipelines to GitHub Actions. The workflow will automatically deploy to production on every push to the `master` or `firebase` branch.
 
 ## Required GitHub Secrets
 
 You need to configure the following secrets in your GitHub repository:
 
-1. **SSH_PRIVATE_KEY_BASE64**: Your SSH private key (raw content, not base64) for connecting to the deployment server
+1. **SSH_PRIVATE_KEY**: Your SSH private key (raw content) for connecting to the deployment server
 2. **DEPLOY_USER**: Username for SSH connection to the deployment server
 3. **DEPLOY_HOST**: Hostname or IP address of the deployment server
 4. **DEPLOY_PATH**: Path on the deployment server where the application should be deployed
@@ -31,7 +31,7 @@ You need to configure the following secrets in your GitHub repository:
    ssh-copy-id -i ~/.ssh/id_rsa.pub user@your-server
    ```
 
-3. Add the raw private key content as the `SSH_PRIVATE_KEY_BASE64` secret in GitHub:
+3. Add the raw private key content as the `SSH_PRIVATE_KEY` secret in GitHub:
    ```bash
    cat ~/.ssh/id_rsa
    ```
@@ -40,24 +40,25 @@ You need to configure the following secrets in your GitHub repository:
 ## Workflow Details
 
 The GitHub Action workflow:
-- Runs on every push to the `master` branch
+- Runs on every push to the `master` or `firebase` branch
 - Uses Ubuntu latest runner
-- Sets up Node.js 22 with npm caching
-- Installs project dependencies using npm
-- Compiles TypeScript code
+- Sets up Node.js 22 with pnpm caching
+- Installs project dependencies using pnpm
+- Compiles TypeScript code with ES2020 target and ESNext modules
 - Deploys to your server using rsync
 - Installs dependencies on the server using npm
 - Reloads the PM2 process
 
 ## Differences from Bitbucket Pipeline
 
-- **Trigger**: Changed from `dev` branch to `master` branch
+- **Trigger**: Changed from `dev` branch to `master` and `firebase` branches
 - **SSH Setup**: Uses GitHub's SSH agent action for secure key management
 - **Known Hosts**: Automatically adds the deployment server to known hosts
-- **Package Manager**: Uses npm for consistency and reliability
+- **Package Manager**: Uses pnpm for development dependencies and npm on server for consistency
 - **Node.js Version**: Updated to Node.js 22 for better performance and latest features
-- **Caching**: Added npm dependency caching for faster builds
+- **Caching**: Added pnpm dependency caching for faster builds
 - **Security**: Uses GitHub secrets instead of Bitbucket variables
+- **TypeScript**: Improved compilation with modern ES2020 target and ESNext modules
 
 ## Troubleshooting
 

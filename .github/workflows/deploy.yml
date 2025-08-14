@@ -18,20 +18,25 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
+          cache: 'pnpm'
+          
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
           
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
         
       - name: Install TypeScript globally
-        run: npm install -g typescript
+        run: pnpm add -g typescript
         
       - name: Compile TypeScript
-        run: tsc --skipLibCheck --resolveJsonModule --esModuleInterop --outDir build -t es5 Simulator/rabbitConsumer.ts
+        run: tsc --skipLibCheck --resolveJsonModule --esModuleInterop --module ESNext --moduleResolution node --outDir build -t es2020 Simulator/rabbitConsumer.ts
         
       - name: Setup SSH
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY_BASE64 }}" | base64 -d > /tmp/ssh_key
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/ssh_key
           chmod 600 /tmp/ssh_key
           eval $(ssh-agent -s)
           ssh-add /tmp/ssh_key

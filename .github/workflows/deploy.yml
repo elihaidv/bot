@@ -35,32 +35,9 @@ jobs:
           echo "pnpm version: $(pnpm --version)"
           echo "TypeScript version: $(npx tsc --version)"
           
-          # Create build directory
-          mkdir -p build
-          
-          echo "🔧 Compiling DB.ts first..."
-          if npx tsc --skipLibCheck --resolveJsonModule --esModuleInterop --module ESNext --moduleResolution node --outDir build -t es2020 DB.ts; then
-            echo "✅ DB.ts compiled successfully"
-            ls -la build/DB.js || echo "⚠️ DB.js not found in expected location"
-          else
-            echo "❌ DB.ts compilation failed"
-            exit 1
-          fi
-          
-          echo "🔧 Compiling Simulator/rabbitConsumer.ts..."
-          if npx tsc --skipLibCheck --resolveJsonModule --esModuleInterop --module ESNext --moduleResolution node --outDir build -t es2020 Simulator/rabbitConsumer.ts; then
-            echo "✅ TypeScript compilation completed successfully!"
-          else
-            echo "❌ rabbitConsumer.ts compilation failed"
-            echo "🔍 Checking what files exist in build directory:"
-            find build -type f -name "*.js" | head -10
-            exit 1
-          fi
-          
-          echo "📁 Final build directory contents:"
-          ls -la build/
-          echo "📁 Simulator build contents:"
-          ls -la build/Simulator/ || echo "Simulator directory not found"
+          # Use custom build script for more reliable compilation
+          chmod +x build-script.cjs
+          node build-script.cjs
         env:
           # Optional database environment variables for compilation
           DB_USERNAME: ${{ secrets.DB_USERNAME || '' }}

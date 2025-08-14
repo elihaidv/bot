@@ -32,152 +32,168 @@ jobs:
         run: npx tsc --skipLibCheck --resolveJsonModule --esModuleInterop --module ESNext --moduleResolution node --outDir build -t es2020 Simulator/rabbitConsumer.ts
         continue-on-error: true
         
-      - name: Check deployment configuration
-        id: config_check
+      - name: Validate deployment secrets
         run: |
-          echo "Checking deployment configuration..."
+          echo "🔍 Validating deployment configuration..."
           echo "============================================"
           
-          missing_secrets=""
+          all_secrets_present=true
           
           if [ -z "$SSH_PRIVATE_KEY_BASE64" ]; then
-            echo "❌ SSH_PRIVATE_KEY_BASE64 is not set"
-            missing_secrets="$missing_secrets SSH_PRIVATE_KEY_BASE64"
+            echo "❌ SSH_PRIVATE_KEY_BASE64 is missing"
+            all_secrets_present=false
           else
-            echo "✅ SSH_PRIVATE_KEY_BASE64 is configured (length: ${#SSH_PRIVATE_KEY_BASE64})"
+            echo "✅ SSH_PRIVATE_KEY_BASE64 is configured"
           fi
           
           if [ -z "$DEPLOY_HOST" ]; then
-            echo "❌ DEPLOY_HOST is not set"
-            missing_secrets="$missing_secrets DEPLOY_HOST"
+            echo "❌ DEPLOY_HOST is missing"
+            all_secrets_present=false
           else
             echo "✅ DEPLOY_HOST is configured: $DEPLOY_HOST"
           fi
           
           if [ -z "$DEPLOY_USER" ]; then
-            echo "❌ DEPLOY_USER is not set"
-            missing_secrets="$missing_secrets DEPLOY_USER"
+            echo "❌ DEPLOY_USER is missing"
+            all_secrets_present=false
           else
             echo "✅ DEPLOY_USER is configured: $DEPLOY_USER"
           fi
           
           if [ -z "$DEPLOY_PATH" ]; then
-            echo "❌ DEPLOY_PATH is not set"
-            missing_secrets="$missing_secrets DEPLOY_PATH"
+            echo "❌ DEPLOY_PATH is missing"
+            all_secrets_present=false
           else
             echo "✅ DEPLOY_PATH is configured: $DEPLOY_PATH"
           fi
           
           echo "============================================"
           
-          if [ ! -z "$missing_secrets" ]; then
+          if [ "$all_secrets_present" = false ]; then
             echo ""
-            echo "🔧 MISSING SECRETS DETECTED!"
-            echo "Please add the following secrets in your GitHub repository:"
+            echo "🚨 DEPLOYMENT FAILED: Missing required secrets!"
+            echo ""
+            echo "Please configure ALL the following secrets:"
             echo "Go to: https://github.com/elihaidv/bot/settings/secrets/actions"
             echo ""
-            for secret in $missing_secrets; do
-              echo "   - $secret"
-            done
+            echo "Required secrets:"
+            echo "  1. SSH_PRIVATE_KEY_BASE64 (your SSH private key, base64 encoded)"
+            echo "  2. DEPLOY_HOST (your server hostname or IP address)" 
+            echo "  3. DEPLOY_USER (your SSH username for the server)"
+            echo "  4. DEPLOY_PATH (full path on server for deployment)"
             echo ""
-            echo "For now, running in TEST MODE (build and validation only)"
-            echo "To enable full deployment, add the missing secrets above."
+            echo "Example values:"
+            echo "  DEPLOY_HOST: 192.168.1.100 or myserver.com"
+            echo "  DEPLOY_USER: root or ubuntu or your-username"
+            echo "  DEPLOY_PATH: /home/user/bot or /root/bot"
             echo ""
-            echo "test_mode=true" >> $GITHUB_OUTPUT
-          else
-            echo "🎉 All required secrets are configured correctly!"
-            echo "test_mode=false" >> $GITHUB_OUTPUT
+            echo "To encode your SSH key: cat ~/.ssh/id_rsa | base64 -w 0"
+            echo ""
+            exit 1
           fi
+          
+          echo "🎉 All deployment secrets are configured!"
         env:
+          SSH_PRIVATE_KEY_BASE64: ${{ secrets.SSH_PRIVATE_KEY_BASE64 }}
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
-          SSH_PRIVATE_KEY_BASE64: ${{ secrets.SSH_PRIVATE_KEY_BASE64 }}
         
-      - name: Validate SSH key (Test Mode)
-        if: steps.config_check.outputs.test_mode == 'true' && env.SSH_PRIVATE_KEY_BASE64 != ''
+      - name: Setup SSH
         run: |
-          echo "🧪 TEST MODE: Validating SSH key format..."
-          echo "${{ secrets.SSH_PRIVATE_KEY_BASE64 }}" | base64 -d > /tmp/test_ssh_key
-          if ssh-keygen -l -f /tmp/test_ssh_key > /dev/null 2>&1; then
-            echo "✅ SSH key format is valid!"
-          else
-            echo "❌ SSH key format is invalid. Please check your SSH_PRIVATE_KEY_BASE64 secret."
-            exit 1
-          fi
-          rm -f /tmp/test_ssh_key
-        env:
-          SSH_PRIVATE_KEY_BASE64: ${{ secrets.SSH_PRIVATE_KEY_BASE64 }}
-          
-      - name: Test Mode Success
-        if: steps.config_check.outputs.test_mode == 'true'
-        run: |
-          echo ""
-          echo "🎉 TEST MODE COMPLETED SUCCESSFULLY!"
-          echo "============================================"
-          echo "✅ Code checkout: SUCCESS"
-          echo "✅ Node.js setup: SUCCESS"
-          echo "✅ Dependencies install: SUCCESS"
-          echo "✅ TypeScript compilation: SUCCESS"
-          if [ ! -z "$SSH_PRIVATE_KEY_BASE64" ]; then
-            echo "✅ SSH key validation: SUCCESS"
-          fi
-          echo ""
-          echo "📋 TO ENABLE FULL DEPLOYMENT:"
-          echo "Add these secrets at: https://github.com/elihaidv/bot/settings/secrets/actions"
-          echo "   - DEPLOY_HOST (your server IP/hostname)"
-          echo "   - DEPLOY_USER (your SSH username)"  
-          echo "   - DEPLOY_PATH (deployment directory path)"
-          echo ""
-          echo "Once all secrets are added, the workflow will perform full deployment!"
-        env:
-          SSH_PRIVATE_KEY_BASE64: ${{ secrets.SSH_PRIVATE_KEY_BASE64 }}
-        
-      - name: Setup SSH (Production Mode)
-        if: steps.config_check.outputs.test_mode == 'false'
-        run: |
+          echo "🔐 Setting up SSH authentication..."
           echo "${{ secrets.SSH_PRIVATE_KEY_BASE64 }}" | base64 -d > /tmp/ssh_key
           chmod 600 /tmp/ssh_key
           eval $(ssh-agent -s)
           ssh-add /tmp/ssh_key
+          echo "✅ SSH key loaded successfully"
           
-      - name: Add known hosts (Production Mode)
-        if: steps.config_check.outputs.test_mode == 'false'
+      - name: Add known hosts
         run: |
+          echo "🔒 Adding server to known hosts..."
           mkdir -p ~/.ssh
           ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
+          echo "✅ Known hosts updated"
           
-      - name: Test SSH connection (Production Mode)
-        if: steps.config_check.outputs.test_mode == 'false'
+      - name: Test SSH connection
         run: |
-          echo "Testing SSH connection to ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}"
-          ssh -v -o ConnectTimeout=10 -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "echo 'SSH connection successful'; pwd; whoami"
+          echo "🔌 Testing SSH connection to ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}"
+          ssh -o ConnectTimeout=30 -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "echo '✅ SSH connection successful'; echo 'Server info:'; uname -a; echo 'Current directory:'; pwd; echo 'User:'; whoami; echo 'Disk space:'; df -h | head -3"
           
-      - name: Create deploy directory (Production Mode)
-        if: steps.config_check.outputs.test_mode == 'false'
+      - name: Create deploy directory
         run: |
-          echo "Creating deploy directory: ${{ secrets.DEPLOY_PATH }}"
-          ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "mkdir -p ${{ secrets.DEPLOY_PATH }}"
+          echo "📁 Creating deployment directory: ${{ secrets.DEPLOY_PATH }}"
+          ssh -o ConnectTimeout=30 ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "mkdir -p ${{ secrets.DEPLOY_PATH }} && echo '✅ Deploy directory created/verified: ${{ secrets.DEPLOY_PATH }}'"
           
-      - name: Deploy to server (Production Mode)
-        if: steps.config_check.outputs.test_mode == 'false'
+      - name: Deploy files to server
         run: |
-          echo "Deploying to ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_PATH }}"
-          rsync -avz --progress --exclude='.git' --exclude='node_modules' --exclude='.github' --exclude='*.log' ./ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_PATH }}
+          echo "🚀 Deploying files to ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_PATH }}"
+          rsync -avz --progress --stats \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            --exclude='.github' \
+            --exclude='*.log' \
+            --exclude='.env*' \
+            ./ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_PATH }}
+          echo "✅ Files deployed successfully"
           
-      - name: Install dependencies on server (Production Mode)
-        if: steps.config_check.outputs.test_mode == 'false'
+      - name: Install dependencies on server
         run: |
-          echo "Installing dependencies on server"
-          ssh -o ConnectTimeout=10 ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "cd ${{ secrets.DEPLOY_PATH }} && npm install --production"
+          echo "📦 Installing dependencies on server..."
+          ssh -o ConnectTimeout=30 ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "cd ${{ secrets.DEPLOY_PATH }} && npm install --production --silent && echo '✅ Dependencies installed successfully'"
           
-      - name: Check PM2 status and reload (Production Mode)
-        if: steps.config_check.outputs.test_mode == 'false'
+      - name: Manage PM2 process
         run: |
-          echo "Checking PM2 and reloading rabbitConsumer"
-          ssh -o ConnectTimeout=10 ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "cd ${{ secrets.DEPLOY_PATH }} && (npx pm2 list || echo 'PM2 not running') && (npx pm2 reload rabbitConsumer || npx pm2 start Simulator/rabbitConsumer.js --name rabbitConsumer)"
+          echo "⚙️ Managing PM2 process for rabbitConsumer..."
+          ssh -o ConnectTimeout=30 ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "
+            cd ${{ secrets.DEPLOY_PATH }}
+            echo 'Current PM2 status:'
+            npx pm2 list || echo 'PM2 not yet running'
+            echo 'Managing rabbitConsumer process...'
+            if npx pm2 reload rabbitConsumer 2>/dev/null; then
+              echo '✅ Successfully reloaded existing rabbitConsumer process'
+            else
+              echo 'Starting new rabbitConsumer process...'
+              npx pm2 start Simulator/rabbitConsumer.js --name rabbitConsumer
+              echo '✅ Successfully started new rabbitConsumer process'
+            fi
+            echo 'Final PM2 status:'
+            npx pm2 list
+            npx pm2 save
+          "
+          
+      - name: Verify deployment
+        run: |
+          echo "✅ Verifying deployment..."
+          ssh -o ConnectTimeout=30 ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "
+            cd ${{ secrets.DEPLOY_PATH }}
+            echo 'Deployment verification:'
+            echo '📁 Directory contents:'
+            ls -la | head -10
+            echo '📦 Package.json exists:'
+            test -f package.json && echo '✅ package.json found' || echo '❌ package.json missing'
+            echo '🔧 Node modules:'
+            test -d node_modules && echo '✅ node_modules installed' || echo '❌ node_modules missing'
+            echo '⚙️ PM2 process status:'
+            npx pm2 show rabbitConsumer || echo 'Process not found'
+          "
+          
+      - name: Deployment success
+        run: |
+          echo ""
+          echo "🎉 DEPLOYMENT COMPLETED SUCCESSFULLY!"
+          echo "============================================"
+          echo "✅ Code deployed to: ${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_PATH }}"
+          echo "✅ Dependencies installed"
+          echo "✅ PM2 process running: rabbitConsumer"
+          echo "✅ Server ready for production"
+          echo ""
+          echo "🔗 Server: ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}"
+          echo "📁 Path: ${{ secrets.DEPLOY_PATH }}"
+          echo ""
           
       - name: Cleanup
         if: always()
         run: |
-          rm -f /tmp/ssh_key /tmp/test_ssh_key
+          rm -f /tmp/ssh_key
+          echo "🧹 Cleanup completed"

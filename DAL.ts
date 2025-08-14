@@ -14,7 +14,10 @@ export class DAL {
     started
 
     async init() {
-        let db = await MongoClient.connect(uri)
+        let db = await MongoClient.connect(uri, { 
+            useUnifiedTopology: true,
+            useNewUrlParser: true
+        })
         this.dbo = db.db("trading")
     }
 

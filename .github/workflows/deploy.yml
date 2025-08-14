@@ -15,9 +15,9 @@ jobs:
         uses: actions/checkout@v4
         
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         with:
-          version: latest
+          version: 8
         
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -29,8 +29,17 @@ jobs:
         run: pnpm install
         
       - name: Compile TypeScript
-        run: npx tsc --skipLibCheck --resolveJsonModule --esModuleInterop --module ESNext --moduleResolution node --outDir build -t es2020 Simulator/rabbitConsumer.ts
-        continue-on-error: true
+        run: |
+          # First compile DB.ts to create DB.js dependency
+          npx tsc --skipLibCheck --resolveJsonModule --esModuleInterop --module ESNext --moduleResolution node --outDir build -t es2020 DB.ts
+          # Then compile the main target file
+          npx tsc --skipLibCheck --resolveJsonModule --esModuleInterop --module ESNext --moduleResolution node --outDir build -t es2020 Simulator/rabbitConsumer.ts
+        env:
+          # Optional database environment variables for compilation
+          DB_USERNAME: ${{ secrets.DB_USERNAME || '' }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD || '' }}
+          DB_ADDRESS: ${{ secrets.DB_ADDRESS || 'localhost:27017' }}
+          DB_ENVIRONMENT: ${{ secrets.DB_ENVIRONMENT || 'production' }}
         
       - name: Configure deployment settings
         id: deploy_config
@@ -65,8 +74,18 @@ jobs:
           echo "🔐 Setting up SSH authentication for production deployment..."
           echo "${{ secrets.SSH_PRIVATE_KEY_BASE64 }}" | base64 -d > /tmp/ssh_key
           chmod 600 /tmp/ssh_key
+          
+          # Start SSH agent and add key
           eval $(ssh-agent -s)
           ssh-add /tmp/ssh_key
+          
+          # Set SSH options for subsequent commands
+          echo "Host *" > ~/.ssh/config
+          echo "  StrictHostKeyChecking no" >> ~/.ssh/config
+          echo "  UserKnownHostsFile /dev/null" >> ~/.ssh/config
+          echo "  LogLevel ERROR" >> ~/.ssh/config
+          chmod 600 ~/.ssh/config
+          
           echo "✅ SSH key loaded successfully"
           
       - name: Add known hosts (Production Mode Only)

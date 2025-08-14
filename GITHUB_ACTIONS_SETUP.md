@@ -6,10 +6,18 @@ This project has been converted from Bitbucket Pipelines to GitHub Actions. The 
 
 You need to configure the following secrets in your GitHub repository:
 
+### Deployment Secrets
 1. **SSH_PRIVATE_KEY_BASE64**: Your SSH private key encoded in base64 for connecting to the deployment server
 2. **DEPLOY_USER**: Username for SSH connection to the deployment server
 3. **DEPLOY_HOST**: Hostname or IP address of the deployment server
 4. **DEPLOY_PATH**: Path on the deployment server where the application should be deployed
+
+### Database Configuration Secrets (Optional)
+If your deployment server needs database configuration through environment variables:
+5. **DB_USERNAME**: MongoDB username
+6. **DB_PASSWORD**: MongoDB password  
+7. **DB_ADDRESS**: MongoDB host and port (e.g., localhost:27017)
+8. **DB_ENVIRONMENT**: Environment name (e.g., production, development)
 
 ## How to Set Up Secrets
 

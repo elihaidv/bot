@@ -56,6 +56,7 @@ jobs:
           echo "  UserKnownHostsFile /dev/null" >> ~/.ssh/config
           echo "  LogLevel ERROR" >> ~/.ssh/config
           echo "Host ${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/config
+          echo "  HostName ${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/config
           echo "  User ${{ secrets.DEPLOY_USER }}" >> ~/.ssh/config
           echo "  IdentityFile /tmp/ssh_key" >> ~/.ssh/config
           chmod 600 ~/.ssh/config

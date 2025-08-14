@@ -102,7 +102,7 @@ jobs:
           # Start SSH agent and add key
           eval $(ssh-agent -s)
           ssh-add /tmp/ssh_key
-          
+          mkdir /home/runner/.ssh
           # Set SSH options for subsequent commands
           echo "Host *" > ~/.ssh/config
           echo "  StrictHostKeyChecking no" >> ~/.ssh/config

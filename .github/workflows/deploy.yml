@@ -17,13 +17,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
+          cache: 'pnpm'
+          
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
           
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install
         
       - name: Install TypeScript globally
-        run: npm install -g typescript
+        run: pnpm add -g typescript
         
       - name: Compile TypeScript
         run: tsc --skipLibCheck --resolveJsonModule --esModuleInterop --outDir build -t es5 Simulator/rabbitConsumer.ts
@@ -31,7 +36,7 @@ jobs:
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.8.0
         with:
-          ssh-private-key: ${{ base64(secrets.SSH_PRIVATE_KEY_BASE64) }}
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_BASE64 }}
           
       - name: Add known hosts
         run: |
@@ -44,7 +49,7 @@ jobs:
           
       - name: Install dependencies on server
         run: |
-          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd /root/bot && npm install"
+          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd ${{ secrets.DEPLOY_PATH }} && pnpm install"
           
       - name: Reload PM2 process
         run: |

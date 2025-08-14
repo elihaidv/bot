@@ -31,18 +31,44 @@ let bots = new Array<Bot>();
 
 
 async function run() {
+  try {
+    console.log("Starting trading bot system...")
+    
+    // Initialize Binance APIs with error handling
+    new Binance({
+      family: 4  // Force IPv4 to resolve DNS family error
+    }).exchangeInfo().then(data => {
+      exchangeInfo = data
+      console.log("exchangeInfo loaded")
+    }).catch(err => {
+      console.error("Failed to load exchangeInfo:", err.message)
+    })
+    
+    new Binance({
+      family: 4  // Force IPv4 to resolve DNS family error
+    }).futuresExchangeInfo().then(data => {
+      futuresExchangeInfo = data
+      SignaligProcessor.instance.futuresExchangeInfo = data
+      console.log("futuresExchangeInfo loaded")
+    }).catch(err => {
+      console.error("Failed to load futuresExchangeInfo:", err.message)
+    })
 
-  new Binance().exchangeInfo().then(data => exchangeInfo = data)
-  new Binance().futuresExchangeInfo().then(data => {
-    futuresExchangeInfo = data
-    SignaligProcessor.instance.futuresExchangeInfo = data
-    console.log("futuresExchangeInfo loaded")
-  })
+    // Initialize database with error handling
+    await DAL.instance.init()
+    console.log("Database connection initialized")
+    
+    setInterval(execute, 3000)
+    console.log("Trading bot system started successfully")
 
-  await DAL.instance.init()
-  setInterval(execute, 3000)
-
-  // createServer()
+    // createServer()
+  } catch (error) {
+    console.error("Failed to start trading bot system:", error.message)
+    BotLogger.instance.error({
+      type: "StartupError",
+      message: error?.message || error,
+    })
+  }
 }
 run()
 
@@ -51,6 +77,12 @@ run()
 async function execute() {
 
   try {
+    // Check if database is initialized
+    if (!DAL.instance.dbo) {
+      console.warn("Database not initialized yet, skipping execution cycle")
+      return
+    }
+
     let botsResults = await DAL.instance.getBots()
 
     let keys: Array<Key> = await DAL.instance.getKeys()
@@ -64,22 +96,48 @@ async function execute() {
 
     let outdatedBots: Array<Bot> = filterOutdated(bots)
 
+    // Check if exchange info is loaded before attempting to place orders
     if (exchangeInfo && futuresExchangeInfo) {
 
       if (first) {
+        console.log("Initializing placers for the first time...")
         initPlacer(bots)
         first = false
+        console.log("Placers initialized successfully")
       }
 
+      console.log(`Processing ${outdatedBots.length} outdated bots`)
 
       await Promise.all(outdatedBots.filter((b) => !b.avoidCancel).map((b) => cancelOrders(b)));
 
       await Sockets.getInstance().timeout(1000)
 
-      await Promise.all(outdatedBots.map((b) => b.placer?.place()))
+      // Execute place orders with individual error handling
+      const placePromises = outdatedBots.map((b) => {
+        if (b.placer) {
+          return b.placer.place().catch(error => {
+            console.error(`Failed to place order for bot ${b.id()}:`, error.message)
+            BotLogger.instance.error({
+              type: "PlaceOrderExecutionError",
+              bot_id: b._id,
+              message: error?.message || error,
+            })
+          })
+        }
+        return Promise.resolve()
+      })
+      
+      await Promise.all(placePromises)
+    } else {
+      if (!exchangeInfo) {
+        console.warn("Exchange info not loaded yet, skipping order placement")
+      }
+      if (!futuresExchangeInfo) {
+        console.warn("Futures exchange info not loaded yet, skipping order placement")
+      }
     }
   } catch (e: any) {
-    console.error(e)
+    console.error("Error in execute function:", e)
     BotLogger.instance.log({
       type: "GeneralError",
       message: e?.message || e,

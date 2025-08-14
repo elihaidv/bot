@@ -17,7 +17,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 8
+          version: latest
         
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -30,10 +30,23 @@ jobs:
         
       - name: Compile TypeScript
         run: |
-          # First compile DB.ts to create DB.js dependency
+          echo "🔨 Starting TypeScript compilation..."
+          echo "Node.js version: $(node --version)"
+          echo "pnpm version: $(pnpm --version)"
+          echo "TypeScript version: $(npx tsc --version)"
+          
+          echo "🔧 Compiling DB.ts first..."
           npx tsc --skipLibCheck --resolveJsonModule --esModuleInterop --module ESNext --moduleResolution node --outDir build -t es2020 DB.ts
-          # Then compile the main target file
+          echo "✅ DB.ts compiled successfully"
+          
+          echo "🔧 Compiling Simulator/rabbitConsumer.ts..."
           npx tsc --skipLibCheck --resolveJsonModule --esModuleInterop --module ESNext --moduleResolution node --outDir build -t es2020 Simulator/rabbitConsumer.ts
+          echo "✅ TypeScript compilation completed successfully!"
+          
+          echo "📁 Checking build directory:"
+          ls -la build/
+          echo "📁 Checking Simulator build:"
+          ls -la build/Simulator/ || echo "Simulator directory not found"
         env:
           # Optional database environment variables for compilation
           DB_USERNAME: ${{ secrets.DB_USERNAME || '' }}

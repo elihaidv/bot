@@ -1,6 +1,4 @@
 import { run } from "./Simulate.js";
-import fetch from 'node-fetch';
-
 import amqp from 'amqplib/callback_api.js';
 import fetchRetry from "./FetchRetry.js";
 import withAutoRecovery from 'amqplib-auto-recovery';

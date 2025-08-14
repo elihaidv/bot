@@ -42,12 +42,11 @@ You need to configure the following secrets in your GitHub repository:
 The GitHub Action workflow:
 - Runs on every push to the `master` branch
 - Uses Ubuntu latest runner
-- Sets up Node.js 18 with pnpm caching
-- Sets up pnpm package manager
-- Installs project dependencies using pnpm
+- Sets up Node.js 22 with npm caching
+- Installs project dependencies using npm
 - Compiles TypeScript code
 - Deploys to your server using rsync
-- Installs dependencies on the server using pnpm
+- Installs dependencies on the server using npm
 - Reloads the PM2 process
 
 ## Differences from Bitbucket Pipeline
@@ -55,15 +54,16 @@ The GitHub Action workflow:
 - **Trigger**: Changed from `dev` branch to `master` branch
 - **SSH Setup**: Uses GitHub's SSH agent action for secure key management
 - **Known Hosts**: Automatically adds the deployment server to known hosts
-- **Package Manager**: Changed from npm to pnpm for consistency with project
-- **Caching**: Added pnpm dependency caching for faster builds
+- **Package Manager**: Uses npm for consistency and reliability
+- **Node.js Version**: Updated to Node.js 22 for better performance and latest features
+- **Caching**: Added npm dependency caching for faster builds
 - **Security**: Uses GitHub secrets instead of Bitbucket variables
 
 ## Troubleshooting
 
 - Ensure your SSH key has the correct permissions on the deployment server
 - Verify the deployment path exists and is writable
-- Check that PM2 and pnpm are installed and configured on the deployment server
+- Check that PM2 and Node.js are installed and configured on the deployment server
 - Ensure the deployment user has the necessary permissions
 - If the action fails with SSH key errors, verify the private key is copied correctly (including BEGIN/END lines)
 - For permission errors, ensure the deployment user can write to the specified path

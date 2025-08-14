@@ -17,19 +17,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18.20.8'
-          cache: 'pnpm'
-          
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 10
+          node-version: '22'
+          cache: 'npm'
           
       - name: Install dependencies
-        run: pnpm install
+        run: npm install
         
       - name: Install TypeScript globally
-        run: pnpm add -g typescript
+        run: npm install -g typescript
         
       - name: Compile TypeScript
         run: tsc --skipLibCheck --resolveJsonModule --esModuleInterop --outDir build -t es5 Simulator/rabbitConsumer.ts
@@ -52,11 +47,11 @@ jobs:
           
       - name: Install dependencies on server
         run: |
-          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "cd ${{ secrets.DEPLOY_PATH }} && npm install -g pnpm@10 && pnpm install"
+          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "cd ${{ secrets.DEPLOY_PATH }} && npm install"
           
       - name: Reload PM2 process
         run: |
-          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "cd ${{ secrets.DEPLOY_PATH }} && pnpm exec pm2 reload rabbitConsumer"
+          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "cd ${{ secrets.DEPLOY_PATH }} && npx pm2 reload rabbitConsumer"
           
       - name: Cleanup
         if: always()

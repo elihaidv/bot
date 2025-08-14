@@ -35,17 +35,31 @@ jobs:
           echo "pnpm version: $(pnpm --version)"
           echo "TypeScript version: $(npx tsc --version)"
           
+          # Create build directory
+          mkdir -p build
+          
           echo "🔧 Compiling DB.ts first..."
-          npx tsc --skipLibCheck --resolveJsonModule --esModuleInterop --module ESNext --moduleResolution node --outDir build -t es2020 DB.ts
-          echo "✅ DB.ts compiled successfully"
+          if npx tsc --skipLibCheck --resolveJsonModule --esModuleInterop --module ESNext --moduleResolution node --outDir build -t es2020 DB.ts; then
+            echo "✅ DB.ts compiled successfully"
+            ls -la build/DB.js || echo "⚠️ DB.js not found in expected location"
+          else
+            echo "❌ DB.ts compilation failed"
+            exit 1
+          fi
           
           echo "🔧 Compiling Simulator/rabbitConsumer.ts..."
-          npx tsc --skipLibCheck --resolveJsonModule --esModuleInterop --module ESNext --moduleResolution node --outDir build -t es2020 Simulator/rabbitConsumer.ts
-          echo "✅ TypeScript compilation completed successfully!"
+          if npx tsc --skipLibCheck --resolveJsonModule --esModuleInterop --module ESNext --moduleResolution node --outDir build -t es2020 Simulator/rabbitConsumer.ts; then
+            echo "✅ TypeScript compilation completed successfully!"
+          else
+            echo "❌ rabbitConsumer.ts compilation failed"
+            echo "🔍 Checking what files exist in build directory:"
+            find build -type f -name "*.js" | head -10
+            exit 1
+          fi
           
-          echo "📁 Checking build directory:"
+          echo "📁 Final build directory contents:"
           ls -la build/
-          echo "📁 Checking Simulator build:"
+          echo "📁 Simulator build contents:"
           ls -la build/Simulator/ || echo "Simulator directory not found"
         env:
           # Optional database environment variables for compilation
@@ -53,6 +67,26 @@ jobs:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD || '' }}
           DB_ADDRESS: ${{ secrets.DB_ADDRESS || 'localhost:27017' }}
           DB_ENVIRONMENT: ${{ secrets.DB_ENVIRONMENT || 'production' }}
+          
+      - name: Alternative Compilation (Fallback)
+        if: failure()
+        run: |
+          echo "🔄 Primary compilation failed, trying alternative approach..."
+          rm -rf build/*
+          
+          echo "🔧 Using tsconfig.json for compilation..."
+          # First ensure DB.js exists
+          npx tsc DB.ts --outDir build --target es2020 --module esnext --moduleResolution node --skipLibCheck
+          
+          # Then compile with project configuration
+          if [ -f tsconfig.json ]; then
+            npx tsc Simulator/rabbitConsumer.ts --project . --outDir build
+          else
+            npx tsc Simulator/rabbitConsumer.ts --outDir build --target es2020 --module esnext --moduleResolution node --skipLibCheck --esModuleInterop --resolveJsonModule
+          fi
+          
+          echo "📁 Alternative compilation results:"
+          find build -name "*.js" | head -10
         
       - name: Configure deployment settings
         id: deploy_config

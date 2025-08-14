@@ -34,9 +34,11 @@ jobs:
         run: tsc --skipLibCheck --resolveJsonModule --esModuleInterop --outDir build -t es5 Simulator/rabbitConsumer.ts
         
       - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.8.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_BASE64 }}
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY_BASE64 }}" | base64 -d > /tmp/ssh_key
+          chmod 600 /tmp/ssh_key
+          eval $(ssh-agent -s)
+          ssh-add /tmp/ssh_key
           
       - name: Add known hosts
         run: |
@@ -54,3 +56,8 @@ jobs:
       - name: Reload PM2 process
         run: |
           ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd ${{ secrets.DEPLOY_PATH }} && pm2 reload rabbitConsumer"
+          
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -f /tmp/ssh_key

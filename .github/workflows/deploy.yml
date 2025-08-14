@@ -44,17 +44,30 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
           
+      - name: Test SSH connection
+        run: |
+          echo "Testing SSH connection to ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}"
+          ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "echo 'SSH connection successful'; pwd; whoami"
+          
+      - name: Create deploy directory
+        run: |
+          echo "Creating deploy directory: ${{ secrets.DEPLOY_PATH }}"
+          ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "mkdir -p ${{ secrets.DEPLOY_PATH }}"
+          
       - name: Deploy to server
         run: |
-          rsync -rzvP -r --exclude-from=.gitignore ./ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_PATH }}
+          echo "Deploying to ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_PATH }}"
+          rsync -avz --progress --exclude='.git' --exclude='node_modules' --exclude='.github' --exclude='*.log' ./ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_PATH }}
           
       - name: Install dependencies on server
         run: |
-          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "cd ${{ secrets.DEPLOY_PATH }} && npm install"
+          echo "Installing dependencies on server"
+          ssh -o ConnectTimeout=10 ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "cd ${{ secrets.DEPLOY_PATH }} && npm install --production"
           
-      - name: Reload PM2 process
+      - name: Check PM2 status and reload
         run: |
-          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "cd ${{ secrets.DEPLOY_PATH }} && npx pm2 reload rabbitConsumer"
+          echo "Checking PM2 and reloading rabbitConsumer"
+          ssh -o ConnectTimeout=10 ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "cd ${{ secrets.DEPLOY_PATH }} && (npx pm2 list || echo 'PM2 not running') && (npx pm2 reload rabbitConsumer || npx pm2 start Simulator/rabbitConsumer.js --name rabbitConsumer)"
           
       - name: Cleanup
         if: always()

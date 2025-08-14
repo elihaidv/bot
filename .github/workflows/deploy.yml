@@ -17,13 +17,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '18.20.8'
           cache: 'pnpm'
           
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: 10
           
       - name: Install dependencies
         run: pnpm install
@@ -52,11 +52,11 @@ jobs:
           
       - name: Install dependencies on server
         run: |
-          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd ${{ secrets.DEPLOY_PATH }} && pnpm install"
+          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "cd ${{ secrets.DEPLOY_PATH }} && npm install -g pnpm@10 && pnpm install"
           
       - name: Reload PM2 process
         run: |
-          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "PATH=$PATH:/root/.nvm/versions/node/v18.12.1/bin && cd ${{ secrets.DEPLOY_PATH }} && pm2 reload rabbitConsumer"
+          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "cd ${{ secrets.DEPLOY_PATH }} && pnpm exec pm2 reload rabbitConsumer"
           
       - name: Cleanup
         if: always()

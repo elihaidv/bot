@@ -91,11 +91,7 @@ jobs:
             ./ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/root/bot
           echo "✅ Files deployed successfully"
           
-      - name: Install dependencies on server
-        run: |
-          echo "📦 Installing dependencies on server..."
-          ssh -o ConnectTimeout=30 ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "cd /root/bot && npm install --production --silent && echo '✅ Dependencies installed successfully'"
-          
+    
       - name: Manage PM2 process
         run: |
           echo "⚙️ Managing PM2 process for rabbitConsumer..."

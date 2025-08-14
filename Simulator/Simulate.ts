@@ -268,6 +268,7 @@ function createPlacer(bots: Bot[]) {
         bot.placer = new WeightAvg(bot, dataManager.exchangeInfo)
         break
       case "3":
+      case "unknown":
         bot.placer = new FutureTrader(bot, dataManager.exchangeInfo)
         break
       case "4":

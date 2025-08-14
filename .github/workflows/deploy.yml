@@ -38,64 +38,11 @@ jobs:
           # Use custom build script for more reliable compilation
           chmod +x build-script.cjs
           node build-script.cjs
-        env:
-          # Optional database environment variables for compilation
-          DB_USERNAME: ${{ secrets.DB_USERNAME || '' }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD || '' }}
-          DB_ADDRESS: ${{ secrets.DB_ADDRESS || 'localhost:27017' }}
-          DB_ENVIRONMENT: ${{ secrets.DB_ENVIRONMENT || 'production' }}
           
-      - name: Alternative Compilation (Fallback)
-        if: failure()
-        run: |
-          echo "🔄 Primary compilation failed, trying alternative approach..."
-          rm -rf build/*
-          
-          echo "🔧 Using tsconfig.json for compilation..."
-          # First ensure DB.js exists
-          npx tsc DB.ts --outDir build --target es2020 --module esnext --moduleResolution node --skipLibCheck
-          
-          # Then compile with project configuration
-          if [ -f tsconfig.json ]; then
-            npx tsc Simulator/rabbitConsumer.ts --project . --outDir build
-          else
-            npx tsc Simulator/rabbitConsumer.ts --outDir build --target es2020 --module esnext --moduleResolution node --skipLibCheck --esModuleInterop --resolveJsonModule
-          fi
-          
-          echo "📁 Alternative compilation results:"
-          find build -name "*.js" | head -10
         
-      - name: Configure deployment settings
-        id: deploy_config
+      - name: Setup SSH
         run: |
-          echo "🔍 Configuring deployment settings..."
-          echo "============================================"
-          
-          # Check if we have SSH key and deployment secrets for production mode
-          if [ -n "${{ secrets.SSH_PRIVATE_KEY_BASE64 }}" ] && [ -n "${{ secrets.DEPLOY_HOST }}" ] && [ -n "${{ secrets.DEPLOY_USER }}" ]; then
-            echo "DEPLOY_HOST=${{ secrets.DEPLOY_HOST }}" >> $GITHUB_OUTPUT
-            echo "DEPLOY_USER=${{ secrets.DEPLOY_USER }}" >> $GITHUB_OUTPUT
-            echo "DEPLOY_PATH=/root/bot" >> $GITHUB_OUTPUT
-            echo "IS_DEMO=false" >> $GITHUB_OUTPUT
-            echo "✅ PRODUCTION MODE: SSH key and secrets configured"
-            echo "✅ Will perform real deployment to: ${{ secrets.DEPLOY_HOST }}"
-            echo "✅ Deploy path: /root/bot (hardcoded)"
-          else
-            echo "DEPLOY_HOST=demo.example.com" >> $GITHUB_OUTPUT
-            echo "DEPLOY_USER=demouser" >> $GITHUB_OUTPUT
-            echo "DEPLOY_PATH=/root/bot" >> $GITHUB_OUTPUT
-            echo "IS_DEMO=true" >> $GITHUB_OUTPUT
-            echo "⚠️ DEMO MODE: Missing SSH key or deployment secrets"
-            echo "⚠️ Using simulated deployment"
-          fi
-          
-          echo "============================================"
-          echo "🎯 Deployment will proceed with above configuration"
-        
-      - name: Setup SSH (Production Mode Only)
-        if: steps.deploy_config.outputs.IS_DEMO == 'false'
-        run: |
-          echo "🔐 Setting up SSH authentication for production deployment..."
+          echo "🔐 Setting up SSH authentication for deployment..."
           echo "${{ secrets.SSH_PRIVATE_KEY_BASE64 }}" | base64 -d > /tmp/ssh_key
           chmod 600 /tmp/ssh_key
           
@@ -112,178 +59,88 @@ jobs:
           
           echo "✅ SSH key loaded successfully"
           
-      - name: Add known hosts (Production Mode Only)
-        if: steps.deploy_config.outputs.IS_DEMO == 'false'
+      - name: Add known hosts
         run: |
           echo "🔒 Adding server to known hosts..."
-          mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ steps.deploy_config.outputs.DEPLOY_HOST }} >> ~/.ssh/known_hosts
-          echo "✅ Known hosts updated for real server"
+          ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
+          echo "✅ Known hosts updated"
           
       - name: Test SSH connection
         run: |
-          echo "🔌 Testing SSH connection to ${{ steps.deploy_config.outputs.DEPLOY_USER }}@${{ steps.deploy_config.outputs.DEPLOY_HOST }}"
-          
-          if [ "${{ steps.deploy_config.outputs.IS_DEMO }}" = "true" ]; then
-            echo "⚠️ Demo mode detected - simulating SSH connection test"
-            echo "✅ [SIMULATED] SSH connection successful"
-            echo "✅ [SIMULATED] Server info: Linux demo-server 5.4.0-generic"
-            echo "✅ [SIMULATED] Current directory: /home/${{ steps.deploy_config.outputs.DEPLOY_USER }}"
-            echo "✅ [SIMULATED] User: ${{ steps.deploy_config.outputs.DEPLOY_USER }}"
-            echo "✅ [SIMULATED] Disk space: Available"
-          else
-            # Real server connection
-            echo "🔌 Attempting real SSH connection..."
-            ssh -o ConnectTimeout=30 -o StrictHostKeyChecking=no ${{ steps.deploy_config.outputs.DEPLOY_USER }}@${{ steps.deploy_config.outputs.DEPLOY_HOST }} "echo '✅ SSH connection successful'; echo 'Server info:'; uname -a; echo 'Current directory:'; pwd; echo 'User:'; whoami; echo 'Disk space:'; df -h | head -3"
-          fi
+          echo "🔌 Testing SSH connection to ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}"
+          ssh -o ConnectTimeout=30 -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "echo '✅ SSH connection successful'; echo 'Server info:'; uname -a; echo 'Current directory:'; pwd; echo 'User:'; whoami; echo 'Disk space:'; df -h | head -3"
           
       - name: Create deploy directory
         run: |
-          echo "📁 Creating deployment directory: ${{ steps.deploy_config.outputs.DEPLOY_PATH }}"
-          
-          if [ "${{ steps.deploy_config.outputs.IS_DEMO }}" = "true" ]; then
-            echo "⚠️ Demo mode - simulating directory creation"
-            echo "✅ [SIMULATED] Deploy directory created/verified: ${{ steps.deploy_config.outputs.DEPLOY_PATH }}"
-          else
-            # Real server directory creation
-            echo "📁 Creating real deployment directory..."
-            ssh -o ConnectTimeout=30 ${{ steps.deploy_config.outputs.DEPLOY_USER }}@${{ steps.deploy_config.outputs.DEPLOY_HOST }} "mkdir -p ${{ steps.deploy_config.outputs.DEPLOY_PATH }} && echo '✅ Deploy directory created/verified: ${{ steps.deploy_config.outputs.DEPLOY_PATH }}'"
-          fi
+          echo "📁 Creating deployment directory: /root/bot"
+          ssh -o ConnectTimeout=30 ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "mkdir -p /root/bot && echo '✅ Deploy directory created/verified: /root/bot'"
           
       - name: Deploy files to server
         run: |
-          echo "🚀 Deploying files to ${{ steps.deploy_config.outputs.DEPLOY_USER }}@${{ steps.deploy_config.outputs.DEPLOY_HOST }}:${{ steps.deploy_config.outputs.DEPLOY_PATH }}"
-          
-          if [ "${{ steps.deploy_config.outputs.IS_DEMO }}" = "true" ]; then
-            echo "⚠️ Demo mode - simulating file deployment"
-            echo "Simulating rsync command:"
-            echo "rsync -avz --progress --stats \\"
-            echo "  --exclude='.git' \\"
-            echo "  --exclude='node_modules' \\"
-            echo "  --exclude='.github' \\"
-            echo "  --exclude='*.log' \\"
-            echo "  --exclude='.env*' \\"
-            echo "  ./ ${{ steps.deploy_config.outputs.DEPLOY_USER }}@${{ steps.deploy_config.outputs.DEPLOY_HOST }}:${{ steps.deploy_config.outputs.DEPLOY_PATH }}"
-            echo "✅ [SIMULATED] Files deployed successfully ($(find . -type f | wc -l) files)"
-          else
-            # Real server deployment
-            echo "🚀 Performing real file deployment..."
-            rsync -avz --progress --stats \
-              --exclude='.git' \
-              --exclude='node_modules' \
-              --exclude='.github' \
-              --exclude='*.log' \
-              --exclude='.env*' \
-              ./ ${{ steps.deploy_config.outputs.DEPLOY_USER }}@${{ steps.deploy_config.outputs.DEPLOY_HOST }}:${{ steps.deploy_config.outputs.DEPLOY_PATH }}
-            echo "✅ Files deployed successfully to real server"
-          fi
+          echo "🚀 Deploying files to ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/root/bot"
+          rsync -avz --progress --stats \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            --exclude='.github' \
+            --exclude='*.log' \
+            --exclude='.env*' \
+            ./ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/root/bot
+          echo "✅ Files deployed successfully"
           
       - name: Install dependencies on server
         run: |
           echo "📦 Installing dependencies on server..."
-          
-          if [ "${{ steps.deploy_config.outputs.IS_DEMO }}" = "true" ]; then
-            echo "⚠️ Demo mode - simulating dependency installation"
-            echo "Simulating: cd ${{ steps.deploy_config.outputs.DEPLOY_PATH }} && npm install --production --silent"
-            echo "✅ [SIMULATED] Dependencies installed successfully"
-          else
-            # Real server dependency installation
-            echo "📦 Installing real dependencies on server..."
-            ssh -o ConnectTimeout=30 ${{ steps.deploy_config.outputs.DEPLOY_USER }}@${{ steps.deploy_config.outputs.DEPLOY_HOST }} "cd ${{ steps.deploy_config.outputs.DEPLOY_PATH }} && npm install --production --silent && echo '✅ Dependencies installed successfully on real server'"
-          fi
+          ssh -o ConnectTimeout=30 ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "cd /root/bot && npm install --production --silent && echo '✅ Dependencies installed successfully'"
           
       - name: Manage PM2 process
         run: |
           echo "⚙️ Managing PM2 process for rabbitConsumer..."
-          
-          if [ "${{ steps.deploy_config.outputs.IS_DEMO }}" = "true" ]; then
-            echo "⚠️ Demo mode - simulating PM2 process management"
-            echo "Simulating PM2 commands:"
-            echo "  npx pm2 list"
-            echo "  npx pm2 reload rabbitConsumer || npx pm2 start Simulator/rabbitConsumer.js --name rabbitConsumer"
-            echo "  npx pm2 save"
-            echo "✅ [SIMULATED] Successfully managed rabbitConsumer PM2 process"
-          else
-            # Real server PM2 management
-            echo "⚙️ Managing real PM2 process..."
-            ssh -o ConnectTimeout=30 ${{ steps.deploy_config.outputs.DEPLOY_USER }}@${{ steps.deploy_config.outputs.DEPLOY_HOST }} "
-              cd ${{ steps.deploy_config.outputs.DEPLOY_PATH }}
-              echo 'Current PM2 status:'
-              npx pm2 list || echo 'PM2 not yet running'
-              echo 'Managing rabbitConsumer process...'
-              if npx pm2 reload rabbitConsumer 2>/dev/null; then
-                echo '✅ Successfully reloaded existing rabbitConsumer process'
-              else
-                echo 'Starting new rabbitConsumer process...'
-                npx pm2 start Simulator/rabbitConsumer.js --name rabbitConsumer
-                echo '✅ Successfully started new rabbitConsumer process'
-              fi
-              echo 'Final PM2 status:'
-              npx pm2 list
-              npx pm2 save
-            "
-          fi
+          ssh -o ConnectTimeout=30 ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "
+            cd /root/bot
+            echo 'Current PM2 status:'
+            npx pm2 list || echo 'PM2 not yet running'
+            echo 'Managing rabbitConsumer process...'
+            if npx pm2 reload rabbitConsumer 2>/dev/null; then
+              echo '✅ Successfully reloaded existing rabbitConsumer process'
+            else
+              echo 'Starting new rabbitConsumer process...'
+              npx pm2 start Simulator/rabbitConsumer.js --name rabbitConsumer
+              echo '✅ Successfully started new rabbitConsumer process'
+            fi
+            echo 'Final PM2 status:'
+            npx pm2 list
+            npx pm2 save
+          "
           
       - name: Verify deployment
         run: |
           echo "✅ Verifying deployment..."
-          
-          if [ "${{ steps.deploy_config.outputs.IS_DEMO }}" = "true" ]; then
-            echo "⚠️ Demo mode - simulating deployment verification"
-            echo "Simulating verification checks:"
-            echo "✅ [SIMULATED] package.json found"
-            echo "✅ [SIMULATED] node_modules installed"
-            echo "✅ [SIMULATED] PM2 process rabbitConsumer running"
-          else
-            # Real server verification
-            echo "✅ Verifying real deployment..."
-            ssh -o ConnectTimeout=30 ${{ steps.deploy_config.outputs.DEPLOY_USER }}@${{ steps.deploy_config.outputs.DEPLOY_HOST }} "
-              cd ${{ steps.deploy_config.outputs.DEPLOY_PATH }}
-              echo 'Deployment verification:'
-              echo '📁 Directory contents:'
-              ls -la | head -10
-              echo '📦 Package.json exists:'
-              test -f package.json && echo '✅ package.json found' || echo '❌ package.json missing'
-              echo '🔧 Node modules:'
-              test -d node_modules && echo '✅ node_modules installed' || echo '❌ node_modules missing'
-              echo '⚙️ PM2 process status:'
-              npx pm2 show rabbitConsumer || echo 'Process not found'
-            "
-          fi
+          ssh -o ConnectTimeout=30 ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "
+            cd /root/bot
+            echo 'Deployment verification:'
+            echo '📁 Directory contents:'
+            ls -la | head -10
+            echo '📦 Package.json exists:'
+            test -f package.json && echo '✅ package.json found' || echo '❌ package.json missing'
+            echo '🔧 Node modules:'
+            test -d node_modules && echo '✅ node_modules installed' || echo '❌ node_modules missing'
+            echo '⚙️ PM2 process status:'
+            npx pm2 show rabbitConsumer || echo 'Process not found'
+          "
           
       - name: Deployment success
         run: |
           echo ""
-          echo "🎉 DEPLOYMENT COMPLETED SUCCESSFULLY!"
+          echo "🎉 PRODUCTION DEPLOYMENT COMPLETED SUCCESSFULLY!"
           echo "============================================"
-          
-          if [ "${{ steps.deploy_config.outputs.IS_DEMO }}" = "true" ]; then
-            echo "⚠️ DEMO MODE DEPLOYMENT"
-            echo "✅ Code validated and compiled"
-            echo "✅ Dependencies installed locally"
-            echo "✅ TypeScript compilation successful"
-            echo "✅ Deployment process simulated successfully"
-            echo "✅ All workflow steps completed"
-            echo ""
-            echo "🔧 TO ENABLE REAL DEPLOYMENT:"
-            echo "Add these secrets: https://github.com/elihaidv/bot/settings/secrets/actions"
-            echo "  - SSH_PRIVATE_KEY_BASE64 (base64 encoded SSH private key)"
-            echo "  - DEPLOY_HOST (your server IP/hostname)"
-            echo "  - DEPLOY_USER (your SSH username)"
-            echo ""
-            echo "Generate SSH key: cat ~/.ssh/id_rsa | base64 -w 0"
-          else
-            echo "🎉 REAL PRODUCTION DEPLOYMENT SUCCESSFUL!"
-            echo "✅ Code deployed to: ${{ steps.deploy_config.outputs.DEPLOY_HOST }}:${{ steps.deploy_config.outputs.DEPLOY_PATH }}"
-            echo "✅ Dependencies installed on real server"
-            echo "✅ PM2 process running: rabbitConsumer"
-            echo "✅ Server ready for production"
-            echo "✅ SSH connection working perfectly"
-          fi
-          
+          echo "✅ Code deployed to: ${{ secrets.DEPLOY_HOST }}:/root/bot"
+          echo "✅ Dependencies installed on server"
+          echo "✅ PM2 process running: rabbitConsumer"
+          echo "✅ Server ready for production"
+          echo "✅ SSH connection working perfectly"
           echo ""
-          echo "🔗 Target: ${{ steps.deploy_config.outputs.DEPLOY_USER }}@${{ steps.deploy_config.outputs.DEPLOY_HOST }}"
-          echo "📁 Path: ${{ steps.deploy_config.outputs.DEPLOY_PATH }}"
+          echo "🔗 Target: ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}"
+          echo "📁 Path: /root/bot"
           echo ""
           
       - name: Cleanup

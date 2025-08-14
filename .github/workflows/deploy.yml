@@ -35,15 +35,56 @@ jobs:
       - name: Check deployment configuration
         run: |
           echo "Checking deployment configuration..."
-          echo "DEPLOY_HOST length: ${#DEPLOY_HOST}"
-          echo "DEPLOY_USER length: ${#DEPLOY_USER}"
-          echo "DEPLOY_PATH length: ${#DEPLOY_PATH}"
-          echo "SSH key length: ${#SSH_PRIVATE_KEY_BASE64}"
-          if [ -z "$DEPLOY_HOST" ]; then echo "ERROR: DEPLOY_HOST is not set"; exit 1; fi
-          if [ -z "$DEPLOY_USER" ]; then echo "ERROR: DEPLOY_USER is not set"; exit 1; fi
-          if [ -z "$DEPLOY_PATH" ]; then echo "ERROR: DEPLOY_PATH is not set"; exit 1; fi
-          if [ -z "$SSH_PRIVATE_KEY_BASE64" ]; then echo "ERROR: SSH_PRIVATE_KEY_BASE64 is not set"; exit 1; fi
-          echo "All required secrets are configured"
+          echo "============================================"
+          
+          missing_secrets=""
+          
+          if [ -z "$SSH_PRIVATE_KEY_BASE64" ]; then
+            echo "❌ SSH_PRIVATE_KEY_BASE64 is not set"
+            missing_secrets="$missing_secrets SSH_PRIVATE_KEY_BASE64"
+          else
+            echo "✅ SSH_PRIVATE_KEY_BASE64 is configured (length: ${#SSH_PRIVATE_KEY_BASE64})"
+          fi
+          
+          if [ -z "$DEPLOY_HOST" ]; then
+            echo "❌ DEPLOY_HOST is not set"
+            missing_secrets="$missing_secrets DEPLOY_HOST"
+          else
+            echo "✅ DEPLOY_HOST is configured: $DEPLOY_HOST"
+          fi
+          
+          if [ -z "$DEPLOY_USER" ]; then
+            echo "❌ DEPLOY_USER is not set"
+            missing_secrets="$missing_secrets DEPLOY_USER"
+          else
+            echo "✅ DEPLOY_USER is configured: $DEPLOY_USER"
+          fi
+          
+          if [ -z "$DEPLOY_PATH" ]; then
+            echo "❌ DEPLOY_PATH is not set"
+            missing_secrets="$missing_secrets DEPLOY_PATH"
+          else
+            echo "✅ DEPLOY_PATH is configured: $DEPLOY_PATH"
+          fi
+          
+          echo "============================================"
+          
+          if [ ! -z "$missing_secrets" ]; then
+            echo ""
+            echo "🔧 MISSING SECRETS DETECTED!"
+            echo "Please add the following secrets in your GitHub repository:"
+            echo "Go to: https://github.com/elihaidv/bot/settings/secrets/actions"
+            echo ""
+            for secret in $missing_secrets; do
+              echo "   - $secret"
+            done
+            echo ""
+            echo "Refer to GITHUB_ACTIONS_SETUP.md for detailed instructions."
+            echo ""
+            exit 1
+          fi
+          
+          echo "🎉 All required secrets are configured correctly!"
         env:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}

@@ -38,21 +38,22 @@ jobs:
           echo "🔍 Configuring deployment settings..."
           echo "============================================"
           
-          # Check if we have real deployment secrets
-          if [ -n "${{ secrets.DEPLOY_HOST }}" ] && [ -n "${{ secrets.DEPLOY_USER }}" ] && [ -n "${{ secrets.DEPLOY_PATH }}" ] && [ -n "${{ secrets.SSH_PRIVATE_KEY_BASE64 }}" ]; then
+          # Check if we have SSH key and deployment secrets for production mode
+          if [ -n "${{ secrets.SSH_PRIVATE_KEY_BASE64 }}" ] && [ -n "${{ secrets.DEPLOY_HOST }}" ] && [ -n "${{ secrets.DEPLOY_USER }}" ]; then
             echo "DEPLOY_HOST=${{ secrets.DEPLOY_HOST }}" >> $GITHUB_OUTPUT
             echo "DEPLOY_USER=${{ secrets.DEPLOY_USER }}" >> $GITHUB_OUTPUT
-            echo "DEPLOY_PATH=${{ secrets.DEPLOY_PATH }}" >> $GITHUB_OUTPUT
+            echo "DEPLOY_PATH=/root/bot" >> $GITHUB_OUTPUT
             echo "IS_DEMO=false" >> $GITHUB_OUTPUT
-            echo "✅ PRODUCTION MODE: All secrets configured"
+            echo "✅ PRODUCTION MODE: SSH key and secrets configured"
             echo "✅ Will perform real deployment to: ${{ secrets.DEPLOY_HOST }}"
+            echo "✅ Deploy path: /root/bot (hardcoded)"
           else
             echo "DEPLOY_HOST=demo.example.com" >> $GITHUB_OUTPUT
             echo "DEPLOY_USER=demouser" >> $GITHUB_OUTPUT
-            echo "DEPLOY_PATH=/home/demouser/bot" >> $GITHUB_OUTPUT
+            echo "DEPLOY_PATH=/root/bot" >> $GITHUB_OUTPUT
             echo "IS_DEMO=true" >> $GITHUB_OUTPUT
-            echo "⚠️ DEMO MODE: Using simulated deployment"
-            echo "⚠️ Missing secrets - running in simulation mode"
+            echo "⚠️ DEMO MODE: Missing SSH key or deployment secrets"
+            echo "⚠️ Using simulated deployment"
           fi
           
           echo "============================================"
@@ -89,6 +90,7 @@ jobs:
             echo "✅ [SIMULATED] Disk space: Available"
           else
             # Real server connection
+            echo "🔌 Attempting real SSH connection..."
             ssh -o ConnectTimeout=30 -o StrictHostKeyChecking=no ${{ steps.deploy_config.outputs.DEPLOY_USER }}@${{ steps.deploy_config.outputs.DEPLOY_HOST }} "echo '✅ SSH connection successful'; echo 'Server info:'; uname -a; echo 'Current directory:'; pwd; echo 'User:'; whoami; echo 'Disk space:'; df -h | head -3"
           fi
           
@@ -101,6 +103,7 @@ jobs:
             echo "✅ [SIMULATED] Deploy directory created/verified: ${{ steps.deploy_config.outputs.DEPLOY_PATH }}"
           else
             # Real server directory creation
+            echo "📁 Creating real deployment directory..."
             ssh -o ConnectTimeout=30 ${{ steps.deploy_config.outputs.DEPLOY_USER }}@${{ steps.deploy_config.outputs.DEPLOY_HOST }} "mkdir -p ${{ steps.deploy_config.outputs.DEPLOY_PATH }} && echo '✅ Deploy directory created/verified: ${{ steps.deploy_config.outputs.DEPLOY_PATH }}'"
           fi
           
@@ -121,6 +124,7 @@ jobs:
             echo "✅ [SIMULATED] Files deployed successfully ($(find . -type f | wc -l) files)"
           else
             # Real server deployment
+            echo "🚀 Performing real file deployment..."
             rsync -avz --progress --stats \
               --exclude='.git' \
               --exclude='node_modules' \
@@ -128,7 +132,7 @@ jobs:
               --exclude='*.log' \
               --exclude='.env*' \
               ./ ${{ steps.deploy_config.outputs.DEPLOY_USER }}@${{ steps.deploy_config.outputs.DEPLOY_HOST }}:${{ steps.deploy_config.outputs.DEPLOY_PATH }}
-            echo "✅ Files deployed successfully"
+            echo "✅ Files deployed successfully to real server"
           fi
           
       - name: Install dependencies on server
@@ -141,7 +145,8 @@ jobs:
             echo "✅ [SIMULATED] Dependencies installed successfully"
           else
             # Real server dependency installation
-            ssh -o ConnectTimeout=30 ${{ steps.deploy_config.outputs.DEPLOY_USER }}@${{ steps.deploy_config.outputs.DEPLOY_HOST }} "cd ${{ steps.deploy_config.outputs.DEPLOY_PATH }} && npm install --production --silent && echo '✅ Dependencies installed successfully'"
+            echo "📦 Installing real dependencies on server..."
+            ssh -o ConnectTimeout=30 ${{ steps.deploy_config.outputs.DEPLOY_USER }}@${{ steps.deploy_config.outputs.DEPLOY_HOST }} "cd ${{ steps.deploy_config.outputs.DEPLOY_PATH }} && npm install --production --silent && echo '✅ Dependencies installed successfully on real server'"
           fi
           
       - name: Manage PM2 process
@@ -157,6 +162,7 @@ jobs:
             echo "✅ [SIMULATED] Successfully managed rabbitConsumer PM2 process"
           else
             # Real server PM2 management
+            echo "⚙️ Managing real PM2 process..."
             ssh -o ConnectTimeout=30 ${{ steps.deploy_config.outputs.DEPLOY_USER }}@${{ steps.deploy_config.outputs.DEPLOY_HOST }} "
               cd ${{ steps.deploy_config.outputs.DEPLOY_PATH }}
               echo 'Current PM2 status:'
@@ -187,6 +193,7 @@ jobs:
             echo "✅ [SIMULATED] PM2 process rabbitConsumer running"
           else
             # Real server verification
+            echo "✅ Verifying real deployment..."
             ssh -o ConnectTimeout=30 ${{ steps.deploy_config.outputs.DEPLOY_USER }}@${{ steps.deploy_config.outputs.DEPLOY_HOST }} "
               cd ${{ steps.deploy_config.outputs.DEPLOY_PATH }}
               echo 'Deployment verification:'
@@ -220,14 +227,15 @@ jobs:
             echo "  - SSH_PRIVATE_KEY_BASE64 (base64 encoded SSH private key)"
             echo "  - DEPLOY_HOST (your server IP/hostname)"
             echo "  - DEPLOY_USER (your SSH username)"
-            echo "  - DEPLOY_PATH (deployment directory path)"
             echo ""
             echo "Generate SSH key: cat ~/.ssh/id_rsa | base64 -w 0"
           else
+            echo "🎉 REAL PRODUCTION DEPLOYMENT SUCCESSFUL!"
             echo "✅ Code deployed to: ${{ steps.deploy_config.outputs.DEPLOY_HOST }}:${{ steps.deploy_config.outputs.DEPLOY_PATH }}"
-            echo "✅ Dependencies installed"
+            echo "✅ Dependencies installed on real server"
             echo "✅ PM2 process running: rabbitConsumer"
             echo "✅ Server ready for production"
+            echo "✅ SSH connection working perfectly"
           fi
           
           echo ""

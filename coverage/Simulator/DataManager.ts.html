@@ -1,0 +1,2272 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for Simulator/DataManager.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">Simulator</a> DataManager.ts</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>0/378</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/221</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/66</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>0/341</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line low'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a>
+<a name='L207'></a><a href='#L207'>207</a>
+<a name='L208'></a><a href='#L208'>208</a>
+<a name='L209'></a><a href='#L209'>209</a>
+<a name='L210'></a><a href='#L210'>210</a>
+<a name='L211'></a><a href='#L211'>211</a>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a>
+<a name='L224'></a><a href='#L224'>224</a>
+<a name='L225'></a><a href='#L225'>225</a>
+<a name='L226'></a><a href='#L226'>226</a>
+<a name='L227'></a><a href='#L227'>227</a>
+<a name='L228'></a><a href='#L228'>228</a>
+<a name='L229'></a><a href='#L229'>229</a>
+<a name='L230'></a><a href='#L230'>230</a>
+<a name='L231'></a><a href='#L231'>231</a>
+<a name='L232'></a><a href='#L232'>232</a>
+<a name='L233'></a><a href='#L233'>233</a>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a>
+<a name='L274'></a><a href='#L274'>274</a>
+<a name='L275'></a><a href='#L275'>275</a>
+<a name='L276'></a><a href='#L276'>276</a>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a>
+<a name='L283'></a><a href='#L283'>283</a>
+<a name='L284'></a><a href='#L284'>284</a>
+<a name='L285'></a><a href='#L285'>285</a>
+<a name='L286'></a><a href='#L286'>286</a>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a>
+<a name='L290'></a><a href='#L290'>290</a>
+<a name='L291'></a><a href='#L291'>291</a>
+<a name='L292'></a><a href='#L292'>292</a>
+<a name='L293'></a><a href='#L293'>293</a>
+<a name='L294'></a><a href='#L294'>294</a>
+<a name='L295'></a><a href='#L295'>295</a>
+<a name='L296'></a><a href='#L296'>296</a>
+<a name='L297'></a><a href='#L297'>297</a>
+<a name='L298'></a><a href='#L298'>298</a>
+<a name='L299'></a><a href='#L299'>299</a>
+<a name='L300'></a><a href='#L300'>300</a>
+<a name='L301'></a><a href='#L301'>301</a>
+<a name='L302'></a><a href='#L302'>302</a>
+<a name='L303'></a><a href='#L303'>303</a>
+<a name='L304'></a><a href='#L304'>304</a>
+<a name='L305'></a><a href='#L305'>305</a>
+<a name='L306'></a><a href='#L306'>306</a>
+<a name='L307'></a><a href='#L307'>307</a>
+<a name='L308'></a><a href='#L308'>308</a>
+<a name='L309'></a><a href='#L309'>309</a>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a>
+<a name='L329'></a><a href='#L329'>329</a>
+<a name='L330'></a><a href='#L330'>330</a>
+<a name='L331'></a><a href='#L331'>331</a>
+<a name='L332'></a><a href='#L332'>332</a>
+<a name='L333'></a><a href='#L333'>333</a>
+<a name='L334'></a><a href='#L334'>334</a>
+<a name='L335'></a><a href='#L335'>335</a>
+<a name='L336'></a><a href='#L336'>336</a>
+<a name='L337'></a><a href='#L337'>337</a>
+<a name='L338'></a><a href='#L338'>338</a>
+<a name='L339'></a><a href='#L339'>339</a>
+<a name='L340'></a><a href='#L340'>340</a>
+<a name='L341'></a><a href='#L341'>341</a>
+<a name='L342'></a><a href='#L342'>342</a>
+<a name='L343'></a><a href='#L343'>343</a>
+<a name='L344'></a><a href='#L344'>344</a>
+<a name='L345'></a><a href='#L345'>345</a>
+<a name='L346'></a><a href='#L346'>346</a>
+<a name='L347'></a><a href='#L347'>347</a>
+<a name='L348'></a><a href='#L348'>348</a>
+<a name='L349'></a><a href='#L349'>349</a>
+<a name='L350'></a><a href='#L350'>350</a>
+<a name='L351'></a><a href='#L351'>351</a>
+<a name='L352'></a><a href='#L352'>352</a>
+<a name='L353'></a><a href='#L353'>353</a>
+<a name='L354'></a><a href='#L354'>354</a>
+<a name='L355'></a><a href='#L355'>355</a>
+<a name='L356'></a><a href='#L356'>356</a>
+<a name='L357'></a><a href='#L357'>357</a>
+<a name='L358'></a><a href='#L358'>358</a>
+<a name='L359'></a><a href='#L359'>359</a>
+<a name='L360'></a><a href='#L360'>360</a>
+<a name='L361'></a><a href='#L361'>361</a>
+<a name='L362'></a><a href='#L362'>362</a>
+<a name='L363'></a><a href='#L363'>363</a>
+<a name='L364'></a><a href='#L364'>364</a>
+<a name='L365'></a><a href='#L365'>365</a>
+<a name='L366'></a><a href='#L366'>366</a>
+<a name='L367'></a><a href='#L367'>367</a>
+<a name='L368'></a><a href='#L368'>368</a>
+<a name='L369'></a><a href='#L369'>369</a>
+<a name='L370'></a><a href='#L370'>370</a>
+<a name='L371'></a><a href='#L371'>371</a>
+<a name='L372'></a><a href='#L372'>372</a>
+<a name='L373'></a><a href='#L373'>373</a>
+<a name='L374'></a><a href='#L374'>374</a>
+<a name='L375'></a><a href='#L375'>375</a>
+<a name='L376'></a><a href='#L376'>376</a>
+<a name='L377'></a><a href='#L377'>377</a>
+<a name='L378'></a><a href='#L378'>378</a>
+<a name='L379'></a><a href='#L379'>379</a>
+<a name='L380'></a><a href='#L380'>380</a>
+<a name='L381'></a><a href='#L381'>381</a>
+<a name='L382'></a><a href='#L382'>382</a>
+<a name='L383'></a><a href='#L383'>383</a>
+<a name='L384'></a><a href='#L384'>384</a>
+<a name='L385'></a><a href='#L385'>385</a>
+<a name='L386'></a><a href='#L386'>386</a>
+<a name='L387'></a><a href='#L387'>387</a>
+<a name='L388'></a><a href='#L388'>388</a>
+<a name='L389'></a><a href='#L389'>389</a>
+<a name='L390'></a><a href='#L390'>390</a>
+<a name='L391'></a><a href='#L391'>391</a>
+<a name='L392'></a><a href='#L392'>392</a>
+<a name='L393'></a><a href='#L393'>393</a>
+<a name='L394'></a><a href='#L394'>394</a>
+<a name='L395'></a><a href='#L395'>395</a>
+<a name='L396'></a><a href='#L396'>396</a>
+<a name='L397'></a><a href='#L397'>397</a>
+<a name='L398'></a><a href='#L398'>398</a>
+<a name='L399'></a><a href='#L399'>399</a>
+<a name='L400'></a><a href='#L400'>400</a>
+<a name='L401'></a><a href='#L401'>401</a>
+<a name='L402'></a><a href='#L402'>402</a>
+<a name='L403'></a><a href='#L403'>403</a>
+<a name='L404'></a><a href='#L404'>404</a>
+<a name='L405'></a><a href='#L405'>405</a>
+<a name='L406'></a><a href='#L406'>406</a>
+<a name='L407'></a><a href='#L407'>407</a>
+<a name='L408'></a><a href='#L408'>408</a>
+<a name='L409'></a><a href='#L409'>409</a>
+<a name='L410'></a><a href='#L410'>410</a>
+<a name='L411'></a><a href='#L411'>411</a>
+<a name='L412'></a><a href='#L412'>412</a>
+<a name='L413'></a><a href='#L413'>413</a>
+<a name='L414'></a><a href='#L414'>414</a>
+<a name='L415'></a><a href='#L415'>415</a>
+<a name='L416'></a><a href='#L416'>416</a>
+<a name='L417'></a><a href='#L417'>417</a>
+<a name='L418'></a><a href='#L418'>418</a>
+<a name='L419'></a><a href='#L419'>419</a>
+<a name='L420'></a><a href='#L420'>420</a>
+<a name='L421'></a><a href='#L421'>421</a>
+<a name='L422'></a><a href='#L422'>422</a>
+<a name='L423'></a><a href='#L423'>423</a>
+<a name='L424'></a><a href='#L424'>424</a>
+<a name='L425'></a><a href='#L425'>425</a>
+<a name='L426'></a><a href='#L426'>426</a>
+<a name='L427'></a><a href='#L427'>427</a>
+<a name='L428'></a><a href='#L428'>428</a>
+<a name='L429'></a><a href='#L429'>429</a>
+<a name='L430'></a><a href='#L430'>430</a>
+<a name='L431'></a><a href='#L431'>431</a>
+<a name='L432'></a><a href='#L432'>432</a>
+<a name='L433'></a><a href='#L433'>433</a>
+<a name='L434'></a><a href='#L434'>434</a>
+<a name='L435'></a><a href='#L435'>435</a>
+<a name='L436'></a><a href='#L436'>436</a>
+<a name='L437'></a><a href='#L437'>437</a>
+<a name='L438'></a><a href='#L438'>438</a>
+<a name='L439'></a><a href='#L439'>439</a>
+<a name='L440'></a><a href='#L440'>440</a>
+<a name='L441'></a><a href='#L441'>441</a>
+<a name='L442'></a><a href='#L442'>442</a>
+<a name='L443'></a><a href='#L443'>443</a>
+<a name='L444'></a><a href='#L444'>444</a>
+<a name='L445'></a><a href='#L445'>445</a>
+<a name='L446'></a><a href='#L446'>446</a>
+<a name='L447'></a><a href='#L447'>447</a>
+<a name='L448'></a><a href='#L448'>448</a>
+<a name='L449'></a><a href='#L449'>449</a>
+<a name='L450'></a><a href='#L450'>450</a>
+<a name='L451'></a><a href='#L451'>451</a>
+<a name='L452'></a><a href='#L452'>452</a>
+<a name='L453'></a><a href='#L453'>453</a>
+<a name='L454'></a><a href='#L454'>454</a>
+<a name='L455'></a><a href='#L455'>455</a>
+<a name='L456'></a><a href='#L456'>456</a>
+<a name='L457'></a><a href='#L457'>457</a>
+<a name='L458'></a><a href='#L458'>458</a>
+<a name='L459'></a><a href='#L459'>459</a>
+<a name='L460'></a><a href='#L460'>460</a>
+<a name='L461'></a><a href='#L461'>461</a>
+<a name='L462'></a><a href='#L462'>462</a>
+<a name='L463'></a><a href='#L463'>463</a>
+<a name='L464'></a><a href='#L464'>464</a>
+<a name='L465'></a><a href='#L465'>465</a>
+<a name='L466'></a><a href='#L466'>466</a>
+<a name='L467'></a><a href='#L467'>467</a>
+<a name='L468'></a><a href='#L468'>468</a>
+<a name='L469'></a><a href='#L469'>469</a>
+<a name='L470'></a><a href='#L470'>470</a>
+<a name='L471'></a><a href='#L471'>471</a>
+<a name='L472'></a><a href='#L472'>472</a>
+<a name='L473'></a><a href='#L473'>473</a>
+<a name='L474'></a><a href='#L474'>474</a>
+<a name='L475'></a><a href='#L475'>475</a>
+<a name='L476'></a><a href='#L476'>476</a>
+<a name='L477'></a><a href='#L477'>477</a>
+<a name='L478'></a><a href='#L478'>478</a>
+<a name='L479'></a><a href='#L479'>479</a>
+<a name='L480'></a><a href='#L480'>480</a>
+<a name='L481'></a><a href='#L481'>481</a>
+<a name='L482'></a><a href='#L482'>482</a>
+<a name='L483'></a><a href='#L483'>483</a>
+<a name='L484'></a><a href='#L484'>484</a>
+<a name='L485'></a><a href='#L485'>485</a>
+<a name='L486'></a><a href='#L486'>486</a>
+<a name='L487'></a><a href='#L487'>487</a>
+<a name='L488'></a><a href='#L488'>488</a>
+<a name='L489'></a><a href='#L489'>489</a>
+<a name='L490'></a><a href='#L490'>490</a>
+<a name='L491'></a><a href='#L491'>491</a>
+<a name='L492'></a><a href='#L492'>492</a>
+<a name='L493'></a><a href='#L493'>493</a>
+<a name='L494'></a><a href='#L494'>494</a>
+<a name='L495'></a><a href='#L495'>495</a>
+<a name='L496'></a><a href='#L496'>496</a>
+<a name='L497'></a><a href='#L497'>497</a>
+<a name='L498'></a><a href='#L498'>498</a>
+<a name='L499'></a><a href='#L499'>499</a>
+<a name='L500'></a><a href='#L500'>500</a>
+<a name='L501'></a><a href='#L501'>501</a>
+<a name='L502'></a><a href='#L502'>502</a>
+<a name='L503'></a><a href='#L503'>503</a>
+<a name='L504'></a><a href='#L504'>504</a>
+<a name='L505'></a><a href='#L505'>505</a>
+<a name='L506'></a><a href='#L506'>506</a>
+<a name='L507'></a><a href='#L507'>507</a>
+<a name='L508'></a><a href='#L508'>508</a>
+<a name='L509'></a><a href='#L509'>509</a>
+<a name='L510'></a><a href='#L510'>510</a>
+<a name='L511'></a><a href='#L511'>511</a>
+<a name='L512'></a><a href='#L512'>512</a>
+<a name='L513'></a><a href='#L513'>513</a>
+<a name='L514'></a><a href='#L514'>514</a>
+<a name='L515'></a><a href='#L515'>515</a>
+<a name='L516'></a><a href='#L516'>516</a>
+<a name='L517'></a><a href='#L517'>517</a>
+<a name='L518'></a><a href='#L518'>518</a>
+<a name='L519'></a><a href='#L519'>519</a>
+<a name='L520'></a><a href='#L520'>520</a>
+<a name='L521'></a><a href='#L521'>521</a>
+<a name='L522'></a><a href='#L522'>522</a>
+<a name='L523'></a><a href='#L523'>523</a>
+<a name='L524'></a><a href='#L524'>524</a>
+<a name='L525'></a><a href='#L525'>525</a>
+<a name='L526'></a><a href='#L526'>526</a>
+<a name='L527'></a><a href='#L527'>527</a>
+<a name='L528'></a><a href='#L528'>528</a>
+<a name='L529'></a><a href='#L529'>529</a>
+<a name='L530'></a><a href='#L530'>530</a>
+<a name='L531'></a><a href='#L531'>531</a>
+<a name='L532'></a><a href='#L532'>532</a>
+<a name='L533'></a><a href='#L533'>533</a>
+<a name='L534'></a><a href='#L534'>534</a>
+<a name='L535'></a><a href='#L535'>535</a>
+<a name='L536'></a><a href='#L536'>536</a>
+<a name='L537'></a><a href='#L537'>537</a>
+<a name='L538'></a><a href='#L538'>538</a>
+<a name='L539'></a><a href='#L539'>539</a>
+<a name='L540'></a><a href='#L540'>540</a>
+<a name='L541'></a><a href='#L541'>541</a>
+<a name='L542'></a><a href='#L542'>542</a>
+<a name='L543'></a><a href='#L543'>543</a>
+<a name='L544'></a><a href='#L544'>544</a>
+<a name='L545'></a><a href='#L545'>545</a>
+<a name='L546'></a><a href='#L546'>546</a>
+<a name='L547'></a><a href='#L547'>547</a>
+<a name='L548'></a><a href='#L548'>548</a>
+<a name='L549'></a><a href='#L549'>549</a>
+<a name='L550'></a><a href='#L550'>550</a>
+<a name='L551'></a><a href='#L551'>551</a>
+<a name='L552'></a><a href='#L552'>552</a>
+<a name='L553'></a><a href='#L553'>553</a>
+<a name='L554'></a><a href='#L554'>554</a>
+<a name='L555'></a><a href='#L555'>555</a>
+<a name='L556'></a><a href='#L556'>556</a>
+<a name='L557'></a><a href='#L557'>557</a>
+<a name='L558'></a><a href='#L558'>558</a>
+<a name='L559'></a><a href='#L559'>559</a>
+<a name='L560'></a><a href='#L560'>560</a>
+<a name='L561'></a><a href='#L561'>561</a>
+<a name='L562'></a><a href='#L562'>562</a>
+<a name='L563'></a><a href='#L563'>563</a>
+<a name='L564'></a><a href='#L564'>564</a>
+<a name='L565'></a><a href='#L565'>565</a>
+<a name='L566'></a><a href='#L566'>566</a>
+<a name='L567'></a><a href='#L567'>567</a>
+<a name='L568'></a><a href='#L568'>568</a>
+<a name='L569'></a><a href='#L569'>569</a>
+<a name='L570'></a><a href='#L570'>570</a>
+<a name='L571'></a><a href='#L571'>571</a>
+<a name='L572'></a><a href='#L572'>572</a>
+<a name='L573'></a><a href='#L573'>573</a>
+<a name='L574'></a><a href='#L574'>574</a>
+<a name='L575'></a><a href='#L575'>575</a>
+<a name='L576'></a><a href='#L576'>576</a>
+<a name='L577'></a><a href='#L577'>577</a>
+<a name='L578'></a><a href='#L578'>578</a>
+<a name='L579'></a><a href='#L579'>579</a>
+<a name='L580'></a><a href='#L580'>580</a>
+<a name='L581'></a><a href='#L581'>581</a>
+<a name='L582'></a><a href='#L582'>582</a>
+<a name='L583'></a><a href='#L583'>583</a>
+<a name='L584'></a><a href='#L584'>584</a>
+<a name='L585'></a><a href='#L585'>585</a>
+<a name='L586'></a><a href='#L586'>586</a>
+<a name='L587'></a><a href='#L587'>587</a>
+<a name='L588'></a><a href='#L588'>588</a>
+<a name='L589'></a><a href='#L589'>589</a>
+<a name='L590'></a><a href='#L590'>590</a>
+<a name='L591'></a><a href='#L591'>591</a>
+<a name='L592'></a><a href='#L592'>592</a>
+<a name='L593'></a><a href='#L593'>593</a>
+<a name='L594'></a><a href='#L594'>594</a>
+<a name='L595'></a><a href='#L595'>595</a>
+<a name='L596'></a><a href='#L596'>596</a>
+<a name='L597'></a><a href='#L597'>597</a>
+<a name='L598'></a><a href='#L598'>598</a>
+<a name='L599'></a><a href='#L599'>599</a>
+<a name='L600'></a><a href='#L600'>600</a>
+<a name='L601'></a><a href='#L601'>601</a>
+<a name='L602'></a><a href='#L602'>602</a>
+<a name='L603'></a><a href='#L603'>603</a>
+<a name='L604'></a><a href='#L604'>604</a>
+<a name='L605'></a><a href='#L605'>605</a>
+<a name='L606'></a><a href='#L606'>606</a>
+<a name='L607'></a><a href='#L607'>607</a>
+<a name='L608'></a><a href='#L608'>608</a>
+<a name='L609'></a><a href='#L609'>609</a>
+<a name='L610'></a><a href='#L610'>610</a>
+<a name='L611'></a><a href='#L611'>611</a>
+<a name='L612'></a><a href='#L612'>612</a>
+<a name='L613'></a><a href='#L613'>613</a>
+<a name='L614'></a><a href='#L614'>614</a>
+<a name='L615'></a><a href='#L615'>615</a>
+<a name='L616'></a><a href='#L616'>616</a>
+<a name='L617'></a><a href='#L617'>617</a>
+<a name='L618'></a><a href='#L618'>618</a>
+<a name='L619'></a><a href='#L619'>619</a>
+<a name='L620'></a><a href='#L620'>620</a>
+<a name='L621'></a><a href='#L621'>621</a>
+<a name='L622'></a><a href='#L622'>622</a>
+<a name='L623'></a><a href='#L623'>623</a>
+<a name='L624'></a><a href='#L624'>624</a>
+<a name='L625'></a><a href='#L625'>625</a>
+<a name='L626'></a><a href='#L626'>626</a>
+<a name='L627'></a><a href='#L627'>627</a>
+<a name='L628'></a><a href='#L628'>628</a>
+<a name='L629'></a><a href='#L629'>629</a>
+<a name='L630'></a><a href='#L630'>630</a>
+<a name='L631'></a><a href='#L631'>631</a>
+<a name='L632'></a><a href='#L632'>632</a>
+<a name='L633'></a><a href='#L633'>633</a>
+<a name='L634'></a><a href='#L634'>634</a>
+<a name='L635'></a><a href='#L635'>635</a>
+<a name='L636'></a><a href='#L636'>636</a>
+<a name='L637'></a><a href='#L637'>637</a>
+<a name='L638'></a><a href='#L638'>638</a>
+<a name='L639'></a><a href='#L639'>639</a>
+<a name='L640'></a><a href='#L640'>640</a>
+<a name='L641'></a><a href='#L641'>641</a>
+<a name='L642'></a><a href='#L642'>642</a>
+<a name='L643'></a><a href='#L643'>643</a>
+<a name='L644'></a><a href='#L644'>644</a>
+<a name='L645'></a><a href='#L645'>645</a>
+<a name='L646'></a><a href='#L646'>646</a>
+<a name='L647'></a><a href='#L647'>647</a>
+<a name='L648'></a><a href='#L648'>648</a>
+<a name='L649'></a><a href='#L649'>649</a>
+<a name='L650'></a><a href='#L650'>650</a>
+<a name='L651'></a><a href='#L651'>651</a>
+<a name='L652'></a><a href='#L652'>652</a>
+<a name='L653'></a><a href='#L653'>653</a>
+<a name='L654'></a><a href='#L654'>654</a>
+<a name='L655'></a><a href='#L655'>655</a>
+<a name='L656'></a><a href='#L656'>656</a>
+<a name='L657'></a><a href='#L657'>657</a>
+<a name='L658'></a><a href='#L658'>658</a>
+<a name='L659'></a><a href='#L659'>659</a>
+<a name='L660'></a><a href='#L660'>660</a>
+<a name='L661'></a><a href='#L661'>661</a>
+<a name='L662'></a><a href='#L662'>662</a>
+<a name='L663'></a><a href='#L663'>663</a>
+<a name='L664'></a><a href='#L664'>664</a>
+<a name='L665'></a><a href='#L665'>665</a>
+<a name='L666'></a><a href='#L666'>666</a>
+<a name='L667'></a><a href='#L667'>667</a>
+<a name='L668'></a><a href='#L668'>668</a>
+<a name='L669'></a><a href='#L669'>669</a>
+<a name='L670'></a><a href='#L670'>670</a>
+<a name='L671'></a><a href='#L671'>671</a>
+<a name='L672'></a><a href='#L672'>672</a>
+<a name='L673'></a><a href='#L673'>673</a>
+<a name='L674'></a><a href='#L674'>674</a>
+<a name='L675'></a><a href='#L675'>675</a>
+<a name='L676'></a><a href='#L676'>676</a>
+<a name='L677'></a><a href='#L677'>677</a>
+<a name='L678'></a><a href='#L678'>678</a>
+<a name='L679'></a><a href='#L679'>679</a>
+<a name='L680'></a><a href='#L680'>680</a>
+<a name='L681'></a><a href='#L681'>681</a>
+<a name='L682'></a><a href='#L682'>682</a>
+<a name='L683'></a><a href='#L683'>683</a>
+<a name='L684'></a><a href='#L684'>684</a>
+<a name='L685'></a><a href='#L685'>685</a>
+<a name='L686'></a><a href='#L686'>686</a>
+<a name='L687'></a><a href='#L687'>687</a>
+<a name='L688'></a><a href='#L688'>688</a>
+<a name='L689'></a><a href='#L689'>689</a>
+<a name='L690'></a><a href='#L690'>690</a>
+<a name='L691'></a><a href='#L691'>691</a>
+<a name='L692'></a><a href='#L692'>692</a>
+<a name='L693'></a><a href='#L693'>693</a>
+<a name='L694'></a><a href='#L694'>694</a>
+<a name='L695'></a><a href='#L695'>695</a>
+<a name='L696'></a><a href='#L696'>696</a>
+<a name='L697'></a><a href='#L697'>697</a>
+<a name='L698'></a><a href='#L698'>698</a>
+<a name='L699'></a><a href='#L699'>699</a>
+<a name='L700'></a><a href='#L700'>700</a>
+<a name='L701'></a><a href='#L701'>701</a>
+<a name='L702'></a><a href='#L702'>702</a>
+<a name='L703'></a><a href='#L703'>703</a>
+<a name='L704'></a><a href='#L704'>704</a>
+<a name='L705'></a><a href='#L705'>705</a>
+<a name='L706'></a><a href='#L706'>706</a>
+<a name='L707'></a><a href='#L707'>707</a>
+<a name='L708'></a><a href='#L708'>708</a>
+<a name='L709'></a><a href='#L709'>709</a>
+<a name='L710'></a><a href='#L710'>710</a>
+<a name='L711'></a><a href='#L711'>711</a>
+<a name='L712'></a><a href='#L712'>712</a>
+<a name='L713'></a><a href='#L713'>713</a>
+<a name='L714'></a><a href='#L714'>714</a>
+<a name='L715'></a><a href='#L715'>715</a>
+<a name='L716'></a><a href='#L716'>716</a>
+<a name='L717'></a><a href='#L717'>717</a>
+<a name='L718'></a><a href='#L718'>718</a>
+<a name='L719'></a><a href='#L719'>719</a>
+<a name='L720'></a><a href='#L720'>720</a>
+<a name='L721'></a><a href='#L721'>721</a>
+<a name='L722'></a><a href='#L722'>722</a>
+<a name='L723'></a><a href='#L723'>723</a>
+<a name='L724'></a><a href='#L724'>724</a>
+<a name='L725'></a><a href='#L725'>725</a>
+<a name='L726'></a><a href='#L726'>726</a>
+<a name='L727'></a><a href='#L727'>727</a>
+<a name='L728'></a><a href='#L728'>728</a>
+<a name='L729'></a><a href='#L729'>729</a>
+<a name='L730'></a><a href='#L730'>730</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+import { exec<span class="fstat-no" title="function not covered" >, spaw</span>n } from <span class="cstat-no" title="statement not covered" >'node:child_process';<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+impo<span class="cstat-no" title="statement not covered" >rt * as fs from 'node:fs/promise<span class="fstat-no" title="function not covered" >s'</span></span>
+import { DAL } fr<span class="fstat-no" title="function not covered" >om "../DAL</span>Simulatio<span class="cstat-no" title="statement not covered" >n.js";<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ></span></span></span>
+import { Account,<span class="fstat-no" title="function not covered" > Bot, Bot</span>Status, O<span class="cstat-no" title="statement not covered" >rder }<span class="cstat-no" title="statement not covered" > from "../Models.js";<span class="cstat-no" title="statement not covered" ></span></span></span>
+import { BaseSock<span class="fstat-no" title="function not covered" >ets }</span> from "../<span class="cstat-no" title="statement not covered" >Sockets/BaseSockets.js";</span>
+import {<span class="cstat-no" title="statement not covered" > Sockets } from "../Sockets/Sockets.js";</span>
+import admZip from 'adm-zip'
+&nbsp;
+import Binance from 'node-binance-api';
+import crypto from 'crypto';
+import fetchRetry from './FetchRetry.js';
+&nbsp;
+export const SECONDS_IN_DAY = 24 * 60 * 60
+&nbsp;
+const UNIT_TIMES = ['1h', '15m', '5m', '1m', '15s', '5s', '1s']
+export const MIN_CHART_SIZE = <span class="cstat-no" title="statement not covered" >5 * SECONDS_I</span>N_DAY
+<span class="cstat-no" title="statement not covered" ></span>
+// readonly UNIT_HOUR_CANDLES <span class="cstat-no" title="statement not covered" >= {</span>
+//     '1h': 1,
+//     '15m': 4,
+//     '5m': 12,
+//     '1m': 60,
+//     '1s': 60 * 60
+// }
+&nbsp;
+const UNIT_NEXT_LEVEL = <span class="cstat-no" title="statement not covered" >{</span>
+    '1s': 5,
+    '5s': 3,
+    '15s': 4,
+    '1m': 5,
+    '5m': 3,
+    '15m': 4,
+    '1h': 1
+}
+<span class="cstat-no" title="statement not covered" ></span>
+const SECOUNDS_IN_UNIT = {
+    '1s': 1,
+    '5s': 5,
+    '15s': 15,
+    '1m': 60,
+    '5m': 60 * 5,
+    '15m': 60 * 15,
+    '1h': 60 * 60
+}
+expo<span class="fstat-no" title="function not covered" >rt</span> class DataManager {
+    hasMoney(t: CandleStick) {
+&nbsp;
+<span class="fstat-no" title="function not covered" ></span>        //   throw new Error("Method not implemented.");
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+    char<span class="cstat-no" title="statement not covered" >t: Array&lt;CandleStick&gt; = []</span>;
+    char<span class="cstat-no" title="statement not covered" >ts: { [key: string]: A</span>rray&lt;CandleStick&gt;; } = {};
+    hist<span class="cstat-no" title="statement not covered" >oryCandles: Array&lt;Candle</span>Stick&gt; = []
+<span class="cstat-no" title="statement not covered" ></span>
+    open<span class="cstat-no" title="statement not covered" >Orders: Array&lt;Order&gt; = [];</span>
+    curr<span class="cstat-no" title="statement not covered" >entCandle = 0</span>
+    bots<span class="cstat-no" title="statement not covered" >: Bot[]<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span>
+    PAIR<span class="cstat-no" title="statement not covered" ></span>
+    exchangeInfo: any
+    filters: any
+    dal = new DAL()
+<span class="cstat-no" title="statement not covered" ></span>
+    minHisto<span class="cstat-no" title="statement not covered" >ryCandles = 0</span>
+    futureHi<span class="cstat-no" title="statement not covered" >story = false</span>
+<span class="cstat-no" title="statement not covered" ></span>
+    // curre<span class="cstat-no" title="statement not covered" >ntHour = 0</span>
+    // offse<span class="cstat-no" title="statement not covered" >tInHour = 0</span>
+    // curre<span class="cstat-no" title="statement not covered" >ntCandleStick: CandleStick | undefined</span>
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+    sockets: BaseSockets
+<span class="cstat-no" title="statement not covered" ></span>
+    constructor(bots: Bot[]) {
+<span class="cstat-no" title="statement not covered" >        this.bots = bots</span>
+<span class="cstat-no" title="statement not covered" >        this.PAIR = this.bot<span class="fstat-no" title="function not covered" >s[</span>0].coin1 + this.bots[0].coin2<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span></span>
+        this.sockets<span class="cstat-no" title="statement not covered" > = Sockets.getInstance()</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+        this.soc<span class="cstat-no" title="statement not covered" >kets.averagePrice = this.averagePrice.bind(this)</span>
+        this.sockets.avera<span class="fstat-no" title="function not covered" >ge</span>Pri<span class="cstat-no" title="statement not covered" >ceQuarter</span> = this.averagePriceQuarter.bind(this)
+<span class="cstat-no" title="statement not covered" ></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+    setExchangeInfo(_exchangeInfo) {
+        this.exchangeInfo = _exchangeInfo
+        this.filters = _<span class="cstat-no" title="statement not covered" >exchangeInfo.symbols.find(s </span>=&gt; s.symbol == this.PAIR).filters.reduce((a, b) =&gt; { a[b.filterType] = b; return a }, {})
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+    openOrder = (bot) =&gt; (type) =&gt; ((coin, qu, price, params?) =&gt; {
+        const p = price |<span class="fstat-no" title="function not covered" >| </span>par<span class="cstat-no" title="statement not covered" >ams.stopPrice</span> || params.activationPrice
+        // if (type ? p &gt; this.chart[this.time].high :  p &lt; this.chart[this.time].low) {
+        //     r<span class="cstat-no" title="statement not covered" >eturn {msg:"Order Expire"}</span>
+        // }
+        cons<span class="cstat-no" title="statement not covered" >t order = new Order(ty<span class="fstat-no" title="function not covered" >pe</span> ? <span class="cstat-no" title="statement not covered" >'BUY' <span class="fstat-no" title="function not covered" >: </span>"SE<span class="cstat-no" title="statement not covered" >LL", "NEW", p,</span></span></span>
+            this.makeid(10), qu, qu, this.chart[this.currentCandle].time, params.type || "LIMIT", params.newClientOrderId,
+<span class="cstat-no" title="statement not covered" >            bot.positionSid<span class="fstat-no" title="function not covered" >e(</span>), p)<span class="cstat-no" title="statement not covered" ></span></span>
+        order.bot <span class="fstat-no" title="function not covered" >= </span>bot<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        bot.lastOr<span class="fstat-no" title="function not covered" >de</span>r =<span class="cstat-no" title="statement not covered" > this.chart[this.currentCa</span>ndle].time
+        order.clos<span class="fstat-no" title="function not covered" >eP</span>osi<span class="cstat-no" title="statement not covered" >tion = params.closePos</span>ition
+<span class="cstat-no" title="statement not covered" >        order.callbackRate</span> = params.callbackRate
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        this.openOrders.push(order)</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        this.dal.logStep({</span>
+            type: 'OpenOrder', side: order.side, price: order.price, quantity: order.origQty, priority: 8,
+<span class="fstat-no" title="function not covered" ></span>            high: this.chart[this.currentCandle].high,
+<span class="cstat-no" title="statement not covered" >            low: this.chart[this.currentCan</span>dle].low,
+<span class="cstat-no" title="statement not covered" >            sma: this.averagePrice(null, bot.SMA),<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span>
+            longSMA: this.averagePriceQuarter(null, bot.longSMA),
+<span class="fstat-no" title="function not covered" ></span>        }, bot)
+<span class="cstat-no" title="statement not covered" ></span>
+        return order<span class="cstat-no" title="statement not covered" ></span>
+    });<span class="cstat-no" title="statement not covered" ></span>
+    make<span class="cstat-no" title="statement not covered" >id(length): s<span class="cstat-no" title="statement not covered" >tr</span>ing {</span>
+        let <span class="cstat-no" title="statement not covered" >result = '';</span>
+        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let charactersLength = characters.length;
+<span class="cstat-no" title="statement not covered" >        for (let i = 0;</span> i &lt; length; i++) {
+            result += characters.charAt(Math.floor(Math.random() *
+<span class="fstat-no" title="function not covered" ></span>                charactersLength));
+<span class="cstat-no" title="statement not covered" >        }<span class="fstat-no" title="function not covered" ></span></span>
+        return result;<span class="cstat-no" title="statement not covered" ></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+    async checkF<span class="cstat-no" title="statement not covered" >ileExists(filepath) {</span>
+        let flag = true;
+        try {
+            awai<span class="cstat-no" title="statement not covered" >t fs.access(fi</span>lepath);
+        } catch (e) {
+<span class="cstat-no" title="statement not covered" >            flag = false;</span>
+        }
+        return flag;
+<span class="fstat-no" title="function not covered" >    }</span>
+    fail<span class="cstat-no" title="statement not covered" >ed: string[] = []<span class="fstat-no" title="function not covered" ></span></span>
+    async fe<span class="cstat-no" title="statement not covered" >tchFile(unit, dateString) {</span>
+        try {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+            const re<span class="cstat-no" title="statement not covered" >s = await this.dal.getHistoryFromLocal(this.PAIR, unit, dateString, this.futureHistory &amp;&amp; dateString &gt;= "2023-06-14" ? "future" : "spot")</span>
+            if (res) {<span class="cstat-no" title="statement not covered" ></span>
+                if (dateString == new Date().toISOString().split('T')[0] &amp;&amp; !this.futureHistory) {
+<span class="cstat-no" title="statement not covered" >                    return await this.fetchDayData(unit, dateString, res)</span>
+                }<span class="cstat-no" title="statement not covered" ></span>
+                console.log("File exists in local", dateString, unit)
+<span class="cstat-no" title="statement not covered" >                return res</span>
+            }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+            if (this.fut<span class="cstat-no" title="statement not covered" >ureHistory ) { </span>
+                const res1 =<span class="cstat-no" title="statement not covered" > await this.dal.getHistoryFromBucket(this.PAIR, unit, dateString)</span>
+                if (res1) {
+                    if (<span class="cstat-no" title="statement not covered" >new Date().getTime() - new Date(dateString).getTime() &gt; </span>SECONDS_IN_DAY * 1000) {
+<span class="cstat-no" title="statement not covered" >                        await this.da</span>l.saveHistoryInLocal(res1, this.PAIR, unit, dateString, "future",1)
+                    }
+                    console.log("File exists in bucket", dateString, unit)
+                    return res<span class="cstat-no" title="statement not covered" >1</span>
+                }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+            }
+&nbsp;
+            const bytes = await fetchRetry(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip`)
+                .then(r =&gt; r.buffer())
+            // const fileChecksum = crypto.createHash('sha256').update(bytes).digest("hex")
+&nbsp;
+            // const checksum = await fetchRetry(`https://data.binance.vision/data/spot/daily/klines/${this.PAIR}/${unit}/${this.PAIR}-${unit}-${dateString}.zip.CHECKSUM`)
+            //     .then(res =&gt; res.text())
+            //     .then(text<span class="cstat-no" title="statement not covered" > =&gt; text.split(" ")[0])</span>
+<span class="cstat-no" title="statement not covered" ></span>
+            // if (c<span class="cstat-no" title="statement not covered" >hecksum != fileChecksum) {</span>
+            //     console.error("Error in:", dateString, unit)
+            //     throw new Err<span class="cstat-no" title="statement not covered" >or("Checksum not match")</span>
+            // }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+            cons<span class="cstat-no" title="statement not covered" >t file = n</span>ew admZip(bytes).getEntries()[0].getData().toString()
+&nbsp;
+            if (file.length == 0) {
+<span class="cstat-no" title="statement not covered" >                console.error("Length is Zero.", dateString, unit)</span>
+            }<span class="cstat-no" title="statement not covered" ></span>
+            
+            cons<span class="cstat-no" title="statement not covered" >t divider = dateString.split("-")[0] == "2025" ? </span>1000 : 1
+            cons<span class="cstat-no" title="statement not covered" >t r = await this.dal.saveHisto</span>ryInLocal(file, this.PAIR, unit, dateString, "spot",divider)
+            cons<span class="cstat-no" title="statement not covered" >ole.log(</span>"downloded: ", dateString, unit);
+            return r
+        } catch (e) {
+            if (new Date(dateString).getTime() &gt; new Date().getTime() - 1000 * 60 * 60 * 24 * 5) {
+<span class="fstat-no" title="function not covered" ></span>                return await this.fetchDayData(unit, dateString)
+<span class="cstat-no" title="statement not covered" >            }<span class="fstat-no" title="function not covered" ></span></span>
+            console.error("<span class="cstat-no" title="statement not covered" >Err</span>or in:", dateString, unit, e)
+            this.failed<span class="cstat-no" title="statement not covered" >.push(dateString)</span>
+<span class="cstat-no" title="statement not covered" >            return</span>
+        }<span class="cstat-no" title="statement not covered" ></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+    fetchDayData<span class="cstat-no" title="statement not covered" > = async (unit, dateString, past: </span>any = []) =&gt; {
+        let t = past.length == 0 ? new Date(dateString).getTime() : past.at(-1)[0] + 1000
+        cons<span class="cstat-no" title="statement not covered" >t end = Math.min(new Date(dateString).getTim</span>e() + SECONDS_IN_DAY * 1000 - 1000, new Date().getTime())
+        cons<span class="cstat-no" title="statement not covered" >t promises: Array&lt;Promise&lt;any&gt;&gt; = []</span>
+<span class="cstat-no" title="statement not covered" ></span>
+        while (t<span class="cstat-no" title="statement not covered" > &lt; end) {</span>
+            prom<span class="cstat-no" title="statement not covered" >ises.push(fetchRetry(`https://api.binance.us/api/v3/klines?symbol=${this.PAIR}&amp;interval=1s&amp;startTime=${t}&amp;endTime=${end}&amp;limit=1000`)</span>
+                .the<span class="cstat-no" title="statement not covered" >n(r =&gt; r.json()))</span>
+&nbsp;
+            t +=<span class="cstat-no" title="statement not covered" > 1000 * 1000</span>
+            if (promises.length % 10 == 0) {
+                await Prom<span class="cstat-no" title="statement not covered" >ise.all(promises)</span>
+<span class="cstat-no" title="statement not covered" >            }<span class="fstat-no" title="function not covered" ></span></span>
+        }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+        const res = <span class="cstat-no" title="statement not covered" >await Promise.all(promises)</span>
+<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+        if (new <span class="cstat-no" title="statement not covered" >Date().get</span>Time() - new Date(dateString).getTime() &gt; SECONDS_IN_DAY) {
+            const resStr = past.map(l =&gt; { l.splice(1, 0, 0); return l })
+                .concat(res.flat())
+                .map(e =&gt; e.toString())
+<span class="fstat-no" title="function not covered" ></span>                .join("\n")
+<span class="cstat-no" title="statement not covered" ></span>
+            this.dal.sa<span class="cstat-no" title="statement not covered" >veH</span>istoryInLocal(resStr, this.PAIR, "1s", dateString, "spot",1)
+        }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        return res.flat().m<span class="fstat-no" title="function not covered" >ap</span>(l =&gt; l.map(e =&gt; parseFloat(e)))</span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+    processF<span class="cstat-no" title="statement not covered" >ile = (unit, dateString, </span>date,) =&gt; this.fetchFile(unit, dateString)
+        .then(d =&gt; d.map(([time, high, low, close]) =&gt; ({ time, high, low, close, children: [] })))
+        .then(d =&gt; this<span class="cstat-no" title="statement not covered" >.buildCharts(d, dat</span>e))
+<span class="cstat-no" title="statement not covered" >        .then(d =&gt; th<span class="cstat-no" title="statement not covered" >is</span>.connectCharts(d));</span>
+<span class="cstat-no" title="statement not covered" ></span>
+    async fe<span class="cstat-no" title="statement not covered" >tchNextChart(<span class="cstat-no" title="statement not covered" >st</span>art, end, unit): Promise&lt;{ [k: string]: Array&lt;CandleStick&gt; }&gt; {</span>
+<span class="cstat-no" title="statement not covered" ></span>
+        let prom<span class="cstat-no" title="statement not covered" >ises: { [k: string]: Promise&lt;{ [k: string]: Array&lt;CandleStick&gt; }&gt; } = {}</span>
+<span class="cstat-no" title="statement not covered" ></span>
+        let date = new Date(start - start % (SECONDS_IN_DAY * 1000))
+<span class="cstat-no" title="statement not covered" ></span>
+        while (date.<span class="cstat-no" title="statement not covered" >getTime() &lt;= end) {</span>
+&nbsp;
+            cons<span class="cstat-no" title="statement not covered" >t dateString = date.toISOString().split("T")[0]</span>
+<span class="cstat-no" title="statement not covered" ></span>
+            promises[dateString] = this.processFile(unit, dateString, date.getTime())
+&nbsp;
+            date.setDate(date.getDate() + 1)
+&nbsp;
+        }
+        await Promise.all(Object.values(promises));
+<span class="cstat-no" title="statement not covered" ></span>
+        while (this.<span class="cstat-no" title="statement not covered" >failed.length &gt; 0) {</span>
+            const tempFailed = this.failed
+            this.failed = []
+            for (const f of tempFailed) {
+<span class="cstat-no" title="statement not covered" >                promises[f] = th</span>is.processFile(unit, f, new Date(f).getTime())
+<span class="cstat-no" title="statement not covered" >            }</span>
+            await Promise.all(Object.values(promises));
+<span class="fstat-no" title="function not covered" ></span>        }
+&nbsp;
+        const files<span class="cstat-no" title="statement not covered" > = await Promise.all(Object.values(promises));</span>
+<span class="cstat-no" title="statement not covered" ></span>
+        return files.reduc<span class="cstat-no" title="statement not covered" >e((a, b) =&gt; {<span class="fstat-no" title="function not covered" ></span></span>
+            Object.keys(b).forEach<span class="cstat-no" title="statement not covered" >(k =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                a[k].at(-1)!.next = b[k].at(0)</span>
+<span class="cstat-no" title="statement not covered" >                a[k] = a[k].concat</span>(b[k])
+            })
+<span class="cstat-no" title="statement not covered" ></span>
+            return a
+<span class="cstat-no" title="statement not covered" >        })</span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+    buildCharts(seconds: CandleStick[], start): { [k: string]: Array&lt;CandleStick&gt; } {
+<span class="cstat-no" title="statement not covered" >        const highers = {}</span>
+<span class="cstat-no" title="statement not covered" >        const lowers = {}</span>
+        const charts: { [k<span class="cstat-no" title="statement not covered" >: string]: Array&lt;any&gt; } = {}<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+        seconds <span class="cstat-no" title="statement not covered" >= this.paddEmptyCandles(seconds, s</span>tart)
+<span class="cstat-no" title="statement not covered" ></span>
+        UNIT_TIMES.forEach(unit =&gt; {
+<span class="cstat-no" title="statement not covered" >            charts[unit] ||= []</span>
+            highers[unit] = 0
+<span class="cstat-no" title="statement not covered" >            lowers[unit] = Infinity</span>
+        })<span class="cstat-no" title="statement not covered" ></span>
+        const length = seconds.length + 1
+        for (let i = 1; i <span class="cstat-no" title="statement not covered" >&lt; l</span>ength; i++) {
+<span class="cstat-no" title="statement not covered" >            const candle = seconds[i</span> - 1]
+<span class="cstat-no" title="statement not covered" >            for (let <span class="cstat-no" title="statement not covered" >j </span>= 0; j &lt; UNIT_TIMES.length - 1; j++) {</span>
+                const uni<span class="cstat-no" title="statement not covered" >t = UNIT_TIMES[j]</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >                if (highers[unit] &lt; candle.h</span>igh) {
+                    highers[unit] = candle.high
+                }
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >                if (lowers</span>[unit] &gt; candle.low) {
+<span class="cstat-no" title="statement not covered" >                    l<span class="cstat-no" title="statement not covered" >ow</span>ers[unit] = candle.low</span>
+<span class="cstat-no" title="statement not covered" >                }</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+                if (i &amp;&amp; i % S<span class="cstat-no" title="statement not covered" >ECOUNDS_IN_UNIT[unit] == 0) {<span class="fstat-no" title="function not covered" ></span></span>
+                    charts[unit].push(<span class="cstat-no" title="statement not covered" >{</span>
+<span class="cstat-no" title="statement not covered" >                        time: candle.time - SECOUNDS_I</span>N_UNIT[unit] * 1000 + 1000,
+<span class="cstat-no" title="statement not covered" >                        high: highers[</span>unit],
+                        low: lowers[unit],
+<span class="cstat-no" title="statement not covered" >                        close: candle.close,</span>
+                        children: []
+<span class="cstat-no" title="statement not covered" >                    })</span>
+<span class="cstat-no" title="statement not covered" >                    higher</span>s[unit] = 0
+                    lowers[unit] = Infinity
+                }
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+        charts["1s"] = seconds
+<span class="fstat-no" title="function not covered" ></span>        return charts
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+    paddEmptyCandles(ch<span class="cstat-no" title="statement not covered" >art, start) {<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        let diff = chart.at<span class="cstat-no" title="statement not covered" >(0)?.time - start</span>
+        if (diff != 0)<span class="cstat-no" title="statement not covered" > {</span>
+<span class="cstat-no" title="statement not covered" >            const ite<span class="cstat-no" title="statement not covered" >ms</span> = Array.from({ length: diff / 1000 }, (_, j) =&gt; {</span>
+                const newCa<span class="cstat-no" title="statement not covered" >ndle = Ob</span>ject.assign(new CandleStick(), chart.at(0))
+<span class="cstat-no" title="statement not covered" >                newCandle.time = start + 1000</span> * j
+<span class="cstat-no" title="statement not covered" >                return newCandle</span>
+<span class="cstat-no" title="statement not covered" >            })<span class="cstat-no" title="statement not covered" ></span></span>
+            chart = items.concat(<span class="cstat-no" title="statement not covered" >chart)</span>
+        }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+        if (!cha<span class="cstat-no" title="statement not covered" >rt.at(-1)?.high){</span>
+            chart = <span class="cstat-no" title="statement not covered" >chart.slice(0, </span>-1)
+        }
+<span class="cstat-no" title="statement not covered" ></span>
+        diff = s<span class="cstat-no" title="statement not covered" >tart + SECONDS_IN</span>_DAY * 1000 - chart.at(-1)?.time
+        if (diff<span class="cstat-no" title="statement not covered" > &gt; 1000) {</span>
+            const it<span class="cstat-no" title="statement not covered" >ems = Array.fro</span>m({ length: diff / 1000 - 1 }, (_, j) =&gt; {
+                const newCandle = Object.assign(new CandleStick(), chart.at(-1))
+<span class="cstat-no" title="statement not covered" >                newCandle.time += 1000 * (j + 1)</span>
+<span class="cstat-no" title="statement not covered" >                return newCandle</span>
+            })<span class="cstat-no" title="statement not covered" ></span>
+            char<span class="cstat-no" title="statement not covered" >t = chart.concat(items)</span>
+        }<span class="cstat-no" title="statement not covered" ></span>
+        if (diff &lt; 1000) {
+            char<span class="cstat-no" title="statement not covered" >t = chart.slice(0, -1)</span>
+        }<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+&nbsp;
+        let copiedChart: CandleStick[] = []
+        copiedChart.push(chart[0])
+<span class="fstat-no" title="function not covered" ></span>        for (let i = 1; i &lt; chart.length; i++) {
+<span class="cstat-no" title="statement not covered" >            const diff = char<span class="cstat-no" title="statement not covered" >t[</span>i].time - copiedChart.at(-1)!.time</span>
+            if (diff &gt;= 1<span class="cstat-no" title="statement not covered" >000) {</span>
+<span class="cstat-no" title="statement not covered" >                copiedCha<span class="cstat-no" title="statement not covered" >rt</span>.push(chart[i])</span>
+            }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+        }<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+        chart = copiedChart.concat([])
+        copiedChart <span class="cstat-no" title="statement not covered" >= []</span>
+&nbsp;
+        for (let<span class="cstat-no" title="statement not covered" > i = 0; i &lt; chart.length - 1; i++) {</span>
+            copiedChart.push(chart[<span class="cstat-no" title="statement not covered" >i])</span>
+            const di<span class="cstat-no" title="statement not covered" >ff = chart[i + 1].time - chart[i]</span>.time
+            if (diff<span class="cstat-no" title="statement not covered" > &gt; 1000) {</span>
+                const items = Array.from({ length: diff / 1000 - 1 }, (_, j) =&gt; {
+                    const newCandle = Object.assign(new CandleStick(), chart[i])
+                    newCandle.time += 1000 * (j + 1)
+                    retu<span class="cstat-no" title="statement not covered" >rn newCandle</span>
+                })
+                copiedChart = copiedChart.concat(items)
+            } else if (diff &lt; 1000) {
+                debugger
+<span class="cstat-no" title="statement not covered" >            }</span>
+        }
+<span class="fstat-no" title="function not covered" ></span>        copiedChart.push(chart.at(-1)!)
+<span class="cstat-no" title="statement not covered" >        return copiedChart<span class="fstat-no" title="function not covered" ></span></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+    calculat<span class="cstat-no" title="statement not covered" >eSmas() {</span>
+        let <span class="cstat-no" title="statement not covered" >smas = Array.from(new Set(this.bots.map(bot =&gt; bot.SMA)))</span>
+        let <span class="cstat-no" title="statement not covered" >closeSum = Array(smas.</span>length).fill(0)
+        let longSMAs = Array.from(new Set(this.bots.map(bot =&gt; bot.longSMA * 3)))
+        let closeSumLong = Array(longSMAs.length).fill(0)
+<span class="fstat-no" title="function not covered" ></span>        const chart = this.historyCandles
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        for (let i = 0; i &lt; chart.length; i</span>++) {
+<span class="cstat-no" title="statement not covered" >            const candle = chart[i]</span>
+            candle.sma ||= {}
+<span class="cstat-no" title="statement not covered" >            candle.long</span>SMA ||= {}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            for (let j = 0; j &lt; smas.length; j++) {</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >                const shortSma = smas[j]</span>
+<span class="cstat-no" title="statement not covered" >                const long</span>Sma = longSMAs[j]
+<span class="cstat-no" title="statement not covered" ></span>
+                let co<span class="cstat-no" title="statement not covered" >unt = shortSma</span>
+<span class="cstat-no" title="statement not covered" >                if (count</span> &gt; i + 1) {
+<span class="cstat-no" title="statement not covered" >                    count = </span>i + 1
+                }
+                candle<span class="cstat-no" title="statement not covered" >.sma[shortSma]<span class="fstat-no" title="function not covered" > =</span> cl<span class="cstat-no" title="statement not covered" >oseSum[j] / count</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >                count = longSma</span>
+                if (count &gt; i + 1) {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+                    count = i + 1
+                }
+                candle.longSMA[longSma] = closeSumLong[j] / count
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+                closeSum[j] += can<span class="cstat-no" title="statement not covered" >dle</span>.close
+<span class="cstat-no" title="statement not covered" >                closeSumLong[j] += candle.close</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >                if (i &gt;= shortSma) {</span>
+                    closeSum[j] -= chart[i - shortSma].close
+                }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span>
+                if (i &gt;= longSma) {
+                    closeSumLong[j] -= chart[i - longSma].close
+<span class="cstat-no" title="statement not covered" >                }</span>
+            }<span class="cstat-no" title="statement not covered" ></span>
+        }<span class="cstat-no" title="statement not covered" ></span>
+    }
+<span class="cstat-no" title="statement not covered" ></span>
+    connectChart<span class="cstat-no" title="statement not covered" >s(charts: { [k: string]: Array&lt;CandleStick&gt; }): { [k: string]: Array&lt;CandleStick&gt; } {</span>
+        for (let uni<span class="cstat-no" title="statement not covered" >tIndex = 0; unitIndex &lt; UNIT_TIMES.length; unitIndex++) {</span>
+            const un<span class="cstat-no" title="statement not covered" >it = UNIT_TIMES[unitIndex]</span>
+<span class="cstat-no" title="statement not covered" ></span>
+            for (let i = 0; i &lt; charts[unit].length; i++) {
+                if (<span class="cstat-no" title="statement not covered" >charts[unit</span>][i + 1]) {
+                    charts[unit][i].lastChild = unit != "1h" &amp;&amp; (i + 1) % UNIT_NEXT_LEVEL[unit] == 0
+<span class="cstat-no" title="statement not covered" >                    charts[unit][i].next = charts[unit][i + 1]</span>
+                } el<span class="cstat-no" title="statement not covered" >se {</span>
+                    charts[unit][i].endTime = charts[unit][i].time + SECOUNDS_IN_UNIT[unit] * 1000
+                }
+                if (<span class="cstat-no" title="statement not covered" >unitIndex &gt; 0) {</span>
+                    cons<span class="cstat-no" title="statement not covered" >t parent = charts[UNIT_TIMES[unitIndex - 1]][Math.floor(i / UNIT_NEXT_LEVEL[unit])]</span>
+                    charts[u<span class="cstat-no" title="statement not covered" >nit][i].parent = parent</span>
+                    if (!parent) {
+                        // debugger
+                    } else {<span class="cstat-no" title="statement not covered" ></span>
+                        parent.children.push(charts[unit][i])
+                    }
+                }
+            }<span class="cstat-no" title="statement not covered" ></span>
+        }<span class="cstat-no" title="statement not covered" ></span>
+        return charts
+    }
+&nbsp;
+    async fetchAllCharts(start, end) {
+        const ch<span class="cstat-no" title="statement not covered" >arts = await this.fetchNextChart(start, end, "1s")</span>
+<span class="cstat-no" title="statement not covered" ></span>
+        this.chart = charts["1s"]
+&nbsp;
+<span class="cstat-no" title="statement not covered" ></span>
+        this.historyCandles = th<span class="cstat-no" title="statement not covered" >is.</span>historyCandles.slice(Math.max(0, this.historyCandles.length - this.minHistoryCandles * 3))
+        this.history<span class="cstat-no" title="statement not covered" >Candles = this.historyCandles.concat(charts["5m"])</span>
+<span class="cstat-no" title="statement not covered" ></span>
+        this.calculateSmas()<span class="cstat-no" title="statement not covered" ></span>
+    }
+<span class="cstat-no" title="statement not covered" ></span>
+    checkOrder(orgorders: Ar<span class="cstat-no" title="statement not covered" >ray&lt;Order&gt;) {</span>
+&nbsp;
+        let orders: Arra<span class="cstat-no" title="statement not covered" >y&lt;Order&gt; = []</span>
+        orders = orders.conc<span class="cstat-no" title="statement not covered" >at(orgorders)</span>
+&nbsp;
+        if (!this.chart[this.currentCandle]) {
+            // debugger<span class="cstat-no" title="statement not covered" ></span>
+            return [<span class="cstat-no" title="statement not covered" >]<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+        for (let bot of <span class="cstat-no" title="statement not covered" >this.bots) {</span>
+            const pos = bot.<span class="cstat-no" title="statement not covered" >binance!.positions[thi</span>s.PAIR + bot.positionSide()]
+            if (pos.positionAmount == 0) continue
+            const liquidationPrice = -(bot.binance!.balance[bot.coin2] / pos.positionAmount) + pos.positionEntry
+            const o = new Or<span class="cstat-no" title="statement not covered" >der(pos.positionAmount &gt; </span>0 ? "SELL" : "BUY", "NEW", liquidationPrice,
+                "liquid", po<span class="cstat-no" title="statement not covered" >s.positionA</span>mount, pos.positionAmount, this.chart[this.currentCandle].time, "STOP_MARKET", "",
+                bot.positionSide(), liquidationPrice)
+            o.bot = bot
+            orders.push(o)
+        }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
+&nbsp;
+&nbsp;
+        
+&nbsp;
+        let maxTime = orders.filter(o =&gt; o.bot!.botStatus != BotStatus.STABLE)
+<span class="fstat-no" title="function not covered" ></span>            .reduce((a, o) =&gt; Math.min(a, o.bot!.lastOrder + o.bot!.secound * 1000), Number.MAX_SAFE_INTEGER)
+        let candle =<span class="cstat-no" title="statement not covered" > this.chart[this.currentCa</span>ndle]
+<span class="cstat-no" title="statement not covered" ></span>
+        while (true) {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >            const ordersInInreval = orders.filter(o =&gt;</span>
+<span class="cstat-no" title="statement not covered" >                ((["LIMIT","TAKE_PROFIT_MARKET","TRAILING_STOP_MARKE</span>T"].includes(o.type) &amp;&amp; o.side == "BUY" ||
+<span class="cstat-no" title="statement not covered" >                    o.type == "STOP_MARKET" &amp;&amp; o.side == "SELL") &amp;&amp; o.price &gt; candl</span>e.low ||
+<span class="cstat-no" title="statement not covered" >                (["LIMIT","TAKE_PROFIT_MARKET","TRAILING_STOP_MARKET"].includes</span>(o.type) &amp;&amp; o.side == "SELL" ||
+<span class="cstat-no" title="statement not covered" >                    o.type == "ST</span>OP_MARKET" &amp;&amp; o.side == "BUY") &amp;&amp; o.price &lt; candle.high) &amp;&amp; !o.active)
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >            const trailingOrders = orders.filter(o =&gt; o.type == "TRAILING_STOP_M</span>ARKET" &amp;&amp; o.active)
+<span class="cstat-no" title="statement not covered" >            const doneTrailings: Order[] = []</span>
+&nbsp;
+            for (let o of trailingOrders) {
+<span class="cstat-no" title="statement not covered" >                o.lastPrice = o.side == "SELL" ? Math.max(o.lastPrice, candle.high) : Math.min(o.lastPrice, candle.low)</span>
+<span class="cstat-no" title="statement not covered" >                if (o.lastPrice &gt; candle.low * (1 + o.callbackRate) &amp;&amp; o.side ==</span> "SELL" ||
+<span class="cstat-no" title="statement not covered" >                    o.lastPrice &lt; candle.high * (1 - o.ca</span>llbackRate) &amp;&amp; o.side == "BUY") {
+                    o.price = candle.close
+                    doneTrailings.push(o);
+<span class="cstat-no" title="statement not covered" >                }</span>
+            }
+            if (doneTrailings.length) {
+                this.currentCandle = (candle.time - this.chart[0].time) / 1000
+                return doneTrailings
+            }
+&nbsp;
+&nbsp;
+            if (!ordersInInreval.length &amp;&amp; (!candle.endTime || candle.endTime &lt; maxTime)) {
+                if (candle.time &gt;= maxTime) {
+                    this.currentCandle = Math.max((maxTime - this.chart[0].time) / 1000, 0)
+                    if (!this.chart[this.currentCandle]) {
+<span class="fstat-no" title="function not covered" ></span>                        debugger
+<span class="cstat-no" title="statement not covered" >                    }<span class="cstat-no" title="statement not covered" ></span></span>
+                    retu<span class="cstat-no" title="statement not covered" >rn []</span>
+                }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >                if (candle.next &amp;&amp; !candle.lastChild) {</span>
+<span class="cstat-no" title="statement not covered" >                    candle = candle.next</span>
+<span class="cstat-no" title="statement not covered" >                } else {</span>
+<span class="cstat-no" title="statement not covered" >                    if (candle.parent &amp;&amp; candle.parent</span>.next) {
+<span class="cstat-no" title="statement not covered" >                        if (trailingOrders.length) {</span>
+                            candle = candle.parent.next.children[0]
+                        } else {
+<span class="fstat-no" title="function not covered" ></span>                            candle = candle.parent.next
+                        }
+<span class="cstat-no" title="statement not covered" >                    } else {</span>
+<span class="cstat-no" title="statement not covered" >                        this.currentCandle = -1</span>
+<span class="cstat-no" title="statement not covered" >                        return []</span>
+                    }<span class="cstat-no" title="statement not covered" ></span>
+                }<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >            } else {</span>
+                if (candle.children.length) {
+                    candle = candle.children[0]
+                } else {
+<span class="cstat-no" title="statement not covered" >                    this.currentCandle = Math.max((candle.time - this.chart[0].time) / 1000, 0)</span>
+                    const res = &lt;{ key: [String], Order }&gt;{}
+                    for (let order of ordersInInreval) {
+                        if (order.orderId == "liquid") {
+<span class="cstat-no" title="statement not covered" >                            continue</span>
+<span class="cstat-no" title="statement not covered" >                        }</span>
+                        if (!res[order.bot!.variation]) {
+                            res[order.bot!.variation] = order;
+<span class="cstat-no" title="statement not covered" >                        }</span>
+<span class="cstat-no" title="statement not covered" >                        if (order.type =</span>= "STOP_MARKET") {
+<span class="cstat-no" title="statement not covered" >                            res[order.bot!.variation] = order;</span>
+                        }
+                    }
+                    const _orders = Object.values(res)
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >                    _orders.filter(o =&gt; o.type =</span>= "TRAILING_STOP_MARKET")
+<span class="cstat-no" title="statement not covered" >                        .forEach(o =&gt; {o</span>.lastPrice ||= candle.close; o.active = true})
+<span class="cstat-no" title="statement not covered" ></span>
+                    if (_orders.length &amp;&amp; _orders.every(o =&gt; o.type == "TRAILING_STOP_MARKET")) {
+                        if (candle.next) {
+                            candle = candle.next
+<span class="cstat-no" title="statement not covered" >                        } else {</span>
+<span class="cstat-no" title="statement not covered" >                            this.currentCandle = -1</span>
+<span class="cstat-no" title="statement not covered" >                            return []</span>
+                        }
+                    } else {
+                        return _orders.filter(o =&gt; o.type != "TRAILING_STOP_MARKET")
+                    }
+<span class="fstat-no" title="function not covered" ></span>                }
+            }
+<span class="cstat-no" title="statement not covered" >        }</span>
+&nbsp;
+<span class="fstat-no" title="function not covered" ></span>
+    }
+<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+    orderexecute(order: Order, t: CandleStick) {
+        const bot = order.bot || this.bots[0]
+        const amount = order.avgPrice * order.executedQty;
+        const direction = order.side == "BUY" ? 1 : -1;
+&nbsp;
+&nbsp;
+        bot.binance!.balance[bot.coin2].available -= amount * direction;
+        bot.binance!.balance[bot.coin2].total -= amount * direction;
+&nbsp;
+        bot.binance!.balance[bot.coin1].available += order.executedQty * direction;
+        bot.binance!.balance[bot.coin1].total += order.executedQty * direction;
+&nbsp;
+&nbsp;
+        order.status = 'FILLED'
+        bot.binance!.orders[this.PAIR].push(order)
+&nbsp;
+<span class="fstat-no" title="function not covered" ></span>        console.log("Orders Executed: ", bot.binance!.orders[this.PAIR].length)
+        if (order.side == "SELL") {
+<span class="cstat-no" title="statement not covered" >            // console.log("balance: " + (bot.bin<span class="fstat-no" title="function not covered" >an</span>ce!<span class="cstat-no" title="statement not covered" >.balance[bot.coin2].av</span>ai</span>lable))
+&nbsp;
+<span class="cstat-no" title="statement not covered" ></span>
+            //Check if 
+            if (bot.binance!.balance[bot.coin1].available &lt; this.filters.MIN_NOTIONAL.minNotional / order.avgPrice) {
+                this.dal.logStep({ type: 'Close Position', priority: 5 }, bot)
+<span class="cstat-no" title="statement not covered" >                bot.binance!.orders[this.PAIR] = [order]</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+        }
+&nbsp;
+        this.dal.logStep({
+<span class="fstat-no" title="function not covered" ></span>            type: order.type == "STOP_MARKET" ? "StopLoose" : 'Execute',
+<span class="cstat-no" title="statement not covered" >            side: order.side</span>,
+<span class="cstat-no" title="statement not covered" >            high: t.high,</span>
+<span class="cstat-no" title="statement not covered" >            low: t.low,</span>
+<span class="cstat-no" title="statement not covered" >            price: order.p</span>rice,
+<span class="cstat-no" title="statement not covered" >            quantity: or</span>der.executedQty,
+<span class="cstat-no" title="statement not covered" >            balanceSecond: (</span>bot.binance!.balance[bot.coin2].available).toFixed(2),
+            balanceFirst: (bot.binance!.balance[bot.coin1].available).toFixed(2),
+            priority: 1
+        }, bot)
+&nbsp;
+&nbsp;
+    }
+&nbsp;
+    closePosition(bot: Bot) {
+        for (let i = 0; i &lt; this.bots.length; i++) {
+            const bot = this.bots[i];
+            const price = this.chart[this.currentCandle].close
+            bot.binance!.balance[bot.coin2].available += bot.binance!.balance[bot.coin1].available * price;
+            bot.binance!.balance[bot.coin2].total += bot.binance!.balance[bot.coin1].total * price;
+&nbsp;
+            bot.binance!.balance[bot.coin1].available = 0
+            bot.binance!.balance[bot.coin1].total = 0
+&nbsp;
+            bot.profitNum = bot.binance!.balance[bot.coin2].available - 10000
+        }
+    }
+&nbsp;
+    initData() {
+&nbsp;
+        for (let bot of this.bots) {
+            bot.binance = new Account(new Binance(),"k");
+            bot.binance.balance = {}
+            const initialAmount = bot.initialPart &gt; 0 ? 10000 * bot.initialPart : 10000
+            const initialBackup = bot.initialPart &gt; 0 ? 10000 * (1 - bot.initialPart) : 0
+            bot.binance.balance[bot.coin2] = bot.isFuture ? initialAmount : {
+                available: initialAmount,
+                total: initialAmount
+            }
+            bot.binance.balance[bot.coin1] = bot.isFuture ? 0 : {
+                available: 0,
+                total: 0
+            }
+            bot.binance.balance.backup = initialBackup
+            bot.binance.balanceOnOpen = {
+                [bot.coin2]: initialAmount
+            }
+&nbsp;
+            bot.binance.orders = [{}]
+            bot.binance.positions = []
+            bot.binance.socket = {
+                prices: {},
+                orderBooks: {}
+            }
+            bot.binance.orders[this.PAIR] = [new Order()]
+&nbsp;
+            this.sockets.prices[this.PAIR] = 1
+&nbsp;
+&nbsp;
+            bot.binance!.positions = {};
+&nbsp;
+            bot.binance!.positions[this.PAIR + bot.positionSide()] ||= {
+                positionAmount: 0,
+                positionEntry: 0
+            }
+&nbsp;
+&nbsp;
+            for (let k in bot) {
+                if (parseFloat(bot[k]) == bot[k]) {
+                    bot[k] = parseFloat(bot[k])
+                }
+&nbsp;
+            }
+        }
+&nbsp;
+    }
+    averagePrice(pair, steps) {
+        return this.chart[this.currentCandle].parent?.parent?.parent?.parent?.sma[steps]
+&nbsp;
+    }
+    averagePriceQuarter(pair, steps) {
+        return this.chart[this.currentCandle].parent?.parent?.parent?.parent?.longSMA[steps * 3]
+    }
+    // averagePrice(pair, steps) {
+    //     const count = Math.min(this.currentCandle, (steps * 5 * 60))
+    //     const start = this.currentCandle - count
+    //     return this.chart
+    //         .map(x =&gt; x.close)
+    //         .slice(start, this.currentCandle)
+    //         .reduce((a, b) =&gt; parseFloat(a) + parseFloat(b), 0) / count
+    // }
+&nbsp;
+    // averagePriceQuarter(pair,steps) {
+    //     const count = Math.min(this.currentCandle, (15 * steps * 60))
+    //     const start = this.currentCandle - count
+    //     return this.chart
+    //         .map(x =&gt; x.close)
+    //         .slice(start, this.currentCandle)
+    //         .reduce((a, b) =&gt; parseFloat(a) + parseFloat(b)) / count
+    // }
+    simulateState(bots: Bot[]) {
+        // if (!this.bot.avoidCancel){
+&nbsp;
+        this.openOrders = this.openOrders.filter(o =&gt; !bots.includes(o.bot!))
+        // }
+&nbsp;
+&nbsp;
+        this.sockets.orderBooks[this.PAIR] = {
+            "asks": {},
+            "bids": {},
+        }
+        this.sockets.orderBooks[this.PAIR].asks[this.chart[this.currentCandle].high] = 1
+        this.sockets.orderBooks[this.PAIR].bids[this.chart[this.currentCandle].low] = 1
+    }
+&nbsp;
+&nbsp;
+}
+&nbsp;
+export class CandleStick {
+    time; high; low; close;
+    next: CandleStick | undefined;
+    parent: CandleStick | undefined;
+    children: CandleStick[] = [];
+    sma; longSMA;
+    lastChild = false
+    endTime;
+&nbsp;
+    constructor(time?, high?, low?, close?) {
+        this.time = time;
+        this.high = high;
+        this.low = low;
+        this.close = close;
+    }
+&nbsp;
+    // get date() {
+    //     return new Date(this.time)
+    // }
+}</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2025-08-12T17:36:55.699Z
+            </div>
+        <script src="../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../sorter.js"></script>
+        <script src="../block-navigation.js"></script>
+    </body>
+</html>
+    

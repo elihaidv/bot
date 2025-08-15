@@ -5,7 +5,9 @@
   "main": "Simulator/Simulate.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "start": "node Simulator/Simulate.js --unhandled-rejections=none"
   },
   "author": "",
@@ -35,8 +37,12 @@
     "telegram-mtproto": "^2.2.2"
   },
   "devDependencies": {
+    "@jest/globals": "^30.0.5",
+    "@types/jest": "^30.0.0",
     "@types/node": "^16.11.43",
     "cli-interact": "^0.1.9",
+    "jest": "^30.0.5",
+    "ts-jest": "^29.4.1",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3"
   }

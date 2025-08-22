@@ -311,7 +311,7 @@ export abstract class BasePlacer {
         return res;
       } else {
         console.log(
-          res.symbol,
+          this.PAIR,
           res.side,
           res.price || params.stopPrice || params.activationPrice,
           res.origQty,

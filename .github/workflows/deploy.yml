@@ -88,7 +88,7 @@ jobs:
             --exclude='.github' \
             --exclude='*.log' \
             --exclude='.env*' \
-            ./ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/root/bot
+            build/ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/root/bot
           echo "✅ Files deployed successfully"
           
     

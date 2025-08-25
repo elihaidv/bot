@@ -1,0 +1,21 @@
+---
+alwaysApply: true
+---
+The simulations  are trigger by rabbit.
+Read from Firebase firestore.
+Execution progress recorded in firestore at realtime.
+Results are saved by CSV files in GCS.
+
+In case you have to debug a simulation execution:
+1. Make sure `tradevision.json` exsits. Else export it from `TRADEVISION_JSON` env variable
+2. Use file `Simulator/local.ts` <simulation id> <variation> <start> <end>
+You may disable or enable logging in this file.
+
+You can use this service account to fetch firestore record for debugging.
+
+The simulations results stored in GCS bucket:
+`simulations-outputs/simulation${simulationId}-${variation}/${page}.csv`
+
+If you need look old simulation executions for debugging, you can fetch the CSV files.
+In case `trading-cloud.json`, you can export it  from `TRADINGCLOUD_JSON` env variable.
+

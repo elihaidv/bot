@@ -62,8 +62,8 @@ async function run() {
     console.log("Trading bot system started successfully")
 
     // createServer()
-  } catch (error) {
-    console.error("Failed to start trading bot system:", error.message)
+  } catch (error: any) {
+    console.error("Failed to start trading bot system:", error?.message || error)
     BotLogger.instance.error({
       type: "StartupError",
       message: error?.message || error,

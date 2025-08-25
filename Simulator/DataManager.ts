@@ -475,7 +475,16 @@ export class DataManager {
             .reduce((a, o) => Math.min(a, o.bot!.lastOrder + o.bot!.secound * 1000), Number.MAX_SAFE_INTEGER)
         let candle = this.chart[this.currentCandle]
 
+        let iterationCount = 0;
+        const MAX_ITERATIONS = 100000; // Safety limit to prevent infinite loops
+        
         while (true) {
+            iterationCount++;
+            if (iterationCount > MAX_ITERATIONS) {
+                console.warn(`CheckOrder: Breaking out of potential infinite loop after ${MAX_ITERATIONS} iterations`);
+                this.currentCandle = Math.min(this.currentCandle + 1, this.chart.length - 1);
+                return [];
+            }
             const ordersInInreval = orders.filter(o =>
                 ((["LIMIT","TAKE_PROFIT_MARKET","TRAILING_STOP_MARKET"].includes(o.type) && o.side == "BUY" ||
                     o.type == "STOP_MARKET" && o.side == "SELL") && o.price > candle.low ||
@@ -507,6 +516,12 @@ export class DataManager {
                     }
                     return []
                 }
+                
+                // Debug logging for candle navigation
+                if (iterationCount % 1000 === 0) {
+                    console.log(`CheckOrder iteration ${iterationCount}: candle.time=${candle.time}, maxTime=${maxTime}, hasNext=${!!candle.next}, hasParent=${!!candle.parent}`);
+                }
+                
                 if (candle.next && !candle.lastChild) {
                     candle = candle.next
                 } else {

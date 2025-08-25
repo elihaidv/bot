@@ -129,13 +129,27 @@ export async function run(simulationId: string, variation: string | number, star
 
   let t = dataManager.chart[dataManager.currentCandle]
 
+  let loopCounter = 0;
   while (t && t.time <= end) {
+    loopCounter++;
+    
+    // Safety check to prevent infinite loops
+    if (loopCounter > 1000000) {
+      console.error(`Breaking out of main simulation loop after ${loopCounter} iterations to prevent infinite loop`);
+      break;
+    }
 
     let botsToPlace: Bot[] = [];
     let ordersToFill: Order[] = []
 
     if (dataManager.openOrders.length) {
+      const prevCandle = dataManager.currentCandle;
       ordersToFill = dataManager.checkOrder(dataManager.openOrders)
+      
+      // If checkOrder didn't advance the candle (or moved it backwards) and returned no orders, we need to advance manually
+      if (dataManager.currentCandle <= prevCandle && ordersToFill.length === 0) {
+        dataManager.currentCandle = prevCandle + 1;
+      }
     } else {
       dataManager.currentCandle++
     }
